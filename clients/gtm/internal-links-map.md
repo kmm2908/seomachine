@@ -1,204 +1,130 @@
 # Glasgow Thai Massage — Internal Links Map
 
-This document catalogs key pages on https://glasgowthaimassage.co.uk/ for strategic internal linking. Reference this when writing content to select appropriate anchor text and destination URLs.
+Use this file when writing any content. Link naturally to relevant pages using the anchor text suggestions. Aim for 3–5 internal links per article. Do not force links — only include them where they genuinely add value for the reader.
+
+**Domains:**
+- Main site: `https://glasgowthaimassage.co.uk`
+- Blog: `https://blog.glasgowthaimassage.co.uk`
 
 ---
 
 ## Core Pages
 
-### Homepage
-- **URL**: https://glasgowthaimassage.co.uk/
-- **When to Link**: When referencing the business broadly; introductions and closing paragraphs
-- **Anchor Text Examples**: "Glasgow Thai Massage", "our Glasgow city centre studio"
-
-### About Page
-- **URL**: https://glasgowthaimassage.co.uk/about-glasgow-thai-massage/
-- **When to Link**: When mentioning Maliwan, Jariya, Wat Pho training, or the business story
-- **Anchor Text Examples**: "about Glasgow Thai Massage", "our story", "meet our therapists"
-
-### Booking Page
-- **URL**: https://glasgowthaimassage.co.uk/booking-form/
-- **When to Link**: Not used in content — CTAs are handled by the page template
-- **Anchor Text Examples**: N/A (template handles booking links)
-
-### Contact Page
-- **URL**: https://glasgowthaimassage.co.uk/contact-us/
-- **When to Link**: When mentioning directions, location enquiries, or reaching out
-- **Anchor Text Examples**: "contact us", "find us at West Nile Street", "get in touch"
-
-### Gift Vouchers
-- **URL**: https://glasgowthaimassage.co.uk/thai-massage-gift-vouchers-v3/
-- **When to Link**: When writing about gifts, occasions (birthday, Valentine's Day, Mother's Day), or couples experiences
-- **Anchor Text Examples**: "Thai massage gift voucher", "massage gift voucher Glasgow", "gift a massage experience"
-
-### Blog
-- **URL**: https://blog.glasgowthaimassage.co.uk/
-- **When to Link**: When directing readers to related articles or further reading
-- **Anchor Text Examples**: "our blog", "read more on our blog"
+| Page | URL | Best anchor text |
+|------|-----|-----------------|
+| Homepage | https://glasgowthaimassage.co.uk/ | Glasgow Thai Massage |
+| Book an appointment | https://glasgowthaimassage.co.uk/book/ | book a session, book online, book your appointment |
+| About us | https://glasgowthaimassage.co.uk/about-glasgow-thai-massage/ | about Glasgow Thai Massage, our story, Maliwan and Jariya |
+| Gift vouchers | https://glasgowthaimassage.co.uk/thai-massage-gift-vouchers-v3/ | Thai massage gift vouchers, gift a massage |
+| Promotions | https://glasgowthaimassage.co.uk/promotions/ | current offers, promotions |
+| All services | https://glasgowthaimassage.co.uk/thai-massage-glasgow/ | our services, all treatments, what we offer |
 
 ---
 
 ## Service Pages
 
-### Thai Massage (Hub / Services Overview)
-- **URL**: https://glasgowthaimassage.co.uk/thai-massage-glasgow/
-- **When to Link**: When discussing the full range of treatments, or as the parent page for specific services
-- **Anchor Text Examples**: "Thai massage Glasgow", "our massage treatments", "full range of Thai massage services"
+Link to these when mentioning a specific treatment in any content type.
 
-### Traditional Thai Massage
-- **URL**: https://glasgowthaimassage.co.uk/massage/thai-massage/
-- **When to Link**: When discussing traditional/dry Thai massage, yoga-style stretching, fully clothed massage, or Wat Pho techniques
-- **Anchor Text Examples**: "traditional Thai massage Glasgow", "Thai massage", "dry Thai massage"
-
-### Thai Oil Massage
-- **URL**: https://glasgowthaimassage.co.uk/thai-massage-glasgow/thai-oil-massage-2/
-- **When to Link**: When discussing oil-based massage, relaxation massage, or heated oil treatments
-- **Anchor Text Examples**: "Thai oil massage Glasgow", "oil massage", "heated oil massage"
-
-### Deep Tissue Massage
-- **URL**: https://glasgowthaimassage.co.uk/thai-massage-glasgow/deep-tissue-massage-in-glasgow/
-- **When to Link**: When discussing back pain, neck pain, muscle knots, chronic tension, office workers, or deep pressure work
-- **Anchor Text Examples**: "deep tissue massage Glasgow", "deep tissue massage", "deep muscle massage Glasgow"
-
-### Couples Massage
-- **URL**: https://glasgowthaimassage.co.uk/couples-massage-in-glasgow-city-centre/
-- **When to Link**: When discussing gifts, occasions (anniversary, birthday, Valentine's Day, Mother's Day), or massage for two
-- **Anchor Text Examples**: "couples massage Glasgow", "couples massage Glasgow city centre", "massage for two Glasgow"
-
-### Thai Aromatherapy Massage
-- **URL**: https://glasgowthaimassage.co.uk/thai-massage-glasgow/thai-aromatherapy-massage/
-- **When to Link**: When discussing aromatherapy, essential oils, stress relief, anxiety, or sleep
-- **Anchor Text Examples**: "aromatherapy massage Glasgow", "Thai aromatherapy massage", "essential oil massage"
-
-### Thai Sports Massage
-- **URL**: https://glasgowthaimassage.co.uk/thai-massage-glasgow/thai-oil-massage-2/thai-sports-massage/
-- **When to Link**: When discussing sports recovery, gym, athletes, injury prevention, or post-workout treatment
-- **Anchor Text Examples**: "Thai sports massage Glasgow", "sports massage", "post-workout massage Glasgow"
-- **Note**: Verify this URL — the path nests under `/thai-oil-massage-2/` which may be a permalink issue
-
-### Thai Facial Massage
-- **URL**: https://glasgowthaimassage.co.uk/thai-massage-glasgow/thai-facial-massage/
-- **When to Link**: When discussing facial tension, headaches, jaw tension, or face and head treatment
-- **Anchor Text Examples**: "Thai facial massage Glasgow", "facial massage", "head and face massage"
-
-### Thai Foot Massage
-- **URL**: https://glasgowthaimassage.co.uk/thai-massage-glasgow/thai-foot-massage/
-- **When to Link**: When discussing reflexology, tired feet, foot pain, or plantar fascia
-- **Anchor Text Examples**: "Thai foot massage Glasgow", "foot massage", "reflexology Glasgow"
-
-### Thai Head Massage
-- **URL**: https://glasgowthaimassage.co.uk/thai-massage-glasgow/thai-head-massage/
-- **When to Link**: When discussing headaches, migraines, scalp tension, or stress relief
-- **Anchor Text Examples**: "Thai head massage Glasgow", "head massage", "scalp massage Glasgow"
-
-### Thai Stone Massage (Hot Stone)
-- **URL**: https://glasgowthaimassage.co.uk/thai-massage-glasgow/stone-massage/
-- **When to Link**: When discussing hot stone therapy, muscle tension, deep warmth, or occasion treatments
-- **Anchor Text Examples**: "Thai stone massage Glasgow", "hot stone massage", "stone massage therapy"
+| Service | URL | Best anchor text |
+|---------|-----|-----------------|
+| Traditional Thai Massage | https://glasgowthaimassage.co.uk/thai-massage-glasgow/thai-massage/ | traditional Thai massage, Thai massage, full-body Thai massage |
+| Thai Oil Massage | https://glasgowthaimassage.co.uk/thai-massage-glasgow/thai-oil-massage-2/ | Thai oil massage, oil massage |
+| Thai Sports Massage | https://glasgowthaimassage.co.uk/thai-massage-glasgow/thai-sports-massage/ | Thai sports massage, sports massage, sports recovery massage |
+| Thai Stone Massage | https://glasgowthaimassage.co.uk/thai-massage-glasgow/stone-massage/ | Thai stone massage, hot stone massage |
+| Thai Aromatherapy Massage | https://glasgowthaimassage.co.uk/thai-massage-glasgow/thai-aromatherapy-massage/ | Thai aromatherapy massage, aromatherapy massage |
+| Thai Head Massage | https://glasgowthaimassage.co.uk/thai-massage-glasgow/thai-head-massage/ | Thai head massage, head and neck massage |
+| Thai Foot Massage | https://glasgowthaimassage.co.uk/thai-massage-glasgow/thai-foot-massage/ | Thai foot massage, foot massage, reflexology |
+| Thai Facial Massage | https://glasgowthaimassage.co.uk/thai-massage-glasgow/thai-facial-massage/ | Thai facial massage, facial massage |
 
 ---
 
-## Location Pages
+## Health Condition Pages
 
-### Glasgow City Centre
-- **URL**: https://glasgowthaimassage.co.uk/glasgow-city-centre/
-- **When to Link**: When writing about the city centre location broadly
-- **Anchor Text Examples**: "Thai massage Glasgow city centre", "city centre massage"
+Link to these when discussing the relevant condition in blog or topical content.
 
-### Merchant City
-- **URL**: https://glasgowthaimassage.co.uk/merchant-city/
-- **When to Link**: Content targeting Merchant City area
-- **Anchor Text Examples**: "Thai massage Merchant City", "massage Merchant City Glasgow"
-
-### Anderston
-- **URL**: https://glasgowthaimassage.co.uk/anderston/
-- **When to Link**: Content targeting Anderston / West Nile Street area
-- **Anchor Text Examples**: "Thai massage Anderston", "massage therapist Anderston Glasgow"
-
-### Finnieston
-- **URL**: https://glasgowthaimassage.co.uk/finnieston/
-- **When to Link**: Content targeting Finnieston area
-- **Anchor Text Examples**: "Thai massage Finnieston", "massage Finnieston Glasgow"
-
-### Cowcaddens
-- **URL**: https://glasgowthaimassage.co.uk/cowcaddens/
-- **When to Link**: Content targeting Cowcaddens area
-- **Anchor Text Examples**: "Thai massage Cowcaddens", "massage near Cowcaddens"
-
-### Charing Cross
-- **URL**: https://glasgowthaimassage.co.uk/charing-cross/
-- **When to Link**: Content targeting Charing Cross area
-- **Anchor Text Examples**: "Thai massage Charing Cross", "massage near Charing Cross Glasgow"
-
-### Garnethill
-- **URL**: https://glasgowthaimassage.co.uk/garnethill/
-- **When to Link**: Content targeting Garnethill area
-- **Anchor Text Examples**: "Thai massage Garnethill", "massage Garnethill Glasgow"
-
-### Blythswood
-- **URL**: https://glasgowthaimassage.co.uk/blythswood/
-- **When to Link**: Content targeting Blythswood area
-- **Anchor Text Examples**: "Thai massage Blythswood", "massage Blythswood Glasgow"
-
-### Townhead
-- **URL**: https://glasgowthaimassage.co.uk/townhead/
-- **When to Link**: Content targeting Townhead area
-- **Anchor Text Examples**: "Thai massage Townhead", "massage near Townhead Glasgow"
-
-### G1 Glasgow
-- **URL**: https://glasgowthaimassage.co.uk/glasgow/
-- **When to Link**: Content targeting G1 postcode
-- **Anchor Text Examples**: "Thai massage G1", "massage therapist G1 Glasgow"
+| Condition | URL | Best anchor text |
+|-----------|-----|-----------------|
+| Sciatica | https://glasgowthaimassage.co.uk/sciatica-pain-treatment/ | sciatica treatment, sciatica pain relief, massage for sciatica |
+| Lower back pain | https://glasgowthaimassage.co.uk/lower-back-pain-causes-treatment/ | lower back pain, back pain treatment, massage for back pain |
 
 ---
 
-## Condition / Topic Pages
+## Blog Categories
 
-### Lower Back Pain / Sciatica
-- **URL**: https://glasgowthaimassage.co.uk/lower-back-pain-causes-treatment
-- **When to Link**: When writing about back pain, sciatica, sciatic nerve, or lower back conditions
-- **Anchor Text Examples**: "sciatica massage Glasgow", "lower back pain treatment", "massage for sciatica"
+Link to category archives when you want to point readers toward more content on a broad topic.
 
----
-
-## Quick Reference by Topic
-
-**When writing about stress, anxiety, or relaxation**, link to:
-- https://glasgowthaimassage.co.uk/thai-massage-glasgow/thai-aromatherapy-massage/ — aromatherapy massage
-- https://glasgowthaimassage.co.uk/massage/thai-massage/ — traditional Thai massage
-
-**When writing about sports, fitness, or gym recovery**, link to:
-- https://glasgowthaimassage.co.uk/thai-massage-glasgow/thai-oil-massage-2/thai-sports-massage/ — Thai sports massage
-- https://glasgowthaimassage.co.uk/thai-massage-glasgow/ — services hub
-
-**When writing about back pain, neck pain, or office workers**, link to:
-- https://glasgowthaimassage.co.uk/thai-massage-glasgow/deeo-tissue-massage-in-glasgow/ — deep tissue massage
-- https://glasgowthaimassage.co.uk/lower-back-pain-causes-treatment — back pain/sciatica page
-- https://glasgowthaimassage.co.uk/massage/thai-massage/ — traditional Thai massage
-
-**When writing about headaches, migraines, or facial tension**, link to:
-- https://glasgowthaimassage.co.uk/thai-massage-glasgow/thai-head-massage/ — head massage
-- https://glasgowthaimassage.co.uk/thai-massage-glasgow/thai-facial-massage/ — facial massage
-
-**When writing about gifts or occasions**, link to:
-- https://glasgowthaimassage.co.uk/couples-massage-in-glasgow-city-centre/ — couples massage
-- https://glasgowthaimassage.co.uk/thai-massage-gift-vouchers-v3/ — gift vouchers
-- https://glasgowthaimassage.co.uk/thai-massage-glasgow/ — services overview
-
-**When writing about foot pain, reflexology, or tired feet**, link to:
-- https://glasgowthaimassage.co.uk/thai-massage-glasgow/thai-foot-massage/ — foot massage
+| Category | URL | Best anchor text |
+|----------|-----|-----------------|
+| Thai Massage articles | https://blog.glasgowthaimassage.co.uk/category/thai-massage/ | our Thai massage blog, more articles on Thai massage |
+| Stay Healthy articles | https://blog.glasgowthaimassage.co.uk/category/stay-healthy/ | our wellness blog, health and nutrition articles |
+| Yoga articles | https://blog.glasgowthaimassage.co.uk/category/yoga/ | our yoga blog, yoga guides and tips |
+| Glasgow News | https://blog.glasgowthaimassage.co.uk/category/glasgow-news/ | Glasgow news, what's on in Glasgow |
 
 ---
 
-## Internal Linking Rules
+## Key Blog Posts — Thai Massage
 
-1. **3-5 links per piece** — aim for 3-5 strategic internal links per content item
-2. **Link on first mention** — add the link when the topic first appears naturally, not on every repeat
-3. **Vary anchor text** — use different phrases for the same URL across different articles
-4. **No CTAs** — do not link to the booking page in content; the page template handles all CTAs
-5. **Service pages over homepage** — link to specific service pages rather than the homepage wherever possible
-6. **Location pages for geo content** — geo and location content should link to the relevant area page
+Link to these from service pages, location pages, or other blog posts on related topics.
+
+| Title | URL | Link when writing about... |
+|-------|-----|--------------------------|
+| Discover the Ancient Healing Secrets of Thai Massage | https://blog.glasgowthaimassage.co.uk/discover-the-ancient-healing-secrets-of-thai-massage/ | history of Thai massage, Wat Pho tradition, origins |
+| The Enigmatic Charm of Thai Massage | https://blog.glasgowthaimassage.co.uk/the-enigmatic-charm-of-thai-massage-discover-its-unique-healing-secrets/ | what makes Thai massage unique, benefits overview |
+| Feel Better, Live Better: Massage and Mental Wellness | https://blog.glasgowthaimassage.co.uk/feel-better-live-better-exploring-the-connection-between-massage-therapy-and-mental-wellness/ | mental health benefits, stress and anxiety, mood |
+| The Healing Power of Touch | https://blog.glasgowthaimassage.co.uk/the-healing-power-of-touch-how-massage-can-relieve-pain-naturally/ | pain relief, natural pain management, how massage works |
+| Beyond Relaxation: Deep Tissue Massage | https://blog.glasgowthaimassage.co.uk/beyond-relaxation-how-deep-tissue-massage-transforms-your-body-and-mind/ | deep tissue, muscle tension, chronic tightness |
+| Massage: Your Secret Weapon for Surviving Winter | https://blog.glasgowthaimassage.co.uk/massage-your-secret-weapon-for-surviving-the-winter/ | winter wellness, seasonal content, immune support |
+| Revitalize Your Body and Mind with Thai Massage | https://blog.glasgowthaimassage.co.uk/revitalize-your-body-and-mind-why-every-wellness-enthusiast-needs-thai-massage/ | wellness routine, regular massage, holistic health |
+| Unlocking the Healing Power: Massage and Recovery | https://blog.glasgowthaimassage.co.uk/unlocking-the-healing-power-how-massage-boosts-recovery-and-repairs-your-body/ | recovery, healing, post-exercise, sports |
+| Nurturing Your Inner Vision with Thai Massage | https://blog.glasgowthaimassage.co.uk/nurturing-your-inner-vision-unleashing-the-magic-of-thai-massage/ | mindfulness, inner calm, holistic wellbeing |
 
 ---
 
-*Update this file when new service pages or location pages go live.*
+## Key Blog Posts — Conditions and Pain Relief
+
+| Title | URL | Link when writing about... |
+|-------|-----|--------------------------|
+| Finding Relief: Massage for Sciatica | https://blog.glasgowthaimassage.co.uk/finding-relief-how-massage-therapy-alleviates-sciatica-pain/ | sciatica, nerve pain, lower back and leg pain |
+| Sciatica No More: Therapeutic Massage | https://blog.glasgowthaimassage.co.uk/sciatica-no-more-the-transformative-benefits-of-therapeutic-massage/ | sciatica treatment, pain reduction |
+| Conquer Back Pain: 10 Simple Tips | https://blog.glasgowthaimassage.co.uk/conquer-back-pain-10-simple-tips-for-a-pain-free-life/ | back pain, posture, prevention |
+| Heal Your Injuries with Massage | https://blog.glasgowthaimassage.co.uk/heal-your-injuries-with-massage/ | injury recovery, rehabilitation, soft tissue |
+| Mastering Whiplash: Recovery Strategies | https://blog.glasgowthaimassage.co.uk/mastering-whiplash-essential-strategies-for-effective-management-and-recovery/ | whiplash, neck injury, accident recovery |
+| 7 Massage Techniques for Achy Feet | https://blog.glasgowthaimassage.co.uk/step-into-bliss-7-massage-techniques-to-banish-achy-feet-forever/ | foot pain, plantar fasciitis, tired feet |
+| The Healing Touch: Massage and Depression | https://blog.glasgowthaimassage.co.uk/the-healing-touch-discover-the-science-behind-massage-and-its-role-in-alleviating-depression/ | depression, mental health, emotional wellbeing |
+| From Knots to Nirvana: Stress and Massage | https://blog.glasgowthaimassage.co.uk/from-knots-to-nirvana-how-massage-therapy-can-melt-your-stress-away/ | stress, tension, anxiety relief |
+
+---
+
+## Key Blog Posts — Yoga
+
+| Title | URL | Link when writing about... |
+|-------|-----|--------------------------|
+| Prenatal Yoga Tips | https://blog.glasgowthaimassage.co.uk/prenatal-yoga-tips/ | pregnancy, prenatal wellness, yoga for expectant mothers |
+| Empowering Prenatal Yoga Poses | https://blog.glasgowthaimassage.co.uk/empowering-prenatal-yoga-transformative-poses-for-expecting-moms/ | pregnancy yoga, trimester-specific poses |
+| Can You Touch Your Toes? Flexibility Guide | https://blog.glasgowthaimassage.co.uk/can-you-touch-your-toes-unlocking-the-secrets-of-flexibility-and-grip/ | flexibility, range of motion, stretching |
+| Dealing with Headache Through Yoga | https://blog.glasgowthaimassage.co.uk/dealing-with-headache-through-yoga/ | headaches, tension headaches, yoga relief |
+| Power Yoga for Muscle Toning | https://blog.glasgowthaimassage.co.uk/power-yoga-challenge-for-muscle-toning/ | strength, toning, active yoga |
+
+---
+
+## Key Blog Posts — Stay Healthy / Nutrition
+
+| Title | URL | Link when writing about... |
+|-------|-----|--------------------------|
+| Discover the World's Most Nutritious Superfoods | https://blog.glasgowthaimassage.co.uk/discover-the-worlds-most-delicious-and-nutritious-superfoods/ | superfoods, anti-inflammatory diet, nutrition |
+| Unlock the Power of Chia Seeds | https://blog.glasgowthaimassage.co.uk/unlock-the-power-of-chia-seeds-five-incredible-benefits-you-cant-ignore/ | chia seeds, omega-3, plant-based nutrition |
+| Why is Everyone Buzzing About Cortisol? | https://blog.glasgowthaimassage.co.uk/why-is-everyone-suddenly-buzzing-about-cortisol/ | cortisol, stress hormones, burnout |
+| Unlocking Restful Nights: Natural Sleep Support | https://blog.glasgowthaimassage.co.uk/unlocking-restful-nights-your-ultimate-guide-to-natural-sleep-support-with-together-health/ | sleep, insomnia, rest and recovery |
+| Relief for Tired and Aching Feet | https://blog.glasgowthaimassage.co.uk/relief-for-tired-and-aching-feet/ | foot care, tired feet, foot health |
+
+---
+
+## Linking Rules
+
+1. **3–5 internal links per article** — do not over-link; every link should feel natural
+2. **Vary anchor text** — do not use the exact same anchor phrase twice in one article
+3. **Services first** — always link to the most relevant service page when a treatment is mentioned
+4. **Blog to blog** — link between blog posts on related topics to build topical depth
+5. **Book CTA** — include one link to `/book/` per article, ideally near a CTA paragraph
+6. **No orphan content** — every new article should link to at least one existing article and receive a link from at least one other piece (update older content when adding new pages)
+7. **Cross-domain linking** — linking from the main site to the blog (and vice versa) is encouraged; both domains are part of the same brand
