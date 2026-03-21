@@ -212,10 +212,10 @@ Reason: caching on the live front-end doesn't affect the REST API. Running conte
 
 ## Still Needs Human Input (GTM)
 
-- [ ] `clients/gtm/seo-guidelines.md` — rewrite for GTM (still has Castos/podcast placeholder content)
-- [ ] `clients/gtm/internal-links-map.md` — populate with actual GTM website URLs
+- [x] `clients/gtm/seo-guidelines.md` — all Castos/podcast placeholder content replaced with GTM massage-specific examples and guidance
+- [x] `clients/gtm/internal-links-map.md` — populated from live site crawl (main site + blog subdomain, 58 + 62 pages)
 - [x] `clients/gtm/competitor-analysis.md` — auto-populated by research_competitors.py (10 map pack + 8 organic, 15 profiles)
-- [ ] `clients/gtm/target-keywords.md` — populate with GTM priority keywords
+- [x] `clients/gtm/target-keywords.md` — fully populated: GBP categories, 8 active services, pipeline services, condition-based, location modifier matrix
 - [x] `clients/gtm/writing-examples.md` — 3 real blog posts added (Thai massage, nutrition, Glasgow news) with extracted style notes
 - [ ] Google Sheet — add Column E (Content Type) dropdown with values: service, location, pillar, topical, blog
 - [x] Elementor template — FAQ section removed; local template JSON refreshed via fetch_elementor_template.py

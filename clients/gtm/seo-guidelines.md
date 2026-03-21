@@ -140,16 +140,16 @@ Primary keyword MUST appear in:
 ### Keyword Integration Best Practices
 - **Natural language first**: Write for humans, optimize for search engines
 - **Use variations**: Don't repeat exact phrase robotically
-  - Example: "podcast hosting" → "hosting your podcast" → "podcast host"
+  - Example: "Thai massage" → "traditional Thai massage" → "Thai massage therapy"
 - **Question formats**: Include conversational variations
-  - "How to start a podcast" vs "starting a podcast"
+  - "How does Thai massage work" vs "what is Thai massage"
 - **Semantic keywords**: Use related terms to support topical authority
-  - For "podcast editing": include "audio editing", "post-production", "editing workflow"
+  - For "deep tissue massage": include "muscle tension", "trigger points", "soft tissue release"
 
 ### Keyword Stuffing (Avoid)
-❌ "Podcast hosting is important. Podcast hosting helps podcasters. Our podcast hosting platform offers podcast hosting services for podcast hosting needs."
+❌ "Thai massage Glasgow is perfect for anyone wanting Thai massage. Our Thai massage Glasgow therapists offer Thai massage Glasgow sessions for all Thai massage Glasgow needs."
 
-✅ "Podcast hosting is important for creators who want to distribute their show to major platforms. A reliable host ensures your episodes are accessible wherever listeners discover new content."
+✅ "Thai massage in Glasgow City Centre offers a therapeutic stretch and acupressure experience that helps release tension, improve flexibility, and restore balance — without the need for oils or undressing."
 
 ## Entity Optimisation
 
@@ -339,15 +339,15 @@ Before writing any GTM article, identify:
 
 **Format Options**:
 - `[Primary Keyword]: [Benefit/Promise]`
-- `How to [Goal] | [Qualifier]`
-- `[Number] Ways to [Achieve Benefit]`
-- `[Topic] Guide for [Audience] | GTM`
+- `[Service] in [Area]: [Benefit]`
+- `[Number] Benefits of [Service] | Glasgow Thai Massage`
+- `[Topic] for [Audience] in Glasgow`
 
 **Examples**:
-- ✅ "How to Start a Podcast in 2025: Complete Guide"
-- ✅ "12 Proven Podcast Growth Strategies | GTM"
-- ❌ "Podcast Tips and Tricks" (too vague, no keyword)
-- ❌ "The Ultimate Comprehensive Guide to Everything About Starting Your First Podcast Successfully" (too long)
+- ✅ "Thai Massage Glasgow City Centre | Book Online"
+- ✅ "Deep Tissue Massage for Back Pain in Glasgow"
+- ❌ "Massage Tips and Tricks" (too vague, no keyword)
+- ❌ "The Ultimate Comprehensive Guide to Every Thai Massage Treatment Available in Glasgow City Centre" (too long)
 
 ### Meta Description
 **Requirements**:
@@ -364,9 +364,9 @@ Before writing any GTM article, identify:
 ```
 
 **Examples**:
-- ✅ "Learn how to start a podcast with our step-by-step guide. Everything from equipment to launch strategy. Perfect for beginners. Start your show today." (159 chars)
-- ✅ "Discover 12 proven podcast growth strategies that top creators use. Increase downloads, engagement, and audience loyalty. Actionable tips inside." (155 chars)
-- ❌ "This is a blog post about podcasting where we discuss many podcast-related topics." (vague, no value prop, no CTA)
+- ✅ "Book traditional Thai massage in Glasgow City Centre. Qualified therapists, flexible appointment times. Located on West Nile Street. Book online today." (153 chars)
+- ✅ "Suffering from back pain or tight muscles? Deep tissue massage at Glasgow Thai Massage targets the root cause. Same-week appointments available." (144 chars)
+- ❌ "This is a page about massage in Glasgow where we discuss many massage-related topics." (vague, no value prop, no CTA)
 
 ### URL Slug
 **Requirements**:
@@ -379,10 +379,10 @@ Before writing any GTM article, identify:
 **Format**: `/blog/[primary-keyword-phrase]`
 
 **Examples**:
-- ✅ `/blog/start-podcast-guide`
-- ✅ `/blog/podcast-growth-strategies`
-- ✅ `/blog/podcast-editing-software`
-- ❌ `/blog/how-to-start-a-podcast-in-2025-the-complete-guide` (too long)
+- ✅ `/blog/thai-massage-for-back-pain`
+- ✅ `/blog/deep-tissue-vs-sports-massage`
+- ✅ `/blog/benefits-of-thai-massage`
+- ❌ `/blog/everything-you-need-to-know-about-traditional-thai-massage-in-glasgow-city-centre` (too long)
 - ❌ `/blog/post-12345` (no keywords)
 
 ## Internal Linking Strategy
@@ -448,7 +448,7 @@ Before writing any GTM article, identify:
 
 ### External Link Quality Standards
 - **Authority**: Link to credible, well-known sources
-  - ✅ Industry publications (Podcast Host, Podnews, etc.)
+  - ✅ Health and wellness publications (NHS, Healthline, British Massage Council)
   - ✅ Research institutions and studies
   - ✅ Established media outlets
   - ❌ Random blogs with no authority
@@ -502,22 +502,22 @@ Use transition words to improve flow (target: one per paragraph):
 ### Expertise, Authoritativeness, Trustworthiness (E-A-T)
 
 #### Expertise
-- Provide accurate, detailed information on podcasting topics
-- Back claims with data and examples
-- Demonstrate deep understanding of podcast creator needs
-- Include actionable, practical advice
+- Provide accurate, detailed information on massage therapy and related health topics
+- Back claims with data and examples (e.g. clinical studies on massage for back pain)
+- Demonstrate deep understanding of client conditions and treatment options
+- Include actionable, practical advice (e.g. what to expect, how to prepare)
 
 #### Authoritativeness
-- Cite credible sources
-- Reference industry data and trends
-- Include expert quotes when relevant
-- Leverage GTM's position as hosting platform
+- Cite credible health and wellness sources (NHS, British Massage Council, peer-reviewed research)
+- Reference industry data and treatment science
+- Highlight therapist qualifications and training (Wat Pho credentials where relevant)
+- Leverage GTM's position as a qualified Glasgow city centre massage clinic
 
 #### Trustworthiness
-- Be transparent and honest
-- Acknowledge limitations or challenges
-- Don't overpromise results
-- Cite sources for all statistics and claims
+- Be transparent and honest about what massage can and cannot treat
+- Acknowledge contraindications where relevant (e.g. pregnancy massage precautions)
+- Don't overpromise medical outcomes — use "may help" and "can support" language
+- Cite sources for all statistics and health claims
 - Update outdated content regularly
 
 ### Content Originality
@@ -529,9 +529,9 @@ Use transition words to improve flow (target: one per paragraph):
 
 ### Factual Accuracy
 - **Verify statistics**: Check all numbers and data points
-- **Current information**: Ensure practices/processes are up-to-date
-- **Technical accuracy**: Podcasting terminology and processes must be correct
-- **GTM features**: Ensure product references are accurate
+- **Current information**: Ensure treatment descriptions and pricing references are up-to-date
+- **Technical accuracy**: Massage therapy terminology and anatomy must be correct
+- **Service accuracy**: Only reference services that are currently live on the GTM website and GBP
 
 ## Image Optimization
 
@@ -544,14 +544,14 @@ Use transition words to improve flow (target: one per paragraph):
 ### Image SEO
 **File Names**:
 - Descriptive and keyword-rich
-- ✅ `podcast-editing-software-interface.jpg`
+- ✅ `thai-massage-glasgow-city-centre-treatment.jpg`
 - ❌ `IMG_12345.jpg`
 
 **Alt Text**:
 - Describe what image shows (accessibility + SEO)
 - Include keywords naturally where relevant
 - 125 characters or less
-- ✅ "Podcast editing software interface showing waveform and timeline"
+- ✅ "Thai massage therapist performing assisted stretch on client at Glasgow Thai Massage"
 - ❌ "Image"
 
 **Placement**:
@@ -570,9 +570,9 @@ Featured snippets appear at position 0 in Google search results. Optimize for th
 
 **Example**:
 ```markdown
-## What is Podcast Hosting?
+## What is Traditional Thai Massage?
 
-Podcast hosting is a service that stores your audio files and generates an RSS feed that distributes your episodes to podcast platforms like Apple Podcasts, Spotify, and Google Podcasts. Without a host, listeners can't discover or access your show on their favorite apps.
+Traditional Thai massage is a therapeutic bodywork technique rooted in ancient healing traditions, combining assisted stretching, joint mobilisation, and acupressure along the body's energy lines. Unlike oil massages, it's performed fully clothed on a floor mat and focuses on restoring physical balance and flexibility.
 ```
 
 ### List-Based Snippets
@@ -676,19 +676,19 @@ Before publishing, verify:
 ## SEO Tools & Resources
 
 ### Recommended Tools
-- **Keyword Research**: Ahrefs, SEMrush, Google Keyword Planner
-- **Content Analysis**: Clearscope, Surfer SEO, MarketMuse
-- **Readability**: Hemingway Editor, Grammarly
-- **Technical SEO**: Screaming Frog, Google Search Console
-- **Rank Tracking**: Ahrefs, SEMrush, Google Search Console
+- **Keyword Research**: DataForSEO (`/research-serp`), Google Keyword Planner, Google Search Console
+- **Content Analysis**: `/research` command (entity mapping + section plan), SEO Machine content scorer
+- **Readability**: Hemingway Editor, SEO Machine readability scorer
+- **Technical SEO**: Screaming Frog, Google Search Console, Google Rich Results Test
+- **Rank Tracking**: Google Search Console, DataForSEO rank tracker
 
 ### Reference Resources
 - Google's Search Quality Evaluator Guidelines
+- British Massage Council (massage therapy standards and terminology)
+- NHS — massage therapy guidance (authoritative health source for UK)
 - Moz Beginner's Guide to SEO
-- Backlinko Blog (Brian Dean)
-- Search Engine Journal
 - Ahrefs Blog
 
 ---
 
-**Remember**: SEO serves the user, not the algorithm. Never sacrifice content quality, accuracy, or helpfulness for keyword optimization. The best SEO is great content that genuinely helps podcast creators succeed.
+**Remember**: SEO serves the user, not the algorithm. Never sacrifice content quality, accuracy, or helpfulness for keyword optimisation. The best GTM content genuinely helps people understand how massage therapy can improve their health — and makes booking straightforward.
