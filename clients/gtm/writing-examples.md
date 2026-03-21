@@ -177,6 +177,45 @@ This summer promises to be one of jaw-dropping sights and fantastic stories that
 
 ---
 
+---
+
+## Example 4: Yoga Category
+### Yoga for Pregnant Women — A Trimester-by-Trimester Guide
+
+Picture this: you're pregnant, eagerly awaiting the arrival of your little superstar, but suddenly you're faced with fatigue, unpredictable mood swings, and those pesky leg cramps. Not to mention the struggle to catch your breath! Sounds familiar, doesn't it? This is where yoga enters the scene, ready to rescue you and help you navigate through those nine months like a breeze. Gear up, because this article is your ticket to unlocking the secrets of how yoga can make your pregnancy a delightful experience!
+
+Yoga isn't just about tying yourself in knots on a mat; it's a holistic approach to wellness that can bring balance, strength, and tranquillity to your life, especially during pregnancy. With yoga, you can alleviate those annoying symptoms while effortlessly preparing both your body and mind for childbirth. So, grab a comfy mat, and let's roll into the world of yoga for pregnant women!
+
+Why Yoga is the Perfect Companion for Your Pregnancy Journey
+
+Before you jump into the mats, let's get down to what yoga can actually do for you. It can ease your aches and discomforts while keeping your spirits high. Regular practice promotes good posture, reduces common pregnancy symptoms like constipation and morning sickness, and even opens up the pelvis to ease labour. Imagine gliding through the delivery process with minimal hitches — all thanks to yoga!
+
+But wait, there's more! Yoga also introduces those feel-good hormones called endorphins into your bloodstream, keeping you positive and energised throughout the day. Who wouldn't want a little dose of happiness amid the wild rollercoaster of pregnancy emotions?
+
+First Trimester: Strengthening Your Foundation
+
+During this phase, strong legs and a solid foundation become your best friends. Focus on standing poses that enhance circulation and reduce pesky leg cramps. By building strength early on, you're setting a strong precedent for the remainder of your pregnancy.
+
+Second and Third Trimester: Slow and Steady Wins the Race
+
+As you enter the second and third trimesters, your body deserves a gentle approach. Engage in mild yoga practices that prevent fatigue and overexertion. Instead of intense poses, lean into meditation and breathing exercises. Be mindful to avoid rigorous routines between the 10th and 14th week when your body needs extra care.
+
+Embrace Calm with These Poses
+
+Vakrasana (Twisted Pose): Works wonders for the spine, neck, and legs while giving the abdominal muscles a gentle stretch.
+
+Utkatasana (Chair Pose): Strengthens pelvic and thigh muscles — setting you up for the journey ahead.
+
+Bhadrasana (Butterfly Pose): Strengthens the pelvic area and inner thighs. Sit with feet together, back straight, and hold until comfortable.
+
+Konasana (Angle Pose): Keeps the waist flexible. Stand with feet apart, raise one arm and lean to the opposite side.
+
+Your Journey Ahead
+
+With this engaging yoga regime at your beck and call, you're set to embrace an easy and pleasurable pregnancy. Remember to consult with an expert before starting any new exercise, especially if you're new to yoga. Check in with your medical provider too — it's better to be safe than sorry!
+
+So, roll out that mat, take a deep breath, and unleash the radiant, relaxed you. Enjoy every moment of this special time, because you deserve it!
+
 ## Style Notes (derived from the above examples)
 
 - **Tone**: Warm, upbeat, encouraging — never clinical or dry. Conversational without being sloppy.
@@ -189,3 +228,4 @@ This summer promises to be one of jaw-dropping sights and fantastic stories that
 - **CTAs**: Soft, action-oriented, placed near the end. "Schedule a massage today", "grab your phone", "why not start today?"
 - **Closing**: Always ends on an upbeat, forward-looking note that leaves the reader energised.
 - **What to avoid**: Long unbroken paragraphs, passive voice, generic openings ("In today's world..."), overly formal language.
+- **No dashes as connectors**: Use commas, colons, or full stops instead of em-dashes and en-dashes to connect clauses. Hyphens only for compound words (well-being, deep-tissue). See brand-voice.md for full rule.

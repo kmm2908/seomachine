@@ -52,6 +52,12 @@ Imagine a highly skilled practitioner who genuinely loves their work and wants c
 
 **Geo/location pages**: Conversational and locally specific. Speak to the area — who lives and works there, what their day looks like, why they'd benefit from an hour away.
 
+**Blog category priority** (most to least frequent publishing):
+1. **Thai Massage** — benefits, techniques, conditions, mental wellness. Primary focus.
+2. **Stay Healthy** — nutrition, wellbeing habits, general health tips. Complements the massage angle.
+3. **Yoga** — poses, pregnancy yoga, flexibility, mindfulness. Related wellness content.
+4. **Glasgow News** — local events, city highlights, neighbourhood stories. Builds local relevance.
+
 **Blog posts**: Friendly and knowledgeable. More personal than service pages. Can have a slight opinion or angle. The tone of a trusted expert writing for a general audience.
 
 **FAQ answers**: Clear, direct, practical. Short sentences. No filler.
