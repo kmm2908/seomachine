@@ -619,8 +619,15 @@ class WordPressPublisher:
                 html_content, featured_media_id = self._upload_and_replace_images(
                     html_content, article_dir
                 )
+                # Inject the banner URL into the schema [BANNER_IMAGE_URL] token.
+                # The first https:// src in the content is the banner (injected first).
+                banner_match = re.search(r'src="(https://[^"]+)"', html_content)
+                if banner_match:
+                    html_content = html_content.replace('[BANNER_IMAGE_URL]', banner_match.group(1))
             except Exception as e:
                 print(f"    Warning: image upload failed — {e}")
+        # Clear any unfilled token (e.g. when no images are generated)
+        html_content = html_content.replace('[BANNER_IMAGE_URL]', '')
 
         # Elementor path: inject HTML into the saved template layout
         if elementor_template_path and Path(elementor_template_path).exists():

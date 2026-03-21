@@ -28,7 +28,7 @@ import re
 import sys
 import time
 import traceback
-from datetime import date
+from datetime import date, datetime
 from pathlib import Path
 from typing import Optional
 
@@ -318,8 +318,12 @@ def run_quality_check(content: str) -> None:
         from readability_scorer import ReadabilityScorer
 
         plain = re.sub(r'<!--.*?-->', '', content, flags=re.DOTALL)
+        # Preserve paragraph breaks before stripping tags
+        plain = re.sub(r'</p>', '\n\n', plain, flags=re.IGNORECASE)
+        plain = re.sub(r'<br\s*/?>', '\n', plain, flags=re.IGNORECASE)
         plain = re.sub(r'<[^>]+>', ' ', plain)
-        plain = re.sub(r'\s+', ' ', plain).strip()
+        plain = re.sub(r'\n[ \t]+', '\n', plain)
+        plain = re.sub(r' +', ' ', plain).strip()
 
         eng = EngagementAnalyzer().analyze(plain)
         read = ReadabilityScorer().analyze(plain)
@@ -471,8 +475,14 @@ def run_batch(sheet_range: Optional[str] = None, publish: bool = False) -> None:
             if not content or len(content) < 100:
                 raise ValueError("Generated content is too short or empty")
 
-            # Replace [DATE] placeholder in schema block with today's ISO date
-            content = content.replace('[DATE]', date.today().isoformat())
+            # Replace schema tokens: date (full ISO 8601 with timezone), business fields
+            today_iso = datetime.now().strftime('%Y-%m-%dT12:00:00+00:00')
+            schema_cfg = business_config.get('schema', {})
+            content = content.replace('[DATE]', today_iso)
+            content = content.replace('[BUSINESS_PHONE]', business_config.get('phone', ''))
+            content = content.replace('[BUSINESS_URL]', business_config.get('website', ''))
+            content = content.replace('[BUSINESS_PRICE_RANGE]', schema_cfg.get('price_range', ''))
+            content = content.replace('[BUSINESS_LOGO]', schema_cfg.get('logo_url', ''))
 
             filepath = write_content_file(address, content, abbreviation, content_type)
             word_count = extract_word_count(content)

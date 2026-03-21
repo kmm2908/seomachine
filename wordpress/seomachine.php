@@ -2,7 +2,7 @@
 /**
  * Plugin Name: SEO Machine
  * Description: Registers SEO content post types and exposes SEO meta fields via REST API. No Yoast dependency.
- * Version: 2.2
+ * Version: 2.4
  * Author: SEO Machine
  *
  * Installation:
@@ -161,6 +161,194 @@ add_shortcode('seo_hub', function($atts) {
     );
 
     return '<ul class="seo-hub-links">' . implode('', $items) . '</ul>';
+});
+
+// ── Convert Post Type metabox ────────────────────────────────────────────────
+//
+// Adds a "SEO Content Type" sidebar panel to Pages (and Posts).
+// Lets editors convert a standard page to any SEO Machine CPT.
+// After conversion the post_type changes in the DB and the editor
+// is redirected to the correct admin URL.
+
+add_action('add_meta_boxes', function() {
+    $screen_types = array_merge(['page', 'post'], array_keys(SEO_MACHINE_POST_TYPES));
+    add_meta_box(
+        'seo_machine_convert',
+        'SEO Content Type',
+        'seo_machine_convert_metabox_html',
+        $screen_types,
+        'side',
+        'default'
+    );
+});
+
+function seo_machine_convert_metabox_html(WP_Post $post): void {
+    $current = $post->post_type;
+    $labels  = [
+        'seo_location' => 'Location Page',
+        'seo_service'  => 'Service Page',
+        'seo_pillar'   => 'Pillar Page',
+        'seo_topical'  => 'Topical Article',
+        'seo_blog'     => 'Blog Post',
+    ];
+
+    wp_nonce_field('seo_machine_convert', 'seo_machine_convert_nonce');
+    ?>
+    <p style="margin:0 0 8px;color:#646970;font-size:12px;">
+        <?php if (array_key_exists($current, $labels)): ?>
+            Currently: <strong><?= esc_html($labels[$current]) ?></strong>
+        <?php else: ?>
+            Convert this <?= esc_html($current) ?> to an SEO content type.
+        <?php endif; ?>
+    </p>
+    <select name="seo_machine_target_type" style="width:100%;margin-bottom:6px;">
+        <option value="">— No change —</option>
+        <?php foreach ($labels as $slug => $label): ?>
+            <option value="<?= esc_attr($slug) ?>" <?= selected($current, $slug, false) ?>>
+                <?= esc_html($label) ?>
+            </option>
+        <?php endforeach; ?>
+    </select>
+    <?php if (array_key_exists($current, $labels)): ?>
+        <p style="margin:4px 0 0;color:#646970;font-size:11px;">
+            To unconvert, use Quick Edit or WP-CLI.
+        </p>
+    <?php endif; ?>
+    <?php
+}
+
+add_action('save_post', function(int $post_id, WP_Post $post) {
+    // Bail on autosave, revisions, or missing nonce
+    if (
+        defined('DOING_AUTOSAVE') && DOING_AUTOSAVE ||
+        wp_is_post_revision($post_id) ||
+        !isset($_POST['seo_machine_convert_nonce']) ||
+        !wp_verify_nonce($_POST['seo_machine_convert_nonce'], 'seo_machine_convert') ||
+        !current_user_can('edit_post', $post_id)
+    ) {
+        return;
+    }
+
+    $target = sanitize_key($_POST['seo_machine_target_type'] ?? '');
+
+    if (empty($target) || !array_key_exists($target, SEO_MACHINE_POST_TYPES)) {
+        return;
+    }
+
+    if ($post->post_type === $target) {
+        return;
+    }
+
+    // Update post_type directly — wp_update_post() would recurse into save_post
+    global $wpdb;
+    $wpdb->update(
+        $wpdb->posts,
+        ['post_type' => $target],
+        ['ID' => $post_id],
+        ['%s'],
+        ['%d']
+    );
+
+    // Flush rewrite rules so the new permalink structure resolves immediately
+    flush_rewrite_rules();
+
+    // Quick Edit saves via AJAX — let WordPress handle the response normally
+    if (wp_doing_ajax()) {
+        return;
+    }
+
+    // Full page save — redirect back to the Pages list
+    wp_redirect(admin_url('edit.php?post_type=page&seo_converted=1&converted_label=' . urlencode(SEO_MACHINE_POST_TYPES[$target][1])));
+    exit;
+}, 10, 2);
+
+// Show an admin notice after a successful conversion
+add_action('admin_notices', function() {
+    if (!isset($_GET['seo_converted'])) {
+        return;
+    }
+    $label = sanitize_text_field($_GET['converted_label'] ?? 'SEO content type');
+    echo '<div class="notice notice-success is-dismissible"><p>'
+        . sprintf('Page converted to <strong>%s</strong> successfully.', esc_html($label))
+        . '</p></div>';
+});
+
+// ── Quick Edit support on Pages list ────────────────────────────────────────
+
+// 1. Add "SEO Type" column to the Pages list
+add_filter('manage_pages_columns', function(array $cols): array {
+    $cols['seo_type'] = 'SEO Type';
+    return $cols;
+});
+
+add_action('manage_pages_custom_column', function(string $col, int $post_id): void {
+    if ($col !== 'seo_type') {
+        return;
+    }
+    $labels = [
+        'seo_location' => 'Location Page',
+        'seo_service'  => 'Service Page',
+        'seo_pillar'   => 'Pillar Page',
+        'seo_topical'  => 'Topical Article',
+        'seo_blog'     => 'Blog Post',
+    ];
+    $type    = get_post_type($post_id);
+    $display = $labels[$type] ?? '—';
+
+    // Hidden input carries the current value so JS can read it
+    echo esc_html($display);
+    echo '<input type="hidden" class="seo-type-value" value="' . esc_attr($type) . '">';
+}, 10, 2);
+
+// 2. Add our dropdown inside the Quick Edit form
+add_action('quick_edit_custom_box', function(string $col, string $post_type): void {
+    if ($col !== 'seo_type' || $post_type !== 'page') {
+        return;
+    }
+    $labels = [
+        'seo_location' => 'Location Page',
+        'seo_service'  => 'Service Page',
+        'seo_pillar'   => 'Pillar Page',
+        'seo_topical'  => 'Topical Article',
+        'seo_blog'     => 'Blog Post',
+    ];
+    wp_nonce_field('seo_machine_convert', 'seo_machine_convert_nonce');
+    ?>
+    <fieldset class="inline-edit-col-left" style="clear:both;padding-top:8px;">
+        <div class="inline-edit-col">
+            <label>
+                <span class="title">SEO Type</span>
+                <select name="seo_machine_target_type" id="seo_machine_target_type">
+                    <option value="">— No change —</option>
+                    <?php foreach ($labels as $slug => $label): ?>
+                        <option value="<?= esc_attr($slug) ?>"><?= esc_html($label) ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </label>
+        </div>
+    </fieldset>
+    <?php
+}, 10, 2);
+
+// 3. JS: pre-populate the select when Quick Edit opens
+add_action('admin_footer-edit.php', function(): void {
+    $screen = get_current_screen();
+    if (!$screen || $screen->id !== 'edit-page') {
+        return;
+    }
+    ?>
+    <script>
+    (function($) {
+        var _edit = inlineEditPost.edit;
+        inlineEditPost.edit = function(id) {
+            _edit.apply(this, arguments);
+            var postId  = typeof id === 'object' ? parseInt(this.getId(id), 10) : id;
+            var current = $('#post-' + postId).find('.seo-type-value').val() || '';
+            $('#seo_machine_target_type').val(current);
+        };
+    }(jQuery));
+    </script>
+    <?php
 });
 
 // ── Elementor support for custom post types ──────────────────────────────────

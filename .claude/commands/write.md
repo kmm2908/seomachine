@@ -16,11 +16,11 @@ Use this command to create comprehensive, SEO-optimized long-form blog content.
 
 ### Pre-Writing Review
 - **Research Brief**: Review research brief from `/research` command if available
-- **Brand Voice**: Check @context/brand-voice.md for tone and messaging
-- **Writing Examples**: Study @context/writing-examples.md for style consistency
+- **Brand Voice**: Check @clients/gtm/brand-voice.md for tone and messaging
+- **Writing Examples**: Study @clients/gtm/writing-examples.md for style consistency
 - **Style Guide**: Follow formatting rules from @context/style-guide.md
-- **SEO Guidelines**: Apply requirements from @context/seo-guidelines.md
-- **Target Keywords**: Integrate keywords from @context/target-keywords.md naturally
+- **SEO Guidelines**: Apply requirements from @clients/gtm/seo-guidelines.md
+- **Target Keywords**: Integrate keywords from @clients/gtm/target-keywords.md naturally
 
 ### Content Structure
 
@@ -114,7 +114,7 @@ Don't just put one CTA at the end. Embedded CTAs get 121% more conversions than 
 - URL slug
 
 #### Internal Linking (3-5+ links)
-- Reference @context/internal-links-map.md for key pages
+- Reference @clients/gtm/internal-links-map.md for key pages
 - Link to relevant pillar content from your site
 - Link to related blog articles
 - Link to product/service pages where natural
@@ -135,14 +135,14 @@ Don't just put one CTA at the end. Embedded CTAs get 121% more conversions than 
 - Break up text with subheadings every 300-400 words
 
 ### Target Audience Focus
-- **Audience Perspective**: Write for your target audience (defined in @context/brand-voice.md)
+- **Audience Perspective**: Write for your target audience (defined in @clients/gtm/brand-voice.md)
 - **Practical Application**: Show how information applies to their specific challenges
-- **Product Integration**: Naturally mention how your features solve problems (reference @context/features.md)
+- **Product Integration**: Naturally mention how your features solve problems (reference @clients/gtm/features.md)
 - **Industry Context**: Reference relevant trends and best practices
 - **Technical Accuracy**: Ensure terminology and processes are correct for your industry
 
 ### Brand Voice Consistency
-- Maintain your brand tone (reference @context/brand-voice.md for specifics)
+- Maintain your brand tone (reference @clients/gtm/brand-voice.md for specifics)
 - Follow your established voice pillars
 - Use messaging framework from your context files
 - Apply terminology preferences consistently

@@ -82,7 +82,8 @@ After Section 2, output a `<!-- SCHEMA -->` block containing a single `<script t
 **Service:**
 - `name` — the service name from the `<h2>` text
 - `description` — first `<p>` text trimmed to ~160 characters, HTML stripped
-- `provider` — `{"@type": "LocalBusiness", "name": "[business.name]", "url": "[business.website]"}`
+- `image` — literal string `[BANNER_IMAGE_URL]`
+- `provider` — `{"@type": "Organization", "name": "[business.name]", "url": "[BUSINESS_URL]"}`
 
 **FAQPage** — one `Question` per `<details>` block from Section 2:
 - `name` — `<summary>` text (the question)
@@ -91,6 +92,9 @@ After Section 2, output a `<!-- SCHEMA -->` block containing a single `<script t
 **LocalBusiness:**
 - `name` — `business.name`
 - `url` — `business.website`
+- `telephone` — literal string `[BUSINESS_PHONE]`
+- `priceRange` — literal string `[BUSINESS_PRICE_RANGE]`
+- `image` — literal string `[BUSINESS_LOGO]`
 - `address` — `PostalAddress` with `streetAddress` from `business.address`, `addressLocality: "Glasgow"`, `addressCountry: "GB"`
 
 ---
@@ -136,10 +140,11 @@ Output three clearly labelled HTML blocks. No frontmatter. No markdown. No CTAs 
       "@type": "Service",
       "name": "[Service name from H2]",
       "description": "[First paragraph, ~160 chars, HTML stripped]",
+      "image": "[BANNER_IMAGE_URL]",
       "provider": {
-        "@type": "LocalBusiness",
+        "@type": "Organization",
         "name": "[business.name]",
-        "url": "[business.website]"
+        "url": "[BUSINESS_URL]"
       }
     },
     {
@@ -161,6 +166,9 @@ Output three clearly labelled HTML blocks. No frontmatter. No markdown. No CTAs 
       "@type": "LocalBusiness",
       "name": "[business.name]",
       "url": "[business.website]",
+      "telephone": "[BUSINESS_PHONE]",
+      "priceRange": "[BUSINESS_PRICE_RANGE]",
+      "image": "[BUSINESS_LOGO]",
       "address": {
         "@type": "PostalAddress",
         "streetAddress": "[business.address]",

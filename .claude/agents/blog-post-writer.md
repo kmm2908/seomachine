@@ -86,8 +86,9 @@ After Section 2, output a `<!-- SCHEMA -->` block containing a single `<script t
 **BlogPosting:**
 - `headline` — the `<h2>` text from Section 1
 - `description` — first `<p>` text trimmed to ~160 characters, HTML stripped
+- `image` — literal string `[BANNER_IMAGE_URL]`
 - `datePublished` — literal string `[DATE]`
-- `author` and `publisher` — `{"@type": "LocalBusiness", "name": "[business.name]"}`
+- `author` and `publisher` — `{"@type": "Organization", "name": "[business.name]", "url": "[BUSINESS_URL]"}`
 
 **FAQPage** — one `Question` per `<details>` block from Section 2:
 - `name` — `<summary>` text (the question)
@@ -96,6 +97,9 @@ After Section 2, output a `<!-- SCHEMA -->` block containing a single `<script t
 **LocalBusiness:**
 - `name` — `business.name`
 - `url` — `business.website`
+- `telephone` — literal string `[BUSINESS_PHONE]`
+- `priceRange` — literal string `[BUSINESS_PRICE_RANGE]`
+- `image` — literal string `[BUSINESS_LOGO]`
 - `address` — `PostalAddress` with `streetAddress` from `business.address`, `addressLocality: "Glasgow"`, `addressCountry: "GB"`
 
 ---
@@ -137,9 +141,10 @@ Structure:
       "@type": "BlogPosting",
       "headline": "[H2 text from Section 1]",
       "description": "[First paragraph, ~160 chars, HTML stripped]",
+      "image": "[BANNER_IMAGE_URL]",
       "datePublished": "[DATE]",
-      "author": {"@type": "LocalBusiness", "name": "[business.name]"},
-      "publisher": {"@type": "LocalBusiness", "name": "[business.name]"}
+      "author": {"@type": "Organization", "name": "[business.name]", "url": "[BUSINESS_URL]"},
+      "publisher": {"@type": "Organization", "name": "[business.name]", "url": "[BUSINESS_URL]"}
     },
     {
       "@type": "FAQPage",
@@ -160,6 +165,9 @@ Structure:
       "@type": "LocalBusiness",
       "name": "[business.name]",
       "url": "[business.website]",
+      "telephone": "[BUSINESS_PHONE]",
+      "priceRange": "[BUSINESS_PRICE_RANGE]",
+      "image": "[BUSINESS_LOGO]",
       "address": {
         "@type": "PostalAddress",
         "streetAddress": "[business.address]",
