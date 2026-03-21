@@ -50,10 +50,13 @@ Fill in this template with Castos-specific style preferences. Update as the styl
 - [ ] No (A, B and C)
 - **Decision**: [Choose and document]
 
-**Em Dashes**:
-- Style: — (em dash, no spaces) or - - (hyphens with spaces)
-- Usage: For parenthetical statements or emphasis
-- Example: "Podcast analytics—when used correctly—drive better content decisions."
+**Em Dashes & Hyphens**:
+- **Do not use hyphens or dashes as sentence connectors.** This includes em dashes (—), en dashes (–), and double hyphens (--) used mid-sentence to link clauses or add parenthetical asides.
+- Rewrite as separate sentences or use a comma instead.
+- ❌ "The clinic is in the West End — easy to reach by subway."
+- ✅ "The clinic is in the West End. It is easy to reach by subway."
+- ✅ "The clinic is in the West End, easy to reach by subway."
+- Hyphens in compound adjectives are fine: "well-known", "full-body"
 
 **Quotation Marks**:
 - "Straight quotes" or "Curly quotes"?

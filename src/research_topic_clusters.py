@@ -18,7 +18,7 @@ import re
 load_dotenv()
 
 # Add data_sources to path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'data_sources'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'data_sources'))
 
 from modules.google_search_console import GoogleSearchConsole
 from modules.dataforseo import DataForSEO
@@ -239,7 +239,7 @@ def cluster_keywords_simple(keywords: List[Dict]) -> Dict[int, Dict]:
 
     # Define topic patterns - customize these for your industry
     # Load from config if available
-    config_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'config', 'competitors.json')
+    config_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'config', 'competitors.json')
     if os.path.exists(config_path):
         import json
         with open(config_path) as f:

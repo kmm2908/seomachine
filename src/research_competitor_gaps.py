@@ -17,7 +17,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Add data_sources to path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'data_sources'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'data_sources'))
 
 from modules.google_search_console import GoogleSearchConsole
 from modules.dataforseo import DataForSEO
@@ -27,7 +27,7 @@ from modules.search_intent_analyzer import SearchIntentAnalyzer
 
 def load_competitors():
     """Load competitor lists from config file."""
-    config_path = os.path.join(os.path.dirname(__file__), 'config', 'competitors.json')
+    config_path = os.path.join(os.path.dirname(__file__), '..', 'config', 'competitors.json')
     if os.path.exists(config_path):
         with open(config_path) as f:
             config = json.load(f)
@@ -286,7 +286,7 @@ def is_relevant_keyword(keyword: str) -> bool:
 
     # Industry-relevant terms - customize for your niche
     # Load from config if available, otherwise accept all keywords
-    config_path = os.path.join(os.path.dirname(__file__), 'config', 'competitors.json')
+    config_path = os.path.join(os.path.dirname(__file__), '..', 'config', 'competitors.json')
     if os.path.exists(config_path):
         with open(config_path) as f:
             config = json.load(f)

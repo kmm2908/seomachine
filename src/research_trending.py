@@ -16,7 +16,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Add data_sources to path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'data_sources'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'data_sources'))
 
 from modules.google_search_console import GoogleSearchConsole
 from modules.dataforseo import DataForSEO

@@ -1,130 +1,192 @@
 # Research Command
 
-Use this command to conduct comprehensive SEO keyword research and competitive analysis before writing new content.
+Conduct comprehensive SEO research and entity mapping before writing new content. Produces a research brief saved to `research/`.
 
 ## Usage
 `/research [topic]`
 
 ## What This Command Does
-1. Performs keyword research for your industry-related topics
-2. Analyzes top-ranking competitor content
-3. Identifies content gaps and opportunities
-4. Develops unique angle for your company perspective
-5. Creates detailed research brief for writing
+1. Identifies the primary entity and maps secondary entities
+2. Performs keyword research to find how people search for this entity
+3. Analyses top-ranking competitor content
+4. Identifies content gaps and opportunities
+5. Creates a detailed research brief for writing
+
+---
 
 ## Process
 
-### Keyword Research
-- **Primary Keyword**: Identify main target keyword for the topic
-- **Search Volume & Difficulty**: Research estimated monthly searches and competition level
-- **Keyword Variations**: Find semantic variations and long-tail opportunities
-- **Related Questions**: Discover what people are actually asking (People Also Ask, forums, Reddit)
-- **Search Intent**: Determine if intent is informational, navigational, commercial, or transactional
-- **Topic Cluster**: Identify how this topic fits into your company content clusters
+### Step 0: Social Research (do this before everything else)
 
-### Competitive Analysis
-- **Top 10 SERP Review**: Analyze the top 10 ranking articles for target keyword
-- **Content Length**: Note word count of top-performing articles (benchmark target)
-- **Common Themes**: What topics/sections do all top articles cover?
-- **Content Gaps**: What's missing from competitor coverage?
-- **Unique Angles**: What perspectives or insights are underexplored?
-- **Featured Snippets**: Identify if there's a featured snippet opportunity
-- **Domain Authority**: Note which competitors rank (indie blogs vs. major publications)
+Search Reddit and YouTube to capture what real users actually say — pain points, questions, and language patterns that SEO content never covers.
 
-### Context Integration
-- **your company Advantage**: How can your company product features naturally enhance this content?
-- **Brand Alignment**: Check @context/brand-voice.md for messaging fit
-- **Existing Content**: Review @context/internal-links-map.md for related your company articles
-- **Target Keywords**: Cross-reference with @context/target-keywords.md priority list
-- **SEO Guidelines**: Ensure research aligns with @context/seo-guidelines.md requirements
+**Reddit searches** (run all 5):
+- `site:reddit.com [topic]`
+- `site:reddit.com [topic] help OR advice`
+- `site:reddit.com [topic] experience OR review`
+- `site:reddit.com [topic] recommend OR worth it`
+- `site:reddit.com [topic] problem OR issue`
 
-### Podcast Industry Focus
-- **Podcast Creator Angle**: How does this topic specifically impact target audiences?
-- **Technical Requirements**: Any your industry-specific technical considerations?
-- **Industry Trends**: Current trends in your industry that relate to this topic
-- **Use Cases**: Real podcast scenarios where this topic matters
-- **Pain Points**: Specific challenges target audiences face with this topic
+**YouTube searches** (run 2–3):
+- `site:youtube.com [topic] guide`
+- `site:youtube.com [topic] review 2024 OR 2025`
 
-### Content Planning
-- **Recommended Structure**: Outline H2 and H3 headings based on research
-- **Content Depth**: Determine target word count (typically 2000-3000+ for SEO)
-- **Supporting Evidence**: Identify statistics, studies, or data to include
-- **Expert Sources**: Find industry experts or quotes to reference
-- **Visual Opportunities**: Suggest images, screenshots, or graphics needed
-- **Internal Links**: Map 3-5 key your company pages to link to (from @context/internal-links-map.md)
-- **External Authority**: Identify 2-3 authoritative external sources to link
+From results, extract and record:
+- **Pain points**: What frustrations or problems come up repeatedly?
+- **Real questions**: Questions people actually ask (not keyword-optimised)
+- **User language**: Exact phrases and terminology real people use
+- **Story seeds**: Specific scenarios or outcomes worth referencing
+- **Content gaps**: What topics are underexplored or poorly answered in existing content?
 
-### Hook Development
-- **Introduction Angle**: Compelling way to open the article
-- **Value Proposition**: Clear benefit reader will get from article
-- **Contrarian Elements**: Any unexpected perspectives to explore
-- **Story Opportunities**: Real examples or case studies to feature
+---
+
+### Step 1: Entity Mapping (do this first)
+
+Before keyword research, establish the entity structure:
+
+- **Primary entity**: The single concept this page is fundamentally about (one treatment, one location, one question)
+- **Entity type**: Is it a Service, Place, Concept, Person, or Organisation?
+- **Knowledge Panel check**: Search the primary entity on Google. What attributes does the Knowledge Panel show? What related entities appear in the panel?
+- **People Also Ask**: Note which questions appear — these reveal the secondary entities Google associates with this topic
+- **Secondary entities (3–5)**: Draw from the condition → treatment → outcome → location chain. Cross-reference with @clients/gtm/seo-guidelines.md entity clusters table
+- **Co-occurrence pairs**: Identify 2–3 entity pairs to work into the copy naturally
+
+### Step 2: Keyword Research
+
+Keywords are how people search for the entity — not the writing target itself:
+
+- **Primary keyword**: The most common search phrase for this entity
+- **Search volume & difficulty**: Estimated monthly searches and competition level
+- **Keyword variations**: Semantic variations and long-tail opportunities
+- **Search intent**: Informational, navigational, commercial, or transactional
+- **Related questions**: People Also Ask, forums — these often match secondary entities
+- **Topic cluster fit**: How this piece fits into the GTM content cluster
+
+### Step 3: Competitive Analysis
+
+- **Top 10 SERP review**: Analyse the top 10 ranking pages for the target keyword
+- **Common entities**: What concepts/entities do all top pages mention? These are required secondary entities
+- **Content length**: Word count of top performers (benchmark target)
+- **Content gaps**: What's missing from competitor coverage?
+- **Featured snippets**: Is there a snippet opportunity? What format (paragraph, list, table)?
+- **Unique angle**: What perspective or insight is underexplored?
+
+### Step 4: GTM Context Integration
+
+- **Brand alignment**: Check @clients/gtm/brand-voice.md for messaging and tone fit
+- **Internal links**: Review @clients/gtm/internal-links-map.md for related pages to link
+- **Target keywords**: Cross-reference with @clients/gtm/target-keywords.md priority list
+- **SEO guidelines**: Confirm research aligns with @clients/gtm/seo-guidelines.md
+- **Services**: Check @clients/gtm/features.md — are any services relevant to this topic?
+- **Competitors**: Check @clients/gtm/competitor-analysis.md for any competitor intel on this topic
+
+### Step 5: Content Planning
+
+- **Recommended structure**: Outline H1, H2, and H3 headings based on research
+- **Word count target**: Based on top 10 SERP averages
+- **Entity placement plan**: Where each secondary entity fits naturally in the structure
+- **Supporting evidence**: Statistics, studies, or data to include
+- **Visual opportunities**: Images, diagrams, or screenshots needed
+- **Internal links**: 3–5 GTM pages to link to (from internal-links-map.md)
+- **External authority**: 2–3 authoritative external sources to cite
+
+### Step 6: Hook Development
+
+- **Opening angle**: Compelling way to open — question, statistic, or relatable scenario
+- **Value proposition**: Clear benefit reader will get
+- **Contrarian or unexpected angle**: Any surprising perspective to explore
+
+---
 
 ## Output
-Provides a comprehensive research brief with:
 
-### 1. SEO Foundation
-- **Primary Keyword**: [keyword] (volume, difficulty)
-- **Secondary Keywords**: 3-5 related keywords and variations
-- **Target Word Count**: Minimum words needed to compete
-- **Featured Snippet Opportunity**: Yes/No, format (paragraph, list, table)
+Save to `research/brief-[topic-slug]-[YYYY-MM-DD].md` with these sections:
 
-### 2. Competitive Landscape
-- **Top 3 Competitor Articles**: URLs and key takeaways from each
-- **Common Sections**: Must-cover topics based on SERP analysis
-- **Content Gaps**: Opportunities to provide unique value
-- **Differentiation Strategy**: How your company can stand out
+### 0. Social Research
+- **Pain points**: [real frustrations from Reddit/YouTube]
+- **User language**: [exact phrases real people use — use these in the copy]
+- **Real questions**: [questions people actually ask, not keyword-optimised]
+- **Story seeds**: [specific scenarios or outcomes worth weaving in]
+- **Content gaps**: [topics underexplored in existing results]
 
-### 3. Recommended Outline
+### 1. Entity Map
+- **Primary entity**: [entity name] — [entity type: Service/Place/Concept/etc.]
+- **Secondary entities**: [list of 3–5 with category: treatment / condition / outcome / location / person]
+- **Co-occurrence pairs**: [2–3 pairs to place near each other in copy]
+- **Schema type**: [Service / FAQPage / Article / LocalBusiness]
+- **Knowledge Panel attributes found**: [key attributes Google already knows]
+
+### 2. SEO Foundation
+- **Primary keyword**: [keyword] (volume, difficulty)
+- **Secondary keywords**: 3–5 related keyword variations
+- **Search intent**: [informational / commercial / transactional]
+- **Target word count**: Minimum words needed to compete
+- **Featured snippet opportunity**: Yes/No, format (paragraph, list, table)
+
+### 3. Competitive Landscape
+- **Top 3 competitor articles**: URLs and key takeaways from each
+- **Required entities**: Concepts all top pages mention (must cover)
+- **Content gaps**: Opportunities competitors miss
+- **Differentiation strategy**: How GTM can stand out
+
+### 4. Recommended Outline
 ```
-H1: [Optimized headline with primary keyword]
+H1: [Title — includes primary entity/keyword, under 60 chars]
 
 Introduction
-- Hook
-- Problem statement
-- Value proposition
+- Hook (question, stat, or scenario)
+- Problem/condition this addresses
+- Promise — what reader will learn
 
-H2: [Main section 1]
-H3: [Subsection]
-H3: [Subsection]
+H2: [Main section 1 — secondary entity or co-occurrence angle]
+H3: [Subsection if needed]
 
 H2: [Main section 2]
 ...
 
 Conclusion
 - Key takeaways
-- Call to action
+- Soft CTA to book
 ```
 
-### 4. Supporting Elements
-- **Statistics to Include**: 5-7 relevant data points with sources
-- **Expert Quotes**: Potential sources or existing quotes
-- **Examples/Case Studies**: Real podcast scenarios to feature
-- **Visual Suggestions**: Screenshots, charts, or graphics needed
+### 5. Section Plan
 
-### 5. Internal Linking Strategy
-- **Pillar Page**: Main your company pillar content to link to
-- **Related Articles**: 2-4 relevant blog posts to link
-- **Product Pages**: your company features to naturally mention
-- **Resource Pages**: Tools or guides to reference
+Build a per-section writing plan using the research. For each H2 section:
 
-### 6. Meta Elements Preview
-- **Meta Title**: Draft optimized title (50-60 characters)
-- **Meta Description**: Draft compelling description (150-160 characters)
-- **URL Slug**: Recommended URL structure
+| # | Type | Heading | Words | CTA | Hook |
+|---|------|---------|-------|-----|------|
+| 1 | intro | [H2 text] | 200 | soft | [hook idea from social research] |
+| 2 | [type] | [H2 text] | [target] | — | [hook idea] |
+| … | … | … | … | … | … |
 
-## File Management
-After completing the research, automatically save the brief to:
-- **File Location**: `research/brief-[topic-slug]-[YYYY-MM-DD].md`
-- **File Format**: Markdown with clear sections and structured data
-- **Naming Convention**: Use lowercase, hyphenated topic slug and current date
+**Section types**: `intro`, `body_explanation`, `body_how_to`, `body_list`, `body_comparison`, `faq`, `conclusion`
 
-Example: `research/brief-podcast-editing-software-2025-10-15.md`
+**Word targets by type**: intro 200 | explanation 300 | how-to 350 | list/comparison 400 | faq 250 | conclusion 200
+
+**CTA distribution**: soft CTA in section 2, medium CTA at midpoint, strong CTA in conclusion
+
+**Hook ideas**: draw from social research pain points and user language (Step 0) — not generic openings
+
+### 6. Supporting Elements
+- **Statistics to include**: 3–5 relevant data points with sources
+- **Expert sources**: Potential references or quotes
+- **Visual suggestions**: Screenshots, diagrams, or graphics needed
+
+### 7. Internal Linking Plan
+- **Pillar page**: Main GTM page to link to
+- **Related articles**: 2–4 relevant blog posts to link
+- **Service pages**: GTM service pages to mention naturally
+
+### 8. Meta Elements Draft
+- **Meta title**: Draft (50–60 characters, primary entity/keyword included)
+- **Meta description**: Draft (150–160 characters, keyword + CTA)
+- **URL slug**: Recommended URL
+
+---
 
 ## Next Steps
-The research brief serves as the foundation for:
-1. Running `/write [topic]` to create the optimized article
-2. Reference material for maintaining SEO focus throughout writing
-3. Checklist to ensure all competitive gaps are addressed
 
-This ensures every article is built on solid SEO research and strategic competitive positioning.
+The research brief feeds directly into:
+1. `/write [topic]` — the brief is the foundation for the article
+2. Reference during writing to stay on entity focus
+3. Checklist to ensure all competitive gaps are addressed

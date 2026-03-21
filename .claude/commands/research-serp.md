@@ -1,61 +1,70 @@
 # Research SERP Command
 
-Deep SERP analysis for a specific keyword to understand what Google wants.
+Deep SERP analysis for a specific keyword to understand what Google wants to see — content format, length, entities, and structure.
 
 ## Usage
 `/research-serp "keyword phrase"`
 
 ## What This Command Does
 
-Analyzes the top 10 ranking results for a keyword to provide detailed content requirements:
-- Content type patterns (listicle, how-to, guide, etc.)
+Analyses the top 10 ranking results for a keyword to provide:
+- Entity patterns — which concepts appear across all top pages
+- Content type and structure (listicle, how-to, guide, etc.)
 - Average word count and recommended length
 - SERP features present (featured snippet, PAA, video, etc.)
-- Freshness requirements
-- Competitive difficulty
 - Search intent
-- Common content structure
+- Competitive difficulty
 
-Generates comprehensive content brief for creating or updating content.
+---
 
 ## Process
 
-Execute SERP analysis for a keyword:
+### Step 1: Run the SERP analysis script
+
 ```bash
 python3 research_serp_analysis.py "your target keyword"
 ```
 
-This will:
-1. Fetch top 20 organic results from DataForSEO
-2. Analyze content patterns in top 10
-3. Detect content types from titles
-4. Fetch word counts for each result
-5. Identify SERP features
-6. Analyze search intent
-7. Assess competitive difficulty
-8. Generate content brief
-9. Create report: `research/serp-analysis-[keyword].md`
+This fetches the top 20 organic results from DataForSEO, analyses content patterns in the top 10, and generates a base report at `research/serp-analysis-[keyword].md`.
+
+### Step 2: Entity extraction from top results (Claude does this)
+
+After the script runs, review the top 5 ranking pages and extract:
+
+- **Primary entity**: What single concept is every top page fundamentally about?
+- **Common secondary entities**: Which concepts appear on 3 or more of the top 5 pages? These are required secondary entities for any page targeting this keyword.
+- **Entity co-occurrence patterns**: Which entities appear near each other consistently?
+- **Knowledge Panel check**: Search the primary entity — what attributes does Google show? These are the attributes your page should describe.
+- **People Also Ask**: List the PAA questions. Each question reveals a secondary entity or attribute Google associates with this keyword.
+
+---
 
 ## Output
 
 The report includes:
 
+### Entity Map for This SERP
+- **Primary entity**: [entity name and type]
+- **Required secondary entities**: Concepts appearing in 3+ of the top 5 pages
+- **PAA entities**: Secondary entities revealed by People Also Ask questions
+- **Recommended co-occurrence pairs**: Entity pairs to place near each other in copy
+- **Schema type**: Recommended schema for a page targeting this keyword
+
 ### Content Requirements
-- Recommended word count (based on top 10 average + 10%)
-- Dominant content type (what format works)
-- Content type distribution
+- Recommended word count (top 10 average + 10%)
+- Dominant content type (listicle, how-to, guide, definition, etc.)
+- Content type distribution across top 10
 
 ### SERP Features
-- Featured snippet opportunity
-- People Also Ask questions
+- Featured snippet opportunity and format
+- People Also Ask questions (top 5)
 - Video/image requirements
 - Other SERP features present
 
 ### Content Brief
 - Target specifications (word count, type, tone)
-- Must-have elements
+- Must-have elements (entities and topics that cannot be omitted)
 - Recommended structure
-- SERP features to target
 - Freshness requirements
 
 ### Competitive Analysis
@@ -63,39 +72,23 @@ The report includes:
 - Difficulty assessment
 - Timeframe expectations
 
-### Action Plan
-Step-by-step process from research to publishing
-
-## Example Use Cases
-
-**Before creating new content**:
-```
-/research-serp "best project management tools"
-```
-Understand: Is this a listicle? How long should it be? What features to include?
-
-**Before updating existing content**:
-```
-/research-serp "how to choose the right software"
-```
-Check if SERP patterns have changed, update to match current expectations
+---
 
 ## Integration
 
 After running `/research-serp`:
-- Use the content brief to guide writing
-- Use `/write [keyword]` with insights from SERP analysis
-- Ensure content matches recommended structure and length
+- Use the entity map to inform `/research [topic]` entity planning
+- Use `/write [keyword]` with the brief as foundation
+- Ensure the entity list from Step 2 is included in the research brief
 
 ## Time & Cost
 
-**Time:** 1-2 minutes per keyword
+**Time:** 1–2 minutes for script + 5 minutes for entity extraction
 **API Cost:** ~$0.02 per keyword (DataForSEO)
-**Cost:** Free for word count (if pages accessible)
 
 ## When to Run
 
-- **Before creating any new content**: Know requirements upfront
-- **Before major content updates**: Check current SERP expectations
-- **When stuck on format**: See what type of content ranks
-- **For competitive research**: Understand difficulty before committing
+- **Before creating new content**: Understand what entity coverage is required
+- **Before major updates**: Check if SERP entity patterns have shifted
+- **When stuck on structure**: See what format and entity mix ranks
+- **For competitive research**: Understand what you need to match or beat

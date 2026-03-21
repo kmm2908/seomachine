@@ -50,6 +50,75 @@ class WordPressPublisher:
         self._categories_cache: Optional[Dict[str, int]] = None
         self._tags_cache: Optional[Dict[str, int]] = None
 
+    @classmethod
+    def from_config(cls, wp_config: dict) -> 'WordPressPublisher':
+        """Create a publisher instance from a client config dict."""
+        return cls(
+            url=wp_config.get('url'),
+            username=wp_config.get('username'),
+            app_password=wp_config.get('app_password'),
+        )
+
+    def _parse_frontmatter(self, content: str) -> dict:
+        """Extract YAML-style frontmatter fields (--- key: value --- block)."""
+        match = re.match(r'^---\n(.+?)\n---', content, re.DOTALL)
+        if not match:
+            return {}
+        fields = {}
+        for line in match.group(1).splitlines():
+            if ':' in line:
+                key, _, value = line.partition(':')
+                fields[key.strip().lower().replace(' ', '_')] = value.strip()
+        return fields
+
+    def _find_first_image(self, content: str, base_dir: Optional[Path] = None) -> Optional[str]:
+        """Find the first local image path referenced in markdown content."""
+        for match in re.findall(r'!\[.*?\]\(([^)]+)\)', content):
+            if match.startswith('http'):
+                continue
+            candidate = Path(match)
+            if base_dir:
+                candidate = base_dir / match
+            if candidate.exists():
+                return str(candidate)
+        return None
+
+    def upload_media(self, image_path: str) -> tuple:
+        """Upload an image to the WordPress media library. Returns (media_id, source_url)."""
+        path = Path(image_path)
+        if not path.exists():
+            raise FileNotFoundError(f"Image not found: {image_path}")
+
+        suffix = path.suffix.lower()
+        mime_types = {
+            '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg',
+            '.png': 'image/png', '.gif': 'image/gif',
+            '.webp': 'image/webp',
+        }
+        content_type = mime_types.get(suffix, 'image/jpeg')
+
+        with open(path, 'rb') as f:
+            response = requests.post(
+                f"{self.api_base}/media",
+                headers={
+                    'Content-Disposition': f'attachment; filename="{path.name}"',
+                    'Content-Type': content_type,
+                },
+                data=f,
+                auth=(self.username, self.app_password),
+            )
+        response.raise_for_status()
+        data = response.json()
+        return data['id'], data['source_url']
+
+    def set_featured_image(self, post_id: int, media_id: int, post_type: str = 'posts') -> None:
+        """Set the featured image (thumbnail) on a post."""
+        response = self.session.post(
+            f"{self.api_base}/{post_type}/{post_id}",
+            json={'featured_media': media_id},
+        )
+        response.raise_for_status()
+
     def parse_draft_file(self, file_path: str) -> Dict:
         """
         Parse a markdown draft file and extract metadata and content
@@ -68,22 +137,29 @@ class WordPressPublisher:
         with open(path, 'r', encoding='utf-8') as f:
             content = f.read()
 
+        # Try YAML frontmatter first, fall back to **Field**: value format
+        fm = self._parse_frontmatter(content)
+
         # Extract H1 title
         h1_match = re.search(r'^#\s+(.+)$', content, re.MULTILINE)
-        title = h1_match.group(1).strip() if h1_match else ''
+        title = h1_match.group(1).strip() if h1_match else fm.get('title', '')
 
-        # Extract metadata fields (format: **Field Name**: Value)
-        def extract_field(field_name: str) -> str:
+        # Extract metadata fields — prefer frontmatter, then **Field**: value
+        def extract_field(field_name: str, fm_key: str = '') -> str:
+            fm_key = fm_key or field_name.lower().replace(' ', '_')
+            if fm.get(fm_key):
+                return fm[fm_key]
             pattern = rf'\*\*{field_name}\*\*:\s*(.+?)(?:\n|$)'
             match = re.search(pattern, content, re.IGNORECASE)
             return match.group(1).strip() if match else ''
 
-        meta_title = extract_field('Meta Title')
-        meta_description = extract_field('Meta Description')
-        target_keyword = extract_field('Target Keyword')
-        secondary_keywords = extract_field('Secondary Keywords')
-        category = extract_field('Category')
-        tags = extract_field('Tags')
+        meta_title = extract_field('Meta Title', 'meta_title')
+        meta_description = extract_field('Meta Description', 'meta_description')
+        target_keyword = extract_field('Target Keyword', 'target_keyword')
+        secondary_keywords = extract_field('Secondary Keywords', 'secondary_keywords')
+        category = extract_field('Category', 'category')
+        tags = extract_field('Tags', 'tags')
+        featured_image = extract_field('Featured Image', 'featured_image')
 
         # Extract URL slug - handle both formats
         slug = ''
@@ -131,6 +207,7 @@ class WordPressPublisher:
             'slug': slug,
             'category': category,
             'tags': tags,
+            'featured_image': featured_image,
             'content': body_content
         }
 
@@ -262,6 +339,31 @@ class WordPressPublisher:
         self._tags_cache[name_lower] = new_tag['id']
         return new_tag['id']
 
+    @staticmethod
+    def _wrap_schema_block(content: str) -> str:
+        """
+        Find the <!-- SCHEMA --> block in HTML content, remove it from its
+        current position, wrap it in a Gutenberg wp:html block (which preserves
+        <script> tags), and append it at the end of the content.
+
+        WordPress strips <script> tags from regular post content but preserves
+        them inside Custom HTML (wp:html) blocks.
+        """
+        schema_pattern = re.compile(
+            r'<!-- SCHEMA -->\s*(<script[^>]*type=["\']application/ld\+json["\'][^>]*>.*?</script>)\s*',
+            re.DOTALL | re.IGNORECASE
+        )
+        match = schema_pattern.search(content)
+        if not match:
+            return content
+
+        script_tag = match.group(1).strip()
+        # Remove the schema block from its original position
+        content = schema_pattern.sub('', content).rstrip()
+        # Append as a Gutenberg Custom HTML block
+        gutenberg_block = f'\n\n<!-- wp:html -->\n{script_tag}\n<!-- /wp:html -->'
+        return content + gutenberg_block
+
     def create_draft(
         self,
         title: str,
@@ -287,6 +389,8 @@ class WordPressPublisher:
         Returns:
             WordPress post response with id, link, etc.
         """
+        content = self._wrap_schema_block(content)
+
         post_data = {
             'title': title,
             'content': content,
@@ -333,9 +437,9 @@ class WordPressPublisher:
         Returns:
             Updated post response
         """
-        # Use the yoast_seo field provided by our mu-plugin
+        # Use the seo_meta field provided by our mu-plugin
         yoast_data = {
-            'yoast_seo': {
+            'seo_meta': {
                 'seo_title': meta_title,
                 'meta_description': meta_description,
                 'focus_keyphrase': focus_keyphrase
@@ -348,6 +452,215 @@ class WordPressPublisher:
         )
         response.raise_for_status()
         return response.json()
+
+    # ── Elementor template injection ──────────────────────────────────────────
+
+    def _find_html_widget(self, elements: list) -> Optional[dict]:
+        """Depth-first search for the HTML injection widget.
+
+        Primary: first widget where widgetType == 'html' and settings.html
+        contains 'Paste HTML Here'. Fallback: first html widget anywhere.
+        """
+        # First pass: look for the marked widget
+        result = self._find_html_widget_marked(elements)
+        if result:
+            return result
+        # Fallback: first html widget
+        return self._find_html_widget_first(elements)
+
+    def _find_html_widget_marked(self, elements: list) -> Optional[dict]:
+        for el in elements:
+            if el.get("elType") == "widget" and el.get("widgetType") == "html":
+                if "Paste HTML Here" in el.get("settings", {}).get("html", ""):
+                    return el
+            result = self._find_html_widget_marked(el.get("elements", []))
+            if result:
+                return result
+        return None
+
+    def _find_html_widget_first(self, elements: list) -> Optional[dict]:
+        for el in elements:
+            if el.get("elType") == "widget" and el.get("widgetType") == "html":
+                return el
+            result = self._find_html_widget_first(el.get("elements", []))
+            if result:
+                return result
+        return None
+
+    def _inject_elementor(self, html_content: str, template_path: str) -> dict:
+        """Load Elementor template JSON and inject article HTML into the HTML widget.
+
+        Schema <script> is appended to the widget content directly — Elementor
+        HTML widgets preserve <script> tags natively, so no Gutenberg wrapper needed.
+        """
+        import json as _json
+        template = _json.loads(Path(template_path).read_text(encoding="utf-8"))
+
+        # Split article HTML from schema block
+        schema_pattern = re.compile(
+            r'<!--\s*SCHEMA\s*-->\s*(<script[^>]*type=["\']application/ld\+json["\'][^>]*>.*?</script>)',
+            re.DOTALL | re.IGNORECASE,
+        )
+        schema_match = schema_pattern.search(html_content)
+        article_html = schema_pattern.sub("", html_content).strip()
+        schema_script = schema_match.group(1).strip() if schema_match else ""
+
+        # Remove the first <h2> — the Elementor template renders the page title
+        # as an H1 via its page title widget, so the H2 would duplicate it.
+        article_html = re.sub(r'<h2[^>]*>.*?</h2>\s*', '', article_html, count=1,
+                               flags=re.DOTALL | re.IGNORECASE)
+
+        # Match list spacing to body text — Elementor HTML widgets don't inherit
+        # theme line-height on <ul>/<li>, so set it inline.
+        article_html = article_html.replace('<ul>', '<ul style="line-height: 1.8; margin: 0.5em 0 1em;">')
+        article_html = article_html.replace('<li>', '<li style="margin-bottom: 0.4em;">')
+
+        widget = self._find_html_widget(template)
+        if not widget:
+            raise RuntimeError("No HTML widget found in Elementor template. Check elementor-template.json.")
+
+        widget["settings"]["html"] = article_html + ("\n\n" + schema_script if schema_script else "")
+        return template
+
+    def _create_elementor_page(
+        self, title: str, template_dict: dict, slug: str, excerpt: str = "", post_type: str = "seo_location"
+    ) -> dict:
+        """Create a WordPress post/page/CPT pre-populated with an Elementor layout."""
+        import json as _json
+        type_endpoints = {'post': 'posts', 'page': 'pages'}
+        endpoint = type_endpoints.get(post_type, post_type)
+        post_data = {
+            "title": title,
+            "slug": slug,
+            "status": "draft",
+            "excerpt": excerpt,
+            "meta": {
+                "_elementor_data": _json.dumps(template_dict, ensure_ascii=False),
+                "_elementor_edit_mode": "builder",
+            },
+        }
+        response = self.session.post(f"{self.api_base}/{endpoint}", json=post_data)
+        response.raise_for_status()
+        return response.json()
+
+    def _upload_and_replace_images(
+        self, html_content: str, article_dir: Path
+    ) -> tuple:
+        """Upload all local <img> files to WP media library and rewrite src to absolute URLs.
+
+        Returns (updated_html, banner_media_id) where banner_media_id is the ID of the
+        first image uploaded (used as the featured image).
+        """
+        local_srcs = re.findall(r'<img[^>]+src="([^"]+)"', html_content)
+        featured_media_id = None
+
+        for src in local_srcs:
+            if src.startswith('http'):
+                continue
+            local_path = article_dir / src
+            if not local_path.exists():
+                print(f"    Warning: image not found locally — {src}")
+                continue
+            try:
+                media_id, media_url = self.upload_media(str(local_path))
+                html_content = html_content.replace(f'src="{src}"', f'src="{media_url}"')
+                print(f"    → uploaded {src} → {media_url}")
+                if featured_media_id is None:
+                    featured_media_id = media_id
+            except Exception as e:
+                print(f"    Warning: failed to upload {src} — {e}")
+
+        return html_content, featured_media_id
+
+    def publish_html_content(
+        self,
+        html_content: str,
+        slug: str,
+        post_type: str = 'post',
+        meta_title: str = '',
+        meta_description: str = '',
+        focus_keyphrase: str = '',
+        featured_image_path: Optional[str] = None,
+        elementor_template_path: Optional[str] = None,
+        excerpt: str = '',
+    ) -> Dict:
+        """
+        Publish raw HTML content (as produced by the batch runner agents) to WordPress.
+
+        Extracts the post title from the first <h2> tag. The <!-- SCHEMA --> block,
+        if present, is automatically wrapped in a Gutenberg wp:html block by create_draft.
+
+        Args:
+            html_content: Raw HTML string with <!-- SECTION 1 -->, <!-- SECTION 2 FAQ -->,
+                          and optionally <!-- SCHEMA --> blocks.
+            slug: URL slug for the post.
+            post_type: 'post', 'page', or custom post type.
+            meta_title: Yoast SEO title (optional).
+            meta_description: Yoast meta description (optional).
+            focus_keyphrase: Yoast focus keyphrase (optional).
+            featured_image_path: Local path to an image to set as featured image (optional).
+
+        Returns:
+            Dict with post_id, edit_url, view_url, title, slug.
+        """
+        type_endpoints = {'post': 'posts', 'posts': 'posts', 'page': 'pages', 'pages': 'pages'}
+        api_endpoint = type_endpoints.get(post_type.lower(), post_type.lower())
+
+        # Extract title from first <h2> tag in the content
+        h2_match = re.search(r'<h2[^>]*>(.*?)</h2>', html_content, re.IGNORECASE | re.DOTALL)
+        title = re.sub(r'<[^>]+>', '', h2_match.group(1)).strip() if h2_match else slug.replace('-', ' ').title()
+
+        # Upload all local images and rewrite their src to absolute WordPress URLs
+        # before creating the draft, so the post content has working image URLs.
+        featured_media_id = None
+        if featured_image_path:
+            try:
+                article_dir = Path(featured_image_path).parent
+                html_content, featured_media_id = self._upload_and_replace_images(
+                    html_content, article_dir
+                )
+            except Exception as e:
+                print(f"    Warning: image upload failed — {e}")
+
+        # Elementor path: inject HTML into the saved template layout
+        if elementor_template_path and Path(elementor_template_path).exists():
+            modified_template = self._inject_elementor(html_content, elementor_template_path)
+            post = self._create_elementor_page(title, modified_template, slug, excerpt=excerpt or meta_description, post_type=post_type)
+        else:
+            post = self.create_draft(
+                title=title,
+                content=html_content,
+                slug=slug,
+                excerpt=excerpt or meta_description,
+                post_type=api_endpoint,
+            )
+        post_id = post['id']
+
+        if meta_title or meta_description or focus_keyphrase:
+            self.set_yoast_meta(
+                post_id=post_id,
+                meta_title=meta_title or title,
+                meta_description=meta_description,
+                focus_keyphrase=focus_keyphrase,
+                post_type=api_endpoint,
+            )
+
+        if featured_media_id:
+            try:
+                featured_endpoint = api_endpoint
+                self.set_featured_image(post_id, featured_media_id, featured_endpoint)
+            except Exception as e:
+                print(f"    Warning: could not set featured image — {e}")
+
+        edit_url = f"{self.url}/wp-admin/post.php?post={post_id}&action=edit"
+        return {
+            'post_id': post_id,
+            'post_type': post_type,
+            'edit_url': edit_url,
+            'view_url': post.get('link', ''),
+            'title': title,
+            'slug': slug,
+        }
 
     def publish_draft(self, file_path: str, post_type: str = 'post') -> Dict:
         """
@@ -415,6 +728,17 @@ class WordPressPublisher:
                 focus_keyphrase=draft['target_keyword'],
                 post_type=api_endpoint
             )
+
+        # Set featured image — use frontmatter field first, then first image in body
+        image_path = draft.get('featured_image') or self._find_first_image(
+            draft['content'], base_dir=Path(file_path).parent
+        )
+        if image_path:
+            try:
+                media_id, _ = self.upload_media(image_path)
+                self.set_featured_image(post_id, media_id, api_endpoint)
+            except Exception as e:
+                print(f"    Warning: image upload failed — {e}")
 
         # Build edit URL
         edit_url = f"{self.url}/wp-admin/post.php?post={post_id}&action=edit"

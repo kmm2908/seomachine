@@ -2,9 +2,13 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Session Start
+
+At the start of every new session, automatically invoke `/start` before responding to anything else.
+
 ## Project Overview
 
-SEO Machine is an open-source Claude Code workspace for creating SEO-optimized blog content. It combines custom commands, specialized agents, and Python-based analytics to research, write, optimize, and publish articles for any business.
+SEO Machine is a Claude Code workspace for creating SEO-optimised content at scale. It combines custom commands, specialised agents, a Python batch runner, and Google Sheets integration to research, write, optimise, and publish articles for multiple business clients.
 
 ## Setup
 
@@ -12,90 +16,194 @@ SEO Machine is an open-source Claude Code workspace for creating SEO-optimized b
 pip install -r data_sources/requirements.txt
 ```
 
-API credentials are configured in `data_sources/config/.env` (GA4, GSC, DataForSEO, WordPress). GA4 service account credentials go in `credentials/ga4-credentials.json`.
+API credentials go in `.env` at the project root (copy from `.env.example`):
+- `ANTHROPIC_API_KEY` — required for the batch runner
+- `GEO_LOCATIONS_SHEET_ID` — Google Sheet ID for the content queue
+- `GA4_CREDENTIALS_PATH` — path to service account JSON
+- DataForSEO, GSC, and SMTP email settings (optional)
 
-## Commands
+WordPress credentials are configured per client in `clients/[abbr]/config.json` (not in `.env`).
 
-All commands are defined in `.claude/commands/` and invoked as slash commands:
+## Client Structure
 
-- `/research [topic]` - Keyword/competitor research, generates brief in `research/`
-- `/write [topic]` - Create full article in `drafts/`, auto-triggers optimization agents
-- `/rewrite [topic]` - Update existing content, saves to `rewrites/`
-- `/optimize [file]` - Final SEO polish pass
-- `/analyze-existing [URL or file]` - Content health audit
-- `/performance-review` - Analytics-driven content priorities
-- `/publish-draft [file]` - Publish to WordPress via REST API
-- `/article [topic]` - Simplified article creation
-- `/cluster [topic]` - Build complete topic cluster strategy with pillar + supporting articles + linking map
-- `/priorities` - Content prioritization matrix
-- `/research-serp`, `/research-gaps`, `/research-trending`, `/research-performance`, `/research-topics` - Specialized research commands
-- `/landing-write`, `/landing-audit`, `/landing-research`, `/landing-publish`, `/landing-competitor` - Landing page commands
+Each client lives in a single folder. To add a new client, run `/new-client`.
 
-## Architecture
-
-### Command-Agent Model
-
-**Commands** (`.claude/commands/`) orchestrate workflows. **Agents** (`.claude/agents/`) are specialized roles invoked by commands. After `/write`, these agents auto-run: SEO Optimizer, Meta Creator, Internal Linker, Keyword Mapper.
-
-Key agents: `content-analyzer.md`, `seo-optimizer.md`, `meta-creator.md`, `internal-linker.md`, `keyword-mapper.md`, `editor.md`, `headline-generator.md`, `cro-analyst.md`, `performance.md`, `cluster-strategist.md`.
-
-### Python Analysis Pipeline
-
-Located in `data_sources/modules/`. The Content Analyzer chains:
-1. `search_intent_analyzer.py` - Query intent classification
-2. `keyword_analyzer.py` - Density, distribution, stuffing detection
-3. `content_length_comparator.py` - Benchmarks against top 10 SERP results
-4. `readability_scorer.py` - Flesch Reading Ease, grade level
-5. `seo_quality_rater.py` - Comprehensive 0-100 SEO score
-
-### Data Integrations
-
-- `google_analytics.py` - GA4 traffic/engagement data
-- `google_search_console.py` - Rankings and impressions
-- `dataforseo.py` - SERP positions, keyword metrics
-- `data_aggregator.py` - Combines all sources into unified analytics
-- `wordpress_publisher.py` - Publishes to WordPress with Yoast SEO metadata
-
-### Opportunity Scoring
-
-`opportunity_scorer.py` uses 8 weighted factors: Volume (25%), Position (20%), Intent (20%), Competition (15%), Cluster (10%), CTR (5%), Freshness (5%), Trend (5%).
-
-## Running Python Scripts
-
-```bash
-# Research & analysis scripts (run from repo root)
-python3 research_quick_wins.py
-python3 research_competitor_gaps.py
-python3 research_performance_matrix.py
-python3 research_priorities_comprehensive.py
-python3 research_serp_analysis.py
-python3 research_topic_clusters.py
-python3 research_trending.py
-python3 seo_baseline_analysis.py
-python3 seo_bofu_rankings.py
-python3 seo_competitor_analysis.py
-
-# Test API connectivity
-python3 test_dataforseo.py
 ```
+clients/
+  gtm/                  ← one folder per client
+    config.json         ← machine-readable config (name, address, WP creds, services)
+    brand-voice.md      ← tone, messaging pillars, client-specific writing rules
+    seo-guidelines.md   ← keyword strategy, entity optimisation rules
+    internal-links-map.md
+    features.md
+    competitor-analysis.md
+    target-keywords.md
+    writing-examples.md
+  README.md             ← schema docs and how to add new clients
+```
+
+Global context (not client-specific) stays in `context/`:
+- `context/style-guide.md` — universal grammar, formatting, writing rules (including no-hyphens rule)
+- `context/cro-best-practices.md` — conversion optimisation principles
 
 ## Content Pipeline
 
-`topics/` (ideas) → `research/` (briefs) → `drafts/` (articles) → `review-required/` (pending review) → `published/` (final)
+```
+Google Sheet queue → src/geo_batch_runner.py → content/[abbr]/[type]/
+```
 
-Rewrites go to `rewrites/`. Landing pages go to `landing-pages/`. Audits go to `audits/`.
+Slash command pipeline (interactive):
+`topics/` → `research/` (briefs) → `drafts/` (articles) → `review-required/` → `published/`
 
-## Context Files
+Rewrites: `rewrites/` | Landing pages: `landing-pages/` | Audits: `audits/`
 
-`context/` contains brand guidelines that inform all content generation:
-- `brand-voice.md` - Tone, messaging pillars
-- `style-guide.md` - Grammar, formatting standards
-- `seo-guidelines.md` - Keyword and structure rules
-- `internal-links-map.md` - Key pages for internal linking
-- `features.md` - Product features
-- `competitor-analysis.md` - Competitive intelligence
-- `cro-best-practices.md` - Conversion optimization guidelines
+## Content Types
+
+The batch runner and agents support 5 content types, selected via Column E in the Google Sheet:
+
+| Type | Agent | Word Count | Use for |
+|------|-------|------------|---------|
+| `service` | `service-page-writer.md` | 400–600 | Individual treatment/service pages |
+| `location` | `location-page-writer.md` | 450+ | District, neighbourhood, or postcode-level location pages |
+| `pillar` | `pillar-page-writer.md` | 700–1000 | GBP category landing pages (hub pages) |
+| `topical` | `topical-writer.md` | 600–1000 | Informational/question-based articles |
+| `blog` | `blog-post-writer.md` | 600–1200 | Conversational blog posts |
+
+Default: `blog` if Column E is empty.
+
+## Batch Runner
+
+```bash
+python3 src/geo_batch_runner.py             # process all "Write Now" rows
+python3 src/geo_batch_runner.py A2:E5       # specific range only
+python3 src/geo_batch_runner.py --publish   # generate + publish to WordPress as draft
+```
+
+Google Sheet columns: A=Topic/Location, B=Status (`Write Now`/`DONE`/`pause`), C=Cost (auto), D=Business abbreviation, E=Content type.
+
+Output: `content/[abbr]/[type]/[slug]-[date]/[slug]-[date].html` (one folder per article; images saved alongside HTML)
+
+After each article is generated, a quality check runs automatically and prints a summary line:
+```
+→ Quality: engagement 3/4 | readability 74/100 (B)  ⚠ fix: ctas
+```
+Uses `EngagementAnalyzer` (hook, rhythm, CTAs, paragraph length) and `ReadabilityScorer` (Flesch, grade level, passive voice). Non-blocking — a check failure never stops publishing.
+
+Set `IMAGE_API_PROVIDER=gemini` in `.env` to generate images automatically. Requires `GOOGLE_AI_API_KEY`. Leave blank to skip image generation (content-only mode). Cost: ~$0.27/post.
+
+**Image naming:** `{base-slug}-banner.jpg`, `{heading-slug}.jpg` (section 1), `{base-slug}-faq.jpg` (FAQ section). All names are keyword-rich — no generic `section-1.jpg` filenames.
+
+**Image placement and alignment:**
+- Banner (1200×500): `class="aligncenter"`, injected after the first sentence of section 1
+- Section image (400×300): `class="alignright"`, after the 3rd paragraph of section 1
+- FAQ image (400×300): `class="alignleft"`, 3 paragraphs before the end of section 1
+- Section 2 (FAQ accordion): no image injected — both body images appear before FAQ starts
+
+**Banner subject by content type:**
+- `location`: banner shows the local area/street scene; section image shows spa treatment
+- All other types: banner shows spa/treatment scene
+
+## Commands (Slash)
+
+All commands are in `.claude/commands/`. Key commands:
+
+**Research:**
+- `/research [topic]` — social research (Reddit/YouTube) → entity mapping → keyword research → section plan; generates brief in `research/`
+- `/research-serp "keyword"` — SERP analysis with entity extraction
+- `/research-gaps` — competitor keyword gap analysis
+- `/research-topics` — topical authority cluster analysis
+- `/research-trending` — trending queries from GSC
+- `/research-performance` — analytics-driven priorities
+
+**Writing:**
+- `/write [topic]` — full article in `drafts/`, auto-triggers SEO agents
+- `/article [topic]` — simplified article creation
+- `/rewrite [topic]` — update existing content
+- `/geo-batch` — batch content from Google Sheet (runs `src/geo_batch_runner.py`)
+
+**Publishing & Optimisation:**
+- `/publish-draft [file]` — publish to WordPress via REST API
+- `/optimize [file]` — final SEO polish pass
+- `/analyze-existing [URL or file]` — content health audit
+- `/cluster [topic]` — topic cluster strategy
+
+**Landing Pages:**
+- `/landing-write`, `/landing-audit`, `/landing-research`, `/landing-publish`, `/landing-competitor`
+
+## Agents
+
+Located in `.claude/agents/`. Content writers:
+- `service-page-writer.md`, `location-page-writer.md`, `pillar-page-writer.md`
+- `topical-writer.md`, `blog-post-writer.md`
+
+All 5 content writers output **three HTML blocks**:
+1. `<!-- SECTION 1 -->` — main body
+2. `<!-- SECTION 2 FAQ -->` — collapsible accordion using `<details>`/`<summary>` (no JS/CSS)
+3. `<!-- SCHEMA -->` — JSON-LD with `@graph` containing the primary type (`Article`/`BlogPosting`/`Service`/`WebPage`), `FAQPage`, and `LocalBusiness` on every page
+
+SEO/optimisation agents (auto-run after `/write`):
+- `seo-optimizer.md`, `meta-creator.md`, `internal-linker.md`, `keyword-mapper.md`
+- `content-analyzer.md`, `editor.md`, `headline-generator.md`, `cro-analyst.md`
+- `performance.md`, `cluster-strategist.md`
+
+## SEO Approach
+
+Content is written entity-first, not keyword-first. See `clients/[abbr]/seo-guidelines.md`.
+
+Key principle: identify the primary entity and 3–5 secondary entities before writing. Entity co-occurrence and salience take priority over keyword density targets. The `/research` command now outputs an Entity Map as its first section.
 
 ## WordPress Integration
 
-Publishing uses the WordPress REST API with a custom MU-plugin (`wordpress/seo-machine-yoast-rest.php`) that exposes Yoast SEO fields. Articles are published in WordPress block format (HTML comments in Markdown files).
+Publishing uses the WordPress REST API. Credentials are stored in `clients/[abbr]/config.json` under the `wordpress` key. The custom MU-plugin (`wordpress/seomachine.php`) registers 5 custom post types and exposes SEO meta fields via REST — no Yoast dependency.
+
+`WordPressPublisher.from_config(wp_config)` accepts credentials directly from the client JSON.
+
+**Batch runner publishing** uses `publish_html_content()` — extracts title from `<h2>`, uploads all local images to WP media library (rewriting relative `src` to absolute URLs), sets first image as featured image. The original topic/address from the Sheet is passed as `excerpt` — this powers the `[seo_hub]` shortcode display text.
+
+**Re-publishing existing HTML files** (without regenerating content):
+```bash
+python3 src/republish_existing.py                # republish all gtm location files
+python3 src/republish_existing.py --type service # service pages
+python3 src/republish_existing.py --abbr gtm --type blog
+```
+Use this when posts need to be re-created in WordPress (e.g. after enabling Elementor CPT support).
+
+**Custom post types** — content is published to the correct CPT based on content type. Mapping is in `clients/[abbr]/config.json` under `wordpress.content_type_map`. CPTs: `seo_service`, `seo_location`, `seo_pillar`, `seo_topical`, `seo_blog`. All grouped under "SEO Content" in wp-admin. SEO meta fields (`seo_meta` REST field) work without Yoast — keys are Yoast-compatible so they display in Yoast UI if installed.
+
+**Elementor template publishing** (used when `clients/[abbr]/elementor-template.json` exists):
+1. Run `python3 src/fetch_elementor_template.py [abbr]` once to capture the saved template (reads `wordpress.elementor_template_id` from config)
+2. On `--publish`, article HTML is injected into the template's HTML widget; first `<h2>` stripped (template has H1 title widget); schema `<script>` appended directly (no Gutenberg wrapper needed); list spacing fixed via inline styles
+3. Post created as the correct CPT (e.g. `seo_location`) with `_elementor_data` + `_elementor_edit_mode: builder` meta
+
+**GTM config:** `clients/gtm/config.json` — `wordpress.elementor_template_id: 16508`, `wordpress.content_type_map` maps all 5 types to CPT slugs
+
+**Hub page shortcode** — `[seo_hub type="location"]` registered in `seomachine.php` (v2.2). Place in an Elementor Shortcode widget (not HTML widget). Renders a `<ul class="seo-hub-links">` of all published posts of that type, sorted A–Z, each wrapped in `<li><h3><a>`. Display text = post excerpt if set, otherwise post title. Supported types: `location`, `service`, `pillar`, `topical`, `blog`. Must be deployed to `wp-content/mu-plugins/seomachine.php` (not inside `plugins/`).
+
+**Schema handling (non-Elementor)**: `_wrap_schema_block()` moves the `<!-- SCHEMA --><script>` block into a Gutenberg `<!-- wp:html -->` block. The `[DATE]` placeholder is replaced with today's ISO date by the batch runner before saving.
+
+## Project Structure
+
+All Python executables live in `src/`. Test scripts live in `tests/`. Modules (imported by scripts) stay in `data_sources/modules/`. GCP service account keys go in `config/`.
+
+```
+src/            ← executable scripts (geo_batch_runner, republish_existing, research_*, etc.)
+tests/          ← test scripts (delete before production)
+data_sources/   ← importable modules (google_sheets, wordpress_publisher, etc.)
+config/         ← service account keys (gitignored)
+clients/        ← per-client context and config
+```
+
+Scripts in `src/` resolve the project root as `Path(__file__).parent.parent`, so all paths (`content/`, `clients/`, `.env`) still resolve correctly when run from the project root.
+
+## Python Analysis Pipeline
+
+Located in `data_sources/modules/`. Scripts in `src/`:
+
+```bash
+python3 src/research_quick_wins.py
+python3 src/research_competitor_gaps.py
+python3 src/research_serp_analysis.py "keyword"
+python3 src/research_topic_clusters.py
+python3 src/research_trending.py
+python3 tests/test_dataforseo.py    # test API connectivity
+```

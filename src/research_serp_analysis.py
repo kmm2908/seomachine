@@ -20,7 +20,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Add data_sources to path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'data_sources'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'data_sources'))
 
 from modules.dataforseo import DataForSEO
 from modules.search_intent_analyzer import SearchIntentAnalyzer
@@ -266,7 +266,7 @@ def assess_difficulty(domains: List[str]) -> str:
     ]
 
     # Medium authority (industry-specific) - loaded from config
-    config_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'config', 'competitors.json')
+    config_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'config', 'competitors.json')
     medium_authority = []
     if os.path.exists(config_path):
         import json
