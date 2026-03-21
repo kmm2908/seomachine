@@ -160,18 +160,60 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 
 ---
 
-## Still Needs Human Input
+## Client: SDY (Serendipity Massage Therapy & Wellness)
+
+New client added 2026-03-21. Brand-new WordPress site, same stack as GTM (Elementor + Hello theme).
+GBP applied for but not yet verified. Abbreviation: `SDY`.
+
+### Deployment Plan
+
+**Rule: local for setup/design, live for all batch runner content.**
+Reason: caching on the live front-end doesn't affect the REST API. Running content against two environments causes DB divergence. Push local → live once, then stay on live for all publishing.
+
+#### Phase 1 — Local setup (in progress)
+- [ ] Get local site URL and credentials — add to config.json as `wordpress_local` block (or swap url temporarily)
+- [ ] Deploy `wordpress/seomachine.php` to local `wp-content/mu-plugins/`
+- [ ] Confirm 5 CPTs appear in wp-admin under "SEO Content"
+- [ ] Enable CPTs in Elementor → Settings → Custom Post Types
+- [ ] Build location page template in Elementor library (mirror GTM template 16508 structure)
+- [ ] Note the local template ID
+
+#### Phase 2 — Push to live
+- [ ] Export local DB, import to live server
+- [ ] Confirm seomachine.php is in `wp-content/mu-plugins/` on live (or redeploy)
+- [ ] Confirm CPTs and Elementor settings survived the push
+- [ ] Run `python3 src/fetch_elementor_template.py sdy` against **live** URL
+- [ ] Update `clients/sdy/config.json` with live `elementor_template_id`
+
+#### Phase 3 — Content (after Phase 2)
+- [ ] Add `SDY` to Column D dropdown in Google Sheet
+- [ ] Add Column E (Content Type) dropdown if not already present
+- [ ] Populate `clients/sdy/internal-links-map.md` with confirmed service page URLs
+- [ ] Add writing examples to `clients/sdy/writing-examples.md` from live site
+- [ ] Test batch on one row: `python3 src/geo_batch_runner.py A2:E3 --publish`
+- [ ] Verify content lands in correct CPT with Elementor template
+
+### Still Needs Human Input (SDY)
+- [ ] Local WP URL and credentials — to be added to config.json temporarily for Phase 1
+- [ ] `clients/sdy/internal-links-map.md` — confirm service page URLs on live site
+- [ ] `clients/sdy/writing-examples.md` — pull 2–3 examples from live site
+- [ ] `clients/sdy/competitor-analysis.md` — populate with Glasgow competitors
+- [ ] GBP verification — needed before publishing location pages publicly
+
+---
+
+## Still Needs Human Input (GTM)
 
 - [ ] `clients/gtm/seo-guidelines.md` — rewrite for GTM (still has Castos/podcast placeholder content)
 - [ ] `clients/gtm/internal-links-map.md` — populate with actual GTM website URLs
 - [ ] `clients/gtm/competitor-analysis.md` — populate with GTM competitors
 - [ ] `clients/gtm/target-keywords.md` — populate with GTM priority keywords
-- [ ] `clients/gtm/writing-examples.md` — add example GTM content to guide tone
+- [x] `clients/gtm/writing-examples.md` — 3 real blog posts added (Thai massage, nutrition, Glasgow news) with extracted style notes
 - [ ] Google Sheet — add Column E (Content Type) dropdown with values: service, location, pillar, topical, blog
-- [ ] Elementor template — delete built-in FAQ section (our content includes FAQ; template has duplicate)
-- [ ] Existing posts (16637–16667) — set short excerpts manually in wp-admin for cleaner hub display (future posts will auto-set from Sheet topic)
+- [x] Elementor template — FAQ section removed; local template JSON refreshed via fetch_elementor_template.py
+- [x] Existing posts (16637–16667) — excerpts set manually in wp-admin for cleaner hub display
 - [ ] Hub section — set `line-height: 1.2` in Elementor site custom CSS if long titles wrap awkwardly
-- [ ] `clients/gtm/config.json` — verify `schema.logo_url` is the correct WP media URL for the GTM logo (currently a placeholder)
+- [x] `clients/gtm/config.json` — `schema.logo_url` confirmed and updated to correct WP media URL
 
 ---
 
@@ -182,6 +224,7 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - Rate limit contention — batch runner competes with active Claude Code conversation on the same API key. Run batch when Claude Code is idle.
 - Duplicate Finnieston post (ID 16642) — old bad batch run artefact, can be deleted from wp-admin.
 - Media library accumulating duplicate images from repeated republish runs — consider cleaning up old uploads.
+- GTM local site removed (2026-03-21) — GTM now live-only. No local environment for GTM.
 
 ---
 

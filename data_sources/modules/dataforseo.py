@@ -374,6 +374,73 @@ class DataForSEO:
             'backlinks': metrics.get('backlinks', {})
         }
 
+
+    def get_maps_pack(self, keyword, location_coordinate=None, limit=10, location_name=None):
+        """Get Google Maps / local pack results.
+
+        Args:
+            keyword: Search keyword
+            location_coordinate: "lat,lng,radius_km" e.g. "55.8642,-4.2518,5"
+            location_name: e.g. "Glasgow,Scotland,United Kingdom" (preferred over coordinate)
+            limit: Number of results
+        """
+        task = {"keyword": keyword, "language_code": "en", "device": "desktop", "depth": limit}
+        if location_name:
+            task["location_name"] = location_name
+        elif location_coordinate:
+            task["location_coordinate"] = location_coordinate
+        data = [task]
+        response = self._post('/v3/serp/google/maps/live/advanced', data)
+        if response.get('status_code') != 20000:
+            return []
+        task = response['tasks'][0]
+        if task.get('status_code') != 20000:
+            return []
+        results = []
+        for item in task['result'][0].get('items', []):
+            if item.get('type') != 'maps_search':
+                continue
+            results.append({
+                'position':     item.get('rank_absolute'),
+                'name':         item.get('title'),
+                'url':          item.get('url'),
+                'rating':       (item.get('rating') or {}).get('value'),
+                'rating_count': (item.get('rating') or {}).get('votes_count'),
+                'address':      item.get('address'),
+                'phone':        item.get('phone'),
+                'place_id':     item.get('place_id'),
+            })
+        return results
+
+    def get_organic_serp(self, keyword, location_code=2826, limit=10):
+        """Get top organic SERP results.
+
+        Args:
+            keyword: Search keyword
+            location_code: DataForSEO location code (2826 = United Kingdom)
+            limit: Number of results
+        """
+        data = [{"keyword": keyword, "location_code": location_code,
+                 "language_code": "en", "device": "desktop",
+                 "os": "windows", "depth": limit}]
+        response = self._post('/v3/serp/google/organic/live/advanced', data)
+        if response.get('status_code') != 20000:
+            return []
+        task = response['tasks'][0]
+        if task.get('status_code') != 20000:
+            return []
+        results = []
+        for item in task['result'][0].get('items', []):
+            if item.get('type') == 'organic':
+                results.append({
+                    'position': item.get('rank_absolute'),
+                    'url':      item.get('url'),
+                    'domain':   item.get('domain'),
+                    'title':    item.get('title'),
+                    'snippet':  item.get('description'),
+                })
+        return results[:limit]
+
     def check_ranking_history(
         self,
         domain: str,

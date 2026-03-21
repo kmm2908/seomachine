@@ -1,0 +1,922 @@
+[
+  {
+    "id": "5cae5f7c",
+    "elType": "container",
+    "settings": {
+      "flex_direction": "column",
+      "content_width": "full",
+      "_title": "Body"
+    },
+    "elements": [
+      {
+        "id": "79caa6eb",
+        "elType": "container",
+        "settings": {
+          "boxed_width": {
+            "unit": "px",
+            "size": 1200,
+            "sizes": []
+          },
+          "flex_justify_content": "center",
+          "_title": "Top Section"
+        },
+        "elements": [
+          {
+            "id": "7434d44",
+            "elType": "widget",
+            "settings": {
+              "_title": "Paste HTML Here"
+            },
+            "elements": [],
+            "widgetType": "html"
+          }
+        ],
+        "isInner": true
+      },
+      {
+        "id": "685484b6",
+        "elType": "container",
+        "settings": {
+          "flex_direction": "column",
+          "_title": "Reviews"
+        },
+        "elements": [
+          {
+            "id": "392846c2",
+            "elType": "widget",
+            "settings": {
+              "title": "What Our Clients Are Saying About Us",
+              "align": "center"
+            },
+            "elements": [],
+            "widgetType": "heading"
+          },
+          {
+            "id": "667b94eb",
+            "elType": "widget",
+            "settings": {
+              "thumbnail_size": "full",
+              "slides_to_show": "1",
+              "arrows_position": "outside",
+              "__globals__": {
+                "arrows_color": "globals/colors?id=7e6d1a1"
+              },
+              "carousel": [
+                {
+                  "id": 14265,
+                  "url": "https://glasgowthaimassage.co.uk/wp-content/uploads/testiColin-2.png"
+                },
+                {
+                  "id": 14266,
+                  "url": "https://glasgowthaimassage.co.uk/wp-content/uploads/testiWill-2.png"
+                },
+                {
+                  "id": 14267,
+                  "url": "https://glasgowthaimassage.co.uk/wp-content/uploads/testiShaheen-3.png"
+                },
+                {
+                  "id": 14268,
+                  "url": "https://glasgowthaimassage.co.uk/wp-content/uploads/testigiulia-2.png"
+                },
+                {
+                  "id": 14269,
+                  "url": "https://glasgowthaimassage.co.uk/wp-content/uploads/testiPaul-2.png"
+                },
+                {
+                  "id": 14270,
+                  "url": "https://glasgowthaimassage.co.uk/wp-content/uploads/testiKevin-2.png"
+                },
+                {
+                  "id": 14271,
+                  "url": "https://glasgowthaimassage.co.uk/wp-content/uploads/testiTony-3.png"
+                }
+              ],
+              "carousel_name": "Image Carousel",
+              "_css_classes": "no-lazy"
+            },
+            "elements": [],
+            "widgetType": "image-carousel"
+          },
+          {
+            "id": "5c18b3e1",
+            "elType": "widget",
+            "settings": {
+              "text": "Book Now",
+              "link": {
+                "url": "https://glasgowthaimassage.co.uk/booking-form/",
+                "is_external": "",
+                "nofollow": "",
+                "custom_attributes": ""
+              },
+              "hover_animation": "grow",
+              "_margin": {
+                "unit": "px",
+                "top": "0",
+                "right": "0",
+                "bottom": "0",
+                "left": "0",
+                "isLinked": true
+              },
+              "_padding": {
+                "unit": "px",
+                "top": "0",
+                "right": "0",
+                "bottom": "0",
+                "left": "0",
+                "isLinked": true
+              },
+              "align": "center"
+            },
+            "elements": [],
+            "widgetType": "global",
+            "templateID": "10095"
+          }
+        ],
+        "isInner": true
+      },
+      {
+        "id": "5dbcb29a",
+        "elType": "container",
+        "settings": {
+          "flex_direction": "column",
+          "_title": "Problems Solved"
+        },
+        "elements": [
+          {
+            "id": "2ef7d0b9",
+            "elType": "widget",
+            "settings": {
+              "title": "Glasgow Massage Therapist",
+              "align_mobile": "center",
+              "align": "center",
+              "typography_typography": "custom",
+              "header_size": "h3",
+              "typography_line_height_mobile": {
+                "unit": "em",
+                "size": 1.2,
+                "sizes": []
+              }
+            },
+            "elements": [],
+            "widgetType": "heading"
+          },
+          {
+            "id": "69e29372",
+            "elType": "widget",
+            "settings": {
+              "editor": "<p><strong>Problems we can help alleviate:</strong></p>",
+              "align": "center"
+            },
+            "elements": [],
+            "widgetType": "text-editor"
+          },
+          {
+            "id": "2b3d30ee",
+            "elType": "container",
+            "settings": {
+              "flex_direction": "row",
+              "flex_gap": {
+                "unit": "px",
+                "size": 0,
+                "column": "0",
+                "row": "0"
+              },
+              "content_width": "full"
+            },
+            "elements": [
+              {
+                "id": "2c7ad532",
+                "elType": "container",
+                "settings": {
+                  "flex_direction": "column",
+                  "content_width": "full",
+                  "width": {
+                    "unit": "%",
+                    "size": "50"
+                  }
+                },
+                "elements": [
+                  {
+                    "id": "52ac9cc",
+                    "elType": "widget",
+                    "settings": {
+                      "icon_list": [
+                        {
+                          "text": "Backache",
+                          "selected_icon": {
+                            "value": "fas fa-star-of-life",
+                            "library": "fa-solid"
+                          },
+                          "_id": "9179467"
+                        },
+                        {
+                          "text": "<a class=\"wpil_keyword_link\" href=\"https://glasgowthaimassage.co.uk/lower-back-pain-causes-treatment\"   title=\"Sciatica\" data-wpil-keyword-link=\"linked\">Sciatica</a>",
+                          "selected_icon": {
+                            "value": "fas fa-star-of-life",
+                            "library": "fa-solid"
+                          },
+                          "_id": "74956ef"
+                        },
+                        {
+                          "_id": "17c5442",
+                          "text": "Stiff Neck or Shoulders",
+                          "selected_icon": {
+                            "value": "fas fa-star-of-life",
+                            "library": "fa-solid"
+                          }
+                        },
+                        {
+                          "_id": "6d00324",
+                          "text": "Refresh Sore Muscles",
+                          "selected_icon": {
+                            "value": "fas fa-star-of-life",
+                            "library": "fa-solid"
+                          }
+                        },
+                        {
+                          "_id": "efd8864",
+                          "text": "Relieve Stress and Tension",
+                          "selected_icon": {
+                            "value": "fas fa-star-of-life",
+                            "library": "fa-solid"
+                          }
+                        },
+                        {
+                          "text": "Injury Rehabilitation",
+                          "selected_icon": {
+                            "value": "fas fa-star-of-life",
+                            "library": "fa-solid"
+                          },
+                          "_id": "aeb52a8"
+                        },
+                        {
+                          "_id": "110b79c",
+                          "text": "Headaches and Migraines",
+                          "selected_icon": {
+                            "value": "fas fa-star-of-life",
+                            "library": "fa-solid"
+                          }
+                        },
+                        {
+                          "text": "Inproved Flexibility",
+                          "selected_icon": {
+                            "value": "fas fa-star-of-life",
+                            "library": "fa-solid"
+                          },
+                          "_id": "e19386a"
+                        },
+                        {
+                          "_id": "9a65a45",
+                          "text": "Renew Tired Aching Feet",
+                          "selected_icon": {
+                            "value": "fas fa-star-of-life",
+                            "library": "fa-solid"
+                          }
+                        },
+                        {
+                          "_id": "0e219df",
+                          "text": "Remove Knots and Relax Tight Muscles",
+                          "selected_icon": {
+                            "value": "fas fa-star-of-life",
+                            "library": "fa-solid"
+                          }
+                        },
+                        {
+                          "text": "Injury Prevention",
+                          "selected_icon": {
+                            "value": "fas fa-star-of-life",
+                            "library": "fa-solid"
+                          },
+                          "_id": "17bba38"
+                        },
+                        {
+                          "text": "Diabetic Neuropathy - Nerve Pain",
+                          "selected_icon": {
+                            "value": "fas fa-star-of-life",
+                            "library": "fa-solid"
+                          },
+                          "_id": "90dc9f6"
+                        },
+                        {
+                          "_id": "8212058",
+                          "text": "Melt Away The Blues When Feeling Low",
+                          "selected_icon": {
+                            "value": "fas fa-star-of-life",
+                            "library": "fa-solid"
+                          }
+                        }
+                      ],
+                      "icon_color": "#FFD700",
+                      "icon_size": {
+                        "unit": "px",
+                        "size": 12,
+                        "sizes": []
+                      },
+                      "space_between": {
+                        "unit": "px",
+                        "size": 12,
+                        "sizes": []
+                      },
+                      "_margin": {
+                        "unit": "px",
+                        "top": "-10",
+                        "right": "0",
+                        "bottom": "20",
+                        "left": "0",
+                        "isLinked": false
+                      },
+                      "_attributes": "onclick|window.location.href='https://glasgowthaimassage.co.uk'",
+                      "custom_css": "selector {\n    cursor: pointer;\n}"
+                    },
+                    "elements": [],
+                    "widgetType": "icon-list"
+                  }
+                ],
+                "isInner": true
+              },
+              {
+                "id": "73076461",
+                "elType": "container",
+                "settings": {
+                  "flex_direction": "column",
+                  "content_width": "full",
+                  "width": {
+                    "unit": "%",
+                    "size": "50"
+                  },
+                  "flex_justify_content": "center"
+                },
+                "elements": [
+                  {
+                    "id": "7bd6b502",
+                    "elType": "widget",
+                    "settings": {
+                      "image": {
+                        "url": "https://glasgowthaimassage.co.uk/wp-content/uploads/cropped-GTN-tsp-lolgo-USE.png",
+                        "id": 11354,
+                        "size": "",
+                        "alt": "Glasgow Thai Massage",
+                        "source": "library"
+                      },
+                      "image_size": "medium"
+                    },
+                    "elements": [],
+                    "widgetType": "image"
+                  }
+                ],
+                "isInner": true
+              }
+            ],
+            "isInner": true
+          }
+        ],
+        "isInner": true
+      },
+      {
+        "id": "3bf92795",
+        "elType": "container",
+        "settings": {
+          "flex_direction": "column",
+          "_title": "Certificates+Google Reviews"
+        },
+        "elements": [
+          {
+            "id": "79199445",
+            "elType": "widget",
+            "settings": {
+              "text": "Book Now",
+              "link": {
+                "url": "https://glasgowthaimassage.co.uk/booking-form/",
+                "is_external": "",
+                "nofollow": "",
+                "custom_attributes": ""
+              },
+              "hover_animation": "grow",
+              "_margin": {
+                "unit": "px",
+                "top": "0",
+                "right": "0",
+                "bottom": "0",
+                "left": "0",
+                "isLinked": true
+              },
+              "_padding": {
+                "unit": "px",
+                "top": "0",
+                "right": "0",
+                "bottom": "0",
+                "left": "0",
+                "isLinked": true
+              },
+              "align": "center"
+            },
+            "elements": [],
+            "widgetType": "global",
+            "templateID": 10095
+          },
+          {
+            "id": "56247dcf",
+            "elType": "widget",
+            "settings": {
+              "title": "Qualifications & Certificates",
+              "align": "center",
+              "_margin": {
+                "unit": "px",
+                "top": "30",
+                "right": "0",
+                "bottom": "0",
+                "left": "0",
+                "isLinked": false
+              }
+            },
+            "elements": [],
+            "widgetType": "heading"
+          },
+          {
+            "id": "7a4a48cc",
+            "elType": "widget",
+            "settings": {
+              "slides": [
+                {
+                  "image": {
+                    "url": "https://glasgowthaimassage.co.uk/wp-content/uploads/3.png",
+                    "id": 11599,
+                    "alt": "Maliwan Malone Glasgow Thai Massage",
+                    "source": "library",
+                    "size": ""
+                  },
+                  "_id": "277f573"
+                },
+                {
+                  "image": {
+                    "url": "https://glasgowthaimassage.co.uk/wp-content/uploads/2-2.png",
+                    "id": 11598,
+                    "alt": "Maliwan Malone Glasgow Thai Massage",
+                    "source": "library",
+                    "size": ""
+                  },
+                  "_id": "ee2cec6"
+                },
+                {
+                  "image": {
+                    "url": "https://glasgowthaimassage.co.uk/wp-content/uploads/1-1.png",
+                    "id": 11597,
+                    "alt": "Maliwan Malone Glasgow Thai Massage",
+                    "source": "library",
+                    "size": ""
+                  },
+                  "_id": "57d02d3"
+                },
+                {
+                  "image": {
+                    "url": "https://glasgowthaimassage.co.uk/wp-content/uploads/4.png",
+                    "id": 11600,
+                    "alt": "Maliwan Malone Glasgow Thai Massage",
+                    "source": "library",
+                    "size": ""
+                  },
+                  "_id": "387fe90"
+                },
+                {
+                  "image": {
+                    "url": "https://glasgowthaimassage.co.uk/wp-content/uploads/6.png",
+                    "id": 11596,
+                    "alt": "Maliwan Malone Glasgow Thai Massage",
+                    "source": "library",
+                    "size": ""
+                  },
+                  "_id": "d3ad317"
+                },
+                {
+                  "_id": "6d1d669",
+                  "image": {
+                    "url": "https://glasgowthaimassage.co.uk/wp-content/uploads/5.png",
+                    "id": 11601,
+                    "size": "",
+                    "alt": "Maliwan Malone Glasgow Thai Massage",
+                    "source": "library"
+                  }
+                },
+                {
+                  "_id": "fb7e5b8",
+                  "image": {
+                    "url": "https://glasgowthaimassage.co.uk/wp-content/uploads/6-1.png",
+                    "id": 11602,
+                    "size": "",
+                    "alt": "Maliwan Malone Glasgow Thai Massage",
+                    "source": "library"
+                  }
+                }
+              ],
+              "slides_per_view": "2",
+              "height": {
+                "unit": "px",
+                "size": 410,
+                "sizes": []
+              },
+              "width": {
+                "unit": "%",
+                "size": 100,
+                "sizes": []
+              },
+              "height_tablet": {
+                "unit": "px",
+                "size": 275,
+                "sizes": []
+              },
+              "height_mobile": {
+                "unit": "px",
+                "size": 261,
+                "sizes": []
+              },
+              "width_mobile": {
+                "unit": "px",
+                "size": 304,
+                "sizes": []
+              },
+              "slides_name": "Slides"
+            },
+            "elements": [],
+            "widgetType": "media-carousel"
+          },
+          {
+            "id": "500cdc2f",
+            "elType": "container",
+            "settings": {
+              "content_width": "full"
+            },
+            "elements": [
+              {
+                "id": "3c96c3e4",
+                "elType": "widget",
+                "settings": {
+                  "title": "Google Reviews",
+                  "align": "center"
+                },
+                "elements": [],
+                "widgetType": "heading"
+              },
+              {
+                "id": "3c8ac88f",
+                "elType": "widget",
+                "settings": {
+                  "html": "<script type='text/javascript' src='https://reputationhub.site/reputation/assets/review-widget.js'></script><iframe class='lc_reviews_widget' src='https://reputationhub.site/reputation/widgets/review_widget/HbhlMeHmDvc4pB9eEAZQ' frameborder='0' scrolling='no' style='min-width: 100%; width: 100%;'></iframe>"
+                },
+                "elements": [],
+                "widgetType": "html"
+              }
+            ],
+            "isInner": true
+          }
+        ],
+        "isInner": true
+      },
+      {
+        "id": "5285a5f8",
+        "elType": "container",
+        "settings": {
+          "flex_direction": "column",
+          "_title": "Maps"
+        },
+        "elements": [
+          {
+            "id": "1d9507",
+            "elType": "widget",
+            "settings": {
+              "text": "Book Now",
+              "link": {
+                "url": "https://glasgowthaimassage.co.uk/booking-form/",
+                "is_external": "",
+                "nofollow": "",
+                "custom_attributes": ""
+              },
+              "hover_animation": "grow",
+              "_margin": {
+                "unit": "px",
+                "top": "0",
+                "right": "0",
+                "bottom": "0",
+                "left": "0",
+                "isLinked": true
+              },
+              "_padding": {
+                "unit": "px",
+                "top": "0",
+                "right": "0",
+                "bottom": "0",
+                "left": "0",
+                "isLinked": true
+              },
+              "align": "center"
+            },
+            "elements": [],
+            "widgetType": "global",
+            "templateID": "10095"
+          },
+          {
+            "id": "50280b6",
+            "elType": "container",
+            "settings": {
+              "content_width": "full",
+              "container_type": "grid",
+              "grid_rows_grid": {
+                "unit": "fr",
+                "size": 1,
+                "sizes": []
+              },
+              "presetTitle": "Grid",
+              "presetIcon": "eicon-container-grid"
+            },
+            "elements": [
+              {
+                "id": "26895516",
+                "elType": "widget",
+                "settings": {
+                  "html": "<iframe src=\"https://www.google.com/maps/embed?pb=!1m28!1m12!1m3!1d4478.149723858036!2d-4.256174854038396!3d55.861367542498044!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m13!3e0!4m5!1s0x488846a10c21cd11%3A0xd9353236f30a2e10!2sJasmine%20Thai%20Massage%2C%20Brunswick%20Street%2C%20Glasgow!3m2!1d55.8587753!2d-4.246929199999999!4m5!1s0x4888453e6d26029d%3A0x6fafd326f44b7ea2!2sFloor%203%20Suite%204%2C%20Glasgow%20Thai%20Massage%2C%20142%20W%20Nile%20St%2C%20Glasgow%20G1%203RQ!3m2!1d55.863946999999996!2d-4.254121!5e0!3m2!1sen!2suk!4v1743780677293!5m2!1sen!2suk\" width=\"600\" height=\"450\" style=\"border:0;\" allowfullscreen=\"\" loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade\"></iframe>"
+                },
+                "elements": [],
+                "widgetType": "html"
+              },
+              {
+                "id": "3e15925f",
+                "elType": "widget",
+                "settings": {
+                  "html": "<iframe src=\"https://www.google.com/maps/embed?pb=!1m28!1m12!1m3!1d8954.6133416022!2d-4.267764833498096!3d55.8686808200339!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m13!3e0!4m5!1s0x4888443b6a4cefb7%3A0x351ff0b3d36f9f5e!2sUnit%205C%2C%20Orchid%20Thai%20Massage%20Studio%20Glasgow%2C%20Millennium%20Court%2C%20Burns%20Street%2C%20Glasgow!3m2!1d55.8734155!2d-4.2602671999999995!4m5!1s0x4888453e6d26029d%3A0x6fafd326f44b7ea2!2sFloor%203%20Suite%204%2C%20Glasgow%20Thai%20Massage%2C%20142%20W%20Nile%20St%2C%20Glasgow%20G1%203RQ!3m2!1d55.863946999999996!2d-4.254121!5e0!3m2!1sen!2suk!4v1743780837107!5m2!1sen!2suk\" width=\"600\" height=\"450\" style=\"border:0;\" allowfullscreen=\"\" loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade\"></iframe>"
+                },
+                "elements": [],
+                "widgetType": "html"
+              },
+              {
+                "id": "6fc0ed05",
+                "elType": "widget",
+                "settings": {
+                  "html": "<iframe src=\"https://www.google.com/maps/embed?pb=!1m28!1m12!1m3!1d4477.505740962582!2d-4.263799504036595!3d55.86695399250637!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m13!3e0!4m5!1s0x488845d7ce87ce31%3A0xf5a10e1a13d598ed!2s38%2C%20GLASGOW%20Royal%20Thai%20Massage.%20Free%20visitor%20carpark%20%2C%20opposite%20Cowcaddens%20subway%2C%20DUNDAS%20COURT%2C%20Business%20centre%2C%20New%20City%20Road%2C%20Glasgow!3m2!1d55.8688383!2d-4.2607506!4m5!1s0x4888453e6d26029d%3A0x6fafd326f44b7ea2!2sFloor%203%20Suite%204%2C%20Glasgow%20Thai%20Massage%2C%20142%20W%20Nile%20St%2C%20Glasgow%20G1%203RQ!3m2!1d55.863946999999996!2d-4.254121!5e0!3m2!1sen!2suk!4v1743780894468!5m2!1sen!2suk\" width=\"600\" height=\"450\" style=\"border:0;\" allowfullscreen=\"\" loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade\"></iframe>"
+                },
+                "elements": [],
+                "widgetType": "html"
+              }
+            ],
+            "isInner": true
+          },
+          {
+            "id": "7364372a",
+            "elType": "container",
+            "settings": {
+              "content_width": "full",
+              "container_type": "grid",
+              "grid_rows_grid": {
+                "unit": "fr",
+                "size": 1,
+                "sizes": []
+              },
+              "presetTitle": "Grid",
+              "presetIcon": "eicon-container-grid"
+            },
+            "elements": [
+              {
+                "id": "234d825c",
+                "elType": "widget",
+                "settings": {
+                  "html": "<iframe src=\"https://www.google.com/maps/embed?pb=!1m28!1m12!1m3!1d4478.159862030611!2d-4.263468804038511!3d55.86127959249798!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m13!3e0!4m5!1s0x4888469dd79d903b%3A0xef65bf326caa4a56!2sGlasgow%20Central%20Station%2C%20Gordon%20Street%2C%20Glasgow!3m2!1d55.8591118!2d-4.2581088!4m5!1s0x4888453e6d26029d%3A0x6fafd326f44b7ea2!2sFloor%203%20Suite%204%2C%20Glasgow%20Thai%20Massage%2C%20142%20W%20Nile%20St%2C%20Glasgow%20G1%203RQ!3m2!1d55.863946999999996!2d-4.254121!5e0!3m2!1sen!2suk!4v1743781051929!5m2!1sen!2suk\" width=\"600\" height=\"450\" style=\"border:0;\" allowfullscreen=\"\" loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade\"></iframe>"
+                },
+                "elements": [],
+                "widgetType": "html"
+              },
+              {
+                "id": "765b126f",
+                "elType": "widget",
+                "settings": {
+                  "html": "<iframe src=\"https://www.google.com/maps/embed?pb=!1m24!1m8!1m3!1d2238.8840984566896!2d-4.255682373837406!3d55.86467727312583!3m2!1i1024!2i768!4f13.1!4m13!3e0!4m5!1s0x4888441f7f0ab0f3%3A0xdb05b27ea9ab286b!2sBuchanan%20Street%20Bus%20Station%2C%20Killermont%20Street%2C%20Glasgow!3m2!1d55.8654076!2d-4.2519263!4m5!1s0x4888453e6d26029d%3A0x6fafd326f44b7ea2!2sFloor%203%20Suite%204%2C%20Glasgow%20Thai%20Massage%2C%20142%20W%20Nile%20St%2C%20Glasgow%20G1%203RQ!3m2!1d55.863946999999996!2d-4.254121!5e0!3m2!1sen!2suk!4v1743781113850!5m2!1sen!2suk\" width=\"600\" height=\"450\" style=\"border:0;\" allowfullscreen=\"\" loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade\"></iframe>"
+                },
+                "elements": [],
+                "widgetType": "html"
+              },
+              {
+                "id": "2e11fecc",
+                "elType": "widget",
+                "settings": {
+                  "html": "<iframe src=\"https://www.google.com/maps/embed?pb=!1m28!1m12!1m3!1d17909.66733013217!2d-4.297291718530851!3d55.86772523009567!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m13!3e2!4m5!1s0x488845daadb32125%3A0xc97083b203abac43!2sLan%20Thai%20Massage%20%26%20Spa%2C%20Chancellor%20Street%2C%20Glasgow!3m2!1d55.871853699999996!2d-4.2983955!4m5!1s0x4888453e6d26029d%3A0x6fafd326f44b7ea2!2sFloor%203%20Suite%204%2C%20Glasgow%20Thai%20Massage%2C%20142%20W%20Nile%20St%2C%20Glasgow%20G1%203RQ!3m2!1d55.863946999999996!2d-4.254121!5e0!3m2!1sen!2suk!4v1743781269068!5m2!1sen!2suk\" width=\"600\" height=\"450\" style=\"border:0;\" allowfullscreen=\"\" loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade\"></iframe>"
+                },
+                "elements": [],
+                "widgetType": "html"
+              }
+            ],
+            "isInner": true
+          }
+        ],
+        "isInner": true
+      },
+      {
+        "id": "39e628de",
+        "elType": "container",
+        "settings": {
+          "flex_direction": "column",
+          "_title": "Video",
+          "boxed_width": {
+            "unit": "%",
+            "size": 50,
+            "sizes": []
+          },
+          "boxed_width_tablet": {
+            "unit": "%",
+            "size": "",
+            "sizes": []
+          },
+          "boxed_width_mobile": {
+            "unit": "%",
+            "size": "",
+            "sizes": []
+          }
+        },
+        "elements": [
+          {
+            "id": "9f3214e",
+            "elType": "widget",
+            "settings": {
+              "youtube_url": "https://youtu.be/qC9g3GZIWac",
+              "vimeo_url": "https://vimeo.com/235215203",
+              "dailymotion_url": "https://www.dailymotion.com/video/x6tqhqb",
+              "videopress_url": "https://videopress.com/v/ZCAOzTNk",
+              "modestbranding": "yes",
+              "show_image_overlay": "yes",
+              "image_overlay": {
+                "url": "https://glasgowthaimassage.co.uk/wp-content/uploads/YouTube-Thumbnail.png",
+                "id": 11275,
+                "size": "",
+                "alt": "Glasgow Thai Massage",
+                "source": "library"
+              }
+            },
+            "elements": [],
+            "widgetType": "global",
+            "templateID": 14131
+          }
+        ],
+        "isInner": true
+      },
+      {
+        "id": "6b7595d1",
+        "elType": "container",
+        "settings": {
+          "_title": "Final CTA"
+        },
+        "elements": [
+          {
+            "id": "35b90a77",
+            "elType": "widget",
+            "settings": {
+              "editor": "<p><br /><strong data-darkreader-inline-color=\"\">f you would like to book an appointment over the phone please call us on: </strong><a href=\"https://glasgowthaimassage.co.uk/contact-us/\"><strong data-darkreader-inline-color=\"\">0737 932 2305</strong></a></p>",
+              "align": "center"
+            },
+            "elements": [],
+            "widgetType": "text-editor"
+          },
+          {
+            "id": "5cc09bcb",
+            "elType": "widget",
+            "settings": {
+              "text": "Book Now",
+              "link": {
+                "url": "https://glasgowthaimassage.co.uk/booking-form/",
+                "is_external": "",
+                "nofollow": "",
+                "custom_attributes": ""
+              },
+              "hover_animation": "grow",
+              "_margin": {
+                "unit": "px",
+                "top": "0",
+                "right": "0",
+                "bottom": "0",
+                "left": "0",
+                "isLinked": true
+              },
+              "_padding": {
+                "unit": "px",
+                "top": "0",
+                "right": "0",
+                "bottom": "0",
+                "left": "0",
+                "isLinked": true
+              },
+              "align": "center"
+            },
+            "elements": [],
+            "widgetType": "global",
+            "templateID": "10095"
+          }
+        ],
+        "isInner": true
+      },
+      {
+        "id": "2978c9d9",
+        "elType": "container",
+        "settings": {
+          "flex_direction": "row",
+          "flex_gap": {
+            "unit": "px",
+            "size": 0,
+            "column": "0",
+            "row": "0"
+          },
+          "flex_justify_content": "space-between",
+          "_title": "Services+Locations"
+        },
+        "elements": [
+          {
+            "id": "75c09f7d",
+            "elType": "container",
+            "settings": {
+              "flex_direction": "column",
+              "content_width": "full",
+              "width": {
+                "unit": "%",
+                "size": 31
+              }
+            },
+            "elements": [
+              {
+                "id": "7cb3b608",
+                "elType": "widget",
+                "settings": {
+                  "editor": "<h2>Services</h2><ul><li><h3><a href=\"https://glasgowthaimassage.co.uk/thai-massage-glasgow/\">Thai Massage</a></h3></li><li><h3><a href=\"https://glasgowthaimassage.co.uk/thai-massage-glasgow/thai-oil-massage-2/\">Thai Oil Massage</a></h3></li><li><h3><a href=\"https://glasgowthaimassage.co.uk/thai-massage-glasgow/thai-aromatherapy-massage/\">Thai  Aromatherapy Massage</a></h3></li><li><h3><a href=\"https://glasgowthaimassage.co.uk/thai-massage-glasgow/thai-oil-massage-2/thai-sports-massage/\">Thai Sports Massage</a></h3></li><li><h3><a href=\"https://glasgowthaimassage.co.uk/thai-massage-glasgow/thai-facial-massage/\">Thai Facial Massage</a></h3></li><li><h3><a href=\"https://glasgowthaimassage.co.uk/thai-massage-glasgow/thai-foot-massage/\">Thai Foot Massage</a></h3></li><li><h3><a href=\"https://glasgowthaimassage.co.uk/thai-massage-glasgow/thai-head-massage/\">Thai Head Massage</a></h3></li><li><h3><a href=\"https://glasgowthaimassage.co.uk/thai-massage-glasgow/stone-massage/\">Thai Stone Massage</a></h3></li><li><h3><a href=\"https://glasgowthaimassage.co.uk/couples-massage-in-glasgow-city-centre/\">Thai Couples Massage</a></h3></li><li><h3><a href=\"https://glasgowthaimassage.co.uk/deep-tissue-massage-in-glasgow/\">Deep Tissue Massage</a></h3></li></ul>",
+                  "__globals__": {
+                    "typography_typography": "globals/typography?id=text"
+                  }
+                },
+                "elements": [],
+                "widgetType": "text-editor"
+              }
+            ],
+            "isInner": true
+          },
+          {
+            "id": "29fa1d32",
+            "elType": "container",
+            "settings": {
+              "flex_direction": "column",
+              "content_width": "full",
+              "width": {
+                "unit": "%",
+                "size": 31
+              }
+            },
+            "elements": [
+              {
+                "id": "5e517e6e",
+                "elType": "widget",
+                "settings": {
+                  "editor": "<h2>Locations</h2>\n<ul>\n<li>\n<h3><a href=\"https://glasgowthaimassage.co.uk/anderston/\">Anderston</a></h3>\n</li>\n<li>\n<h3><a href=\"https://glasgowthaimassage.co.uk/charing-cross/\">Charing Cross</a></h3>\n</li>\n<li>\n<h3><a href=\"https://glasgowthaimassage.co.uk/cowcaddens/\">Cowcaddens</a></h3>\n</li>\n<li>\n<h3><a href=\"https://glasgowthaimassage.co.uk/garnethill/\">Garnethill</a></h3>\n</li>\n<li>\n<h3><a href=\"https://glasgowthaimassage.co.uk/finnieston/\">Finnieston</a></h3>\n</li>\n<li>\n<h3><a href=\"https://glasgowthaimassage.co.uk/glasgow-city-centre/\">Glasgow City</a></h3>\n</li>\n<li>\n<h3><a href=\"https://glasgowthaimassage.co.uk/merchant-city/\">Merchant City</a></h3>\n</li>\n<li>\n<h3><a href=\"https://glasgowthaimassage.co.uk/glasgow/\">G1 Glasgow</a></h3>\n</li>\n<li>\n<h3><a href=\"https://glasgowthaimassage.co.uk/blythswood/\">Blythswood</a></h3>\n</li>\n<li>\n<h3><a href=\"https://glasgowthaimassage.co.uk/townhead/\">Townhead</a></h3></li>\n</ul>",
+                  "__globals__": {
+                    "typography_typography": "globals/typography?id=text"
+                  }
+                },
+                "elements": [],
+                "widgetType": "text-editor"
+              },
+              {
+                "id": "d1e4852",
+                "elType": "widget",
+                "settings": {
+                  "shortcode": "[seo_hub type=\"location\"]"
+                },
+                "elements": [],
+                "widgetType": "shortcode"
+              }
+            ],
+            "isInner": true
+          },
+          {
+            "id": "5f8a8caf",
+            "elType": "container",
+            "settings": {
+              "flex_direction": "column",
+              "content_width": "full",
+              "width": {
+                "unit": "%",
+                "size": 31
+              }
+            },
+            "elements": [
+              {
+                "id": "16989d31",
+                "elType": "widget",
+                "settings": {
+                  "editor": "<h2>Sources</h2><ul><li><h3><a href=\"https://en.wikipedia.org/wiki/Traditional_Thai_massage\">Thai Massage</a></h3></li><li><h3><a href=\"https://health.clevelandclinic.org/thai-massage\">Thai Massage Benefits</a></h3></li><li><h3><a href=\"https://www.webmd.com/balance/benefits-of-thai-massage\">Thai Massage Defrinition</a></h3></li><li><h3><a href=\"https://www.medicalnewstoday.com/articles/323687\">Thai Massage Therapy</a></h3></li></ul>",
+                  "__globals__": {
+                    "typography_typography": "globals/typography?id=text"
+                  }
+                },
+                "elements": [],
+                "widgetType": "text-editor"
+              }
+            ],
+            "isInner": true
+          }
+        ],
+        "isInner": true
+      }
+    ],
+    "isInner": false
+  }
+]

@@ -437,7 +437,19 @@ TODO
 
 ---
 
-### Step 5: Print Completion Summary
+### Step 5: Run Competitor Research
+
+Once `config.json` and `target-keywords.md` are created, automatically run:
+
+```bash
+python3 src/research_competitors.py --abbr [abbr]
+```
+
+This fetches the top 10 map pack + top 10 organic results for the client's primary keyword, scrapes each competitor site, and writes a fully populated `clients/[abbr]/competitor-analysis.md`. No manual research needed.
+
+If the script fails (e.g. DataForSEO quota), note it in the completion summary — the user can run it manually later.
+
+### Step 6: Print Completion Summary
 
 ```
 ✓ Client created: [ABBREVIATION]
@@ -449,15 +461,15 @@ Files created:
   ✓ seo-guidelines.md    — TODO: fill in entity cluster and keyword strategy
   ✓ internal-links-map.md — TODO: add URLs for all key pages
   ✓ features.md          — TODO: document all services and differentiators
-  ✓ competitor-analysis.md — TODO: research and add 2-3 main competitors
+  ✓ competitor-analysis.md — auto-populated by research_competitors.py
   ✓ target-keywords.md   — TODO: populate with priority keywords
   ✓ writing-examples.md  — TODO: add 2-3 examples of on-brand writing
 
 Next steps:
-  1. Fill in the TODO sections in the 7 context files above
+  1. Fill in the TODO sections in the remaining context files
   2. Add [ABBREVIATION] rows to the Google Sheet to start generating content
   3. Run /research [topic] to start building keyword strategy
-  4. Run python3 geo_batch_runner.py to generate content when ready
+  4. Run python3 src/geo_batch_runner.py to generate content when ready
 
 Output will be saved to: content/[abbr]/
 ```

@@ -1,0 +1,37 @@
+{
+  "name": "Glasgow Thai Massage",
+  "abbreviation": "GTM",
+  "address": "Floor 3 Suite 4, Victoria Chambers, 142 West Nile Street, Glasgow G1 2RQ",
+  "area": "Glasgow City Centre",
+  "postcode": "G1 2RQ",
+  "phone": "0737 932 2305",
+  "booking_url": "https://glasgowthaimassage.co.uk/booking-form/",
+  "website": "https://glasgowthaimassage.co.uk",
+  "services": [
+    "Thai massage",
+    "Thai Oil Massage",
+    "deep tissue massage",
+    "sports massage"
+  ],
+  "keyword_prefix": "thai massage",
+  "schema": {
+    "price_range": "\u00a3\u00a3",
+    "logo_url": "https://glasgowthaimassage.co.uk/wp-content/uploads/cropped-GTN-tsp-lolgo-USE.png"
+  },
+  "wordpress": {
+    "url": "https://glasgowthaimassage.co.uk",
+    "username": "kmm-J4oHXcNXZUL",
+    "app_password": "Wtg0 jK0T 3bak 7XRg Mg1P o7io",
+    "content_type_map": {
+      "service": "seo_service",
+      "location": "seo_location",
+      "pillar": "seo_pillar",
+      "topical": "seo_topical",
+      "blog": "seo_blog"
+    },
+    "default_post_type": "seo_blog",
+    "default_status": "draft",
+    "elementor_template_id": 16508
+  },
+  "city": "Glasgow"
+}
