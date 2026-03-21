@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-03-21 (session 7 — all Priority 1–5 tests complete)
+Last updated: 2026-03-21 (session 8 — competitor research script + map pack fixed)
 
 ---
 
@@ -92,6 +92,14 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] Must use Elementor **Shortcode widget** (not HTML widget) — HTML widget does not process shortcodes
 - [x] CSS: `li h3 a { font-size: 0.8rem }` from Elementor Kit applies automatically — no custom CSS needed
 - [x] Line-height for wrapped items: add `.elementor-shortcode .seo-hub-links h3 { line-height: 1.2; }` to site custom CSS if needed
+
+### Competitor research script (new session 8)
+- [x] `src/research_competitors.py` — standalone script: geocodes client area via Nominatim, pulls top 10 map pack + top 10 organic from DataForSEO, scrapes competitor sites, extracts structured profiles via Claude Haiku, writes `clients/[abbr]/competitor-analysis.md`
+- [x] Geocoding fix — strips "City Centre" / "Town Centre" etc. before Nominatim query (bare city name geocodes correctly)
+- [x] Map pack approach — uses `location_name` (e.g. `"Glasgow,Scotland,United Kingdom"`) instead of coordinates; `keyword_prefix` only (no city in keyword) for better map results
+- [x] `dataforseo.get_maps_pack()` — updated to accept both `location_name` and `location_coordinate`
+- [x] Integrated into `/new-client` workflow as Step 5 — competitor-analysis.md auto-populated for every new client
+- [x] `clients/gtm/competitor-analysis.md` — fully populated: 10 map pack results (GTM at #9), 8 organic competitors, 15 sites profiled
 
 ### Republish script (new session 5)
 - [x] `src/republish_existing.py` — re-publishes existing HTML files to WordPress without regenerating content
@@ -206,7 +214,7 @@ Reason: caching on the live front-end doesn't affect the REST API. Running conte
 
 - [ ] `clients/gtm/seo-guidelines.md` — rewrite for GTM (still has Castos/podcast placeholder content)
 - [ ] `clients/gtm/internal-links-map.md` — populate with actual GTM website URLs
-- [ ] `clients/gtm/competitor-analysis.md` — populate with GTM competitors
+- [x] `clients/gtm/competitor-analysis.md` — auto-populated by research_competitors.py (10 map pack + 8 organic, 15 profiles)
 - [ ] `clients/gtm/target-keywords.md` — populate with GTM priority keywords
 - [x] `clients/gtm/writing-examples.md` — 3 real blog posts added (Thai massage, nutrition, Glasgow news) with extracted style notes
 - [ ] Google Sheet — add Column E (Content Type) dropdown with values: service, location, pillar, topical, blog

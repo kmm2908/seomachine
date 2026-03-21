@@ -1,7 +1,7 @@
 # Competitor Analysis — Glasgow Thai Massage
 
 Generated: 2026-03-21  
-Keyword: `thai massage glasgow city centre`
+Keyword: `thai massage therapist Glasgow`
 
 ---
 
@@ -27,13 +27,13 @@ Keyword: `thai massage glasgow city centre`
 | Rank | Domain | Title |
 |------|--------|-------|
 | 5 | glasgowthaimassage.co.uk ⭐ (us) | Glasgow Thai Massage – The Best Thai Massage in Glasgow ... |
-| 6 | www.phuket-thai-massage.co.uk | Phuket Thai Massage - Glasgow - City Centre |
-| 7 | www.leelawadeethaiwellnesscentreglasgow.com | Leelawadee Thai Wellness Centre Glasgow | spa | 136 ... |
-| 8 | www.tigerlilythaispa.co.uk | Tiger Lily Thai Massage Glasgow - Home |
-| 9 | www.jasminethaimassage.net | Jasmine Thai Massage | Thai Massage | 100A Brunswick ... |
-| 12 | thaihousemassageglasgow.co.uk | Thai House Massage & Spa: Home |
-| 13 | serenitythaimassage.co.uk | Serenity Thai Massage | Massage Therapist in Glasgow |
-| 14 | www.nutchathaimassage.co.uk | Glasgow Location | Nutcha Thai Massage |
+| 7 | www.ninathaitherapy.com | Home | Nina Thai Massage and Healing |
+| 8 | www.jasminethaimassage.net | Jasmine Thai Massage | Thai Massage | 100A Brunswick ... |
+| 9 | www.orchidthaimassagestudio.com | Orchid Wellbeing Glasgow | Authentic Thai Massage & ... |
+| 11 | www.lanthai-massage.co.uk | Lan Thai Massage in Glasgow |
+| 12 | www.phuket-thai-massage.co.uk | Phuket Thai Massage - Glasgow - City Centre |
+| 14 | www.leelawadeethaiwellnesscentreglasgow.com | Leelawadee Thai Wellness Centre Glasgow | spa | 136 ... |
+| 15 | serenitythaimassage.co.uk | Serenity Thai Massage | Massage Therapist in Glasgow |
 
 ---
 
@@ -44,49 +44,48 @@ Keyword: `thai massage glasgow city centre`
 **Website**: https://thaihousemassageglasgow.co.uk/  
 **Rating**: 4 (44 reviews)  
 **Address**: 82 Gordon St, Glasgow G1 3RS  
-**USP**: Authentic Thai massage blending ancient techniques with modern comfort in a serene location opposite Central train station.  
+**USP**: Authentic Thai massage blending ancient techniques with modern comfort, conveniently located across from Central train station in Glasgow city centre.  
 **Content quality**: basic  
 **Has blog**: No  
 **Has location pages**: No  
 **Services**: Thai traditional massage, Thai foot massage, Thai aroma massage
 
 **Strengths**:
-- Prime city centre location (opposite Central train station)
-- Decent review volume with solid 4-star rating
-- Clear service offerings with descriptive language
+- Prime city centre location near Central train station for accessibility
+- Clear service offerings with focus on authentic Thai techniques
+- Decent review count (44 reviews) with solid 4-star rating
 
 **Gaps / weaknesses**:
-- No pricing information visible on website
-- No online booking system mentioned
-- Minimal content - no blog, therapist bios, or detailed service descriptions
-- No opening hours or contact details readily visible on homepage
-- Limited differentiation beyond 'authentic' positioning
+- No pricing information visible on website, forcing potential customers to call
+- Very minimal content - no detailed service descriptions, therapist bios, or additional pages
+- No blog, testimonials, or educational content to build authority and SEO
 
-**Notes**: Website is minimal and lacks conversion optimization. No visible CTA for bookings. Phone number available on Google Maps but not prominently featured on website. Could improve significantly with pricing transparency, online booking, and more detailed content.
+**Notes**: Website is extremely basic with minimal information architecture. No online booking system mentioned. Heavy reliance on phone contact (+441412211657). Location advantage is significant (Gordon Street, near Central station). Rating of 4.0 suggests some customer satisfaction but also indicates room for improvement or potential negative reviews.
 
 ### Nutcha Thai Massage Glasgow
 **Source**: Map #2  
 **Website**: https://nutchathaimassage.co.uk/locations/glasgow/  
 **Rating**: 5 (4 reviews)  
 **Address**: 287, 289, Central Chambers, 93 Hope St, Glasgow G2 6LD  
-**Pricing**: £30-£220 depending on service and duration (30 min to 120 min options)  
-**USP**: Authentic Thai massage with VTCT Level 3 certified therapists across multiple locations in the Midlands and Scotland.  
+**Pricing**: 30 min £30 - 120 min £220 (range across services)  
+**USP**: Authentic Thai massage with VTCT Level 3 certified therapists across multiple convenient locations in the Midlands and Scotland.  
 **Content quality**: good  
 **Has blog**: No  
 **Has location pages**: Yes  
 **Services**: Head and Foot Reflexology, Relaxing Hot Oil Massage, Deep Tissue Massage, Full Body Massage, Thai Traditional Massage, Hot Stone Massage, Couples' Relaxing Hot Oil Massage, Couples' Deep Tissue Massage
 
 **Strengths**:
-- Perfect 5-star rating with positive reviews
-- Clear service menu with transparent pricing for multiple durations
-- Emphasis on professional VTCT Level 3 certifications and authentic Thai techniques
+- Strong credentials - all therapists VTCT Level 3 certified with traditional training
+- Comprehensive service menu including specialist couples treatments and hot stone massage
+- Multi-location business model showing established brand with expansion (new Glasgow location in 2025)
 
 **Gaps / weaknesses**:
-- No customer testimonials or detailed reviews visible on website
-- No blog or educational content about Thai massage benefits
-- Limited information about therapist experience or individual staff profiles
+- No testimonials or detailed customer reviews visible on website despite 5-star rating
+- No information about therapist experience levels, years in practice, or specific training backgrounds
+- No content marketing (blog, wellness tips) to improve SEO and establish thought leadership
+- Limited social proof beyond Google Maps rating - no case studies or before/after information
 
-**Notes**: Recently opened (2025), located in city centre with good accessibility. Offers couples treatments which is a good differentiator. Website has a generic closing statement about 'passionate and creative individuals crafting captivating designs' that doesn't fit the massage business context and suggests template reuse. Only 4 Google reviews despite perfect rating suggests new business with limited customer base.
+**Notes**: Very new Glasgow location (opened 2025) with 4 reviews all 5-star. Website has minor quality issues (generic team description unrelated to massage business, some service description duplication). Strong pricing structure with clear tiers. Convenient city centre location with parking.
 
 ### Daras Massage and Spa
 **Source**: Map #3  
@@ -98,136 +97,134 @@ Keyword: `thai massage glasgow city centre`
 **Has location pages**: No  
 
 **Strengths**:
-- Strong Google Maps presence with 67 reviews
-- Good overall rating of 4.4 stars
+- Strong Google Maps presence with 67 reviews and 4.4 rating
 - Central Glasgow location on Renfield Street
+- Active online booking system
 
 **Gaps / weaknesses**:
-- Website appears to only show booking confirmation page - no service details or pricing visible
-- No apparent blog, location pages, or content marketing strategy
-- Poor website content quality and user experience for potential customers
+- Website shows only booking confirmation page - no service descriptions visible
+- No pricing information accessible
+- No content strategy or SEO optimization evident
+- Missing service details and business information
 
-**Notes**: Website accessibility issue - landing on 'booking confirmed' page suggests poor site structure or indexing. Limited digital marketing presence despite good Google Maps ratings. Competitor appears to rely heavily on Google Maps reviews rather than website content.
+**Notes**: Website appears incomplete or redirects to booking page. Unable to assess full digital presence. Strong local reviews suggest established reputation. Need to check full website structure for complete analysis.
 
 ### Tiger Lily Thai Spa
 **Source**: Map #4  
 **Website**: http://tigerlilythaispa.co.uk/  
 **Rating**: 4.4 (118 reviews)  
 **Address**: 3rd floor, 113 W Regent St, Glasgow G2 2RU  
-**USP**: Specialises in both traditional Thai massage and modern Thai oil massage with highly trained therapists offering customised treatment plans.  
+**USP**: Specialises in both traditional Thai massage and modern Thai oil massage with highly trained therapists offering tailored treatment plans.  
 **Content quality**: good  
 **Has blog**: No  
 **Has location pages**: No  
 **Services**: Traditional Thai massage, Modern Thai oil massage, Facial treatments, Couple treatment packages
 
 **Strengths**:
-- Strong social proof with 118 reviews and 4.4 rating
-- Detailed benefits-focused content explaining Thai massage advantages
-- Convenient city centre location with extended opening hours (7 days, 11am-8pm)
+- Strong Google rating (4.4/5) with substantial review count (118 reviews)
+- Clear articulation of Thai massage benefits with educational content on health advantages
+- Excellent customer testimonials highlighting staff warmth, relaxing atmosphere, and treatment effectiveness
 
 **Gaps / weaknesses**:
-- No pricing information displayed on website
-- No detailed service menu or individual treatment descriptions
-- No online booking system visible, requires phone contact
+- No pricing information visible on website
+- No individual service descriptions or treatment menu details
+- No online booking system or calendar visible
+- No blog or educational content beyond homepage benefits
 
-**Notes**: Located on 3rd floor which may be a barrier to footfall. Website uses benefit-driven copy and customer testimonials effectively. Opening hours and bank holiday information clearly stated. No email contact method visible, only phone number provided.
+**Notes**: Prime city centre location (West Regent Street). Open 7 days 11am-8pm. Website is functional but minimal - lacks detailed service menu, pricing transparency, and booking functionality which could impact conversion. Strong reputation based on reviews suggests good service delivery despite basic web presence.
 
 ### Serenity Thai Massage
 **Source**: Map #5  
 **Website**: https://www.serenitythaimassage.co.uk/  
 **Rating**: 5 (42 reviews)  
 **Address**: 82 Union St, Glasgow G1 3QS  
-**USP**: Authentic Thai massage blending traditional healing methods with modern techniques in a newly renovated peaceful space in Glasgow city centre.  
-**Content quality**: basic  
+**USP**: Authentic traditional Thai massage combined with modern techniques in a newly renovated, peaceful space in the heart of Glasgow.  
+**Content quality**: good  
 **Has blog**: No  
 **Has location pages**: No  
 **Services**: Thai Massage, Deep Tissue Massage, Hot Stone Therapy, Aromatherapy
 
 **Strengths**:
 - Perfect 5-star rating with 42 reviews showing strong customer satisfaction
-- Prime city centre location on Union Street with excellent accessibility
-- Clear focus on authenticity and professional service with emphasis on personalized care
+- Clear positioning around authenticity and professional expertise with newly renovated facilities
+- Good SEO optimization with relevant page titles and service descriptions
 
 **Gaps / weaknesses**:
-- No pricing information visible on website, forcing customers to call for quotes
-- No online booking system apparent; requires phone contact to book
-- Minimal content depth - services page lacks detailed descriptions, duration info, or specific benefits
+- No pricing information visible on website, requiring customers to call for quotes
+- Missing detailed service descriptions, duration options, and what to expect from each treatment
+- No blog content, FAQ section, or educational material to drive organic traffic or establish authority
 
-**Notes**: Website mentions recent reopening (March 21 announcement suggests outdated content). No blog or educational content strategy. Limited web presence for a business with excellent reviews. Strong offline reputation not fully leveraged online. Phone number readily available suggesting phone-first booking model.
+**Notes**: Website content appears incomplete or in draft form (unfinished sentences: 'With a strong focus on...', 'Whether it is the rhythmic...'). Instagram mentioned but no link provided. Central Union Street location is highly desirable. Phone number available for bookings.
 
 ### Balance Massage Healing
 **Source**: Map #6  
 **Website**: http://www.balancemassagehealing.com/  
 **Rating**: 5 (5 reviews)  
 **Address**: first floor, studio at Thai house, 82 Gordon St, Glasgow G1 3RS  
-**USP**: Over a decade of professional experience in Traditional Thai Massage with personalized, deeply therapeutic approach combined with ancient techniques.  
+**USP**: Over a decade of professional experience in Traditional Thai Massage with personalized, deeply therapeutic treatments tailored to individual needs.  
 **Content quality**: good  
 **Has blog**: No  
 **Has location pages**: No  
-**Services**: Traditional Thai Massage, Therapeutic Massage, Deep tissue massage, Stretching and compression therapy
+**Services**: Traditional Thai Massage, Deep tissue massage, Therapeutic massage, Flexibility improvement, Energy flow stimulation
 
 **Strengths**:
-- Perfect 5-star rating with reviews on Google Maps
-- Clear emphasis on therapist experience (10+ years) and credentials
-- Strong emotional/wellness positioning beyond just physical benefits
+- Strong credibility messaging with 10+ years experience emphasized
+- Emotional and holistic benefits clearly articulated alongside physical benefits
+- Good location visibility - prominent Gordon Street location near train station
 
 **Gaps / weaknesses**:
-- No pricing information visible on website
-- No online booking system link provided despite mention of one
-- Limited content depth - no service descriptions, duration options, or contraindications beyond pregnancy
-- No staff bios or qualifications details
-- No blog or educational content to support SEO
+- No pricing information displayed on website
+- No online booking system link or integration visible despite mentioning it
+- Limited service detail - no session duration options or specific treatment types listed
 
-**Notes**: Website appears to be a basic template (title shows 'v0 App'). Located inside 'Thai house' at same address. Does not serve pregnant clients. Contact options include phone, email, and promised online booking system. Professional tone but minimal technical SEO optimization.
+**Notes**: Website appears minimal (page title shows 'v0 App' suggesting it may be a template or in development). Very small review base (5 reviews) despite claimed 10+ years experience. Does not serve pregnant clients. Contact methods provided: phone, email, and claimed online booking system.
 
 ### Blue Diamond Thai Massage Therapy
 **Source**: Map #7  
 **Website**: https://www.diamondmassagestherapy.com/  
 **Rating**: 4.9 (42 reviews)  
 **Address**: 4/4 4th Floor, 90 Mitchell St, Glasgow G1 3NQ  
-**Pricing**: 30 min from £30, 60 min from £30-£40, up to 2 hours available  
-**USP**: Qualified Thai masseuses providing professional massage in a calm atmosphere with aromatherapy diffusers and complimentary snacks, offering couple massage options.  
+**Pricing**: 30 min from £30, sessions up to 2 hours, sport massage from £40  
+**USP**: Qualified Thai masseuses offering professional massage in a calm atmosphere with aromatherapy diffusers and complimentary snacks, available for couples.  
 **Content quality**: basic  
 **Has blog**: No  
 **Has location pages**: No  
 **Services**: Relaxing massage, Aromatherapy oil massage, Deep tissue massage, Sport massage, Head massage, Foot massage, 4 hands massage, Couple massage
 
 **Strengths**:
-- Excellent Google rating (4.9/5) with 42 reviews showing strong customer satisfaction
-- Wide range of massage types including specialist services like 4 hands and couple massage
-- Central Glasgow location on Mitchell Street with convenient parking and extended hours (10am-9pm daily)
+- Excellent Google rating (4.9/5 with 42 reviews)
+- Wide variety of massage types including niche offerings like 4 hands and couple massages
+- Central location on Mitchell Street with clear parking information and flexible access arrangements
 
 **Gaps / weaknesses**:
-- Website has poor grammar and formatting inconsistencies (e.g., 'Diamond Therapy Mass' instead of 'Massage')
-- No detailed pricing breakdown for longer sessions (1.5-2 hours) or multi-therapist services
-- Missing staff/therapist information beyond basic intro, no qualifications or credentials prominently displayed
-- No FAQ, blog, or educational content to improve SEO and build authority
-- Duplicate/conflicting address information (two different postcodes listed)
+- Website is poorly designed with repetitive content, broken layout, and unclear pricing structure for different session lengths
+- No blog, testimonials, therapist profiles, or detailed service descriptions
+- Limited online booking functionality and no clear CTAs; missing FAQs, benefits descriptions, or professional imagery
 
-**Notes**: Website appears to be a basic template with functional but unprofessional presentation. Strong local reputation based on reviews suggests good service delivery despite weak digital presence. Address discrepancy (G1 3NQ vs G1 4PD) should be corrected. Mobile/responsive design not evident from content structure.
+**Notes**: Strong local reputation evidenced by high review count and rating, but website does not reflect this quality. Therapist claims 4 years experience. Address discrepancies noted (G1 3NQ vs G1 4PD). Business appears to rely heavily on word-of-mouth and direct contact rather than digital marketing.
 
 ### Phuket Thai Massage
 **Source**: Map #8  
 **Website**: https://www.phuket-thai-massage.co.uk/  
 **Rating**: 5 (28 reviews)  
 **Address**: Suite 3.1 3rd Floor, Waterloo Chambers, 19 Waterloo St, Glasgow G2 6AY  
-**USP**: Authentic Thai massage experience in Glasgow city centre with skilled therapists offering a peaceful escape inspired by Phuket, located one minute from Central Station.  
+**USP**: Authentic Thai massage experience in Glasgow city centre, one minute from Central station, offering an escape to Phuket with skilled therapists and a peaceful studio atmosphere.  
 **Content quality**: good  
 **Has blog**: No  
 **Has location pages**: No  
-**Services**: Thai massage, Thai oil massage, Deep tissue massage, Foot massage, Thai traditional massage
+**Services**: Thai massage, Oil massage, Foot massage, Deep tissue massage, Thai traditional massage
 
 **Strengths**:
 - Perfect 5-star rating with 28 reviews showing strong customer satisfaction
-- Prime location one minute from Glasgow Central Station with proximity to major hotels
-- Authentic Thai hospitality messaging with owner personality (Ploy from Phuket) creating emotional connection
+- Excellent location near Glasgow Central station and major hotels (Indigo, Radisson Blue, Ibis, Motel One)
+- Strong emotional branding with immersive Phuket beach imagery and personal therapist introduction (Ploy)
 
 **Gaps / weaknesses**:
-- No visible pricing information on website - significant conversion barrier
-- No online booking system - requires phone call to schedule
-- Limited content marketing - no blog, FAQs, or educational resources about massage benefits
+- No pricing information visible on website, forcing customers to call
+- No online booking system - requires phone call to arrange appointments
+- Limited service descriptions and no information about therapist qualifications or experience
 
-**Notes**: Early bird discount of 10% available for bookings at least 1 day in advance between 9-11am. Operating hours 9am-6pm daily. Website copy is well-written with strong sensory imagery and benefit-focused messaging. No pricing transparency could be intentional for premium positioning but limits online conversions.
+**Notes**: Early bird discount (10%) available for bookings 1+ day in advance between 9-11am. Open daily 9am-6pm. Website designed by RC Creative & SEO. Strong emotional copywriting but lacks practical e-commerce functionality.
 
 ### Praan Thai Health & Spa Glasgow
 **Source**: Map #10  
@@ -237,133 +234,159 @@ Keyword: `thai massage glasgow city centre`
 **Content quality**: basic  
 **Has blog**: No  
 **Has location pages**: No  
-**Services**: Thai massage, Health & spa treatments, Therapy services
 
 **Strengths**:
 - Perfect 5-star rating with 16 reviews showing strong customer satisfaction
-- Central location on Mitchell Street near Central Station, highly accessible
-- Established presence on Treatwell booking platform
+- Prime central location on Mitchell Street near Central Station
+- Listed on Treatwell platform for online booking visibility
 
 **Gaps / weaknesses**:
-- No pricing information visible on website or listing
-- Limited service descriptions - unclear what specific treatments are offered
-- No dedicated website - only Treatwell widget presence suggests weak online visibility
+- No website content provided - appears to rely primarily on Treatwell and Google Maps
+- No service descriptions, pricing information, or therapist details visible
+- No blog, SEO content, or location pages to drive organic search traffic
+- Limited digital presence beyond third-party platforms
 
-**Notes**: Business appears to rely primarily on Treatwell for online presence and bookings. Phone contact available. Second floor location may impact foot traffic and accessibility.
+**Notes**: Business appears to depend heavily on third-party booking platforms (Treatwell, Google Maps) rather than owned digital properties. Contact available via phone and likely booking through Treatwell. No evidence of direct website or marketing content.
 
-### Leelawadee Thai Wellness Centre Glasgow | spa | 136 ...
+### Home | Nina Thai Massage and Healing
 **Source**: Organic #7  
-**Website**: https://www.leelawadeethaiwellnesscentreglasgow.com/  
-**USP**: Family-run wellness centre combining traditional Thai therapies with modern techniques, established for over 15 years with strong reputation for excellence and customer satisfaction.  
-**Content quality**: basic  
-**Has blog**: No  
-**Has location pages**: No  
-
-**Strengths**:
-- Strong brand authority with 15+ years operating history
-- Emphasis on natural healing and premium products (grapeseed oil mentioned)
-- Clear mission statement focused on holistic care and customer satisfaction
-
-**Gaps / weaknesses**:
-- No visible service menu or pricing information on homepage
-- No customer reviews or ratings displayed
-- No detailed treatment descriptions or therapist profiles
-- Missing blog/educational content for SEO and trust-building
-- Limited information about booking system accessibility
-
-**Notes**: Website appears to be minimal/underdeveloped. Pricing and detailed service offerings not visible in provided content. Booking system is online but phone number noted as enquiries/reschedule only. Premium product quality highlighted but not leveraged in marketing. No social proof (reviews/testimonials) visible.
-
-### Tiger Lily Thai Massage Glasgow - Home
-**Source**: Organic #8  
-**Website**: https://www.tigerlilythaispa.co.uk/  
-**Pricing**: 30-120 mins, £33-£104. Traditional Thai: 60min £55, 90min £82, 120min £104. Wednesday specials available.  
-**USP**: Specialises in both traditional Thai massage and modern Thai oil massage with convenient West End/city centre location and 7-day opening.  
+**Website**: https://www.ninathaitherapy.com/  
+**Pricing**: 45 mins £60, 60 mins £75, 75 mins £85, 90 mins £100 (most services); Couples 60 mins £140, 90 mins £200; Foot Spa 60 mins £85, 90 mins £110  
+**USP**: Blends authentic traditional Thai massage with modern therapeutic techniques in a newly expanded wellness studio, combining ancient healing wisdom with certified sports massage expertise.  
 **Content quality**: strong  
 **Has blog**: No  
 **Has location pages**: No  
-**Services**: Traditional Thai Massage, Thai Deep Tissue Oil Massage, Thai Relaxing Oil Massage, Bamboo Massage, Swedish Massage, Pregnancy Massage, Workplace Fatigue Treatment, Facial Treatments
+**Services**: Straight & Align Deep Tissue, Table Thai Massage, Lymphatic Drainage Massage, Couples Massage, Thai Aroma Relaxing Massage, Fusion Sport Massage, Foot Spa Package
 
 **Strengths**:
-- Comprehensive service menu covering traditional and modern techniques
-- Clear pricing structure with Wednesday special offers
-- Strong customer testimonials highlighting staff expertise and welcoming atmosphere
-- Detailed service descriptions explaining techniques and benefits
+- Compelling founder story and personal brand (Nina's background as flight attendant adds authenticity)
+- Diverse service menu catering to different needs (athletes, professionals, couples, wellness-focused)
+- Strong service descriptions with clear benefits and ideal customer profiles for each treatment
 
 **Gaps / weaknesses**:
-- No visible online booking system (only 'Contact to Book Now')
-- Limited review count display (only 3 reviews shown, no star rating)
-- No blog content or educational resources
-- Missing staff credentials/therapist qualifications details
-- No FAQ or contraindications section
+- No customer testimonials or reviews visible on homepage
+- No online booking system mentioned or visible
+- Limited information about therapist qualifications beyond Nina's credentials
+- No FAQ or detailed policies section
+- No corporate/bulk booking packages mentioned
 
-**Notes**: Website is well-structured with good content quality. Located at 113 West Regent Street, Glasgow. Open 11am-8pm daily. Offers couple packages. Uses traditional description language ('Sen lines', 'Qi') to build authority. Wednesday specials are competitive pricing lever.
+**Notes**: Website content appears incomplete (Foot Spa description cuts off mid-sentence). Strong emotional branding and wellness positioning. Location highlighted as key advantage (4 mins from Charing Cross station, Bath Street). Recently expanded location suggests growth momentum.
 
 ### Jasmine Thai Massage | Thai Massage | 100A Brunswick ...
-**Source**: Organic #9  
+**Source**: Organic #8  
 **Website**: https://www.jasminethaimassage.net/  
-**USP**: Newly upgraded beds with face holes in all rooms including couples room, combined with professionally trained Thai massage therapists offering multiple massage styles.  
+**USP**: Professional Thai massage therapists offering diverse treatment options with new upgraded facilities including couples massage room with face holes.  
 **Content quality**: basic  
 **Has blog**: No  
 **Has location pages**: No  
 **Services**: Thai Massage, Healing Massage, Sports Massage, Back Neck Shoulder Massage, Aromatherapy Massage, Swedish Massage, Couples Massage, Foot Reflexology
 
 **Strengths**:
-- Wide range of massage services to appeal to different customer needs
-- Mentions loyalty program and promotional packages to encourage repeat business
-- Clear communication of recent facility upgrades (new beds) as a competitive advantage
-
-**Gaps / weaknesses**:
-- No pricing information visible on website - major conversion barrier
-- No customer reviews or ratings to build trust
-- Poor SEO/content strategy - minimal descriptive content, no blog, no detailed service pages
-- Website appears incomplete or under development ('look forward to welcoming you all in 2026')
-
-**Notes**: Website messaging suggests recent renovation/rebranding. Homepage mentions welcoming customers in 2026, suggesting site may still be in development or there's unclear communication about opening/reopening. No contact form, hours, or booking system visible. Domain registration suggests active business but website execution is weak.
-
-### Serenity Thai Massage | Massage Therapist in Glasgow
-**Source**: Organic #13  
-**Website**: https://serenitythaimassage.co.uk/  
-**USP**: Authentic Thai massage blending traditional healing methods with modern techniques in a newly renovated, peaceful Glasgow city centre location.  
-**Content quality**: basic  
-**Has blog**: No  
-**Has location pages**: No  
-**Services**: Authentic Thai Massage, Deep Tissue Massage, Hot Stone Therapy, Aromatherapy
-
-**Strengths**:
-- Clear focus on authenticity and traditional Thai massage techniques
-- Emphasis on professional customer service and personalised care
-- Recently renovated space marketed as tranquil retreat in city centre
+- Wide range of massage types beyond traditional Thai (Swedish, sports, aromatherapy)
+- Couples massage offering with dedicated room
+- Recently upgraded facilities with new beds
+- Loyalty program and promotional packages mentioned
 
 **Gaps / weaknesses**:
 - No pricing information visible on website
 - No customer reviews or ratings displayed
-- Minimal content depth - limited service descriptions and no blog/educational content
+- No blog or educational content
+- Limited information about therapist qualifications and experience
 - No online booking system mentioned
-- Limited information about therapist qualifications or experience
+- Missing opening hours/contact details in provided content
 
-**Notes**: Website appears outdated with announcement about reopening from March 21 (specific year unclear). Instagram presence mentioned but no link provided. Very basic SEO optimization with minimal keyword targeting beyond service names.
+**Notes**: Website mentions 'best price guarantee' but no actual prices listed. Site appears to be under renovation or recently updated (mentions 'welcoming you all in 2026'). Lacks SEO optimization with basic content structure. No social proof or testimonials provided.
 
-### Glasgow Location | Nutcha Thai Massage
-**Source**: Organic #14  
-**Website**: https://www.nutchathaimassage.co.uk/locations/glasgow/  
-**Pricing**: 30 min £30 - 120 min £220 (varies by service)  
-**USP**: Authentic Thai massage with VTCT Level 3 certified therapists across multiple convenient Midlands and Scotland locations.  
+### Orchid Wellbeing Glasgow | Authentic Thai Massage & ...
+**Source**: Organic #9  
+**Website**: https://www.orchidthaimassagestudio.com/  
+**USP**: Personalized authentic Thai massage combining traditional techniques with modern wellness in a central Glasgow studio.  
 **Content quality**: good  
 **Has blog**: No  
-**Has location pages**: Yes  
-**Services**: Head and Foot Reflexology, Relaxing Hot Oil Massage, Deep Tissue Massage, Full Body Massage, Thai Traditional Massage, Couples' Relaxing Hot Oil Massage, Couples' Deep Tissue Massage, Couples' Thai Traditional Massage
+**Has location pages**: No  
+**Services**: Thai Oil Massage, Deep Tissue Therapy, Hot Stone Massage, Facial, Head & Shoulder Massage, Foot Massage with Shoulder & Arm Massage, Sports Massage (pre and post-event)
 
 **Strengths**:
-- Clear service menu with transparent pricing across multiple durations
-- Professional credentials highlighted (VTCT Level 3 certification)
-- Couples massage offerings provide additional revenue stream
+- Clear service offerings with detailed descriptions
+- Strong emphasis on experienced, professionally trained therapists
+- Easy online booking system highlighted with multiple payment options
 
 **Gaps / weaknesses**:
-- No customer reviews or testimonials visible to build social proof
-- No online booking system mentioned or visible
-- Missing content about therapist experience, qualifications beyond VTCT level, or business background
+- No pricing information visible on website
+- No customer reviews or ratings displayed
+- Limited content depth - no blog, FAQ, or educational resources
+- No therapist profiles or credentials detail
+- Minimal information about the studio location/address
 
-**Notes**: Very new location (opened 2025). Website has minor issues: generic tagline 'We are a team of passionate and creative individuals...' appears misplaced or copied. No visible social media links, blog content, or customer reviews. Pricing is competitive and clearly structured. Location in city centre with street parking is a strength.
+**Notes**: Website has good design and clear messaging but lacks pricing transparency and social proof. Some service descriptions are duplicated (Thai Oil Massage listed twice). No visible contact information or specific address beyond 'central Glasgow'.
+
+### Lan Thai Massage in Glasgow
+**Source**: Organic #11  
+**Website**: https://www.lanthai-massage.co.uk/  
+**USP**: Combines traditional Thai healing practices with modern wellness techniques in the West End of Glasgow  
+**Content quality**: good  
+**Has blog**: No  
+**Has location pages**: No  
+**Services**: Traditional Thai Massage, Head, Shoulder & Back Massage, Aroma Massage, Thai Oil Deep Tissue Massage, Sports Oil Massage, Foot & Head Massage, Thai Warrior Massage, Tipping Line Massage
+
+**Strengths**:
+- Comprehensive service menu with specialized treatments (cupping therapy, warrior massage, energy line massage)
+- Strong branding and messaging around holistic wellness and ancient healing traditions
+- Well-articulated service descriptions that emphasize benefits and target different customer needs
+
+**Gaps / weaknesses**:
+- No pricing information visible on website
+- No customer reviews or ratings displayed
+- No blog, therapist bios, or educational content to build authority
+- No booking system or appointment information visible
+- Missing CTAs for bookings/contact
+
+**Notes**: Website focuses heavily on wellness messaging and heritage. Managing Director quote adds credibility. Service descriptions are repetitive in structure and phrasing (likely AI-generated). No visible contact form, phone number, or booking mechanism. Gift voucher offer mentioned but not detailed.
+
+### Leelawadee Thai Wellness Centre Glasgow | spa | 136 ...
+**Source**: Organic #14  
+**Website**: https://www.leelawadeethaiwellnesscentreglasgow.com/  
+**USP**: Family-run wellness centre with over 15 years of experience combining traditional Thai therapies with modern techniques in a peaceful environment.  
+**Content quality**: basic  
+**Has blog**: No  
+**Has location pages**: No  
+
+**Strengths**:
+- Strong brand heritage - 15+ years established in community
+- Clear focus on holistic, natural healing philosophy
+- Emphasis on premium products (Grapeseed Oil) and professional credentials
+
+**Gaps / weaknesses**:
+- No service menu or pricing information visible on website
+- No customer reviews or ratings displayed
+- Minimal content - lacks blog, detailed service descriptions, or therapist profiles
+- No online booking system mentioned despite stating bookings must be made via system
+- Missing SEO-friendly content structure and FAQ section
+
+**Notes**: Website appears to be under-optimized for conversion. Contact info restricted to email only (phone noted as enquiries/rescheduling only). No clear call-to-action or service differentiation. Potential technical issue with booking system visibility.
+
+### Serenity Thai Massage | Massage Therapist in Glasgow
+**Source**: Organic #15  
+**Website**: https://serenitythaimassage.co.uk/  
+**USP**: Authentic Thai massage blending traditional healing methods with modern techniques in a newly renovated, peaceful Glasgow location.  
+**Content quality**: basic  
+**Has blog**: No  
+**Has location pages**: No  
+**Services**: Thai Massage, Deep Tissue Massage, Hot Stone Therapy, Aromatherapy
+
+**Strengths**:
+- Clear focus on authenticity and traditional Thai massage techniques
+- Emphasis on newly renovated, tranquil space and professional environment
+- Strong messaging around personalized care and customer satisfaction
+
+**Gaps / weaknesses**:
+- No pricing information visible on website
+- No customer reviews or ratings displayed
+- Limited content depth - no blog, testimonials, or detailed service descriptions
+- No online booking system mentioned or visible
+- Minimal information about therapist qualifications or experience
+
+**Notes**: Website appears basic with minimal SEO optimization. No contact form visible in provided content. Instagram mentioned but no link provided. Last update reference to March 21 reopening suggests content may be outdated.
 
 ---
 
@@ -371,57 +394,59 @@ Keyword: `thai massage glasgow city centre`
 
 Topics and pages competitors are missing — opportunities for this client:
 
+- No pricing information visible on website, forcing potential customers to call
+- Very minimal content - no detailed service descriptions, therapist bios, or additional pages
+- No blog, testimonials, or educational content to build authority and SEO
+- No testimonials or detailed customer reviews visible on website despite 5-star rating
+- No information about therapist experience levels, years in practice, or specific training backgrounds
+- No content marketing (blog, wellness tips) to improve SEO and establish thought leadership
+- Limited social proof beyond Google Maps rating - no case studies or before/after information
+- Website shows only booking confirmation page - no service descriptions visible
+- No pricing information accessible
+- No content strategy or SEO optimization evident
+- Missing service details and business information
 - No pricing information visible on website
-- No online booking system mentioned
-- Minimal content - no blog, therapist bios, or detailed service descriptions
-- No opening hours or contact details readily visible on homepage
-- Limited differentiation beyond 'authentic' positioning
-- No customer testimonials or detailed reviews visible on website
-- No blog or educational content about Thai massage benefits
-- Limited information about therapist experience or individual staff profiles
-- Website appears to only show booking confirmation page - no service details or pricing visible
-- No apparent blog, location pages, or content marketing strategy
-- Poor website content quality and user experience for potential customers
+- No individual service descriptions or treatment menu details
+- No online booking system or calendar visible
+- No blog or educational content beyond homepage benefits
+- No pricing information visible on website, requiring customers to call for quotes
+- Missing detailed service descriptions, duration options, and what to expect from each treatment
+- No blog content, FAQ section, or educational material to drive organic traffic or establish authority
 - No pricing information displayed on website
-- No detailed service menu or individual treatment descriptions
-- No online booking system visible, requires phone contact
-- No pricing information visible on website, forcing customers to call for quotes
-- No online booking system apparent; requires phone contact to book
-- Minimal content depth - services page lacks detailed descriptions, duration info, or specific benefits
-- No online booking system link provided despite mention of one
-- Limited content depth - no service descriptions, duration options, or contraindications beyond pregnancy
-- No staff bios or qualifications details
-- No blog or educational content to support SEO
-- Website has poor grammar and formatting inconsistencies (e.g., 'Diamond Therapy Mass' instead of 'Massage')
-- No detailed pricing breakdown for longer sessions (1.5-2 hours) or multi-therapist services
-- Missing staff/therapist information beyond basic intro, no qualifications or credentials prominently displayed
-- No FAQ, blog, or educational content to improve SEO and build authority
-- Duplicate/conflicting address information (two different postcodes listed)
-- No visible pricing information on website - significant conversion barrier
-- No online booking system - requires phone call to schedule
-- Limited content marketing - no blog, FAQs, or educational resources about massage benefits
-- No pricing information visible on website or listing
-- Limited service descriptions - unclear what specific treatments are offered
-- No dedicated website - only Treatwell widget presence suggests weak online visibility
-- No visible service menu or pricing information on homepage
-- No customer reviews or ratings displayed
-- No detailed treatment descriptions or therapist profiles
-- Missing blog/educational content for SEO and trust-building
-- Limited information about booking system accessibility
-- No visible online booking system (only 'Contact to Book Now')
-- Limited review count display (only 3 reviews shown, no star rating)
-- No blog content or educational resources
-- Missing staff credentials/therapist qualifications details
-- No FAQ or contraindications section
-- No pricing information visible on website - major conversion barrier
-- No customer reviews or ratings to build trust
-- Poor SEO/content strategy - minimal descriptive content, no blog, no detailed service pages
-- Website appears incomplete or under development ('look forward to welcoming you all in 2026')
-- Minimal content depth - limited service descriptions and no blog/educational content
-- Limited information about therapist qualifications or experience
-- No customer reviews or testimonials visible to build social proof
+- No online booking system link or integration visible despite mentioning it
+- Limited service detail - no session duration options or specific treatment types listed
+- Website is poorly designed with repetitive content, broken layout, and unclear pricing structure for different session lengths
+- No blog, testimonials, therapist profiles, or detailed service descriptions
+- Limited online booking functionality and no clear CTAs; missing FAQs, benefits descriptions, or professional imagery
+- No pricing information visible on website, forcing customers to call
+- No online booking system - requires phone call to arrange appointments
+- Limited service descriptions and no information about therapist qualifications or experience
+- No website content provided - appears to rely primarily on Treatwell and Google Maps
+- No service descriptions, pricing information, or therapist details visible
+- No blog, SEO content, or location pages to drive organic search traffic
+- Limited digital presence beyond third-party platforms
+- No customer testimonials or reviews visible on homepage
 - No online booking system mentioned or visible
-- Missing content about therapist experience, qualifications beyond VTCT level, or business background
+- Limited information about therapist qualifications beyond Nina's credentials
+- No FAQ or detailed policies section
+- No corporate/bulk booking packages mentioned
+- No customer reviews or ratings displayed
+- No blog or educational content
+- Limited information about therapist qualifications and experience
+- No online booking system mentioned
+- Missing opening hours/contact details in provided content
+- Limited content depth - no blog, FAQ, or educational resources
+- No therapist profiles or credentials detail
+- Minimal information about the studio location/address
+- No blog, therapist bios, or educational content to build authority
+- No booking system or appointment information visible
+- Missing CTAs for bookings/contact
+- No service menu or pricing information visible on website
+- Minimal content - lacks blog, detailed service descriptions, or therapist profiles
+- No online booking system mentioned despite stating bookings must be made via system
+- Missing SEO-friendly content structure and FAQ section
+- Limited content depth - no blog, testimonials, or detailed service descriptions
+- Minimal information about therapist qualifications or experience
 
 ---
 

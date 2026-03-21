@@ -205,5 +205,10 @@ python3 src/research_competitor_gaps.py
 python3 src/research_serp_analysis.py "keyword"
 python3 src/research_topic_clusters.py
 python3 src/research_trending.py
+python3 src/research_competitors.py --abbr gtm   # full competitor research (map pack + organic + profiles)
 python3 tests/test_dataforseo.py    # test API connectivity
 ```
+
+**`research_competitors.py`** — standalone competitor intelligence script. Reads `clients/[abbr]/config.json`, geocodes the `area` field via Nominatim (strips "City Centre" etc. before geocoding), queries DataForSEO for top 10 map pack results (`location_name` approach) + top 10 organic (UK, location code 2826), filters directory domains, scrapes each competitor site, extracts structured profiles via Claude Haiku, writes `clients/[abbr]/competitor-analysis.md`. Integrated into `/new-client` workflow as Step 5.
+
+`dataforseo.get_maps_pack()` accepts both `location_name` (e.g. `"Glasgow,Scotland,United Kingdom"`) and `location_coordinate` (e.g. `"55.86,-4.25,10000"`).
