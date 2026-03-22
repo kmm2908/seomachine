@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-03-22 (session 9 — SDY client onboarded + seomachine.php Elementor auto-enable fix)
+Last updated: 2026-03-22 (session 9 cont. — GTM Sheet dropdown done, hub CSS confirmed not needed, SDY template build in progress)
 
 ---
 
@@ -226,10 +226,10 @@ Reason: caching on the live front-end doesn't affect the REST API. Running conte
 - [x] `clients/gtm/competitor-analysis.md` — auto-populated by research_competitors.py (10 map pack + 8 organic, 15 profiles)
 - [x] `clients/gtm/target-keywords.md` — fully populated: GBP categories, 8 active services, pipeline services, condition-based, location modifier matrix
 - [x] `clients/gtm/writing-examples.md` — 3 real blog posts added (Thai massage, nutrition, Glasgow news) with extracted style notes
-- [ ] Google Sheet — add Column E (Content Type) dropdown with values: service, location, pillar, topical, blog
+- [x] Google Sheet — Column E (Content Type) dropdown added with values: service, location, pillar, topical, blog
 - [x] Elementor template — FAQ section removed; local template JSON refreshed via fetch_elementor_template.py
 - [x] Existing posts (16637–16667) — excerpts set manually in wp-admin for cleaner hub display
-- [ ] Hub section — set `line-height: 1.2` in Elementor site custom CSS if long titles wrap awkwardly
+- [x] Hub section — line-height confirmed not needed; all titles display cleanly at default
 - [x] `clients/gtm/config.json` — `schema.logo_url` confirmed and updated to correct WP media URL
 
 ---
