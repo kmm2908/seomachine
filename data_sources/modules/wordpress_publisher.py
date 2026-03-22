@@ -468,12 +468,12 @@ class WordPressPublisher:
         # Fallback: first html widget
         return self._find_html_widget_first(elements)
 
-    def _find_html_widget_marked(self, elements: list) -> Optional[dict]:
+    def _find_html_widget_marked(self, elements: list, marker: str = "Paste HTML Here") -> Optional[dict]:
         for el in elements:
             if el.get("elType") == "widget" and el.get("widgetType") == "html":
-                if "Paste HTML Here" in el.get("settings", {}).get("html", ""):
+                if marker in el.get("settings", {}).get("html", ""):
                     return el
-            result = self._find_html_widget_marked(el.get("elements", []))
+            result = self._find_html_widget_marked(el.get("elements", []), marker)
             if result:
                 return result
         return None
@@ -488,15 +488,17 @@ class WordPressPublisher:
         return None
 
     def _inject_elementor(self, html_content: str, template_path: str) -> dict:
-        """Load Elementor template JSON and inject article HTML into the HTML widget.
+        """Load Elementor template JSON and inject article HTML into the HTML widget(s).
 
-        Schema <script> is appended to the widget content directly — Elementor
-        HTML widgets preserve <script> tags natively, so no Gutenberg wrapper needed.
+        Two-section mode (S1/S2 markers): Section 1 body goes into <!-- S1 CONTENT -->,
+        Section 2 FAQ + schema go into <!-- S2 CONTENT -->.
+        Single-widget mode (legacy / GTM): all content injected into one widget.
+        Schema <script> is appended directly — Elementor HTML widgets preserve <script> tags.
         """
         import json as _json
         template = _json.loads(Path(template_path).read_text(encoding="utf-8"))
 
-        # Split article HTML from schema block
+        # Split schema block from article HTML
         schema_pattern = re.compile(
             r'<!--\s*SCHEMA\s*-->\s*(<script[^>]*type=["\']application/ld\+json["\'][^>]*>.*?</script>)',
             re.DOTALL | re.IGNORECASE,
@@ -505,21 +507,35 @@ class WordPressPublisher:
         article_html = schema_pattern.sub("", html_content).strip()
         schema_script = schema_match.group(1).strip() if schema_match else ""
 
-        # Remove the first <h2> — the Elementor template renders the page title
-        # as an H1 via its page title widget, so the H2 would duplicate it.
+        # Remove the first <h2> — template renders the page title via its own widget
         article_html = re.sub(r'<h2[^>]*>.*?</h2>\s*', '', article_html, count=1,
                                flags=re.DOTALL | re.IGNORECASE)
 
-        # Match list spacing to body text — Elementor HTML widgets don't inherit
-        # theme line-height on <ul>/<li>, so set it inline.
-        article_html = article_html.replace('<ul>', '<ul style="line-height: 1.8; margin: 0.5em 0 1em;">')
-        article_html = article_html.replace('<li>', '<li style="margin-bottom: 0.4em;">')
+        def fix_list_spacing(html: str) -> str:
+            html = html.replace('<ul>', '<ul style="line-height: 1.8; margin: 0.5em 0 1em;">')
+            html = html.replace('<li>', '<li style="margin-bottom: 0.4em;">')
+            return html
 
-        widget = self._find_html_widget(template)
-        if not widget:
-            raise RuntimeError("No HTML widget found in Elementor template. Check elementor-template.json.")
+        # Two-section mode: look for S1 and S2 markers
+        w_s1 = self._find_html_widget_marked(template, "<!-- S1 CONTENT -->")
+        w_s2 = self._find_html_widget_marked(template, "<!-- S2 CONTENT -->")
 
-        widget["settings"]["html"] = article_html + ("\n\n" + schema_script if schema_script else "")
+        if w_s1 and w_s2:
+            # Split on the SECTION 2 FAQ comment
+            split_pattern = re.compile(r'<!--\s*SECTION\s*2\s*FAQ\s*-->', re.IGNORECASE)
+            parts = split_pattern.split(article_html, maxsplit=1)
+            section1_html = fix_list_spacing(parts[0].strip())
+            section2_html = fix_list_spacing(parts[1].strip()) if len(parts) > 1 else ""
+            w_s1["settings"]["html"] = section1_html
+            w_s2["settings"]["html"] = section2_html + ("\n\n" + schema_script if schema_script else "")
+        else:
+            # Legacy single-widget mode (GTM template)
+            article_html = fix_list_spacing(article_html)
+            widget = self._find_html_widget(template)
+            if not widget:
+                raise RuntimeError("No HTML widget found in Elementor template. Check elementor-template.json.")
+            widget["settings"]["html"] = article_html + ("\n\n" + schema_script if schema_script else "")
+
         return template
 
     def _create_elementor_page(

@@ -41,7 +41,8 @@ def fetch_template(abbr: str) -> None:
     api_url = f"{url}/wp-json/wp/v2/elementor_library/{template_id}?context=edit"
     print(f"Fetching template {template_id} from {url}...")
 
-    response = requests.get(api_url, auth=(username, app_password), timeout=30)
+    verify_ssl = not url.endswith(".local")
+    response = requests.get(api_url, auth=(username, app_password), timeout=30, verify=verify_ssl)
 
     if response.status_code == 404:
         print(f"Error: template {template_id} not found. Check elementor_template_id in config.")

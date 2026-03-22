@@ -11,9 +11,9 @@
   "services": ["Thai massage", "Thai Oil Massage", "Swedish massage", "sports massage", "hot stone massage", "aromatherapy massage"],
   "keyword_prefix": "thai massage",
   "wordpress": {
-    "url": "https://sdy.local",
+    "url": "https://serendipitymassage.co.uk",
     "username": "kmm-T5r",
-    "app_password": "seLS YVoq 0YSU v8CI LDo9 IHib",
+    "app_password": "G8lp 3awQ nhtU C3V1 he5O V5aB",
     "content_type_map": {
       "service":  "seo_service",
       "location": "seo_location",
@@ -23,11 +23,12 @@
     },
     "default_post_type": "seo_blog",
     "default_status": "draft",
-    "elementor_template_id": null
+    "elementor_template_id": 564
   },
-  "wordpress_live": {
-    "url": "https://serendipitymassage.co.uk",
+  "wordpress_local": {
+    "url": "https://sdy.local",
     "username": "kmm-T5r",
-    "app_password": "CD7K yZV7 WXyg XzQW SjEk q0th"
+    "app_password": "seLS YVoq 0YSU v8CI LDo9 IHib",
+    "elementor_template_id": 635
   }
 }

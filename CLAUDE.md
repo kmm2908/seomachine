@@ -174,11 +174,15 @@ Use this when posts need to be re-created in WordPress (e.g. after enabling Elem
 **Custom post types** — content is published to the correct CPT based on content type. Mapping is in `clients/[abbr]/config.json` under `wordpress.content_type_map`. CPTs: `seo_service`, `seo_location`, `seo_pillar`, `seo_topical`, `seo_blog`. All grouped under "SEO Content" in wp-admin. SEO meta fields (`seo_meta` REST field) work without Yoast — keys are Yoast-compatible so they display in Yoast UI if installed.
 
 **Elementor template publishing** (used when `clients/[abbr]/elementor-template.json` exists):
-1. Run `python3 src/fetch_elementor_template.py [abbr]` once to capture the saved template (reads `wordpress.elementor_template_id` from config)
-2. On `--publish`, article HTML is injected into the template's HTML widget; first `<h2>` stripped (template has H1 title widget); schema `<script>` appended directly (no Gutenberg wrapper needed); list spacing fixed via inline styles
+1. Run `python3 src/fetch_elementor_template.py [abbr]` once to capture the saved template (reads `wordpress.elementor_template_id` from config). Skips SSL verification automatically for `.local` domains.
+2. On `--publish`, article HTML is injected into the template's HTML widget(s); first `<h2>` stripped (template has H1 title widget); schema `<script>` appended directly; list spacing fixed via inline styles
 3. Post created as the correct CPT (e.g. `seo_location`) with `_elementor_data` + `_elementor_edit_mode: builder` meta
 
+**Two-section injection mode** (SDY template): if the template contains HTML widgets with `<!-- S1 CONTENT -->` and `<!-- S2 CONTENT -->` markers, the injector splits automatically — Section 1 body → S1 widget, FAQ accordion → S2 widget (with schema appended). The Button section between them is left untouched. Falls back to single-widget mode (GTM) if markers are absent.
+
 **GTM config:** `clients/gtm/config.json` — `wordpress.elementor_template_id: 16508`, `wordpress.content_type_map` maps all 5 types to CPT slugs
+
+**SDY config:** `clients/sdy/config.json` — `wordpress` block points to live (`serendipitymassage.co.uk`); `elementor_template_id: 564`; `wordpress_local` block preserves local credentials for reference
 
 **Elementor CPT auto-enable** — `seomachine.php` filters `option_elementor_cpt_support` and `default_option_elementor_cpt_support` to auto-enable all 5 CPTs in Elementor without manual checkbox step. No Elementor → Settings action required on new installs.
 

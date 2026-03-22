@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-03-22 (session 9 cont. — GTM Sheet dropdown done, hub CSS confirmed not needed, SDY template build in progress)
+Last updated: 2026-03-22 (session 10 — SDY now live; template 564 fetched from serendipitymassage.co.uk)
 
 ---
 
@@ -140,6 +140,14 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] `research_competitors.py --abbr sdy` run — 7 organic competitors profiled, map pack pending (keyword tuning needed)
 - [x] GTM local site deleted — GTM is live-only from session 9 onwards
 
+### SDY go-live + two-section injection (session 10)
+- [x] SDY Elementor template built locally — S1 and S2 sections replaced with HTML widgets using `<!-- S1 CONTENT -->` and `<!-- S2 CONTENT -->` markers; Button CTA left between them
+- [x] `src/fetch_elementor_template.py` — SSL verification skipped for `.local` domains (self-signed cert fix)
+- [x] Local template fetched (ID 635), live template imported and fetched (ID 564) — both markers confirmed present
+- [x] `data_sources/modules/wordpress_publisher.py` — `_inject_elementor()` updated to support two-section mode; detects S1/S2 markers automatically; falls back to single-widget mode for GTM
+- [x] `_find_html_widget_marked()` updated to accept configurable `marker` string
+- [x] `clients/sdy/config.json` — `wordpress` block switched to live (`serendipitymassage.co.uk`); app password updated; template ID 564; local credentials preserved in `wordpress_local`
+
 ### End-to-end batch publishing (tested session 5)
 - [x] 5 location + 2 service posts republished clean to correct CPTs (IDs 16637–16667)
 - [x] CPT permalink routing confirmed working — `/location/[slug]/` resolves correctly
@@ -191,15 +199,15 @@ Reason: caching on the live front-end doesn't affect the REST API. Running conte
 - [x] Deploy `wordpress/seomachine.php` to local `wp-content/mu-plugins/`
 - [x] Confirm 5 CPTs appear via REST API (`seo_service`, `seo_location`, `seo_pillar`, `seo_topical`, `seo_blog`)
 - [x] Elementor CPTs auto-enabled via `option_elementor_cpt_support` filter — confirmed all 5 showing in Elementor → Settings
-- [ ] Build location page template in Elementor library (in progress — user building)
-- [ ] Get template ID and run `python3 src/fetch_elementor_template.py sdy`
+- [x] Build location page template in Elementor library — S1/S2 HTML widgets with markers
+- [x] Get template ID (635) and run `python3 src/fetch_elementor_template.py sdy`
 
 #### Phase 2 — Push to live
-- [ ] Export local DB, import to live server
-- [ ] Confirm seomachine.php is in `wp-content/mu-plugins/` on live (or redeploy)
-- [ ] Confirm CPTs and Elementor settings survived the push
-- [ ] Run `python3 src/fetch_elementor_template.py sdy` against **live** URL
-- [ ] Update `clients/sdy/config.json` with live `elementor_template_id`
+- [x] Deploy seomachine.php to live `wp-content/mu-plugins/`
+- [x] Confirm CPTs active and Elementor auto-enabled on live
+- [x] Import Elementor template to live — template ID 564
+- [x] Update `clients/sdy/config.json` — `wordpress` block now points to live; app password set; template ID 564
+- [x] Run `python3 src/fetch_elementor_template.py sdy` against live — S1/S2 markers confirmed
 
 #### Phase 3 — Content (after Phase 2)
 - [ ] Add `SDY` to Column D dropdown in Google Sheet
@@ -211,11 +219,13 @@ Reason: caching on the live front-end doesn't affect the REST API. Running conte
 
 ### Still Needs Human Input (SDY)
 - [x] Local WP URL and credentials — in config.json (`wordpress` block = local, `wordpress_live` = live)
+- [x] Live credentials and app password — set in config.json; `wordpress` block now live
+- [x] Elementor template — built (local ID 635, live ID 564); fetched and stored
 - [ ] `clients/sdy/internal-links-map.md` — confirm service page URLs on live site
 - [ ] `clients/sdy/writing-examples.md` — pull 2–3 examples from live site
 - [x] `clients/sdy/competitor-analysis.md` — auto-populated: 7 organic competitors profiled by research_competitors.py
 - [ ] GBP verification — needed before publishing location pages publicly
-- [ ] Elementor template — complete build, provide template ID for fetch_elementor_template.py
+- [ ] Add `SDY` to Column D dropdown in Google Sheet
 
 ---
 
