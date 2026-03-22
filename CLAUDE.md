@@ -30,7 +30,8 @@ Each client lives in a single folder. To add a new client, run `/new-client`.
 
 ```
 clients/
-  gtm/                  ← one folder per client
+  gtm/                  ← Glasgow Thai Massage (live, publishing active)
+  sdy/                  ← Serendipity Massage Therapy & Wellness (new, local setup phase)
     config.json         ← machine-readable config (name, address, WP creds, services)
     brand-voice.md      ← tone, messaging pillars, client-specific writing rules
     seo-guidelines.md   ← keyword strategy, entity optimisation rules
@@ -41,6 +42,8 @@ clients/
     writing-examples.md
   README.md             ← schema docs and how to add new clients
 ```
+
+**Local/live config pattern** — when a client has a local dev environment, `config.json` uses `wordpress` for the active target and `wordpress_live` to store live credentials. For Phase 2 (push to live), copy `wordpress_live` values into `wordpress`.
 
 Global context (not client-specific) stays in `context/`:
 - `context/style-guide.md` — universal grammar, formatting, writing rules (including no-hyphens rule)
@@ -177,7 +180,9 @@ Use this when posts need to be re-created in WordPress (e.g. after enabling Elem
 
 **GTM config:** `clients/gtm/config.json` — `wordpress.elementor_template_id: 16508`, `wordpress.content_type_map` maps all 5 types to CPT slugs
 
-**Hub page shortcode** — `[seo_hub type="location"]` registered in `seomachine.php` (v2.2). Place in an Elementor Shortcode widget (not HTML widget). Renders a `<ul class="seo-hub-links">` of all published posts of that type, sorted A–Z, each wrapped in `<li><h3><a>`. Display text = post excerpt if set, otherwise post title. Supported types: `location`, `service`, `pillar`, `topical`, `blog`. Must be deployed to `wp-content/mu-plugins/seomachine.php` (not inside `plugins/`).
+**Elementor CPT auto-enable** — `seomachine.php` filters `option_elementor_cpt_support` and `default_option_elementor_cpt_support` to auto-enable all 5 CPTs in Elementor without manual checkbox step. No Elementor → Settings action required on new installs.
+
+**Hub page shortcode** — `[seo_hub type="location"]` registered in `seomachine.php`. Place in an Elementor Shortcode widget (not HTML widget). Renders a `<ul class="seo-hub-links">` of all published posts of that type, sorted A–Z, each wrapped in `<li><h3><a>`. Display text = post excerpt if set, otherwise post title. Supported types: `location`, `service`, `pillar`, `topical`, `blog`. Must be deployed to `wp-content/mu-plugins/seomachine.php` (not inside `plugins/`).
 
 **Schema handling (non-Elementor)**: `_wrap_schema_block()` moves the `<!-- SCHEMA --><script>` block into a Gutenberg `<!-- wp:html -->` block. The `[DATE]` placeholder is replaced with today's ISO date by the batch runner before saving.
 

@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-03-22 (session 8 cont. — GTM context files complete: internal-links-map, seo-guidelines, target-keywords all done)
+Last updated: 2026-03-22 (session 9 — SDY client onboarded + seomachine.php Elementor auto-enable fix)
 
 ---
 
@@ -132,6 +132,14 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] `WordPressPublisher` — replaces `[BANNER_IMAGE_URL]` with actual WP media URL after image upload
 - [x] `.claude/settings.json` created for project — `bypassPermissions` mode; all Playwright MCP tools added to global allow list
 
+### SDY client onboarding (session 9)
+- [x] `clients/sdy/` created — config.json, brand-voice.md, features.md, seo-guidelines.md (clean, not Castos template), target-keywords.md, internal-links-map.md, competitor-analysis.md, writing-examples.md
+- [x] `clients/sdy/config.json` — `wordpress` block points to local (`https://sdy.local`); `wordpress_live` block stores live credentials for Phase 2 swap
+- [x] `seomachine.php` updated — added `option_elementor_cpt_support` + `default_option_elementor_cpt_support` filters; CPTs now auto-enabled in Elementor without manual checkbox step
+- [x] Deployed to SDY local (`~/Local Sites/Sdy/app/public/wp-content/mu-plugins/`)
+- [x] `research_competitors.py --abbr sdy` run — 7 organic competitors profiled, map pack pending (keyword tuning needed)
+- [x] GTM local site deleted — GTM is live-only from session 9 onwards
+
 ### End-to-end batch publishing (tested session 5)
 - [x] 5 location + 2 service posts republished clean to correct CPTs (IDs 16637–16667)
 - [x] CPT permalink routing confirmed working — `/location/[slug]/` resolves correctly
@@ -179,12 +187,12 @@ GBP applied for but not yet verified. Abbreviation: `SDY`.
 Reason: caching on the live front-end doesn't affect the REST API. Running content against two environments causes DB divergence. Push local → live once, then stay on live for all publishing.
 
 #### Phase 1 — Local setup (in progress)
-- [ ] Get local site URL and credentials — add to config.json as `wordpress_local` block (or swap url temporarily)
-- [ ] Deploy `wordpress/seomachine.php` to local `wp-content/mu-plugins/`
-- [ ] Confirm 5 CPTs appear in wp-admin under "SEO Content"
-- [ ] Enable CPTs in Elementor → Settings → Custom Post Types
-- [ ] Build location page template in Elementor library (mirror GTM template 16508 structure)
-- [ ] Note the local template ID
+- [x] Get local site URL and credentials — added to config.json (`wordpress` = local, `wordpress_live` = live)
+- [x] Deploy `wordpress/seomachine.php` to local `wp-content/mu-plugins/`
+- [x] Confirm 5 CPTs appear via REST API (`seo_service`, `seo_location`, `seo_pillar`, `seo_topical`, `seo_blog`)
+- [x] Elementor CPTs auto-enabled via `option_elementor_cpt_support` filter — confirmed all 5 showing in Elementor → Settings
+- [ ] Build location page template in Elementor library (in progress — user building)
+- [ ] Get template ID and run `python3 src/fetch_elementor_template.py sdy`
 
 #### Phase 2 — Push to live
 - [ ] Export local DB, import to live server
@@ -202,11 +210,12 @@ Reason: caching on the live front-end doesn't affect the REST API. Running conte
 - [ ] Verify content lands in correct CPT with Elementor template
 
 ### Still Needs Human Input (SDY)
-- [ ] Local WP URL and credentials — to be added to config.json temporarily for Phase 1
+- [x] Local WP URL and credentials — in config.json (`wordpress` block = local, `wordpress_live` = live)
 - [ ] `clients/sdy/internal-links-map.md` — confirm service page URLs on live site
 - [ ] `clients/sdy/writing-examples.md` — pull 2–3 examples from live site
-- [ ] `clients/sdy/competitor-analysis.md` — populate with Glasgow competitors
+- [x] `clients/sdy/competitor-analysis.md` — auto-populated: 7 organic competitors profiled by research_competitors.py
 - [ ] GBP verification — needed before publishing location pages publicly
+- [ ] Elementor template — complete build, provide template ID for fetch_elementor_template.py
 
 ---
 

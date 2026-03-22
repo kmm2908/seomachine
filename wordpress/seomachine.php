@@ -352,6 +352,10 @@ add_action('admin_footer-edit.php', function(): void {
 });
 
 // ── Elementor support for custom post types ──────────────────────────────────
+//
+// Two approaches combined for compatibility across Elementor versions:
+// 1. Filter the public post types list (shows CPTs in Elementor → Settings)
+// 2. Filter the stored option (auto-enables CPTs without manual checkbox step)
 
 add_filter('elementor/utils/get_public_post_types', function($types) {
     foreach (SEO_MACHINE_POST_TYPES as $slug => [$plural]) {
@@ -361,4 +365,22 @@ add_filter('elementor/utils/get_public_post_types', function($types) {
         }
     }
     return $types;
+});
+
+// Auto-enable our CPTs in Elementor without requiring manual settings checkbox
+add_filter('option_elementor_cpt_support', function($value) {
+    $cpts = array_keys(SEO_MACHINE_POST_TYPES);
+    if (!is_array($value)) {
+        $value = [];
+    }
+    foreach ($cpts as $cpt) {
+        if (!in_array($cpt, $value, true)) {
+            $value[] = $cpt;
+        }
+    }
+    return $value;
+});
+
+add_filter('default_option_elementor_cpt_support', function() {
+    return array_keys(SEO_MACHINE_POST_TYPES);
 });

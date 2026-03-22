@@ -1,0 +1,33 @@
+{
+  "name": "Serendipity Massage Therapy & Wellness",
+  "abbreviation": "SDY",
+  "address": "Floor 1, Suite 50, Central Chambers, 93 Hope Street, Glasgow G2 6LD",
+  "area": "Glasgow City Centre",
+  "postcode": "G2 6LD",
+  "phone": "0141 673 6630",
+  "email": "relax@serendipitymassage.co.uk",
+  "booking_url": "https://serendipitymassage.co.uk/book-now/",
+  "website": "https://serendipitymassage.co.uk",
+  "services": ["Thai massage", "Thai Oil Massage", "Swedish massage", "sports massage", "hot stone massage", "aromatherapy massage"],
+  "keyword_prefix": "thai massage",
+  "wordpress": {
+    "url": "https://sdy.local",
+    "username": "kmm-T5r",
+    "app_password": "seLS YVoq 0YSU v8CI LDo9 IHib",
+    "content_type_map": {
+      "service":  "seo_service",
+      "location": "seo_location",
+      "pillar":   "seo_pillar",
+      "topical":  "seo_topical",
+      "blog":     "seo_blog"
+    },
+    "default_post_type": "seo_blog",
+    "default_status": "draft",
+    "elementor_template_id": null
+  },
+  "wordpress_live": {
+    "url": "https://serendipitymassage.co.uk",
+    "username": "kmm-T5r",
+    "app_password": "CD7K yZV7 WXyg XzQW SjEk q0th"
+  }
+}
