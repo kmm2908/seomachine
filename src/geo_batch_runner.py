@@ -43,9 +43,10 @@ load_dotenv(ROOT / '.env')
 sys.path.insert(0, str(ROOT / 'data_sources' / 'modules'))
 from google_sheets import (
     read_pending, update_status, update_cost, update_file_path,
-    send_email, IMAGES_PENDING_VALUE,
+    send_email, IMAGES_PENDING_VALUE, REVIEW_REQUIRED_VALUE,
 )
 from wikipedia import WikipediaResearcher
+from quality_gate import QualityGate
 
 # ── Paths ────────────────────────────────────────────────────────────────────
 CONTENT_DIR = ROOT / 'content'
@@ -314,34 +315,6 @@ def extract_word_count(content: str) -> int:
     return len(words)
 
 
-def run_quality_check(content: str) -> None:
-    """Run engagement and readability checks on generated content."""
-    try:
-        from engagement_analyzer import EngagementAnalyzer
-        from readability_scorer import ReadabilityScorer
-
-        plain = re.sub(r'<!--.*?-->', '', content, flags=re.DOTALL)
-        # Preserve paragraph breaks before stripping tags
-        plain = re.sub(r'</p>', '\n\n', plain, flags=re.IGNORECASE)
-        plain = re.sub(r'<br\s*/?>', '\n', plain, flags=re.IGNORECASE)
-        plain = re.sub(r'<[^>]+>', ' ', plain)
-        plain = re.sub(r'\n[ \t]+', '\n', plain)
-        plain = re.sub(r' +', ' ', plain).strip()
-
-        eng = EngagementAnalyzer().analyze(plain)
-        read = ReadabilityScorer().analyze(plain)
-
-        eng_score = f"{eng['passed_count']}/{eng['total_criteria']}"
-        read_score = read.get('overall_score', 0)
-        grade = read.get('grade', '?').split(' ')[0]
-
-        issues = [k for k, passed in eng['scores'].items() if not passed]
-        issue_str = f"  ⚠ fix: {', '.join(issues)}" if issues else ""
-
-        print(f"    → Quality: engagement {eng_score} | readability {read_score:.0f}/100 ({grade}){issue_str}")
-    except Exception as qe:
-        print(f"    → Quality check skipped: {qe}")
-
 
 def calculate_cost(usage) -> float:
     """Calculate USD cost from an API usage object."""
@@ -579,23 +552,37 @@ def run_batch(sheet_range: Optional[str] = None, publish: bool = False) -> None:
                 total_cost_usd += cost_usd
                 written_files.append(str(filepath.relative_to(ROOT)))
                 print(f"[{i}/{total}] ✓ Written (Images o/s): {filepath.relative_to(ROOT)} ({word_count} words, ${cost_usd:.4f})")
-                run_quality_check(content)
                 if i < total:
                     time.sleep(65)
                 continue
 
-            # Mark DONE and record cost in Column C immediately after saving
-            update_status(row, 'DONE')
+            # Quality gate — checks and rewrites if needed before publishing
+            gate = QualityGate(client, business_config)
+            gate_result = gate.check_and_improve(content, address, content_type)
+            content = gate_result.content       # use final (possibly rewritten) version
+            cost_usd += gate_result.cost_usd    # add rewrite costs to row total
+
+            if not gate_result.passed:
+                update_status(row, REVIEW_REQUIRED_VALUE)
+                update_file_path(row, str(filepath.relative_to(ROOT)))
+                total_cost_usd += cost_usd
+                written_files.append(str(filepath.relative_to(ROOT)))
+                print(f"[{i}/{total}] ⚠ Review Required: {filepath.relative_to(ROOT)} ({word_count} words, ${cost_usd:.4f})")
+                print(f"    Failed: {', '.join(gate_result.failures)}")
+                if i < total:
+                    time.sleep(65)
+                continue
+
+            # Gate passed — write DONE status and cost, then publish
+            total_cost_usd += cost_usd
+            written_files.append(str(filepath.relative_to(ROOT)))
             cost_str = f"${cost_usd:.4f}"
+            print(f"[{i}/{total}] ✓ Written: {filepath.relative_to(ROOT)} ({word_count} words, {cost_str})")
+            update_status(row, 'DONE')
             try:
                 update_cost(row, cost_str)
             except Exception:
                 pass  # Cost tracking is non-critical
-
-            total_cost_usd += cost_usd
-            written_files.append(str(filepath.relative_to(ROOT)))
-            print(f"[{i}/{total}] ✓ Written: {filepath.relative_to(ROOT)} ({word_count} words, {cost_str})")
-            run_quality_check(content)
 
             # Optionally publish to WordPress
             if publish:
