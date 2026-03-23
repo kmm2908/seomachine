@@ -41,6 +41,7 @@ STATUS_COLUMN = 'B'
 QUEUE_VALUE = 'Write Now'
 DONE_VALUE = 'DONE'
 IMAGES_PENDING_VALUE = 'Images o/s'
+REVIEW_REQUIRED_VALUE = 'Review Required'
 
 
 def get_service():
