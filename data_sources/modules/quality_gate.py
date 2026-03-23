@@ -78,10 +78,10 @@ class QualityGate:
             total_cost += rewrite_cost
 
             if rewrite_content is None:
-                # API error — treat as failed attempt, continue if retries remain
-                failures = ['rewrite_api_error']
+                # API error — keep original failures so next retry still gets correct instructions
                 if rewrite_num < MAX_REWRITES:
                     continue
+                # Exhausted all retries
                 return QualityResult(
                     content=current_content,
                     passed=False,
@@ -236,7 +236,7 @@ Content to rewrite:
         brand_voice_path = _ROOT / 'clients' / abbr / 'brand-voice.md'
         try:
             return Path(brand_voice_path).read_text(encoding='utf-8')[:2000]
-        except FileNotFoundError:
+        except OSError:
             return ''
 
     def _to_plain(self, html: str) -> str:

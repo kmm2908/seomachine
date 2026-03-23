@@ -174,6 +174,57 @@ def test_scorer_error_is_failsafe_returns_passed():
     assert result.cost_usd == 0.0
 
 
+def test_api_error_on_first_rewrite_uses_original_failures_for_second():
+    """When rewrite 1 hits an API error, rewrite 2 must still receive fix instructions."""
+    from quality_gate import QualityGate
+    captured_prompts = []
+
+    def capture_and_succeed(*args, **kwargs):
+        # Capture the prompt from the second call
+        if len(captured_prompts) == 1:
+            # second call — return passing content
+            captured_prompts.append(kwargs.get('messages', [{}])[0].get('content', ''))
+            mock_usage = MagicMock()
+            mock_usage.input_tokens = 1000
+            mock_usage.output_tokens = 500
+            mock_msg = MagicMock()
+            mock_msg.content = [MagicMock(text=PASSING_CONTENT)]
+            mock_msg.usage = mock_usage
+            return mock_msg
+        # first call — fail
+        captured_prompts.append('error')
+        raise Exception("API unavailable")
+
+    failing_scores = {
+        'scores': {'hook': False, 'ctas': False, 'stories': False, 'rhythm': True, 'paragraphs': True},
+    }
+    passing_scores = {
+        'scores': {'hook': True, 'ctas': True, 'stories': True, 'rhythm': True, 'paragraphs': True},
+    }
+    failing_read = {'readability_metrics': {'flesch_reading_ease': 30.0}}
+    passing_read = {'readability_metrics': {'flesch_reading_ease': 72.0}}
+
+    mock_eng = MagicMock()
+    # analyze() called: initial check (fail), then after rewrite-2 succeeds (pass)
+    mock_eng.return_value.analyze.side_effect = [failing_scores, passing_scores]
+    mock_read = MagicMock()
+    mock_read.return_value.analyze.side_effect = [failing_read, passing_read]
+
+    mock_client = MagicMock()
+    mock_client.messages.create.side_effect = capture_and_succeed
+    gate = QualityGate(mock_client, make_client_config())
+    with patch('quality_gate.EngagementAnalyzer', mock_eng), \
+         patch('quality_gate.ReadabilityScorer', mock_read), \
+         patch('quality_gate.Path.read_text', return_value='# Brand Voice\nBe warm.'):
+        result = gate.check_and_improve(FAILING_CONTENT, 'Deep Tissue', 'service')
+
+    assert result.passed is True
+    # The second API call prompt should contain real fix instructions (not empty)
+    second_prompt = captured_prompts[1]
+    assert 'specific improvements' in second_prompt
+    assert len(second_prompt) > 200  # a real prompt, not an empty one
+
+
 def test_failures_list_only_contains_strings():
     from quality_gate import QualityGate
     mock_client = make_mock_anthropic(FAILING_CONTENT)
