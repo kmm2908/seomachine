@@ -563,8 +563,13 @@ def run_batch(sheet_range: Optional[str] = None, publish: bool = False) -> None:
             cost_usd += gate_result.cost_usd    # add rewrite costs to row total
 
             if not gate_result.passed:
+                filepath.write_text(content, encoding='utf-8')   # save best rewrite attempt
                 update_status(row, REVIEW_REQUIRED_VALUE)
                 update_file_path(row, str(filepath.relative_to(ROOT)))
+                try:
+                    update_cost(row, f"${cost_usd:.4f}")
+                except Exception:
+                    pass  # Cost tracking is non-critical
                 total_cost_usd += cost_usd
                 written_files.append(str(filepath.relative_to(ROOT)))
                 print(f"[{i}/{total}] ⚠ Review Required: {filepath.relative_to(ROOT)} ({word_count} words, ${cost_usd:.4f})")
