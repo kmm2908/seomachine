@@ -161,6 +161,17 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] `_find_html_widget_marked()` updated to accept configurable `marker` string
 - [x] `clients/sdy/config.json` — `wordpress` block switched to live (`serendipitymassage.co.uk`); app password updated; template ID 564; local credentials preserved in `wordpress_local`
 
+### Quality gate (session 12)
+- [x] `QualityGate` class in `data_sources/modules/quality_gate.py` — check/rewrite loop, max 2 rewrites
+- [x] Pass thresholds: Flesch Reading Ease ≥ 60 + Hook (mandatory) + CTAs (mandatory) + 2/3 optional (stories, rhythm, paragraphs)
+- [x] Targeted rewrite instructions built from specific failures — only failing criteria included per attempt
+- [x] API error on rewrite: continues loop if retries remain, returns failed after exhausting
+- [x] Scorer error: fail-safe (returns passed=True, skips gate)
+- [x] On final failure: best rewrite saved to disk, row marked `Review Required` in Sheet, cost recorded, publish skipped
+- [x] Mini-stories re-enabled as 5th engagement criterion with massage therapy patterns (unnamed client scenarios)
+- [x] `REVIEW_REQUIRED_VALUE` added to `google_sheets.py`
+- [x] `geo_batch_runner.py` — DONE/cost writes deferred until after gate passes; rewrite costs added to row total
+
 ### End-to-end batch publishing (tested session 5)
 - [x] 5 location + 2 service posts republished clean to correct CPTs (IDs 16637–16667)
 - [x] CPT permalink routing confirmed working — `/location/[slug]/` resolves correctly
