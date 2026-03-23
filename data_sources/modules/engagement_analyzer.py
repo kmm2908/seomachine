@@ -51,34 +51,44 @@ class EngagementAnalyzer:
         r'Want to\s+(?:see|learn|try|get)',
     ]
 
-    # Name patterns for mini-stories
-    NAME_PATTERNS = [
+    # Client scenario patterns (massage therapy — named and unnamed)
+    STORY_PATTERNS = [
+        r'\bOne of our (?:clients|regulars|customers|guests)\b',
+        r'\b(?:A|One) (?:client|couple|guest|customer|visitor|person)\b',
+        r'\b(?:Many|Some|Most) of our (?:clients|regulars|guests)\b',
+        r'\b(?:Couples|People|Clients) (?:celebrating|coming|looking|dealing|suffering)\b',
+        r'\b(?:imagine|picture) (?:coming|arriving|booking|feeling)\b',
+        # Retain named patterns as secondary detection
         r'\b(?:Sarah|Mike|Marcus|Lisa|John|David|Emily|Chris|Alex|Tom|Anna|James|Maria|Rachel|Dan|Kate)\b',
-        r'\b(?:The team at|At) [A-Z][a-z]+(?:\s+[A-Z][a-z]+)?\b',  # "The team at Acme"
-        r'\b[A-Z][a-z]+\'s (?:podcast|show|episode|company|business|team)\b',  # "Sarah's podcast"
+        r'\b(?:The team at|At) [A-Z][a-z]+(?:\s+[A-Z][a-z]+)?\b',
+        r"\b[A-Z][a-z]+'s (?:massage|treatment|session|appointment|back|neck|shoulders)\b",
     ]
 
+    # Outcome verbs for massage therapy domain
+    STORY_OUTCOME_VERBS = r'felt|feeling|relieved|noticed|returned|booked|recommended|improved|relaxed|found|discovered|said|tells? us|told us|shared|melt'
+
     def analyze(self, content: str, filename: str = "") -> Dict[str, Any]:
-        """Analyze article for 4 engagement criteria (stories removed)"""
+        """Analyze article for 5 engagement criteria"""
         results = {
             'filename': filename,
             'hook': self._analyze_hook(content),
             'rhythm': self._analyze_rhythm(content),
             'ctas': self._analyze_ctas(content),
             'paragraphs': self._analyze_paragraphs(content),
+            'stories': self._analyze_mini_stories(content),
         }
 
-        # Calculate pass/fail for each (4 criteria, stories removed)
         results['scores'] = {
             'hook': results['hook']['is_good'],
             'rhythm': results['rhythm']['score'] >= 45,  # Lowered from 60 - comparison articles are table-heavy by design
             'ctas': results['ctas']['distributed'],
             'paragraphs': results['paragraphs']['long_count'] <= 3,
+            'stories': results['stories']['count'] >= 1,
         }
 
         results['passed_count'] = sum(results['scores'].values())
-        results['total_criteria'] = 4
-        results['all_passed'] = results['passed_count'] == 4
+        results['total_criteria'] = 5
+        results['all_passed'] = results['passed_count'] == 5
 
         return results
 
@@ -210,36 +220,30 @@ class EngagementAnalyzer:
         }
 
     def _analyze_mini_stories(self, content: str) -> Dict[str, Any]:
-        """Analyze presence of mini-stories with specific names"""
+        """Analyze presence of client scenarios/mini-stories."""
         stories_found = []
 
-        # Look for name patterns
-        for pattern in self.NAME_PATTERNS:
-            matches = re.finditer(pattern, content)
-            for match in matches:
-                # Get surrounding context
-                start = max(0, match.start() - 50)
+        for pattern in self.STORY_PATTERNS:
+            for match in re.finditer(pattern, content, re.IGNORECASE):
+                start = max(0, match.start() - 100)
                 end = min(len(content), match.end() + 100)
                 context = content[start:end]
-
-                # Check if it's in a story context (has outcome indicators)
-                if re.search(r'(?:discovered|realized|found|spent|cost|saved|grew|increased|launched|started|switched|moved)', context, re.IGNORECASE):
+                if re.search(self.STORY_OUTCOME_VERBS, context, re.IGNORECASE):
                     stories_found.append({
-                        'name': match.group(),
+                        'match': match.group(),
                         'context': context[:80].strip()
                     })
 
-        # Deduplicate by name
-        unique_names = set()
+        # Deduplicate by match text
+        seen = set()
         unique_stories = []
         for story in stories_found:
-            if story['name'] not in unique_names:
-                unique_names.add(story['name'])
+            if story['match'] not in seen:
+                seen.add(story['match'])
                 unique_stories.append(story)
 
         return {
             'count': len(unique_stories),
-            'names_found': list(unique_names)[:5],
             'stories': unique_stories[:3]
         }
 
@@ -317,44 +321,44 @@ class EngagementAnalyzer:
 def format_results(results: List[Dict]) -> str:
     """Format analysis results as a table"""
     lines = []
-    lines.append("=" * 90)
+    lines.append("=" * 97)
     lines.append("ENGAGEMENT CRITERIA ANALYSIS - All Articles from 2025-12-10")
-    lines.append("=" * 90)
+    lines.append("=" * 97)
     lines.append("")
 
-    # Summary header (4 criteria, stories removed)
-    lines.append(f"{'Article':<45} {'Hook':^8} {'Rhythm':^8} {'CTAs':^8} {'Paras':^8} {'Score':^8}")
-    lines.append("-" * 90)
+    lines.append(f"{'Article':<45} {'Hook':^8} {'Stories':^8} {'Rhythm':^8} {'CTAs':^8} {'Paras':^8} {'Score':^8}")
+    lines.append("-" * 97)
 
     passed_all = 0
-    totals = {'hook': 0, 'rhythm': 0, 'ctas': 0, 'paragraphs': 0}
+    totals = {'hook': 0, 'stories': 0, 'rhythm': 0, 'ctas': 0, 'paragraphs': 0}
 
     for r in results:
         name = r['filename'].replace('-2025-12-10.md', '')[:43]
         hook = "✓" if r['scores']['hook'] else "✗"
+        stories = "✓" if r['scores']['stories'] else "✗"
         rhythm = "✓" if r['scores']['rhythm'] else "✗"
         ctas = "✓" if r['scores']['ctas'] else "✗"
         paras = "✓" if r['scores']['paragraphs'] else "✗"
-        score = f"{r['passed_count']}/4"
+        score = f"{r['passed_count']}/5"
 
         if r['all_passed']:
             passed_all += 1
 
         for key in totals:
-            if r['scores'][key]:
+            if r['scores'].get(key):
                 totals[key] += 1
 
-        lines.append(f"{name:<45} {hook:^8} {rhythm:^8} {ctas:^8} {paras:^8} {score:^8}")
+        lines.append(f"{name:<45} {hook:^8} {stories:^8} {rhythm:^8} {ctas:^8} {paras:^8} {score:^8}")
 
-    lines.append("-" * 90)
-    lines.append(f"{'TOTALS PASSING':<45} {totals['hook']:^8} {totals['rhythm']:^8} {totals['ctas']:^8} {totals['paragraphs']:^8} {passed_all:^8}")
+    lines.append("-" * 97)
+    lines.append(f"{'TOTALS PASSING':<45} {totals['hook']:^8} {totals['stories']:^8} {totals['rhythm']:^8} {totals['ctas']:^8} {totals['paragraphs']:^8} {passed_all:^8}")
     lines.append(f"{'(out of ' + str(len(results)) + ')':<45}")
     lines.append("")
 
     # Detailed issues
-    lines.append("=" * 90)
+    lines.append("=" * 97)
     lines.append("DETAILED ISSUES BY CRITERION")
-    lines.append("=" * 90)
+    lines.append("=" * 97)
 
     # Hook issues
     hook_issues = [r for r in results if not r['scores']['hook']]
@@ -391,7 +395,7 @@ def format_results(results: List[Dict]) -> str:
             lines.append(f"   • {r['filename'].replace('-2025-12-10.md', '')}: score={r['rhythm']['score']}, monotonous_sections={r['rhythm']['monotonous_sections']}")
 
     lines.append("")
-    lines.append("=" * 90)
+    lines.append("=" * 97)
 
     return "\n".join(lines)
 
