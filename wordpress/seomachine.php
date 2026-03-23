@@ -15,17 +15,17 @@ if (!defined('ABSPATH')) {
 }
 
 define('SEO_MACHINE_POST_TYPES', [
-    'seo_service'  => ['Services',          'Service'],
-    'seo_location' => ['Locations',         'Location'],
-    'seo_pillar'   => ['Pillar Pages',      'Pillar Page'],
-    'seo_topical'  => ['Topical Articles',  'Topical Article'],
-    'seo_blog'     => ['Blog Posts',        'Blog Post'],
+    'seo_service'  => ['Services',          'Service',        'seo_service'],
+    'seo_location' => ['Locations',         'Location',       'seo_location'],
+    'seo_pillar'   => ['Pillar Pages',      'Pillar Page',    'seo_pillar'],
+    'seo_topical'  => ['Topical Articles',  'Topical Article','seo_topical'],
+    'seo_blog'     => ['Blog Posts',        'Blog Post',      'seo_blog'],
 ]);
 
-// ── Custom Post Types ────────────────────────────────────────────────────────
+// ── CPT registration helper ───────────────────────────────────────────────────
 
-add_action('init', function() {
-    foreach (SEO_MACHINE_POST_TYPES as $slug => [$plural, $singular]) {
+function seo_machine_register_post_types() {
+    foreach (SEO_MACHINE_POST_TYPES as $slug => [$plural, $singular, $rest_base]) {
         register_post_type($slug, [
             'labels'       => [
                 'name'          => $plural,
@@ -37,6 +37,7 @@ add_action('init', function() {
             ],
             'public'             => true,
             'show_in_rest'       => true,
+            'rest_base'          => $rest_base,
             'show_in_menu'       => 'seo-content',
             'show_in_nav_menus'  => true,
             'supports'           => ['title', 'editor', 'thumbnail', 'excerpt', 'custom-fields'],
@@ -44,7 +45,17 @@ add_action('init', function() {
             'has_archive'        => false,
         ]);
     }
-});
+}
+
+// ── Custom Post Types ────────────────────────────────────────────────────────
+// Register on init if it hasn't fired yet, otherwise register immediately.
+
+if (did_action('init')) {
+    seo_machine_register_post_types();
+} else {
+    add_action('init', 'seo_machine_register_post_types', 1);
+}
+
 
 // Parent admin menu — redirects to Services list
 add_action('admin_menu', function() {

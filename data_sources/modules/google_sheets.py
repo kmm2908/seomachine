@@ -6,10 +6,11 @@ Used by the /geo-batch command to manage the geo content writing queue.
 
 Sheet format:
   Column A: Location address including postcode (e.g. "Byres Road Glasgow G12")
-  Column B: Status dropdown — "Write Now" | "pause" | "DONE"
+  Column B: Status dropdown — "Write Now" | "pause" | "DONE" | "Images o/s"
   Column C: Cost (written by script after generation, e.g. "$0.43")
   Column D: Business abbreviation dropdown (e.g. "GTM") — matches a file in clients/
   Column E: Content type (e.g. "geo", "service", "location", "topical", "blog") — defaults to "blog" if empty
+  Column F: File path (auto-set when status = "Images o/s"; cleared on DONE)
 
 Usage:
   python3 google_sheets.py read
@@ -35,10 +36,11 @@ _root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__
 load_dotenv(os.path.join(_root, '.env'))
 
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
-DEFAULT_RANGE = 'A2:E1000'
+DEFAULT_RANGE = 'A2:F1000'
 STATUS_COLUMN = 'B'
 QUEUE_VALUE = 'Write Now'
 DONE_VALUE = 'DONE'
+IMAGES_PENDING_VALUE = 'Images o/s'
 
 
 def get_service():
@@ -90,11 +92,12 @@ def read_pending(range_str: Optional[str] = None) -> list[dict]:
         status = row[1].strip() if len(row) > 1 else ''
         business = row[3].strip() if len(row) > 3 else ''
         content_type = row[4].strip() if len(row) > 4 else ''
+        file_path = row[5].strip() if len(row) > 5 else ''
 
         if not address:
             continue
 
-        if status.lower() != QUEUE_VALUE.lower():
+        if status.lower() not in (QUEUE_VALUE.lower(), IMAGES_PENDING_VALUE.lower()):
             continue
 
         pending.append({
@@ -102,6 +105,8 @@ def read_pending(range_str: Optional[str] = None) -> list[dict]:
             'address': address,
             'business': business,
             'content_type': content_type or 'blog',
+            'status': status,
+            'file_path': file_path,
         })
 
     return pending
@@ -118,6 +123,18 @@ def update_status(row_number: int, status: str) -> None:
         range=cell_range,
         valueInputOption='RAW',
         body={'values': [[status]]},
+    ).execute()
+
+
+def update_file_path(row_number: int, path_str: str) -> None:
+    """Write file path to Column F of the given row. Pass empty string to clear."""
+    service = get_service()
+    sheet_id = get_sheet_id()
+    service.spreadsheets().values().update(
+        spreadsheetId=sheet_id,
+        range=f'F{row_number}',
+        valueInputOption='RAW',
+        body={'values': [[path_str]]},
     ).execute()
 
 

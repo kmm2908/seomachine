@@ -31,7 +31,7 @@ Each client lives in a single folder. To add a new client, run `/new-client`.
 ```
 clients/
   gtm/                  ← Glasgow Thai Massage (live, publishing active)
-  sdy/                  ← Serendipity Massage Therapy & Wellness (new, local setup phase)
+  sdy/                  ← Serendipity Massage Therapy & Wellness (live, batch publishing active)
     config.json         ← machine-readable config (name, address, WP creds, services)
     brand-voice.md      ← tone, messaging pillars, client-specific writing rules
     seo-guidelines.md   ← keyword strategy, entity optimisation rules
@@ -82,7 +82,7 @@ python3 src/geo_batch_runner.py A2:E5       # specific range only
 python3 src/geo_batch_runner.py --publish   # generate + publish to WordPress as draft
 ```
 
-Google Sheet columns: A=Topic/Location, B=Status (`Write Now`/`DONE`/`pause`), C=Cost (auto), D=Business abbreviation, E=Content type.
+Google Sheet columns: A=Topic/Location, B=Status (`Write Now`/`DONE`/`pause`/`Images o/s`), C=Cost (auto), D=Business abbreviation, E=Content type, F=File path (auto-set when `Images o/s`, cleared on DONE).
 
 Output: `content/[abbr]/[type]/[slug]-[date]/[slug]-[date].html` (one folder per article; images saved alongside HTML)
 
@@ -92,7 +92,9 @@ After each article is generated, a quality check runs automatically and prints a
 ```
 Uses `EngagementAnalyzer` (hook, rhythm, CTAs, paragraph length) and `ReadabilityScorer` (Flesch, grade level, passive voice). Non-blocking — a check failure never stops publishing.
 
-Set `IMAGE_API_PROVIDER=gemini` in `.env` to generate images automatically. Requires `GOOGLE_AI_API_KEY`. Leave blank to skip image generation (content-only mode). Cost: ~$0.27/post.
+Set `IMAGE_API_PROVIDER=gemini` in `.env` to generate images automatically. Requires `GOOGLE_AI_API_KEY` and `OPENAI_API_KEY`. Leave blank to skip image generation (content-only mode). Cost: ~$0.27/post (Gemini) or ~$0.16/post (DALL-E 3 fallback).
+
+**Image failure handling:** if image generation fails after 3 Gemini retries (30s/60s/120s backoff), the runner automatically falls back to DALL-E 3. If both fail and `--publish` is set, the row is marked `Images o/s` and the file path written to Column F — content is saved locally but not published. Next batch run retries images only (no content regeneration) and publishes on success.
 
 **Image naming:** `{base-slug}-banner.jpg`, `{heading-slug}.jpg` (section 1), `{base-slug}-faq.jpg` (FAQ section). All names are keyword-rich — no generic `section-1.jpg` filenames.
 
@@ -158,6 +160,8 @@ Key principle: identify the primary entity and 3–5 secondary entities before w
 ## WordPress Integration
 
 Publishing uses the WordPress REST API. Credentials are stored in `clients/[abbr]/config.json` under the `wordpress` key. The custom MU-plugin (`wordpress/seomachine.php`) registers 5 custom post types and exposes SEO meta fields via REST — no Yoast dependency.
+
+**SiteGround hosting note:** deploy to `wp-content/mu-plugins/` (plural). SiteGround also has a `mu-plugin/` (singular) folder which is display-only — WordPress does not auto-load PHP files from it.
 
 `WordPressPublisher.from_config(wp_config)` accepts credentials directly from the client JSON.
 

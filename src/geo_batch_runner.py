@@ -41,7 +41,10 @@ load_dotenv(ROOT / '.env')
 
 # ── Import shared Google Sheets helpers ──────────────────────────────────────
 sys.path.insert(0, str(ROOT / 'data_sources' / 'modules'))
-from google_sheets import read_pending, update_status, update_cost, send_email
+from google_sheets import (
+    read_pending, update_status, update_cost, update_file_path,
+    send_email, IMAGES_PENDING_VALUE,
+)
 from wikipedia import WikipediaResearcher
 
 # ── Paths ────────────────────────────────────────────────────────────────────
@@ -452,6 +455,71 @@ def run_batch(sheet_range: Optional[str] = None, publish: bool = False) -> None:
         address = loc['address']
         abbreviation = loc.get('business', '').strip()
         content_type = loc.get('content_type', 'blog').strip().lower() or 'blog'
+        item_status = loc.get('status', 'Write Now')
+
+        # ── Images o/s: retry image generation only ───────────────────────────
+        if item_status.lower() == IMAGES_PENDING_VALUE.lower():
+            print(f"[{i}/{total}] Retrying images [{content_type}]: {address} [{abbreviation}]...")
+            file_path_rel = loc.get('file_path', '').strip()
+            if not file_path_rel:
+                print(f"    → No file path recorded — resetting to 'Write Now'")
+                update_status(row, 'Write Now')
+            else:
+                filepath = ROOT / file_path_rel
+                if not filepath.exists():
+                    print(f"    → File not found: {file_path_rel} — resetting to 'Write Now'")
+                    update_status(row, 'Write Now')
+                    update_file_path(row, '')
+                else:
+                    html_content = filepath.read_text(encoding='utf-8')
+                    try:
+                        sys.path.insert(0, str(ROOT / 'data_sources' / 'modules'))
+                        from image_generator import ImageGenerator
+                        img_cost = ImageGenerator().generate_for_post(
+                            html_content, address, filepath, content_type
+                        )
+                        total_cost_usd += img_cost
+                        print(f"    → Images: generated (+${img_cost:.2f})")
+                        try:
+                            update_cost(row, f"${img_cost:.4f}")
+                        except Exception:
+                            pass
+                        if publish:
+                            try:
+                                business_config = load_business_config(abbreviation)
+                                wp_config = business_config.get('wordpress')
+                                if wp_config:
+                                    from wordpress_publisher import WordPressPublisher
+                                    publisher = WordPressPublisher.from_config(wp_config)
+                                    post_type = wp_config.get('content_type_map', {}).get(
+                                        content_type, wp_config.get('default_post_type', 'post')
+                                    )
+                                    banner_candidates = list(filepath.parent.glob('*-banner.jpg'))
+                                    featured_image = str(banner_candidates[0]) if banner_candidates else None
+                                    elementor_template = CLIENTS_DIR / abbreviation.lower() / 'elementor-template.json'
+                                    result = publisher.publish_html_content(
+                                        html_content=html_content,
+                                        slug=slugify(address),
+                                        post_type=post_type,
+                                        featured_image_path=featured_image,
+                                        elementor_template_path=str(elementor_template) if elementor_template.exists() else None,
+                                        excerpt=address,
+                                    )
+                                    print(f"    → Published WP draft (ID: {result['post_id']}): {result['edit_url']}")
+                            except Exception as e:
+                                print(f"    → WP publish failed: {e}")
+                        update_status(row, 'DONE')
+                        update_file_path(row, '')
+                        written_files.append(str(filepath.relative_to(ROOT)))
+                        print(f"[{i}/{total}] ✓ Images done: {filepath.relative_to(ROOT)}")
+                    except Exception as img_err:
+                        print(f"    → Images: still failing — {img_err}")
+                        # Leave as 'Images o/s' for next run
+            if i < total:
+                time.sleep(65)
+            continue
+
+        # ── Write Now: full content + image + publish pipeline ────────────────
         print(f"[{i}/{total}] Writing [{content_type}]: {address} [{abbreviation or 'no business set'}]...")
 
         try:
@@ -488,14 +556,33 @@ def run_batch(sheet_range: Optional[str] = None, publish: bool = False) -> None:
             word_count = extract_word_count(content)
 
             # Generate images if provider is configured
+            images_ok = True
             if os.getenv('IMAGE_API_PROVIDER') == 'gemini':
                 try:
                     from image_generator import ImageGenerator
                     img_cost = ImageGenerator().generate_for_post(content, address, filepath, content_type)
                     cost_usd += img_cost
+                    content = filepath.read_text(encoding='utf-8')  # reload with injected img tags
                     print(f"    → Images: 3 generated (+${img_cost:.2f})")
                 except Exception as img_err:
+                    images_ok = False
                     print(f"    → Images: failed — {img_err}")
+
+            # If publishing and images failed, defer — mark 'Images o/s', don't publish
+            if not images_ok and publish:
+                update_status(row, IMAGES_PENDING_VALUE)
+                update_file_path(row, str(filepath.relative_to(ROOT)))
+                try:
+                    update_cost(row, f"${cost_usd:.4f}")
+                except Exception:
+                    pass
+                total_cost_usd += cost_usd
+                written_files.append(str(filepath.relative_to(ROOT)))
+                print(f"[{i}/{total}] ✓ Written (Images o/s): {filepath.relative_to(ROOT)} ({word_count} words, ${cost_usd:.4f})")
+                run_quality_check(content)
+                if i < total:
+                    time.sleep(65)
+                continue
 
             # Mark DONE and record cost in Column C immediately after saving
             update_status(row, 'DONE')
@@ -553,7 +640,6 @@ def run_batch(sheet_range: Optional[str] = None, publish: bool = False) -> None:
             time.sleep(65)
 
     # ── Summary email ─────────────────────────────────────────────────────────
-    from datetime import datetime
     now = datetime.now().strftime('%Y-%m-%d %H:%M')
 
     email_lines = [

@@ -25,9 +25,19 @@ GEMINI_URL = (
     f"{GEMINI_MODEL}:generateContent"
 )
 
+# ── DALL-E 3 API (fallback) ───────────────────────────────────────────────────
+
+DALLE_URL = "https://api.openai.com/v1/images/generations"
+
 # ── Pricing ───────────────────────────────────────────────────────────────────
 
-COST_PER_IMAGE = 0.09  # Gemini 3.1 Flash, 2K image
+COST_PER_IMAGE = 0.09        # Gemini 3.1 Flash, 2K image
+DALLE_COST_BANNER = 0.080    # DALL-E 3, 1792x1024 standard
+DALLE_COST_SECTION = 0.040   # DALL-E 3, 1024x1024 standard
+
+# ── Gemini retry settings ─────────────────────────────────────────────────────
+
+GEMINI_RETRY_DELAYS = [30, 60, 120]  # seconds between retries on 503
 
 # ── Banner action phrases ─────────────────────────────────────────────────────
 # Short action phrases for use inside BANNER_TEMPLATE's {scene} slot.
@@ -131,6 +141,7 @@ class ImageGenerator:
 
     def __init__(self):
         self.api_key = os.getenv("GOOGLE_AI_API_KEY")
+        self.openai_api_key = os.getenv("OPENAI_API_KEY")
         if not self.api_key:
             raise EnvironmentError("GOOGLE_AI_API_KEY not set in environment")
 
@@ -154,7 +165,7 @@ class ImageGenerator:
             banner_prompt = self._build_location_banner_prompt(topic)
         else:
             banner_prompt = self._build_banner_prompt(topic)
-        self._generate(banner_prompt, banner_path, "banner")
+        total_cost = self._generate(banner_prompt, banner_path, "banner")
         print(f"    → {banner_path.name}")
 
         # Generate one section image per section — filename is the slugified heading
@@ -167,7 +178,7 @@ class ImageGenerator:
                 heading_slug = _slugify(heading) or f"{base_slug}-section-{i}"
             section_path = article_dir / f"{heading_slug}.jpg"
             section_prompt = self._build_section_prompt(heading, i)
-            self._generate(section_prompt, section_path, "section")
+            total_cost += self._generate(section_prompt, section_path, "section")
             section_paths.append(section_path)
             print(f"    → {section_path.name}")
             if i < len(section_headings):
@@ -176,8 +187,7 @@ class ImageGenerator:
         # Inject <img> tags into the HTML and rewrite the file
         self._inject_into_html(filepath, banner_path, section_paths, section_headings, topic)
 
-        num_images = 1 + len(section_paths)
-        return round(num_images * COST_PER_IMAGE, 4)
+        return round(total_cost, 4)
 
     # ── Private methods ───────────────────────────────────────────────────────
 
@@ -246,7 +256,31 @@ class ImageGenerator:
                 return contexts.get(image_type, contexts["section"])
         return BANNER_FALLBACK_SCENE if image_type == "banner" else SECTION_FALLBACK_SCENE
 
-    def _generate(self, prompt: str, output_path: Path, image_type: str) -> Path:
+    def _generate(self, prompt: str, output_path: Path, image_type: str) -> float:
+        """Try Gemini with retries on 503, fall back to DALL-E 3. Returns image cost."""
+        last_err = None
+        for attempt, delay in enumerate(GEMINI_RETRY_DELAYS):
+            try:
+                self._generate_gemini(prompt, output_path, image_type)
+                return COST_PER_IMAGE
+            except RuntimeError as e:
+                if '503' in str(e):
+                    print(f"    → Gemini 503, retry {attempt + 1}/{len(GEMINI_RETRY_DELAYS)} in {delay}s...")
+                    time.sleep(delay)
+                    last_err = e
+                else:
+                    last_err = e
+                    break
+
+        if not self.openai_api_key:
+            raise RuntimeError(
+                f"Gemini failed ({last_err}) and OPENAI_API_KEY not set for DALL-E fallback"
+            )
+        print(f"    → DALL-E 3 fallback...")
+        self._generate_dalle(prompt, output_path, image_type)
+        return DALLE_COST_BANNER if image_type == "banner" else DALLE_COST_SECTION
+
+    def _generate_gemini(self, prompt: str, output_path: Path, image_type: str) -> Path:
         """Call Gemini API, decode base64 response, save and crop the image."""
         if image_type == "banner":
             aspect_ratio = "21:9"
@@ -288,7 +322,40 @@ class ImageGenerator:
         img_bytes = base64.b64decode(image_part["inlineData"]["data"])
         output_path.write_bytes(img_bytes)
         self._crop_image(output_path, crop_target)
+        return output_path
 
+    def _generate_dalle(self, prompt: str, output_path: Path, image_type: str) -> Path:
+        """Call DALL-E 3 API, download image, save and crop."""
+        size = "1792x1024" if image_type == "banner" else "1024x1024"
+        crop_target = (1200, 500) if image_type == "banner" else (400, 300)
+
+        response = requests.post(
+            DALLE_URL,
+            headers={
+                "Authorization": f"Bearer {self.openai_api_key}",
+                "Content-Type": "application/json",
+            },
+            json={
+                "model": "dall-e-3",
+                "prompt": prompt,
+                "size": size,
+                "quality": "standard",
+                "n": 1,
+                "response_format": "url",
+            },
+            timeout=90,
+        )
+
+        if response.status_code != 200:
+            raise RuntimeError(
+                f"DALL-E API error {response.status_code}: {response.text[:300]}"
+            )
+
+        image_url = response.json()["data"][0]["url"]
+        img_response = requests.get(image_url, timeout=60)
+        img_response.raise_for_status()
+        output_path.write_bytes(img_response.content)
+        self._crop_image(output_path, crop_target)
         return output_path
 
     def _crop_image(self, path: Path, target: tuple) -> None:

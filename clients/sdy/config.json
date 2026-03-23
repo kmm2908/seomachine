@@ -10,6 +10,10 @@
   "website": "https://serendipitymassage.co.uk",
   "services": ["Thai massage", "Thai Oil Massage", "Swedish massage", "sports massage", "hot stone massage", "aromatherapy massage"],
   "keyword_prefix": "thai massage",
+  "schema": {
+    "price_range": "££",
+    "logo_url": "https://serendipitymassage.co.uk/wp-content/uploads/serendipity-logo.png"
+  },
   "wordpress": {
     "url": "https://serendipitymassage.co.uk",
     "username": "kmm-T5r",

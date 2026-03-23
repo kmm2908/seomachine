@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-03-22 (session 10 — SDY now live; template 564 fetched from serendipitymassage.co.uk)
+Last updated: 2026-03-23 (session 11 — SDY batch publishing live; image retry/fallback pipeline built)
 
 ---
 
@@ -140,6 +140,19 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] `research_competitors.py --abbr sdy` run — 7 organic competitors profiled, map pack pending (keyword tuning needed)
 - [x] GTM local site deleted — GTM is live-only from session 9 onwards
 
+### SDY batch publishing live + image pipeline hardening (session 11)
+- [x] `clients/sdy/writing-examples.md` — populated with GTM examples as style reference
+- [x] `seomachine.php` — added explicit `rest_base` to all 5 CPTs; restructured registration with `did_action('init')` fallback; **must deploy to `mu-plugins` (plural) on SiteGround** — `mu-plugin` (singular) is display-only
+- [x] SDY SiteGround hosting fix — plugin must live in `wp-content/mu-plugins/` (not `mu-plugin/`)
+- [x] `geo_batch_runner.py` — fixed `datetime` UnboundLocalError (removed inline import at line 556)
+- [x] `geo_batch_runner.py` — fixed image injection bug: content now reloaded from disk after `generate_for_post()` so published HTML includes `<img>` tags
+- [x] **Image retry + fallback pipeline** — Gemini retries 3× (30s/60s/120s backoff) on 503, then auto-falls back to DALL-E 3
+- [x] **"Images o/s" status** — on image failure, row marked `Images o/s` + file path written to Column F; next batch run retries images only (no content regeneration); marks DONE on success
+- [x] `google_sheets.py` — `IMAGES_PENDING_VALUE`, `update_file_path()`, Column F support; `read_pending()` picks up both `Write Now` and `Images o/s` rows
+- [x] `image_generator.py` — `_generate_gemini()` / `_generate_dalle()` split; `_generate()` wrapper handles retry + fallback; returns per-image cost
+- [x] SDY Phase 3 batch test — location + service posts published to live site with images, Elementor two-section template confirmed working (ID 606)
+- [x] `clients/sdy/elementor-template.json` — re-fetched after layout adjustment
+
 ### SDY go-live + two-section injection (session 10)
 - [x] SDY Elementor template built locally — S1 and S2 sections replaced with HTML widgets using `<!-- S1 CONTENT -->` and `<!-- S2 CONTENT -->` markers; Button CTA left between them
 - [x] `src/fetch_elementor_template.py` — SSL verification skipped for `.local` domains (self-signed cert fix)
@@ -210,22 +223,22 @@ Reason: caching on the live front-end doesn't affect the REST API. Running conte
 - [x] Run `python3 src/fetch_elementor_template.py sdy` against live — S1/S2 markers confirmed
 
 #### Phase 3 — Content (after Phase 2)
-- [ ] Add `SDY` to Column D dropdown in Google Sheet
-- [ ] Add Column E (Content Type) dropdown if not already present
+- [x] Add `SDY` to Column D dropdown in Google Sheet
+- [x] Add Column E (Content Type) dropdown if not already present
 - [ ] Populate `clients/sdy/internal-links-map.md` with confirmed service page URLs
-- [ ] Add writing examples to `clients/sdy/writing-examples.md` from live site
-- [ ] Test batch on one row: `python3 src/geo_batch_runner.py A2:E3 --publish`
-- [ ] Verify content lands in correct CPT with Elementor template
+- [x] Add writing examples to `clients/sdy/writing-examples.md` — using GTM examples as style reference
+- [x] Test batch: location + service posts published successfully with images (IDs 596, 606)
+- [x] Verify content lands in correct CPT with Elementor template — confirmed two-section injection working
 
 ### Still Needs Human Input (SDY)
 - [x] Local WP URL and credentials — in config.json (`wordpress` block = local, `wordpress_live` = live)
 - [x] Live credentials and app password — set in config.json; `wordpress` block now live
 - [x] Elementor template — built (local ID 635, live ID 564); fetched and stored
 - [ ] `clients/sdy/internal-links-map.md` — confirm service page URLs on live site
-- [ ] `clients/sdy/writing-examples.md` — pull 2–3 examples from live site
+- [x] `clients/sdy/writing-examples.md` — populated with GTM style examples
 - [x] `clients/sdy/competitor-analysis.md` — auto-populated: 7 organic competitors profiled by research_competitors.py
 - [ ] GBP verification — needed before publishing location pages publicly
-- [ ] Add `SDY` to Column D dropdown in Google Sheet
+- [x] Add `SDY` to Column D dropdown in Google Sheet
 
 ---
 
