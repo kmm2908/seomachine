@@ -43,7 +43,7 @@ load_dotenv(ROOT / '.env')
 sys.path.insert(0, str(ROOT / 'data_sources' / 'modules'))
 from google_sheets import (
     read_pending, update_status, update_cost, update_file_path,
-    send_email, update_notes, IMAGES_PENDING_VALUE, REVIEW_REQUIRED_VALUE, PUBLISH_VALUE,
+    send_email, update_notes, update_review_count, IMAGES_PENDING_VALUE, REVIEW_REQUIRED_VALUE, PUBLISH_VALUE,
 )
 from wikipedia import WikipediaResearcher
 from quality_gate import QualityGate
@@ -85,6 +85,26 @@ def slugify(text: str) -> str:
     text = re.sub(r'\s+', '-', text.strip())
     text = re.sub(r'-+', '-', text)
     return text[:80].rstrip('-')
+
+
+def _append_quality_log(root, client: str, content_type: str, topic: str, attempts: int, failures: list) -> None:
+    """Append a row to logs/quality-log.csv each time an article is flagged Review."""
+    import csv
+    log_path = root / 'logs' / 'quality-log.csv'
+    log_path.parent.mkdir(exist_ok=True)
+    write_header = not log_path.exists()
+    with open(log_path, 'a', newline='', encoding='utf-8') as f:
+        writer = csv.writer(f)
+        if write_header:
+            writer.writerow(['date', 'client', 'content_type', 'topic', 'attempts', 'failures'])
+        writer.writerow([
+            datetime.now().strftime('%Y-%m-%d'),
+            client,
+            content_type,
+            topic,
+            attempts,
+            ' | '.join(failures),
+        ])
 
 
 def load_business_config(abbreviation: str) -> dict:
@@ -429,6 +449,7 @@ def run_batch(sheet_range: Optional[str] = None, publish: bool = False) -> None:
         abbreviation = loc.get('business', '').strip()
         content_type = loc.get('content_type', 'blog').strip().lower() or 'blog'
         item_status = loc.get('status', 'Write Now')
+        review_count = loc.get('review_count', 0)
 
         # ── Images o/s: retry image generation only ───────────────────────────
         if item_status.lower() == IMAGES_PENDING_VALUE.lower():
@@ -618,6 +639,7 @@ def run_batch(sheet_range: Optional[str] = None, publish: bool = False) -> None:
 
             if not gate_result.passed:
                 filepath.write_text(content, encoding='utf-8')   # save best rewrite attempt
+                new_review_count = review_count + 1
                 update_status(row, REVIEW_REQUIRED_VALUE)
                 update_file_path(row, str(filepath.relative_to(ROOT)))
                 try:
@@ -628,6 +650,11 @@ def run_batch(sheet_range: Optional[str] = None, publish: bool = False) -> None:
                     update_notes(row, ' | '.join(gate_result.failures))
                 except Exception:
                     pass
+                try:
+                    update_review_count(row, new_review_count)
+                except Exception:
+                    pass
+                _append_quality_log(ROOT, abbreviation, content_type, address, gate_result.attempts, gate_result.failures)
                 total_cost_usd += cost_usd
                 written_files.append(str(filepath.relative_to(ROOT)))
                 print(f"[{i}/{total}] ⚠ Review: {filepath.relative_to(ROOT)} ({word_count} words, ${cost_usd:.4f})")
