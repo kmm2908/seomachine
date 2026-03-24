@@ -43,8 +43,23 @@ class EngagementAnalyzer:
 
     # CTA patterns
     CTA_PATTERNS = [
-        r'\[.{5,50}→\]',  # [Text →]
-        r'\*\*\[.{5,50}\]',  # **[Text]
+        # Booking — primary massage therapy CTAs
+        r'\bBook\s+(?:now|today|online|your\s+session|a\s+session|your\s+(?:appointment|visit|treatment))\b',
+        r'\bBook\b.{0,25}(?:session|appointment|visit|treatment)\b',
+        r'\b(?:arrange|reserve)\s+(?:your|an?)\s+(?:session|appointment|visit|treatment)\b',
+        # Phone / contact
+        r'\bCall\s+(?:us|now|today)\b',
+        r'\bCall\b.{0,15}\b\d{4,}\b',  # "Call us on 0141..."
+        r'\bGet\s+in\s+touch\b',
+        r'\bContact\s+us\b',
+        # Messaging
+        r'\bWhatsApp\s+us\b',
+        r'\bMessage\s+us\b',
+        # Visit / find
+        r'\b(?:Find|Visit)\s+us\b',
+        # Legacy SaaS patterns — keep as fallbacks
+        r'\[.{5,50}→\]',
+        r'\*\*\[.{5,50}\]',
         r'(?:Start|Try|Get|Begin|Sign up|Create).{0,20}(?:free|trial|today|now)',
         r'(?:Learn|Read|Discover|Explore|See)\s+(?:more|how)',
         r'Ready to\s+\w+',

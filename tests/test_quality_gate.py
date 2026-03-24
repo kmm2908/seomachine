@@ -233,3 +233,40 @@ def test_failures_list_only_contains_strings():
         result = gate.check_and_improve(FAILING_CONTENT, 'Deep Tissue', 'service')
     assert isinstance(result.failures, list)
     assert all(isinstance(f, str) for f in result.failures)
+
+
+def test_preserve_instructions_included_for_passing_criteria():
+    """When readability passes but CTAs fail, the rewrite prompt must preserve readability."""
+    from quality_gate import QualityGate
+    captured_prompt = []
+
+    def capture_call(**kwargs):
+        captured_prompt.append(kwargs.get('messages', [{}])[0].get('content', ''))
+        mock_usage = MagicMock()
+        mock_usage.input_tokens = 1000
+        mock_usage.output_tokens = 500
+        mock_msg = MagicMock()
+        mock_msg.content = [MagicMock(text=PASSING_CONTENT)]
+        mock_msg.usage = mock_usage
+        return mock_msg
+
+    mock_client = MagicMock()
+    mock_client.messages.create.side_effect = lambda *a, **kw: capture_call(**kw)
+
+    gate = QualityGate(mock_client, make_client_config())
+
+    # Mock: readability passes, CTAs fail
+    passing_read = {'readability_metrics': {'flesch_reading_ease': 70}}
+    failing_eng = {'scores': {'hook': True, 'ctas': False, 'stories': True, 'rhythm': True, 'paragraphs': True}}
+
+    with patch('quality_gate.EngagementAnalyzer') as mock_eng_cls, \
+         patch('quality_gate.ReadabilityScorer') as mock_read_cls, \
+         patch('quality_gate.Path.read_text', return_value='# Brand Voice\nBe warm.'):
+        mock_eng_cls.return_value.analyze.return_value = failing_eng
+        mock_read_cls.return_value.analyze.return_value = passing_read
+        gate.check_and_improve(FAILING_CONTENT, 'Deep Tissue', 'service')
+
+    assert len(captured_prompt) >= 1
+    prompt = captured_prompt[0]
+    assert 'PRESERVE' in prompt
+    assert 'Readability is already good' in prompt

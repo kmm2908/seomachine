@@ -65,6 +65,7 @@ class QualityGate:
             return QualityResult(content=content, passed=True, attempts=1, cost_usd=0.0)
 
         failures = self._evaluate(eng, read)
+        passing = self._get_passing(eng, read)
         self._print_quality_line(eng, read, failures, attempt=1, rewriting=bool(failures))
 
         if not failures:
@@ -73,7 +74,7 @@ class QualityGate:
         # Rewrite loop
         for rewrite_num in range(1, MAX_REWRITES + 1):
             rewrite_content, rewrite_cost = self._rewrite(
-                current_content, topic, content_type, failures, rewrite_num
+                current_content, topic, content_type, failures, rewrite_num, passing
             )
             total_cost += rewrite_cost
 
@@ -104,6 +105,7 @@ class QualityGate:
                 )
 
             failures = self._evaluate(eng, read)
+            passing = self._get_passing(eng, read)  # update for next iteration
             is_last = rewrite_num == MAX_REWRITES
             self._print_quality_line(
                 eng, read, failures,
@@ -152,7 +154,19 @@ class QualityGate:
 
         return failures
 
-    def _build_fix_instructions(self, failures: List[str]) -> str:
+    def _get_passing(self, eng: dict, read: dict) -> List[str]:
+        """Return list of criterion keys that currently pass."""
+        passing = []
+        flesch = read.get('readability_metrics', {}).get('flesch_reading_ease', 0)
+        if flesch >= FLESCH_THRESHOLD:
+            passing.append('readability')
+        scores = eng.get('scores', {})
+        for key in ('hook', 'ctas', 'stories', 'rhythm', 'paragraphs'):
+            if scores.get(key, False):
+                passing.append(key)
+        return passing
+
+    def _build_fix_instructions(self, failures: List[str], passing: List[str] = None) -> str:
         """Build targeted fix instructions from a list of failure keys."""
         instructions = []
         if 'readability' in failures:
@@ -168,8 +182,10 @@ class QualityGate:
             )
         if 'ctas' in failures:
             instructions.append(
-                "Add at least 2 calls to action — one before the halfway point, one near the end. "
-                "Use natural language like 'Book a couples massage' or 'Get in touch to arrange your visit'."
+                "Add at least 2 calls to action distributed through the article — one in the first half, one near the end. "
+                "Use natural massage therapy CTAs like: 'Book your session today', 'Call us now to arrange your visit', "
+                "'Get in touch to book your appointment', 'Book online now', or 'Contact us today'. "
+                "Do not put both CTAs at the end — spread them through the content."
             )
         if 'stories' in failures:
             instructions.append(
@@ -186,16 +202,29 @@ class QualityGate:
             instructions.append(
                 "Break any paragraph with more than 4 sentences into two shorter ones."
             )
+        # Preserve instructions — tell Claude not to break what already works
+        preserve_instructions = {
+            'readability': "Readability is already good — keep sentences short and clear. Do not make sentences longer or more complex.",
+            'hook':        "The opening paragraph is already effective — do not change it.",
+            'ctas':        "CTAs are already well distributed — keep them as they are.",
+            'stories':     "The client scenario is already present — keep it.",
+            'rhythm':      "Sentence rhythm is already varied — maintain this variety.",
+            'paragraphs':  "Paragraph lengths are already good — do not merge paragraphs together.",
+        }
+        if passing:
+            preserve_lines = [preserve_instructions[k] for k in passing if k in preserve_instructions]
+            if preserve_lines:
+                instructions.append("PRESERVE (do not change these — they already pass):\n" + "\n".join(f"- {l}" for l in preserve_lines))
         return "\n".join(f"- {inst}" for inst in instructions)
 
     def _rewrite(self, content: str, topic: str, content_type: str,
-                 failures: List[str], attempt_num: int):
+                 failures: List[str], attempt_num: int, passing: List[str] = None):
         """
         Call Claude API to rewrite content with targeted instructions.
         Returns (rewritten_content, cost_usd) or (None, 0.0) on API error.
         """
         brand_voice = self._load_brand_voice()
-        fix_instructions = self._build_fix_instructions(failures)
+        fix_instructions = self._build_fix_instructions(failures, passing)
 
         prompt = f"""You are rewriting an existing piece of content to improve its quality.
 
