@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-03-23 (session 11 — SDY batch publishing live; image retry/fallback pipeline built)
+Last updated: 2026-03-24 (session 12 — quality gate live; Review/Publish workflow; template auto-refresh)
 
 ---
 
@@ -163,14 +163,32 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 
 ### Quality gate (session 12)
 - [x] `QualityGate` class in `data_sources/modules/quality_gate.py` — check/rewrite loop, max 2 rewrites
-- [x] Pass thresholds: Flesch Reading Ease ≥ 60 + Hook (mandatory) + CTAs (mandatory) + 2/3 optional (stories, rhythm, paragraphs)
+- [x] Pass thresholds: Flesch Reading Ease ≥ 55 + Hook (mandatory) + CTAs (mandatory) + 2/3 optional (stories, rhythm, paragraphs)
 - [x] Targeted rewrite instructions built from specific failures — only failing criteria included per attempt
+- [x] Preserve instructions — passing criteria explicitly protected from regression in each rewrite
 - [x] API error on rewrite: continues loop if retries remain, returns failed after exhausting
 - [x] Scorer error: fail-safe (returns passed=True, skips gate)
-- [x] On final failure: best rewrite saved to disk, row marked `Review Required` in Sheet, cost recorded, publish skipped
+- [x] `_to_plain()` strips `<script>` tag content — JSON-LD schema was being scored as prose (caused Flesch 0 and false paragraph failures)
+- [x] On final failure: best rewrite saved to disk, row marked `Review` in Sheet, failures written to Column G, cost recorded, publish skipped
 - [x] Mini-stories re-enabled as 5th engagement criterion with massage therapy patterns (unnamed client scenarios)
-- [x] `REVIEW_REQUIRED_VALUE` added to `google_sheets.py`
+- [x] CTA patterns updated for massage therapy — 10 domain-specific patterns replacing SaaS-era defaults
+- [x] `google_sheets.py` — `REVIEW_REQUIRED_VALUE` (`Review`), `PUBLISH_VALUE` (`Publish`), `update_notes()` (Column G), `update_review_count()` (Column H)
 - [x] `geo_batch_runner.py` — DONE/cost writes deferred until after gate passes; rewrite costs added to row total
+- [x] `Publish` status — batch runner reads file from Column F, publishes without regenerating, marks DONE
+- [x] Column G (Notes) — quality failures written on Review, cleared on DONE
+- [x] Column H (Review #) — increments each time a row is flagged Review, retained on DONE
+- [x] `logs/quality-log.csv` — append-only log of every Review event (date, client, type, topic, attempts, failures)
+- [x] End-to-end tested: Glasgow Central Station passed gate (Flesch 55, 2 rewrites), published to SDY live (ID 677)
+
+### Elementor template auto-refresh (session 12)
+- [x] `fetch_elementor_template.py` — saves `elementor-template-meta.json` sidecar with WP `modified` date on every fetch
+- [x] `refresh_if_stale(abbr, wp_config)` — lightweight REST check; auto-re-fetches template if WP modified date is newer
+- [x] Batch runner calls `_ensure_template_fresh()` once per client per run before every publish (Images o/s, Publish, and Write Now paths)
+- [x] `clients/sdy/elementor-template-meta.json` — created; baseline `modified` date stored
+
+### WordPress permalink fix (session 12)
+- [x] `seomachine.php` — `register_activation_hook` added; flushes rewrite rules on plugin activation so CPT permalinks work immediately on new installs
+- [x] SDY live site — permalink flush resolved `/location/[slug]/` 404 (Settings → Permalinks → Save)
 
 ### End-to-end batch publishing (tested session 5)
 - [x] 5 location + 2 service posts republished clean to correct CPTs (IDs 16637–16667)

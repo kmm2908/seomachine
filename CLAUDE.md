@@ -82,15 +82,19 @@ python3 src/geo_batch_runner.py A2:E5       # specific range only
 python3 src/geo_batch_runner.py --publish   # generate + publish to WordPress as draft
 ```
 
-Google Sheet columns: A=Topic/Location, B=Status (`Write Now`/`DONE`/`pause`/`Images o/s`), C=Cost (auto), D=Business abbreviation, E=Content type, F=File path (auto-set when `Images o/s`, cleared on DONE).
+Google Sheet columns: A=Topic/Location, B=Status (`Write Now`/`DONE`/`pause`/`Images o/s`/`Review`/`Publish`), C=Cost (auto), D=Business abbreviation, E=Content type, F=File path (auto-set on `Images o/s`/`Review`, cleared on DONE), G=Notes (quality failures on `Review`, cleared on DONE), H=Review count (increments each time a row is flagged `Review`).
 
 Output: `content/[abbr]/[type]/[slug]-[date]/[slug]-[date].html` (one folder per article; images saved alongside HTML)
 
-After each article is generated, a quality check runs automatically and prints a summary line:
+**Quality gate** runs after every article is written. Checks Flesch Reading Ease ≥ 55 (readability) and engagement (hook + CTAs mandatory; mini-stories, rhythm, paragraphs — 2/3 optional). If it fails, Claude rewrites with targeted instructions, up to 2 rewrites. Console output:
 ```
-→ Quality: engagement 3/4 | readability 74/100 (B)  ⚠ fix: ctas
+→ Quality: Flesch 55 ✓ | hook ✓ | ctas ✓ | stories ✗ | rhythm ✓ | paras ✓ — passed
 ```
-Uses `EngagementAnalyzer` (hook, rhythm, CTAs, paragraph length) and `ReadabilityScorer` (Flesch, grade level, passive voice). Non-blocking — a check failure never stops publishing.
+On final failure: best rewrite saved to disk, row marked `Review` in Sheet, failures written to Column G, publish skipped.
+
+**Review workflow:** manually edit the HTML file (path in Column F, failures in Column G), then set Column B to `Publish`. Next batch run publishes the file without regenerating content, marks DONE, clears G and F.
+
+Quality failures logged to `logs/quality-log.csv` (append-only, gitignored).
 
 Set `IMAGE_API_PROVIDER=gemini` in `.env` to generate images automatically. Requires `GOOGLE_AI_API_KEY` and `OPENAI_API_KEY`. Leave blank to skip image generation (content-only mode). Cost: ~$0.27/post (Gemini) or ~$0.16/post (DALL-E 3 fallback).
 
@@ -178,7 +182,8 @@ Use this when posts need to be re-created in WordPress (e.g. after enabling Elem
 **Custom post types** — content is published to the correct CPT based on content type. Mapping is in `clients/[abbr]/config.json` under `wordpress.content_type_map`. CPTs: `seo_service`, `seo_location`, `seo_pillar`, `seo_topical`, `seo_blog`. All grouped under "SEO Content" in wp-admin. SEO meta fields (`seo_meta` REST field) work without Yoast — keys are Yoast-compatible so they display in Yoast UI if installed.
 
 **Elementor template publishing** (used when `clients/[abbr]/elementor-template.json` exists):
-1. Run `python3 src/fetch_elementor_template.py [abbr]` once to capture the saved template (reads `wordpress.elementor_template_id` from config). Skips SSL verification automatically for `.local` domains.
+1. Run `python3 src/fetch_elementor_template.py [abbr]` once to capture the saved template (reads `wordpress.elementor_template_id` from config). Skips SSL verification automatically for `.local` domains. Saves a `clients/[abbr]/elementor-template-meta.json` sidecar with the WP `modified` date.
+2. Before every publish, the batch runner checks whether the template has been updated in WordPress (compares `modified` date via REST API) and auto-re-fetches if stale. Prints `→ Template: up to date` or `→ Template updated in WordPress — re-fetching...`. Checked once per client per run.
 2. On `--publish`, article HTML is injected into the template's HTML widget(s); first `<h2>` stripped (template has H1 title widget); schema `<script>` appended directly; list spacing fixed via inline styles
 3. Post created as the correct CPT (e.g. `seo_location`) with `_elementor_data` + `_elementor_edit_mode: builder` meta
 
