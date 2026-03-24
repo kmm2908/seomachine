@@ -43,7 +43,7 @@ load_dotenv(ROOT / '.env')
 sys.path.insert(0, str(ROOT / 'data_sources' / 'modules'))
 from google_sheets import (
     read_pending, update_status, update_cost, update_file_path,
-    send_email, IMAGES_PENDING_VALUE, REVIEW_REQUIRED_VALUE,
+    send_email, IMAGES_PENDING_VALUE, REVIEW_REQUIRED_VALUE, PUBLISH_VALUE,
 )
 from wikipedia import WikipediaResearcher
 from quality_gate import QualityGate
@@ -488,6 +488,56 @@ def run_batch(sheet_range: Optional[str] = None, publish: bool = False) -> None:
                     except Exception as img_err:
                         print(f"    → Images: still failing — {img_err}")
                         # Leave as 'Images o/s' for next run
+            if i < total:
+                time.sleep(65)
+            continue
+
+        # ── Publish: publish existing file without regenerating content ──────
+        if item_status.lower() == PUBLISH_VALUE.lower():
+            print(f"[{i}/{total}] Publishing [{content_type}]: {address} [{abbreviation}]...")
+            file_path_rel = loc.get('file_path', '').strip()
+            if not file_path_rel:
+                print(f"    → No file path in Column F — set Column F to the file path and retry")
+                if i < total:
+                    time.sleep(65)
+                continue
+            filepath = ROOT / file_path_rel
+            if not filepath.exists():
+                print(f"    → File not found: {file_path_rel} — check Column F path")
+                if i < total:
+                    time.sleep(65)
+                continue
+            try:
+                content = filepath.read_text(encoding='utf-8')
+                business_config = load_business_config(abbreviation)
+                wp_config = business_config.get('wordpress')
+                if not wp_config:
+                    print(f"    → No wordpress config in {abbreviation}.json — skipping")
+                else:
+                    from wordpress_publisher import WordPressPublisher
+                    publisher = WordPressPublisher.from_config(wp_config)
+                    post_type = wp_config.get('content_type_map', {}).get(
+                        content_type, wp_config.get('default_post_type', 'post')
+                    )
+                    banner_candidates = list(filepath.parent.glob('*-banner.jpg'))
+                    featured_image = str(banner_candidates[0]) if banner_candidates else None
+                    elementor_template = CLIENTS_DIR / abbreviation.lower() / 'elementor-template.json'
+                    result = publisher.publish_html_content(
+                        html_content=content,
+                        slug=slugify(address),
+                        post_type=post_type,
+                        featured_image_path=featured_image,
+                        elementor_template_path=str(elementor_template) if elementor_template.exists() else None,
+                        excerpt=address,
+                    )
+                    print(f"    → Published WP draft (ID: {result['post_id']}): {result['edit_url']}")
+                update_status(row, 'DONE')
+                update_file_path(row, '')
+                written_files.append(str(filepath.relative_to(ROOT)))
+                print(f"[{i}/{total}] ✓ Published: {filepath.relative_to(ROOT)}")
+            except Exception as e:
+                print(f"    → Publish failed: {e}")
+                print(f"    Full traceback:\n{traceback.format_exc()}")
             if i < total:
                 time.sleep(65)
             continue

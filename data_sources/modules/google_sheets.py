@@ -6,7 +6,7 @@ Used by the /geo-batch command to manage the geo content writing queue.
 
 Sheet format:
   Column A: Location address including postcode (e.g. "Byres Road Glasgow G12")
-  Column B: Status dropdown — "Write Now" | "pause" | "DONE" | "Images o/s" | "Review"
+  Column B: Status dropdown — "Write Now" | "pause" | "DONE" | "Images o/s" | "Review" | "Publish"
   Column C: Cost (written by script after generation, e.g. "$0.43")
   Column D: Business abbreviation dropdown (e.g. "GTM") — matches a file in clients/
   Column E: Content type (e.g. "geo", "service", "location", "topical", "blog") — defaults to "blog" if empty
@@ -42,6 +42,7 @@ QUEUE_VALUE = 'Write Now'
 DONE_VALUE = 'DONE'
 IMAGES_PENDING_VALUE = 'Images o/s'
 REVIEW_REQUIRED_VALUE = 'Review'
+PUBLISH_VALUE = 'Publish'
 
 
 def get_service():
@@ -98,7 +99,7 @@ def read_pending(range_str: Optional[str] = None) -> list[dict]:
         if not address:
             continue
 
-        if status.lower() not in (QUEUE_VALUE.lower(), IMAGES_PENDING_VALUE.lower()):
+        if status.lower() not in (QUEUE_VALUE.lower(), IMAGES_PENDING_VALUE.lower(), PUBLISH_VALUE.lower()):
             continue
 
         pending.append({
