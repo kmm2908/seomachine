@@ -19,7 +19,7 @@ import json
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).parent.parent.resolve()
+ROOT = Path(__file__).parent.parent.parent.resolve()
 sys.path.insert(0, str(ROOT / 'data_sources' / 'modules'))
 
 from wordpress_publisher import WordPressPublisher

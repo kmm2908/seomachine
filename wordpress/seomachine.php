@@ -2,7 +2,7 @@
 /**
  * Plugin Name: SEO Machine
  * Description: Registers SEO content post types and exposes SEO meta fields via REST API. No Yoast dependency.
- * Version: 2.4
+ * Version: 2.5
  * Author: SEO Machine
  *
  * Installation:
@@ -15,11 +15,12 @@ if (!defined('ABSPATH')) {
 }
 
 define('SEO_MACHINE_POST_TYPES', [
-    'seo_service'  => ['Services',          'Service',        'seo_service'],
-    'seo_location' => ['Locations',         'Location',       'seo_location'],
-    'seo_pillar'   => ['Pillar Pages',      'Pillar Page',    'seo_pillar'],
-    'seo_topical'  => ['Topical Articles',  'Topical Article','seo_topical'],
-    'seo_blog'     => ['Blog Posts',        'Blog Post',      'seo_blog'],
+    'seo_service'   => ['Services',                 'Service',               'seo_service'],
+    'seo_location'  => ['Locations',                'Location',              'seo_location'],
+    'seo_pillar'    => ['Pillar Pages',             'Pillar Page',           'seo_pillar'],
+    'seo_topical'   => ['Topical Articles',         'Topical Article',       'seo_topical'],
+    'seo_blog'      => ['Blog Posts',               'Blog Post',             'seo_blog'],
+    'seo_comp_alt'  => ['Competitor Alternatives',  'Competitor Alternative','seo_comp_alt'],
 ]);
 
 // ── CPT registration helper ───────────────────────────────────────────────────
@@ -41,7 +42,7 @@ function seo_machine_register_post_types() {
             'show_in_menu'       => 'seo-content',
             'show_in_nav_menus'  => true,
             'supports'           => ['title', 'editor', 'thumbnail', 'excerpt', 'custom-fields'],
-            'rewrite'            => ['slug' => str_replace('seo_', '', $slug)],
+            'rewrite'            => ['slug' => str_replace('_', '-', str_replace('seo_', '', $slug))],
             'has_archive'        => false,
         ]);
     }
@@ -155,6 +156,7 @@ add_shortcode('seo_hub', function($atts) {
         'pillar'   => 'seo_pillar',
         'topical'  => 'seo_topical',
         'blog'     => 'seo_blog',
+        'comp-alt' => 'seo_comp_alt',
     ];
 
     $post_type = $type_map[$atts['type']] ?? 'seo_location';
@@ -202,11 +204,12 @@ add_action('add_meta_boxes', function() {
 function seo_machine_convert_metabox_html(WP_Post $post): void {
     $current = $post->post_type;
     $labels  = [
-        'seo_location' => 'Location Page',
-        'seo_service'  => 'Service Page',
-        'seo_pillar'   => 'Pillar Page',
-        'seo_topical'  => 'Topical Article',
-        'seo_blog'     => 'Blog Post',
+        'seo_location'  => 'Location Page',
+        'seo_service'   => 'Service Page',
+        'seo_pillar'    => 'Pillar Page',
+        'seo_topical'   => 'Topical Article',
+        'seo_blog'      => 'Blog Post',
+        'seo_comp_alt'  => 'Competitor Alternative',
     ];
 
     wp_nonce_field('seo_machine_convert', 'seo_machine_convert_nonce');
@@ -303,11 +306,12 @@ add_action('manage_pages_custom_column', function(string $col, int $post_id): vo
         return;
     }
     $labels = [
-        'seo_location' => 'Location Page',
-        'seo_service'  => 'Service Page',
-        'seo_pillar'   => 'Pillar Page',
-        'seo_topical'  => 'Topical Article',
-        'seo_blog'     => 'Blog Post',
+        'seo_location'  => 'Location Page',
+        'seo_service'   => 'Service Page',
+        'seo_pillar'    => 'Pillar Page',
+        'seo_topical'   => 'Topical Article',
+        'seo_blog'      => 'Blog Post',
+        'seo_comp_alt'  => 'Competitor Alternative',
     ];
     $type    = get_post_type($post_id);
     $display = $labels[$type] ?? '—';
@@ -323,11 +327,12 @@ add_action('quick_edit_custom_box', function(string $col, string $post_type): vo
         return;
     }
     $labels = [
-        'seo_location' => 'Location Page',
-        'seo_service'  => 'Service Page',
-        'seo_pillar'   => 'Pillar Page',
-        'seo_topical'  => 'Topical Article',
-        'seo_blog'     => 'Blog Post',
+        'seo_location'  => 'Location Page',
+        'seo_service'   => 'Service Page',
+        'seo_pillar'    => 'Pillar Page',
+        'seo_topical'   => 'Topical Article',
+        'seo_blog'      => 'Blog Post',
+        'seo_comp_alt'  => 'Competitor Alternative',
     ];
     wp_nonce_field('seo_machine_convert', 'seo_machine_convert_nonce');
     ?>

@@ -6,6 +6,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 At the start of every new session, automatically invoke `/start` before responding to anything else.
 
+## Agent Usage
+
+Offload research, writing, file operations, and batch tasks to sub-agents wherever possible to keep the main conversation context clean. Prefer `run_in_background: true` for any task that doesn't need its result before the next step.
+
 ## Project Overview
 
 SEO Machine is a Claude Code workspace for creating SEO-optimised content at scale. It combines custom commands, specialised agents, a Python batch runner, and Google Sheets integration to research, write, optimise, and publish articles for multiple business clients.
@@ -52,7 +56,7 @@ Global context (not client-specific) stays in `context/`:
 ## Content Pipeline
 
 ```
-Google Sheet queue → src/geo_batch_runner.py → content/[abbr]/[type]/
+Google Sheet queue → src/content/geo_batch_runner.py → content/[abbr]/[type]/
 ```
 
 Slash command pipeline (interactive):
@@ -71,20 +75,23 @@ The batch runner and agents support 5 content types, selected via Column E in th
 | `pillar` | `pillar-page-writer.md` | 700–1000 | GBP category landing pages (hub pages) |
 | `topical` | `topical-writer.md` | 600–1000 | Informational/question-based articles |
 | `blog` | `blog-post-writer.md` | 600–1200 | Conversational blog posts |
+| `comp-alt` | `competitor-alt-writer.md` | 500–700 | Competitor alternative / comparison pages |
 
 Default: `blog` if Column E is empty.
 
 ## Batch Runner
 
 ```bash
-python3 src/geo_batch_runner.py             # process all "Write Now" rows
-python3 src/geo_batch_runner.py A2:E5       # specific range only
-python3 src/geo_batch_runner.py --publish   # generate + publish to WordPress as draft
+python3 src/content/geo_batch_runner.py             # process all "Write Now" rows
+python3 src/content/geo_batch_runner.py A2:E5       # specific range only
+python3 src/content/geo_batch_runner.py --publish   # generate + publish to WordPress as draft
 ```
 
 Google Sheet columns: A=Topic/Location, B=Status (`Write Now`/`DONE`/`pause`/`Images o/s`/`Review`/`Publish`), C=Cost (auto), D=Business abbreviation, E=Content type, F=File path (auto-set on `Images o/s`/`Review`, cleared on DONE), G=Notes (quality failures on `Review`, cleared on DONE), H=Review count (increments each time a row is flagged `Review`).
 
 Output: `content/[abbr]/[type]/[slug]-[date]/[slug]-[date].html` (one folder per article; images saved alongside HTML)
+
+**Directions snippet** — `src/snippets/generate_directions_snippet.py` generates a self-contained HTML+JS Google Maps directions widget per client. Saved to `clients/[abbr]/snippets/[abbr]-directions.html`. The batch runner calls `_ensure_directions_snippet()` automatically on the first publish run per client — no manual step needed. The snippet is injected into `comp-alt` page prompts automatically.
 
 **Quality gate** runs after every article is written. Checks Flesch Reading Ease ≥ 55 (readability) and engagement (hook + CTAs mandatory; mini-stories, rhythm, paragraphs — 2/3 optional). If it fails, Claude rewrites with targeted instructions, up to 2 rewrites. Console output:
 ```
@@ -128,7 +135,7 @@ All commands are in `.claude/commands/`. Key commands:
 - `/write [topic]` — full article in `drafts/`, auto-triggers SEO agents
 - `/article [topic]` — simplified article creation
 - `/rewrite [topic]` — update existing content
-- `/geo-batch` — batch content from Google Sheet (runs `src/geo_batch_runner.py`)
+- `/geo-batch` — batch content from Google Sheet (runs `src/content/geo_batch_runner.py`)
 
 **Publishing & Optimisation:**
 - `/publish-draft [file]` — publish to WordPress via REST API
@@ -173,16 +180,16 @@ Publishing uses the WordPress REST API. Credentials are stored in `clients/[abbr
 
 **Re-publishing existing HTML files** (without regenerating content):
 ```bash
-python3 src/republish_existing.py                # republish all gtm location files
-python3 src/republish_existing.py --type service # service pages
-python3 src/republish_existing.py --abbr gtm --type blog
+python3 src/content/republish_existing.py                # republish all gtm location files
+python3 src/content/republish_existing.py --type service # service pages
+python3 src/content/republish_existing.py --abbr gtm --type blog
 ```
 Use this when posts need to be re-created in WordPress (e.g. after enabling Elementor CPT support).
 
-**Custom post types** — content is published to the correct CPT based on content type. Mapping is in `clients/[abbr]/config.json` under `wordpress.content_type_map`. CPTs: `seo_service`, `seo_location`, `seo_pillar`, `seo_topical`, `seo_blog`. All grouped under "SEO Content" in wp-admin. SEO meta fields (`seo_meta` REST field) work without Yoast — keys are Yoast-compatible so they display in Yoast UI if installed.
+**Custom post types** — content is published to the correct CPT based on content type. Mapping is in `clients/[abbr]/config.json` under `wordpress.content_type_map`. CPTs: `seo_service`, `seo_location`, `seo_pillar`, `seo_topical`, `seo_blog`, `seo_comp_alt`. All grouped under "SEO Content" in wp-admin. SEO meta fields (`seo_meta` REST field) work without Yoast — keys are Yoast-compatible so they display in Yoast UI if installed.
 
 **Elementor template publishing** (used when `clients/[abbr]/elementor-template.json` exists):
-1. Run `python3 src/fetch_elementor_template.py [abbr]` once to capture the saved template (reads `wordpress.elementor_template_id` from config). Skips SSL verification automatically for `.local` domains. Saves a `clients/[abbr]/elementor-template-meta.json` sidecar with the WP `modified` date.
+1. Run `python3 src/publishing/fetch_elementor_template.py [abbr]` once to capture the saved template (reads `wordpress.elementor_template_id` from config). Skips SSL verification automatically for `.local` domains. Saves a `clients/[abbr]/elementor-template-meta.json` sidecar with the WP `modified` date.
 2. Before every publish, the batch runner checks whether the template has been updated in WordPress (compares `modified` date via REST API) and auto-re-fetches if stale. Prints `→ Template: up to date` or `→ Template updated in WordPress — re-fetching...`. Checked once per client per run.
 2. On `--publish`, article HTML is injected into the template's HTML widget(s); first `<h2>` stripped (template has H1 title widget); schema `<script>` appended directly; list spacing fixed via inline styles
 3. Post created as the correct CPT (e.g. `seo_location`) with `_elementor_data` + `_elementor_edit_mode: builder` meta
@@ -201,29 +208,34 @@ Use this when posts need to be re-created in WordPress (e.g. after enabling Elem
 
 ## Project Structure
 
-All Python executables live in `src/`. Test scripts live in `tests/`. Modules (imported by scripts) stay in `data_sources/modules/`. GCP service account keys go in `config/`.
+All Python executables live in `src/` under module subfolders. Test scripts live in `tests/`. Modules (imported by scripts) stay in `data_sources/modules/`. GCP service account keys go in `config/`.
 
 ```
-src/            ← executable scripts (geo_batch_runner, republish_existing, research_*, etc.)
+src/
+  content/      ← geo_batch_runner.py, republish_existing.py
+  research/     ← research_competitors.py, research_quick_wins.py, research_serp_analysis.py, etc.
+  publishing/   ← fetch_elementor_template.py
+  snippets/     ← generate_directions_snippet.py
+  competitors/  ← competitor alternative page generators (future)
 tests/          ← test scripts (delete before production)
 data_sources/   ← importable modules (google_sheets, wordpress_publisher, etc.)
 config/         ← service account keys (gitignored)
 clients/        ← per-client context and config
 ```
 
-Scripts in `src/` resolve the project root as `Path(__file__).parent.parent`, so all paths (`content/`, `clients/`, `.env`) still resolve correctly when run from the project root.
+Scripts in `src/` subfolders resolve the project root as `Path(__file__).parent.parent.parent`, so all paths (`content/`, `clients/`, `.env`) still resolve correctly when run from the project root.
 
 ## Python Analysis Pipeline
 
 Located in `data_sources/modules/`. Scripts in `src/`:
 
 ```bash
-python3 src/research_quick_wins.py
-python3 src/research_competitor_gaps.py
-python3 src/research_serp_analysis.py "keyword"
-python3 src/research_topic_clusters.py
-python3 src/research_trending.py
-python3 src/research_competitors.py --abbr gtm   # full competitor research (map pack + organic + profiles)
+python3 src/research/research_quick_wins.py
+python3 src/research/research_competitor_gaps.py
+python3 src/research/research_serp_analysis.py "keyword"
+python3 src/research/research_topic_clusters.py
+python3 src/research/research_trending.py
+python3 src/research/research_competitors.py --abbr gtm   # full competitor research (map pack + organic + profiles)
 python3 tests/test_dataforseo.py    # test API connectivity
 ```
 

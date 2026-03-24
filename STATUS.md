@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-03-24 (session 12 — quality gate live; Review/Publish workflow; template auto-refresh)
+Last updated: 2026-03-24 (session 13 — directions snippets, src/ reorganisation, comp-alt content type, seomachine.php v2.5)
 
 ---
 
@@ -186,6 +186,39 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] Batch runner calls `_ensure_template_fresh()` once per client per run before every publish (Images o/s, Publish, and Write Now paths)
 - [x] `clients/sdy/elementor-template-meta.json` — created; baseline `modified` date stored
 
+### src/ folder reorganisation (session 13)
+- [x] `src/` split into module subfolders: `src/content/`, `src/research/`, `src/publishing/`, `src/snippets/`, `src/competitors/`
+- [x] All scripts moved: `geo_batch_runner.py` + `republish_existing.py` → `src/content/`; all `research_*.py` → `src/research/`; `fetch_elementor_template.py` → `src/publishing/`; `generate_directions_snippet.py` → `src/snippets/`
+- [x] All ROOT paths updated from `Path(__file__).parent.parent` to `Path(__file__).parent.parent.parent`
+- [x] Batch runner import paths updated to use `ROOT / 'src' / 'publishing'` and `ROOT / 'src' / 'snippets'`
+- [x] CLAUDE.md updated with new paths throughout (batch runner commands, research script paths, fetch_elementor_template path, Project Structure section)
+
+### Directions snippet generator (session 13)
+- [x] `src/snippets/generate_directions_snippet.py` — reads client config, outputs self-contained HTML+JS Google Maps directions widget
+- [x] GTM Place ID `ChIJnQImbT5FiEgRon5L9CbTr28` added to `clients/gtm/config.json`
+- [x] Snippets saved to `clients/[abbr]/snippets/[abbr]-directions.html`
+- [x] `_ensure_directions_snippet()` added to batch runner — auto-generates on first publish run per client (runs alongside `_ensure_template_fresh`)
+- [x] GTM snippet: `clients/gtm/snippets/gtm-directions.html`
+- [x] SDY snippet: `clients/sdy/snippets/sdy-directions.html`
+
+### comp-alt content type (session 13)
+- [x] `.claude/agents/competitor-alt-writer.md` — new agent for "X alternative" competitor comparison pages
+- [x] `comp-alt` added to `CONTENT_TYPE_AGENTS` and `PROMPT_BUILDERS` in batch runner
+- [x] `build_comp_alt_prompt()` — loads directions widget from snippets folder and injects into user prompt
+- [x] `competitor-analysis.md` loaded in system prompt when `content_type == 'comp-alt'`
+- [x] Maps to `seo_comp_alt` CPT in `clients/gtm/config.json` and `clients/sdy/config.json`
+- [x] Column E value in Google Sheet: `comp-alt`
+- [x] Two competitor alternative pages written for GTM:
+  - `content/gtm/competitor-alternatives/tiger-lily-thai-spa-alternative/tiger-lily-thai-spa-alternative.html`
+  - `content/gtm/competitor-alternatives/thai-house-massage-glasgow-alternative/thai-house-massage-glasgow-alternative.html`
+
+### seomachine.php v2.5 (session 13)
+- [x] New `seo_comp_alt` CPT registered: "Competitor Alternatives" / "Competitor Alternative", REST base `seo_comp_alt`
+- [x] Permalink: `/comp-alt/[slug]/` — rewrite slug derived via `str_replace('_', '-', str_replace('seo_', '', $slug))`
+- [x] Added to convert metabox labels, Quick Edit dropdown, SEO Type column, and hub shortcode type map
+- [x] Elementor auto-enable filter covers `seo_comp_alt` automatically (via the constant)
+- [ ] **Needs deploying to GTM and SDY live sites** — upload to `wp-content/mu-plugins/`, then Settings → Permalinks → Save on each site
+
 ### WordPress permalink fix (session 12)
 - [x] `seomachine.php` — `register_activation_hook` added; flushes rewrite rules on plugin activation so CPT permalinks work immediately on new installs
 - [x] SDY live site — permalink flush resolved `/location/[slug]/` 404 (Settings → Permalinks → Save)
@@ -224,6 +257,14 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] Trigger a failing engagement check (e.g. no CTAs) — confirm ⚠ fix label appears — confirmed: engagement 3/4 ⚠ fix: ctas on location content
 - [x] Confirm quality check failure does not block publishing (`--publish` still works) — confirmed: run_quality_check() is try/except wrapped, publish block runs independently
 
+### Priority 6 — Session 13 (needs testing)
+- [ ] Deploy `wordpress/seomachine.php` v2.5 to GTM live (`wp-content/mu-plugins/`) — flush permalinks after upload
+- [ ] Deploy `wordpress/seomachine.php` v2.5 to SDY live (`wp-content/mu-plugins/`) — flush permalinks after upload
+- [ ] Confirm `seo_comp_alt` CPT appears in wp-admin on both sites
+- [ ] Confirm `/comp-alt/[slug]/` permalink routing works on both sites
+- [ ] Test `comp-alt` batch run — set Column E to `comp-alt`, run with `--publish`, confirm Elementor page created under correct CPT
+- [ ] Verify directions snippet auto-generates on first batch publish run (check `clients/[abbr]/snippets/` folder)
+
 ---
 
 ## Client: SDY (Serendipity Massage Therapy & Wellness)
@@ -260,6 +301,7 @@ Reason: caching on the live front-end doesn't affect the REST API. Running conte
 - [x] Verify content lands in correct CPT with Elementor template — confirmed two-section injection working
 
 ### Still Needs Human Input (SDY)
+- [ ] Deploy `wordpress/seomachine.php` v2.5 to SDY live `wp-content/mu-plugins/` — then Settings → Permalinks → Save to flush rewrite rules
 - [x] Local WP URL and credentials — in config.json (`wordpress` block = local, `wordpress_live` = live)
 - [x] Live credentials and app password — set in config.json; `wordpress` block now live
 - [x] Elementor template — built (local ID 635, live ID 564); fetched and stored
@@ -273,6 +315,7 @@ Reason: caching on the live front-end doesn't affect the REST API. Running conte
 
 ## Still Needs Human Input (GTM)
 
+- [ ] Deploy `wordpress/seomachine.php` v2.5 to GTM live `wp-content/mu-plugins/` — then Settings → Permalinks → Save to flush rewrite rules
 - [x] `clients/gtm/seo-guidelines.md` — all Castos/podcast placeholder content replaced with GTM massage-specific examples and guidance
 - [x] `clients/gtm/internal-links-map.md` — populated from live site crawl (main site + blog subdomain, 58 + 62 pages)
 - [x] `clients/gtm/competitor-analysis.md` — auto-populated by research_competitors.py (10 map pack + 8 organic, 15 profiles)

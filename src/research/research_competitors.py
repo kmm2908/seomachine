@@ -28,7 +28,7 @@ import requests
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 
-ROOT = Path(__file__).parent.parent.resolve()
+ROOT = Path(__file__).parent.parent.parent.resolve()
 load_dotenv(ROOT / '.env')
 
 sys.path.insert(0, str(ROOT / 'data_sources' / 'modules'))

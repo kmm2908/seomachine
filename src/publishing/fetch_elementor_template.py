@@ -20,7 +20,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-CLIENTS_DIR = Path(__file__).parent.parent / "clients"
+CLIENTS_DIR = Path(__file__).parent.parent.parent / "clients"
 
 
 def refresh_if_stale(abbr: str, wp_config: dict) -> bool:

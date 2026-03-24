@@ -36,7 +36,7 @@ import anthropic
 from dotenv import load_dotenv
 
 # ── Project root and .env ────────────────────────────────────────────────────
-ROOT = Path(__file__).parent.parent.resolve()
+ROOT = Path(__file__).parent.parent.parent.resolve()
 load_dotenv(ROOT / '.env')
 
 # ── Import shared Google Sheets helpers ──────────────────────────────────────
@@ -56,11 +56,12 @@ CLIENTS_DIR = ROOT / 'clients'
 
 # ── Content type → agent file mapping ────────────────────────────────────────
 CONTENT_TYPE_AGENTS = {
-    'service':  'service-page-writer.md',
-    'location': 'location-page-writer.md',
-    'topical':  'topical-writer.md',
-    'blog':     'blog-post-writer.md',
-    'pillar':   'pillar-page-writer.md',
+    'service':   'service-page-writer.md',
+    'location':  'location-page-writer.md',
+    'topical':   'topical-writer.md',
+    'blog':      'blog-post-writer.md',
+    'pillar':    'pillar-page-writer.md',
+    'comp-alt':  'competitor-alt-writer.md',
 }
 
 # ── Claude model and pricing ─────────────────────────────────────────────────
@@ -87,7 +88,28 @@ def slugify(text: str) -> str:
     return text[:80].rstrip('-')
 
 
-_template_checked: set = set()  # track which clients have been checked this run
+_template_checked: set = set()   # track which clients have been checked this run
+_snippets_generated: set = set() # track which clients have had snippets checked this run
+
+
+def _ensure_directions_snippet(abbr: str) -> None:
+    """Generate the directions snippet for a client if it doesn't already exist.
+    Runs once per client per batch run."""
+    if abbr in _snippets_generated:
+        return
+    _snippets_generated.add(abbr)
+    snippet_path = CLIENTS_DIR / abbr / "snippets" / f"{abbr}-directions.html"
+    if snippet_path.exists():
+        return
+    try:
+        sys.path.insert(0, str(ROOT / 'src' / 'snippets'))
+        from generate_directions_snippet import generate
+        snippet = generate(abbr)
+        snippet_path.parent.mkdir(exist_ok=True)
+        snippet_path.write_text(snippet, encoding='utf-8')
+        print(f"    → Directions snippet: generated ({snippet_path.relative_to(ROOT)})")
+    except Exception as e:
+        print(f"    → Directions snippet error (skipped): {e}")
 
 
 def _ensure_template_fresh(abbr: str, wp_config: dict) -> None:
@@ -96,7 +118,7 @@ def _ensure_template_fresh(abbr: str, wp_config: dict) -> None:
         return
     _template_checked.add(abbr)
     try:
-        sys.path.insert(0, str(ROOT / 'src'))
+        sys.path.insert(0, str(ROOT / 'src' / 'publishing'))
         from fetch_elementor_template import refresh_if_stale
         refreshed = refresh_if_stale(abbr, wp_config)
         if not refreshed:
@@ -168,6 +190,12 @@ def build_system_prompt(abbreviation: str, content_type: str,
         parts.append(f"\n\n## SEO Guidelines\n\n{seo_guidelines}")
     if internal_links:
         parts.append(f"\n\n## Internal Links Map\n\n{internal_links}")
+
+    # Competitor analysis — only needed for comp-alt pages
+    if content_type == 'comp-alt':
+        competitor_analysis = load_file(client_dir / 'competitor-analysis.md')
+        if competitor_analysis:
+            parts.append(f"\n\n## Competitor Analysis\n\n{competitor_analysis}")
 
     parts.append(
         "\n\n## Output Instructions\n\n"
@@ -313,11 +341,36 @@ Steps you must follow:
 3. Output three HTML sections starting with <!-- SECTION 1 -->. No frontmatter, no markdown."""
 
 
+def build_comp_alt_prompt(topic: str, business_config: Optional[dict] = None) -> str:
+    """User prompt for competitor alternative pages. topic = competitor name."""
+    abbr = (business_config.get('abbreviation', '') if business_config else '').lower()
+    snippet_path = CLIENTS_DIR / abbr / 'snippets' / f'{abbr}-directions.html'
+    directions_widget = load_file(snippet_path)
+
+    prompt = f"""Write a competitor alternative page for the following competitor:
+
+Competitor: {topic}
+
+Instructions:
+1. Find the entry for "{topic}" in the Competitor Analysis provided in your system prompt.
+   Use only the data in that entry — do not invent details.
+2. Follow the page structure in your agent instructions exactly.
+3. In the "Getting Here" section, include this directions widget exactly as written — do not modify it:
+
+{directions_widget if directions_widget else '<!-- No directions widget found — omit this section -->'}
+
+4. Output three HTML sections: <!-- SECTION 1 -->, <!-- SECTION 2 FAQ -->, <!-- SCHEMA -->.
+   No markdown, no frontmatter, no commentary."""
+
+    return prompt
+
+
 PROMPT_BUILDERS = {
-    'service':  build_service_prompt,
-    'location': build_location_prompt,
-    'topical':  build_topical_prompt,
-    'blog':     build_blog_prompt,
+    'service':   build_service_prompt,
+    'location':  build_location_prompt,
+    'topical':   build_topical_prompt,
+    'blog':      build_blog_prompt,
+    'comp-alt':  build_comp_alt_prompt,
 }
 
 
@@ -501,6 +554,7 @@ def run_batch(sheet_range: Optional[str] = None, publish: bool = False) -> None:
                                 business_config = load_business_config(abbreviation)
                                 wp_config = business_config.get('wordpress')
                                 if wp_config:
+                                    _ensure_directions_snippet(abbreviation.lower())
                                     _ensure_template_fresh(abbreviation.lower(), wp_config)
                                     from wordpress_publisher import WordPressPublisher
                                     publisher = WordPressPublisher.from_config(wp_config)
@@ -554,6 +608,7 @@ def run_batch(sheet_range: Optional[str] = None, publish: bool = False) -> None:
                 if not wp_config:
                     print(f"    → No wordpress config in {abbreviation}.json — skipping")
                 else:
+                    _ensure_directions_snippet(abbreviation.lower())
                     _ensure_template_fresh(abbreviation.lower(), wp_config)
                     from wordpress_publisher import WordPressPublisher
                     publisher = WordPressPublisher.from_config(wp_config)
@@ -704,6 +759,7 @@ def run_batch(sheet_range: Optional[str] = None, publish: bool = False) -> None:
                 if wp_config:
                     try:
                         sys.path.insert(0, str(ROOT / 'data_sources' / 'modules'))
+                        _ensure_directions_snippet(abbreviation.lower())
                         _ensure_template_fresh(abbreviation.lower(), wp_config)
                         from wordpress_publisher import WordPressPublisher
                         publisher = WordPressPublisher.from_config(wp_config)
