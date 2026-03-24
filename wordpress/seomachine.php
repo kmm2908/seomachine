@@ -56,6 +56,12 @@ if (did_action('init')) {
     add_action('init', 'seo_machine_register_post_types', 1);
 }
 
+// Flush rewrite rules on activation so CPT permalinks work immediately.
+register_activation_hook(__FILE__, function () {
+    seo_machine_register_post_types();
+    flush_rewrite_rules();
+});
+
 
 // Parent admin menu — redirects to Services list
 add_action('admin_menu', function() {
