@@ -271,6 +271,7 @@ Content to rewrite:
     def _to_plain(self, html: str) -> str:
         """Strip HTML to plain text, preserving paragraph breaks for scoring."""
         text = re.sub(r'<!--.*?-->', '', html, flags=re.DOTALL)
+        text = re.sub(r'<script[^>]*>.*?</script>', '', text, flags=re.IGNORECASE | re.DOTALL)
         text = re.sub(r'</p>', '\n\n', text, flags=re.IGNORECASE)
         text = re.sub(r'<br\s*/?>', '\n', text, flags=re.IGNORECASE)
         text = re.sub(r'<[^>]+>', ' ', text)
