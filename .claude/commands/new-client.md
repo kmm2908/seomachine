@@ -36,9 +36,13 @@ Ask the following questions one at a time. Wait for an answer before moving to t
 8. **Booking URL** — URL of the online booking page — enter "skip" to leave blank
 9. **Core keyword prefix** — the main search phrase the site targets, without a location (e.g. "thai massage", "dog grooming", "physiotherapy")
 10. **Services** — comma-separated list of treatments or services offered (e.g. "Thai massage, deep tissue massage, sports massage, hot stone massage")
-11. **WordPress site URL** — the WP install URL (e.g. "https://glasgowthaimassage.co.uk") — enter "skip" to set up WordPress later
-12. **WordPress username** — WP application password username — enter "skip" if skipping WordPress
-13. **WordPress application password** — (e.g. "Wtg0 jK0T 3bak 7XRg Mg1P o7io") — enter "skip" if skipping WordPress
+11. **Canonical brand description** — one or two sentences describing the business, used verbatim in AI-generated content. Suggest a draft based on Q1, Q9, and Q10, then ask the user to confirm or edit.
+    - Auto-draft format: "[Business name] is a [keyword_prefix] studio in [area], offering [services joined with commas]."
+    - Show the draft and ask: "Does this description work, or would you like to edit it?"
+12. **Positioning note** — plain-English guidance on tone: what to emphasise and what to avoid. Enter "skip" to leave blank.
+13. **WordPress site URL** — the WP install URL (e.g. "https://glasgowthaimassage.co.uk") — enter "skip" to set up WordPress later
+14. **WordPress username** — WP application password username — enter "skip" if skipping WordPress
+15. **WordPress application password** — (e.g. "Wtg0 jK0T 3bak 7XRg Mg1P o7io") — enter "skip" if skipping WordPress
 
 ### Step 2: Confirm Before Creating
 
@@ -64,10 +68,15 @@ Write: `clients/[abbr_lowercase]/config.json`
   "booking_url": "[answer to Q8, or empty string]",
   "keyword_prefix": "[answer to Q9]",
   "services": ["[service 1]", "[service 2]", "..."],
+  "ai_visibility": {
+    "canonical_description": "[answer to Q11]",
+    "brand_associations": ["[keyword_prefix] [area]", "[keyword_prefix]"],
+    "positioning_note": "[answer to Q12, or omit key if skipped]"
+  },
   "wordpress": {
-    "url": "[answer to Q11, or null]",
-    "username": "[answer to Q12, or null]",
-    "app_password": "[answer to Q13, or null]",
+    "url": "[answer to Q13, or null]",
+    "username": "[answer to Q14, or null]",
+    "app_password": "[answer to Q15, or null]",
     "default_post_type": "post",
     "default_status": "draft"
   }
