@@ -7,18 +7,31 @@ on:
       - 'wordpress/seomachine.php'
 
 jobs:
-  deploy:
+  deploy-gtm-gtb:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Deploy to all sites via SFTP
+      - name: Deploy to GTM and GTB via SFTP
+        run: |
+          echo "${{ secrets.SITEGROUND_SSH_KEY }}" > /tmp/deploy_key
+          chmod 600 /tmp/deploy_key
+          sftp -i /tmp/deploy_key -P 18765 -o StrictHostKeyChecking=no u2168-sqqieazmgeuw@ukm1.siteground.biz << 'SFTP'
+          put wordpress/seomachine.php www/glasgowthaimassage.co.uk/public_html/wp-content/mu-plugins/seomachine.php
+          put wordpress/seomachine.php www/blog.glasgowthaimassage.co.uk/public_html/wp-content/mu-plugins/seomachine.php
+          SFTP
+          rm /tmp/deploy_key
+
+  deploy-sdy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy to SDY via SFTP
         run: |
           echo "${{ secrets.SITEGROUND_SSH_KEY }}" > /tmp/deploy_key
           chmod 600 /tmp/deploy_key
           sftp -i /tmp/deploy_key -P 18765 -o StrictHostKeyChecking=no u2732-2mxetksmslhk@gukm1055.siteground.biz << 'SFTP'
-          put wordpress/seomachine.php /glasgowthaimassage.co.uk/glasgowthaimassage.co.uk/public_html/wp-content/mu-plugins/seomachine.php
-          put wordpress/seomachine.php /glasgowthaimassage.co.uk/blog.glasgowthaimassage.co.uk/public_html/wp-content/mu-plugins/seomachine.php
-          put wordpress/seomachine.php /serendipitymassage.co.uk/serendipitymassage.co.uk/public_html/wp-content/mu-plugins/seomachine.php
+          put wordpress/seomachine.php www/serendipitymassage.co.uk/public_html/wp-content/mu-plugins/seomachine.php
           SFTP
           rm /tmp/deploy_key

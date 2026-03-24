@@ -2,7 +2,7 @@
 /**
  * Plugin Name: SEO Machine
  * Description: Registers SEO content post types and exposes SEO meta fields via REST API. No Yoast dependency.
- * Version: 2.6.2
+ * Version: 2.6.3
  * Author: SEO Machine
  *
  * Installation:
