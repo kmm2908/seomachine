@@ -12,35 +12,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Deploy to GTM (glasgowthaimassage.co.uk)
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.GTM_SSH_HOST }}
-          username: ${{ secrets.GTM_SSH_USER }}
-          key: ${{ secrets.GTM_SSH_KEY }}
-          port: ${{ secrets.GTM_SSH_PORT }}
-          source: wordpress/seomachine.php
-          target: ${{ secrets.GTM_MUPLUGINS_PATH }}
-          strip_components: 1
-
-      - name: Deploy to GTB (blog.glasgowthaimassage.co.uk)
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.GTB_SSH_HOST }}
-          username: ${{ secrets.GTB_SSH_USER }}
-          key: ${{ secrets.GTB_SSH_KEY }}
-          port: ${{ secrets.GTB_SSH_PORT }}
-          source: wordpress/seomachine.php
-          target: ${{ secrets.GTB_MUPLUGINS_PATH }}
-          strip_components: 1
-
-      - name: Deploy to SDY (serendipitymassage.co.uk)
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.SDY_SSH_HOST }}
-          username: ${{ secrets.SDY_SSH_USER }}
-          key: ${{ secrets.SDY_SSH_KEY }}
-          port: ${{ secrets.SDY_SSH_PORT }}
-          source: wordpress/seomachine.php
-          target: ${{ secrets.SDY_MUPLUGINS_PATH }}
-          strip_components: 1
+      - name: Deploy to all sites via SFTP
+        run: |
+          echo "${{ secrets.SITEGROUND_SSH_KEY }}" > /tmp/deploy_key
+          chmod 600 /tmp/deploy_key
+          sftp -i /tmp/deploy_key -P 18765 -o StrictHostKeyChecking=no sftp3899-6c89d606@sftp.siteground.net << 'SFTP'
+          put wordpress/seomachine.php glasgowthaimassage.co.uk/glasgowthaimassage.co.uk/public_html/wp-content/mu-plugins/seomachine.php
+          put wordpress/seomachine.php glasgowthaimassage.co.uk/blog.glasgowthaimassage.co.uk/public_html/wp-content/mu-plugins/seomachine.php
+          put wordpress/seomachine.php serendipitymassage.co.uk/serendipitymassage.co.uk/public_html/wp-content/mu-plugins/seomachine.php
+          SFTP
+          rm /tmp/deploy_key
