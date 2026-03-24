@@ -190,7 +190,9 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] `.github/workflows/deploy-plugin.yml` — GitHub Actions workflow; deploys `wordpress/seomachine.php` to GTM, GTB, and SDY via SFTP on every push to main that touches the file
 - [x] SSH key pair generated (`~/.ssh/seomachine_deploy`); public key added to SiteGround SSH Manager; private key stored as `SITEGROUND_SSH_KEY` GitHub Actions secret
 - [x] SFTP credentials: `u2732-2mxetksmslhk@gukm1055.siteground.biz` port 18765
-- [x] Tested and confirmed working — all three sites deploy in ~7s
+- [x] Tested and confirmed working — two parallel jobs (GTM/GTB on ukm1.siteground.biz, SDY on gukm1055.siteground.biz)
+- [x] Correct SFTP paths: `www/[domain]/public_html/wp-content/mu-plugins/seomachine.php`
+- [x] GTM mu-plugins directory created (wasn't deployed there before)
 
 ### AI brand visibility & positioning (session 16)
 - [x] `context/ai-brand-visibility.md` — Brian Dean (Backlinko) YouTube video transcribed, summarised, and stored; covers 4 strategies for getting brands cited in LLM/AI answers; includes section translating strategies for local service clients (GTM, SDY)
