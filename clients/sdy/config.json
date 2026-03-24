@@ -31,6 +31,11 @@
     "elementor_template_id": 564
   },
   "niche": "massage-therapy",
+  "ai_visibility": {
+    "canonical_description": "Serendipity Massage Therapy & Wellness is a holistic massage and wellness studio offering therapeutic massage, relaxation treatments, and wellbeing services.",
+    "brand_associations": ["massage therapy", "holistic wellness", "relaxation massage", "therapeutic massage"],
+    "positioning_note": "Emphasise: holistic wellbeing, therapeutic benefit, personal care. Tone is warm and nurturing — not clinical, not luxury spa."
+  },
   "wordpress_local": {
     "url": "https://sdy.local",
     "username": "kmm-T5r",
