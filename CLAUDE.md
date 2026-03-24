@@ -51,6 +51,8 @@ clients/
 
 **Niche field** — `config.json` includes a `"niche"` key (e.g. `"thai-massage"`, `"massage-therapy"`). Used by `research_blog_topics.py` to cache keyword research at `research/niches/[niche]/` and share it across all clients in the same niche. Blog subdomain clients (e.g. GTB) use the same niche as their main site (GTM). Add a new niche slug when onboarding a client in a different market.
 
+**AI visibility field** — `config.json` includes an optional `"ai_visibility"` block with three sub-fields: `canonical_description` (exact brand description used verbatim by writing agents), `brand_associations` (keyword phrases to weave into content), and `positioning_note` (tone guidance). Injected as a `## AI Brand Positioning` section in system prompts for `blog` and `topical` content types only — applies to both the batch runner and the scheduled publisher, which share the same `build_system_prompt()` function. See `context/ai-brand-visibility.md` for the strategy behind this. Full schema in `clients/README.md`.
+
 Global context (not client-specific) stays in `context/`:
 - `context/style-guide.md` — universal grammar, formatting, writing rules (including no-hyphens rule)
 - `context/cro-best-practices.md` — conversion optimisation principles

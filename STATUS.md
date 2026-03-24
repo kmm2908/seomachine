@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-03-24 (session 15 — scheduled publishing pipeline, queue status view, multi-window wrap policy)
+Last updated: 2026-03-24 (session 16 — AI brand visibility research, ai_visibility config feature, CLAUDE.md updates)
 
 ---
 
@@ -186,6 +186,18 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] Batch runner calls `_ensure_template_fresh()` once per client per run before every publish (Images o/s, Publish, and Write Now paths)
 - [x] `clients/sdy/elementor-template-meta.json` — created; baseline `modified` date stored
 
+### AI brand visibility & positioning (session 16)
+- [x] `context/ai-brand-visibility.md` — Brian Dean (Backlinko) YouTube video transcribed, summarised, and stored; covers 4 strategies for getting brands cited in LLM/AI answers; includes section translating strategies for local service clients (GTM, SDY)
+- [x] `ai_visibility` block added to `clients/gtm/config.json`, `clients/sdy/config.json`, `clients/gtb/config.json` — fields: `canonical_description`, `brand_associations`, `positioning_note`
+- [x] `build_system_prompt()` in `src/content/geo_batch_runner.py` — injects `## AI Brand Positioning` section for `blog` and `topical` content types only; gracefully handles missing block or partial fields; empty dict guard prevents bare heading injection
+- [x] `src/content/publish_scheduled.py` — inherits `ai_visibility` automatically (imports `build_system_prompt` from batch runner; no code change needed)
+- [x] `tests/test_ai_visibility.py` — 9 tests: injection for blog + topical, exclusion for location/service/pillar/comp-alt, missing block, partial fields, empty dict
+- [x] `clients/README.md` — `ai_visibility` schema documented with field descriptions
+- [x] `.claude/commands/new-client.md` — Q11 (canonical description with auto-draft) and Q12 (positioning note) added; WordPress questions renumbered Q13–Q15
+- [x] `docs/superpowers/specs/2026-03-24-ai-visibility-config-design.md` — approved spec
+- [x] `docs/superpowers/plans/2026-03-24-ai-visibility-config.md` — reviewed implementation plan
+- [x] `CLAUDE.md` — `ai_visibility` field documented; `context/ai-brand-visibility.md` added to global context list
+
 ### Blog topic research pipeline (session 14)
 - [x] `"niche"` field added to all 3 client configs: GTM=`thai-massage`, GTB=`thai-massage`, SDY=`massage-therapy`
 - [x] `src/research/research_blog_topics.py` — keyword research + competitor SERP scoring; niche cache at `research/niches/[niche]/` (30-day TTL, shared across clients in same niche)
@@ -282,6 +294,11 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [ ] Confirm CPTs appear in wp-admin on `blog.glasgowthaimassage.co.uk`
 - [ ] Add `GTB` to Column D dropdown in Google Sheet
 - [ ] Test batch publish run — single blog row with `--publish`, confirm Elementor page created on blog site
+
+### Priority 8 — AI brand visibility (session 16)
+- [ ] Run a blog batch row for GTM and confirm `## AI Brand Positioning` wording appears in the intro of the generated HTML
+- [ ] Run a location batch row and confirm no positioning language was changed
+- [ ] Run `publish_scheduled.py --dry-run --abbr gtb` and confirm AI positioning section appears in output (scheduled path)
 
 ### Scheduled publishing pipeline (session 15)
 - [x] `src/content/publish_scheduled.py` — cron-driven publisher; reads `research/[abbr]/topic-queue.json`; one topic per run; full pipeline (generate → quality gate → WP publish → log → email)

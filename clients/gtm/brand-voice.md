@@ -13,6 +13,27 @@ This document defines the Glasgow Thai Massage brand voice, tone, and messaging 
 
 ---
 
+## Content Perspective
+
+This is the strategic "why" behind all content we create. Reference it to ensure every piece has a point of view, not just information.
+
+**What we believe needs to change in the industry:**
+Massage is marketed almost universally as a treat — something you book after a stressful month, on a birthday, or before a holiday. This framing keeps it occasional and optional. The industry underserves the people who would benefit most from regular sessions: those with chronic desk tension, athletes managing their bodies, and people carrying long-term stress.
+
+**How this change benefits our audience:**
+If people understood massage as maintenance rather than luxury, they would book regularly — and experience cumulative results rather than short-term relief. A monthly session does more than a one-off annual treat.
+
+**How Glasgow Thai Massage contributes to that change:**
+We deliver traditional therapeutic Thai massage, not spa-lite relaxation. Maliwan's Wat Pho training means every session is genuinely skilled bodywork. Our city-centre location makes regular sessions realistic for Glasgow workers. Our content exists to reframe the choice: not "do I deserve this?" but "when did I last do this?"
+
+**In practice, this means:**
+- Lead with function and outcome, not indulgence — "your neck has been asking for this for months" not "treat yourself"
+- Name specific conditions and audiences rather than speaking to everyone generically
+- Make the case for regularity — CTAs and closing sections should nudge repeat booking, not just a first visit
+- Differentiate traditional technique from generic massage wherever possible
+
+---
+
 ## Brand Voice Pillars
 
 ### 1. Warm and Welcoming

@@ -1,0 +1,12 @@
+Anderston, G3
+Charing Cross, G2 / G3
+Cowcaddens, G4
+Garnethill, G3
+Finnieston, G3
+Glasgow City, G1 / G2
+Merchant City, G1
+G1 Glasgow, G1
+Blythswood, G2
+Townhead, G4
+
+*(Note: City centre areas like Charing Cross and Glasgow City borders often overlap between G1, G2, and G3, so the most common postcode districts have been provided).*

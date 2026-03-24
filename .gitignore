@@ -118,3 +118,6 @@ config/*-*[0-9]*.json
 
 # Quality log (auto-generated)
 logs/quality-log.csv
+
+# Firecrawl cache (web scraping artifacts)
+.firecrawl/

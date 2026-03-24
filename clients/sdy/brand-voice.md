@@ -12,6 +12,27 @@ This document defines the Serendipity brand voice, tone, and messaging framework
 
 ---
 
+## Content Perspective
+
+This is the strategic "why" behind all content we create. Reference it to ensure every piece has a point of view, not just information.
+
+**What we believe needs to change in the industry:**
+Massage therapy is consistently undersold. Most businesses — and most content — frame it as relaxation or pampering. This misrepresents what skilled therapeutic massage actually does and creates a mental barrier: clients feel they need to justify the spend rather than recognising it as a routine investment in their physical and mental health.
+
+**How this change benefits our audience:**
+When people understand that massage addresses real physiological issues — muscle tension, postural strain, stress-driven inflammation, disrupted sleep — they make better decisions about their health. They book before they're in crisis, not after.
+
+**How Serendipity contributes to that change:**
+Serendipity is a professional team practice, not a sole trader or a chain. Every therapist is trained to a consistent standard using techniques developed by Jariya Malone. Our content should communicate that standard and position Serendipity as the go-to for people who want results, not just an hour off.
+
+**In practice, this means:**
+- Frame treatments around what they do, not just how they feel
+- Address specific conditions and audiences — don't write for "anyone who needs a massage"
+- Emphasise the team's training and consistency as a differentiator from both independent therapists and chain spa brands
+- Make regularity the goal — content should build the case for ongoing sessions, not just the first visit
+
+---
+
 ## Brand Voice Pillars
 
 ### 1. Warm and Welcoming

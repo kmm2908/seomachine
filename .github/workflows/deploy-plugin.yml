@@ -1,0 +1,46 @@
+name: Deploy seomachine.php
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'wordpress/seomachine.php'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy to GTM (glasgowthaimassage.co.uk)
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.GTM_SSH_HOST }}
+          username: ${{ secrets.GTM_SSH_USER }}
+          key: ${{ secrets.GTM_SSH_KEY }}
+          port: ${{ secrets.GTM_SSH_PORT }}
+          source: wordpress/seomachine.php
+          target: ${{ secrets.GTM_MUPLUGINS_PATH }}
+          strip_components: 1
+
+      - name: Deploy to GTB (blog.glasgowthaimassage.co.uk)
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.GTB_SSH_HOST }}
+          username: ${{ secrets.GTB_SSH_USER }}
+          key: ${{ secrets.GTB_SSH_KEY }}
+          port: ${{ secrets.GTB_SSH_PORT }}
+          source: wordpress/seomachine.php
+          target: ${{ secrets.GTB_MUPLUGINS_PATH }}
+          strip_components: 1
+
+      - name: Deploy to SDY (serendipitymassage.co.uk)
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SDY_SSH_HOST }}
+          username: ${{ secrets.SDY_SSH_USER }}
+          key: ${{ secrets.SDY_SSH_KEY }}
+          port: ${{ secrets.SDY_SSH_PORT }}
+          source: wordpress/seomachine.php
+          target: ${{ secrets.SDY_MUPLUGINS_PATH }}
+          strip_components: 1
