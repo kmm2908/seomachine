@@ -24,7 +24,7 @@ _INPUT_COST_PER_M = 3.00
 _OUTPUT_COST_PER_M = 15.00
 
 MAX_REWRITES = 2
-FLESCH_THRESHOLD = 60        # Flesch Reading Ease >= 60
+FLESCH_THRESHOLD = 55        # Flesch Reading Ease >= 55
 ENGAGEMENT_OPTIONAL_MIN = 2  # Must pass >=2 of 3 optional criteria
 
 
