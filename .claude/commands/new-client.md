@@ -99,6 +99,24 @@ TODO: Fill in this document before generating content. It defines the tone and v
 
 ---
 
+## Content Perspective
+
+This is the strategic "why" behind all content. Every piece should carry a point of view, not just information. Answer these three questions to define it:
+
+**What we believe needs to change in the industry:**
+TODO — What is the industry getting wrong? What framing, assumption, or behaviour needs to shift? (e.g. "massage is sold as a treat when it should be sold as maintenance")
+
+**How this change benefits our audience:**
+TODO — If the industry shifted, what would clients do differently? What better decisions would they make? (e.g. "they would book regularly instead of only when they're in pain")
+
+**How [Business Name] contributes to that change:**
+TODO — What about this specific business makes it part of the solution? Credentials, approach, pricing, location, team? (e.g. "we deliver genuine therapeutic technique at city-centre prices, making regular sessions realistic")
+
+**In practice, this means:**
+TODO — Translate the above into 3-4 writing instructions. What should every piece of content do or avoid as a result? (e.g. "lead with outcomes, not indulgence; always make the case for returning")
+
+---
+
 ## Brand Voice Pillars
 
 Define 3 voice pillars. For each one: what it means, how it sounds in writing, an example sentence, and what to avoid.

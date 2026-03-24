@@ -27,3 +27,27 @@ Update project documentation to reflect everything completed or changed in this 
 4. **Commit and push to GitHub** — stage all changes, create a commit with a short message summarising the session (e.g. `Session 6: hub shortcode + image pipeline`), and push to `origin main`
 
 5. **Confirm** — output a brief summary of what was updated and the commit hash so the user can verify before closing
+
+## Multi-window / parallel agent policy
+
+When two or more Claude Code windows are open on this project simultaneously, only one should run `/wrap`. Follow these rules to avoid STATUS.md overwrites:
+
+**Which window wraps:**
+- The window doing the most significant work "owns" the wrap for that session
+- Sub-agents spawned via the Agent tool within a session are disposable — they do not run `/wrap`; only the parent session does
+- If a secondary window finishes its task, the user should tell the primary window what it completed before wrapping, so it can incorporate that into STATUS.md
+
+**Section ownership — if parallel sessions are running concurrently:**
+STATUS.md should have clearly named sections per work area. Each window only edits its own section — never another window's section. Example:
+
+```
+## GTM Content Pipeline      ← owned by whichever window is working on GTM
+## GTB Scheduled Publishing  ← owned by the GTB session
+## Research Pipeline         ← owned by the research session
+```
+
+This prevents last-write-wins collisions when two wraps happen close together.
+
+**Sequencing:**
+- Never run `/wrap` from two windows at the same time
+- If both need to wrap, finish the secondary window first, then run `/wrap` on the primary window last so it has the complete picture

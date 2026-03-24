@@ -38,7 +38,7 @@ _root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__
 load_dotenv(os.path.join(_root, '.env'))
 
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
-DEFAULT_RANGE = 'A2:H1000'
+DEFAULT_RANGE = 'A2:I1000'
 STATUS_COLUMN = 'B'
 QUEUE_VALUE = 'Write Now'
 DONE_VALUE = 'DONE'
@@ -98,6 +98,7 @@ def read_pending(range_str: Optional[str] = None) -> list[dict]:
         content_type = row[4].strip() if len(row) > 4 else ''
         file_path = row[5].strip() if len(row) > 5 else ''
         review_count = int(row[7].strip()) if len(row) > 7 and row[7].strip().isdigit() else 0
+        niche = row[8].strip() if len(row) > 8 else ''
 
         if not address:
             continue
@@ -113,9 +114,24 @@ def read_pending(range_str: Optional[str] = None) -> list[dict]:
             'status': status,
             'file_path': file_path,
             'review_count': review_count,
+            'niche': niche,
         })
 
     return pending
+
+
+def append_rows(rows: list[list]) -> int:
+    """Append rows to the sheet. Returns the number of rows appended."""
+    service = get_service()
+    sheet_id = get_sheet_id()
+    result = service.spreadsheets().values().append(
+        spreadsheetId=sheet_id,
+        range='A1',
+        valueInputOption='RAW',
+        insertDataOption='INSERT_ROWS',
+        body={'values': rows},
+    ).execute()
+    return result.get('updates', {}).get('updatedRows', 0)
 
 
 def update_status(row_number: int, status: str) -> None:
@@ -165,6 +181,18 @@ def update_notes(row_number: int, notes: str) -> None:
         range=f'G{row_number}',
         valueInputOption='RAW',
         body={'values': [[notes]]},
+    ).execute()
+
+
+def update_niche(row_number: int, niche: str) -> None:
+    """Write niche value to Column I of the given row."""
+    service = get_service()
+    sheet_id = get_sheet_id()
+    service.spreadsheets().values().update(
+        spreadsheetId=sheet_id,
+        range=f'I{row_number}',
+        valueInputOption='RAW',
+        body={'values': [[niche]]},
     ).execute()
 
 

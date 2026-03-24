@@ -49,14 +49,18 @@ clients/
 
 **Local/live config pattern** — when a client has a local dev environment, `config.json` uses `wordpress` for the active target and `wordpress_live` to store live credentials. For Phase 2 (push to live), copy `wordpress_live` values into `wordpress`.
 
+**Niche field** — `config.json` includes a `"niche"` key (e.g. `"thai-massage"`, `"massage-therapy"`). Used by `research_blog_topics.py` to cache keyword research at `research/niches/[niche]/` and share it across all clients in the same niche. Blog subdomain clients (e.g. GTB) use the same niche as their main site (GTM). Add a new niche slug when onboarding a client in a different market.
+
 Global context (not client-specific) stays in `context/`:
 - `context/style-guide.md` — universal grammar, formatting, writing rules (including no-hyphens rule)
 - `context/cro-best-practices.md` — conversion optimisation principles
+- `context/ai-brand-visibility.md` — strategy for getting brands cited in LLM/AI answers (Brian Dean); consult when planning content marketing strategy, content distribution, or off-site brand building
 
 ## Content Pipeline
 
 ```
 Google Sheet queue → src/content/geo_batch_runner.py → content/[abbr]/[type]/
+Topic queue file  → src/content/publish_scheduled.py → content/[abbr]/[type]/  (cron-driven, no Sheet)
 ```
 
 Slash command pipeline (interactive):
@@ -87,9 +91,13 @@ python3 src/content/geo_batch_runner.py A2:E5       # specific range only
 python3 src/content/geo_batch_runner.py --publish   # generate + publish to WordPress as draft
 ```
 
-Google Sheet columns: A=Topic/Location, B=Status (`Write Now`/`DONE`/`pause`/`Images o/s`/`Review`/`Publish`), C=Cost (auto), D=Business abbreviation, E=Content type, F=File path (auto-set on `Images o/s`/`Review`, cleared on DONE), G=Notes (quality failures on `Review`, cleared on DONE), H=Review count (increments each time a row is flagged `Review`).
+Google Sheet columns: A=Topic/Location, B=Status (`Write Now`/`DONE`/`pause`/`Images o/s`/`Review`/`Publish`), C=Cost (auto), D=Business abbreviation, E=Content type, F=File path (auto-set on `Images o/s`/`Review`, cleared on DONE), G=Notes (quality failures on `Review`, cleared on DONE), H=Review count (increments each time a row is flagged `Review`), I=Niche (set by `research_blog_topics.py --sheet`; read-only for batch runner).
 
 Output: `content/[abbr]/[type]/[slug]-[date]/[slug]-[date].html` (one folder per article; images saved alongside HTML)
+
+**Scheduled publisher** — `src/content/publish_scheduled.py` publishes one topic per cron run from a JSON queue file, bypassing the Google Sheet entirely. Queue file: `research/[abbr]/topic-queue.json`. Generate it with `research_blog_topics.py --queue [--cadence N]`. Each run: picks next `pending` topic → generates content → quality gate → publishes to WordPress → marks topic `published`/`failed`/`review_required` in queue → appends to `logs/scheduled-publish-log.csv` → sends email. Missed-run detection: checks gap since last publish vs cadence + 2-day buffer. `--status` flag prints a formatted queue table (icons: ✓ published · · pending · ⚠ review · ✗ failed). `--dry-run` skips WordPress publish.
+
+Cron example (every Monday 09:00): `0 9 * * 1 cd /path/to/seomachine && python3 src/content/publish_scheduled.py --abbr gtb`
 
 **Directions snippet** — `src/snippets/generate_directions_snippet.py` generates a self-contained HTML+JS Google Maps directions widget per client. Saved to `clients/[abbr]/snippets/[abbr]-directions.html`. The batch runner calls `_ensure_directions_snippet()` automatically on the first publish run per client — no manual step needed. The snippet is injected into `comp-alt` page prompts automatically.
 
@@ -130,6 +138,7 @@ All commands are in `.claude/commands/`. Key commands:
 - `/research-topics` — topical authority cluster analysis
 - `/research-trending` — trending queries from GSC
 - `/research-performance` — analytics-driven priorities
+- `/research-blog-topics [abbr]` — keyword-driven blog topic ideas with competitor SERP analysis; niche cache shared across clients (30-day TTL); add `--sheet` to push to Google Sheet (status: pause)
 
 **Writing:**
 - `/write [topic]` — full article in `drafts/`, auto-triggers SEO agents
@@ -212,7 +221,7 @@ All Python executables live in `src/` under module subfolders. Test scripts live
 
 ```
 src/
-  content/      ← geo_batch_runner.py, republish_existing.py
+  content/      ← geo_batch_runner.py, republish_existing.py, publish_scheduled.py
   research/     ← research_competitors.py, research_quick_wins.py, research_serp_analysis.py, etc.
   publishing/   ← fetch_elementor_template.py
   snippets/     ← generate_directions_snippet.py
@@ -236,6 +245,14 @@ python3 src/research/research_serp_analysis.py "keyword"
 python3 src/research/research_topic_clusters.py
 python3 src/research/research_trending.py
 python3 src/research/research_competitors.py --abbr gtm   # full competitor research (map pack + organic + profiles)
+python3 src/research/research_blog_topics.py --abbr gtb   # blog topic ideas (niche cache, 30-day TTL)
+python3 src/research/research_blog_topics.py --abbr gtb --sheet   # also push to Sheet (status: pause)
+python3 src/research/research_blog_topics.py --abbr gtb --refresh  # force cache refresh
+python3 src/research/research_blog_topics.py --abbr gtb --queue    # write topic-queue.json for scheduled publishing
+python3 src/research/research_blog_topics.py --abbr gtb --queue --cadence 14  # fortnightly cadence
+python3 src/content/publish_scheduled.py --abbr gtb          # publish next topic from queue
+python3 src/content/publish_scheduled.py --abbr gtb --status # show queue status table
+python3 src/content/publish_scheduled.py --abbr gtb --dry-run  # generate + quality-check, skip WP publish
 python3 tests/test_dataforseo.py    # test API connectivity
 ```
 

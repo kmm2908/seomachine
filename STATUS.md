@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-03-24 (session 13 — directions snippets, src/ reorganisation, comp-alt content type, seomachine.php v2.5)
+Last updated: 2026-03-24 (session 15 — scheduled publishing pipeline, queue status view, multi-window wrap policy)
 
 ---
 
@@ -186,6 +186,16 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] Batch runner calls `_ensure_template_fresh()` once per client per run before every publish (Images o/s, Publish, and Write Now paths)
 - [x] `clients/sdy/elementor-template-meta.json` — created; baseline `modified` date stored
 
+### Blog topic research pipeline (session 14)
+- [x] `"niche"` field added to all 3 client configs: GTM=`thai-massage`, GTB=`thai-massage`, SDY=`massage-therapy`
+- [x] `src/research/research_blog_topics.py` — keyword research + competitor SERP scoring; niche cache at `research/niches/[niche]/` (30-day TTL, shared across clients in same niche)
+- [x] Thresholds: vol ≥ 50, competition ≤ 40%; informational intent filter; location-keyword filter
+- [x] `--sheet` flag pushes topics to Google Sheet with status `pause` for human review before running
+- [x] `--refresh` flag forces cache refresh; `--limit` controls output count (default 25)
+- [x] `google_sheets.py` — DEFAULT_RANGE expanded to `A2:I1000`; `niche` added to `read_pending()` output; `update_niche()` added (Column I)
+- [x] `/research-blog-topics [abbr]` command — runs script, then Claude adds cluster analysis, angle suggestions, cross-linking chains, and publishing cadence recommendation
+- [x] `/research-blog-topics gtb` — run and tested; 19 topics generated, report at `research/gtb/blog-topics-2026-03-24.md`
+
 ### src/ folder reorganisation (session 13)
 - [x] `src/` split into module subfolders: `src/content/`, `src/research/`, `src/publishing/`, `src/snippets/`, `src/competitors/`
 - [x] All scripts moved: `geo_batch_runner.py` + `republish_existing.py` → `src/content/`; all `research_*.py` → `src/research/`; `fetch_elementor_template.py` → `src/publishing/`; `generate_directions_snippet.py` → `src/snippets/`
@@ -217,7 +227,7 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] Permalink: `/comp-alt/[slug]/` — rewrite slug derived via `str_replace('_', '-', str_replace('seo_', '', $slug))`
 - [x] Added to convert metabox labels, Quick Edit dropdown, SEO Type column, and hub shortcode type map
 - [x] Elementor auto-enable filter covers `seo_comp_alt` automatically (via the constant)
-- [ ] **Needs deploying to GTM and SDY live sites** — upload to `wp-content/mu-plugins/`, then Settings → Permalinks → Save on each site
+- [x] Deployed to GTM live, SDY live, and GTB (`blog.glasgowthaimassage.co.uk`) — permalinks flushed on all three sites
 
 ### WordPress permalink fix (session 12)
 - [x] `seomachine.php` — `register_activation_hook` added; flushes rewrite rules on plugin activation so CPT permalinks work immediately on new installs
@@ -258,12 +268,46 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] Confirm quality check failure does not block publishing (`--publish` still works) — confirmed: run_quality_check() is try/except wrapped, publish block runs independently
 
 ### Priority 6 — Session 13 (needs testing)
-- [ ] Deploy `wordpress/seomachine.php` v2.5 to GTM live (`wp-content/mu-plugins/`) — flush permalinks after upload
-- [ ] Deploy `wordpress/seomachine.php` v2.5 to SDY live (`wp-content/mu-plugins/`) — flush permalinks after upload
-- [ ] Confirm `seo_comp_alt` CPT appears in wp-admin on both sites
-- [ ] Confirm `/comp-alt/[slug]/` permalink routing works on both sites
+- [x] Deploy `wordpress/seomachine.php` v2.5 to GTM live — done
+- [x] Deploy `wordpress/seomachine.php` v2.5 to SDY live — done
+- [ ] Confirm `seo_comp_alt` CPT appears in wp-admin on GTM and SDY
+- [ ] Confirm `/comp-alt/[slug]/` permalink routing works on GTM and SDY
 - [ ] Test `comp-alt` batch run — set Column E to `comp-alt`, run with `--publish`, confirm Elementor page created under correct CPT
 - [ ] Verify directions snippet auto-generates on first batch publish run (check `clients/[abbr]/snippets/` folder)
+
+### Priority 7 — GTB client setup (session 14)
+- [x] `clients/gtb/` folder created — config.json, brand-voice.md, seo-guidelines.md, internal-links-map.md, features.md, target-keywords.md, writing-examples.md, competitor-analysis.md
+- [x] `clients/gtb/config.json` — WP URL `blog.glasgowthaimassage.co.uk`, app password, template ID 22538
+- [x] `clients/gtb/elementor-template.json` — re-fetched after user added S1/S2 markers in Elementor; two-section mode confirmed (S1 depth 2, S2 depth 3)
+- [ ] Confirm CPTs appear in wp-admin on `blog.glasgowthaimassage.co.uk`
+- [ ] Add `GTB` to Column D dropdown in Google Sheet
+- [ ] Test batch publish run — single blog row with `--publish`, confirm Elementor page created on blog site
+
+### Scheduled publishing pipeline (session 15)
+- [x] `src/content/publish_scheduled.py` — cron-driven publisher; reads `research/[abbr]/topic-queue.json`; one topic per run; full pipeline (generate → quality gate → WP publish → log → email)
+- [x] `--status` flag — formatted queue table with icons (✓ published · · pending · ⚠ review · ✗ failed), next-due date, overdue warning
+- [x] `--dry-run` flag — generates and quality-checks content, skips WordPress publish
+- [x] Missed-run detection — compares last published date from log vs cadence + 2-day buffer; warning appended to email
+- [x] `logs/scheduled-publish-log.csv` — append-only log (date, abbr, topic, content_type, status, post_id, cost, notes)
+- [x] `research_blog_topics.py --queue` — generates `research/[abbr]/topic-queue.json` from top topics; `--cadence N` sets days between runs (default 7)
+- [x] `~/.claude/settings.json` — PreCompact hook added: injects instruction to run `/wrap` before context is compacted
+- [x] `.claude/commands/wrap.md` — multi-window / parallel agent policy added (section ownership, sequencing rules)
+- [ ] Set up cron job for GTB scheduled publishing (once first test batch passes)
+
+---
+
+## Client: GTB (Glasgow Thai Massage — Blog Site)
+
+Blog subdomain for Glasgow Thai Massage. Separate WordPress install at `blog.glasgowthaimassage.co.uk`. Same business/brand as GTM. Architecture decision: blog subdomain = separate client entry; if a future client has blog on main domain, they use the same abbreviation.
+
+### Setup Status
+- [x] `clients/gtb/` folder — all context files created (brand voice, SEO guidelines, features, target keywords, writing examples, competitor analysis)
+- [x] `clients/gtb/config.json` — URL `blog.glasgowthaimassage.co.uk`, username `kmm_st65inj7`, template ID 22538
+- [x] `clients/gtb/elementor-template.json` — fetched; S1/S2 markers confirmed (two-section mode, same as SDY)
+- [x] `seomachine.php` v2.5 deployed to `blog.glasgowthaimassage.co.uk`
+- [ ] Confirm 6 CPTs appear in wp-admin
+- [ ] Add `GTB` to Google Sheet Column D dropdown
+- [ ] Test batch publish run
 
 ---
 
@@ -301,7 +345,7 @@ Reason: caching on the live front-end doesn't affect the REST API. Running conte
 - [x] Verify content lands in correct CPT with Elementor template — confirmed two-section injection working
 
 ### Still Needs Human Input (SDY)
-- [ ] Deploy `wordpress/seomachine.php` v2.5 to SDY live `wp-content/mu-plugins/` — then Settings → Permalinks → Save to flush rewrite rules
+- [x] Deploy `wordpress/seomachine.php` v2.5 to SDY live — done (session 14)
 - [x] Local WP URL and credentials — in config.json (`wordpress` block = local, `wordpress_live` = live)
 - [x] Live credentials and app password — set in config.json; `wordpress` block now live
 - [x] Elementor template — built (local ID 635, live ID 564); fetched and stored
@@ -315,7 +359,7 @@ Reason: caching on the live front-end doesn't affect the REST API. Running conte
 
 ## Still Needs Human Input (GTM)
 
-- [ ] Deploy `wordpress/seomachine.php` v2.5 to GTM live `wp-content/mu-plugins/` — then Settings → Permalinks → Save to flush rewrite rules
+- [x] Deploy `wordpress/seomachine.php` v2.5 to GTM live — done (session 14)
 - [x] `clients/gtm/seo-guidelines.md` — all Castos/podcast placeholder content replaced with GTM massage-specific examples and guidance
 - [x] `clients/gtm/internal-links-map.md` — populated from live site crawl (main site + blog subdomain, 58 + 62 pages)
 - [x] `clients/gtm/competitor-analysis.md` — auto-populated by research_competitors.py (10 map pack + 8 organic, 15 profiles)

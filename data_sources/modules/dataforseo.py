@@ -271,8 +271,12 @@ class DataForSEO:
         if task['status_code'] != 20000:
             return []
 
+        result = task.get('result') or []
+        if not result or not result[0]:
+            return []
+
         keywords = []
-        for item in task['result'][0].get('items', []):
+        for item in result[0].get('items') or []:
             keywords.append({
                 'keyword': item.get('keyword_data', {}).get('keyword'),
                 'search_volume': item.get('keyword_data', {}).get('keyword_info', {}).get('search_volume'),
@@ -319,8 +323,12 @@ class DataForSEO:
         if task['status_code'] != 20000:
             return []
 
+        result = task.get('result') or []
+        if not result or not result[0]:
+            return []
+
         questions = []
-        for item in task['result'][0].get('items', []):
+        for item in result[0].get('items') or []:
             kw = item.get('keyword_data', {}).get('keyword', '')
 
             # Filter for questions
