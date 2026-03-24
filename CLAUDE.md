@@ -185,6 +185,8 @@ Publishing uses the WordPress REST API. Credentials are stored in `clients/[abbr
 
 **SiteGround hosting note:** deploy to `wp-content/mu-plugins/` (plural). SiteGround also has a `mu-plugin/` (singular) folder which is display-only — WordPress does not auto-load PHP files from it.
 
+**Auto-deploy:** `.github/workflows/deploy-plugin.yml` deploys `wordpress/seomachine.php` to all three sites automatically on every push to `main` that touches that file. Two parallel jobs: GTM/GTB (`u2168-sqqieazmgeuw@ukm1.siteground.biz`) and SDY (`u2732-2mxetksmslhk@gukm1055.siteground.biz`). Uses `SITEGROUND_SSH_KEY` GitHub Actions secret (private key at `~/.ssh/seomachine_deploy`).
+
 `WordPressPublisher.from_config(wp_config)` accepts credentials directly from the client JSON.
 
 **Batch runner publishing** uses `publish_html_content()` — extracts title from `<h2>`, uploads all local images to WP media library (rewriting relative `src` to absolute URLs), sets first image as featured image. The original topic/address from the Sheet is passed as `excerpt` — this powers the `[seo_hub]` shortcode display text.
