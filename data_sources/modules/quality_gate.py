@@ -299,7 +299,7 @@ Content to rewrite:
             # attempt=1 → about to do rewrite 1/2; attempt=2 → about to do rewrite 2/2
             line += f" — rewriting ({attempt}/{MAX_REWRITES})"
         elif failures and not rewriting:
-            line += f" — FAILED after {MAX_REWRITES} rewrites → Review Required"
+            line += f" — FAILED after {MAX_REWRITES} rewrites → Review"
         else:
             line += " — passed"
 

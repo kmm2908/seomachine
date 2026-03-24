@@ -572,7 +572,7 @@ def run_batch(sheet_range: Optional[str] = None, publish: bool = False) -> None:
                     pass  # Cost tracking is non-critical
                 total_cost_usd += cost_usd
                 written_files.append(str(filepath.relative_to(ROOT)))
-                print(f"[{i}/{total}] ⚠ Review Required: {filepath.relative_to(ROOT)} ({word_count} words, ${cost_usd:.4f})")
+                print(f"[{i}/{total}] ⚠ Review: {filepath.relative_to(ROOT)} ({word_count} words, ${cost_usd:.4f})")
                 print(f"    Failed: {', '.join(gate_result.failures)}")
                 if i < total:
                     time.sleep(65)
