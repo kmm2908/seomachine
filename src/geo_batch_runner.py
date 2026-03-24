@@ -43,7 +43,7 @@ load_dotenv(ROOT / '.env')
 sys.path.insert(0, str(ROOT / 'data_sources' / 'modules'))
 from google_sheets import (
     read_pending, update_status, update_cost, update_file_path,
-    send_email, IMAGES_PENDING_VALUE, REVIEW_REQUIRED_VALUE, PUBLISH_VALUE,
+    send_email, update_notes, IMAGES_PENDING_VALUE, REVIEW_REQUIRED_VALUE, PUBLISH_VALUE,
 )
 from wikipedia import WikipediaResearcher
 from quality_gate import QualityGate
@@ -533,6 +533,10 @@ def run_batch(sheet_range: Optional[str] = None, publish: bool = False) -> None:
                     print(f"    → Published WP draft (ID: {result['post_id']}): {result['edit_url']}")
                 update_status(row, 'DONE')
                 update_file_path(row, '')
+                try:
+                    update_notes(row, '')
+                except Exception:
+                    pass
                 written_files.append(str(filepath.relative_to(ROOT)))
                 print(f"[{i}/{total}] ✓ Published: {filepath.relative_to(ROOT)}")
             except Exception as e:
@@ -620,6 +624,10 @@ def run_batch(sheet_range: Optional[str] = None, publish: bool = False) -> None:
                     update_cost(row, f"${cost_usd:.4f}")
                 except Exception:
                     pass  # Cost tracking is non-critical
+                try:
+                    update_notes(row, ' | '.join(gate_result.failures))
+                except Exception:
+                    pass
                 total_cost_usd += cost_usd
                 written_files.append(str(filepath.relative_to(ROOT)))
                 print(f"[{i}/{total}] ⚠ Review: {filepath.relative_to(ROOT)} ({word_count} words, ${cost_usd:.4f})")
@@ -638,6 +646,10 @@ def run_batch(sheet_range: Optional[str] = None, publish: bool = False) -> None:
                 update_cost(row, cost_str)
             except Exception:
                 pass  # Cost tracking is non-critical
+            try:
+                update_notes(row, '')
+            except Exception:
+                pass
 
             # Optionally publish to WordPress
             if publish:

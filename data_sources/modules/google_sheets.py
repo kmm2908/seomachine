@@ -11,6 +11,7 @@ Sheet format:
   Column D: Business abbreviation dropdown (e.g. "GTM") — matches a file in clients/
   Column E: Content type (e.g. "geo", "service", "location", "topical", "blog") — defaults to "blog" if empty
   Column F: File path (auto-set when status = "Images o/s"; cleared on DONE)
+  Column G: Notes (quality failures written on "Review"; cleared on DONE)
 
 Usage:
   python3 google_sheets.py read
@@ -137,6 +138,18 @@ def update_file_path(row_number: int, path_str: str) -> None:
         range=f'F{row_number}',
         valueInputOption='RAW',
         body={'values': [[path_str]]},
+    ).execute()
+
+
+def update_notes(row_number: int, notes: str) -> None:
+    """Write notes to Column G of the given row. Pass empty string to clear."""
+    service = get_service()
+    sheet_id = get_sheet_id()
+    service.spreadsheets().values().update(
+        spreadsheetId=sheet_id,
+        range=f'G{row_number}',
+        valueInputOption='RAW',
+        body={'values': [[notes]]},
     ).execute()
 
 
