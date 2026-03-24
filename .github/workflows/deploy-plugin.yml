@@ -16,7 +16,7 @@ jobs:
         run: |
           echo "${{ secrets.SITEGROUND_SSH_KEY }}" > /tmp/deploy_key
           chmod 600 /tmp/deploy_key
-          sftp -i /tmp/deploy_key -P 18765 -o StrictHostKeyChecking=no sftp3899-6c89d606@sftp.siteground.net << 'SFTP'
+          sftp -i /tmp/deploy_key -P 18765 -o StrictHostKeyChecking=no u2732-2mxetksmslhk@gukm1055.siteground.biz << 'SFTP'
           put wordpress/seomachine.php glasgowthaimassage.co.uk/glasgowthaimassage.co.uk/public_html/wp-content/mu-plugins/seomachine.php
           put wordpress/seomachine.php glasgowthaimassage.co.uk/blog.glasgowthaimassage.co.uk/public_html/wp-content/mu-plugins/seomachine.php
           put wordpress/seomachine.php serendipitymassage.co.uk/serendipitymassage.co.uk/public_html/wp-content/mu-plugins/seomachine.php
