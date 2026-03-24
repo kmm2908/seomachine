@@ -197,6 +197,22 @@ def build_system_prompt(abbreviation: str, content_type: str,
         if competitor_analysis:
             parts.append(f"\n\n## Competitor Analysis\n\n{competitor_analysis}")
 
+    # AI brand positioning — blog and topical only
+    if content_type in ('blog', 'topical') and business_config:
+        ai_vis = business_config.get('ai_visibility', {})
+        if ai_vis and any(ai_vis.get(k) for k in ('canonical_description', 'brand_associations', 'positioning_note')):
+            canonical = ai_vis.get('canonical_description', '')
+            associations = ', '.join(ai_vis.get('brand_associations', []))
+            note = ai_vis.get('positioning_note', '')
+            section = "## AI Brand Positioning\n\n"
+            if canonical:
+                section += f"Use this description (verbatim or close to it) when introducing the business:\n> {canonical}\n\n"
+            if associations:
+                section += f"Weave these brand-problem associations naturally into the content: {associations}\n\n"
+            if note:
+                section += f"Positioning guidance: {note}"
+            parts.append(f"\n\n{section.strip()}")
+
     parts.append(
         "\n\n## Output Instructions\n\n"
         "Your ENTIRE response must be the HTML content — nothing else. "
