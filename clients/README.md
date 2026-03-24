@@ -32,6 +32,12 @@ clients/
   "website": "https://example.com",
   "services": ["service 1", "service 2"],
   "keyword_prefix": "the core search keyword e.g. thai massage",
+  "niche": "slug identifying the client's market niche e.g. thai-massage, massage-therapy",
+  "ai_visibility": {
+    "canonical_description": "One or two sentences used verbatim or near-verbatim when introducing the business in blog/topical content.",
+    "brand_associations": ["brand-problem phrase 1", "brand-problem phrase 2"],
+    "positioning_note": "Plain-English tone guidance — what to emphasise and what to avoid."
+  },
   "wordpress": {
     "url": "https://example.com",
     "username": "wp-username",
@@ -48,6 +54,7 @@ clients/
 - **keyword_prefix** — Combined with location/area names to form keyword phrases e.g. "thai massage Finnieston".
 - **abbreviation** — Must match exactly (case-insensitive) what is in Column D of the Google Sheet.
 - **wordpress.app_password** — WordPress Application Password generated in WP Admin → Users → Profile → Application Passwords. Never the login password.
+- **ai_visibility** — Optional. Injected as `## AI Brand Positioning` in system prompts for `blog` and `topical` content types. Implements the consistent-phrasing strategy from `context/ai-brand-visibility.md`. All three sub-fields are optional; omit the block entirely to disable.
 
 ---
 
