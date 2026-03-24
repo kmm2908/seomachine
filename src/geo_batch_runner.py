@@ -87,6 +87,24 @@ def slugify(text: str) -> str:
     return text[:80].rstrip('-')
 
 
+_template_checked: set = set()  # track which clients have been checked this run
+
+
+def _ensure_template_fresh(abbr: str, wp_config: dict) -> None:
+    """Check once per client per run whether the Elementor template needs refreshing."""
+    if abbr in _template_checked:
+        return
+    _template_checked.add(abbr)
+    try:
+        sys.path.insert(0, str(ROOT / 'src'))
+        from fetch_elementor_template import refresh_if_stale
+        refreshed = refresh_if_stale(abbr, wp_config)
+        if not refreshed:
+            print(f"    → Template: up to date")
+    except Exception as e:
+        print(f"    → Template check error (skipped): {e}")
+
+
 def _append_quality_log(root, client: str, content_type: str, topic: str, attempts: int, failures: list) -> None:
     """Append a row to logs/quality-log.csv each time an article is flagged Review."""
     import csv
@@ -483,6 +501,7 @@ def run_batch(sheet_range: Optional[str] = None, publish: bool = False) -> None:
                                 business_config = load_business_config(abbreviation)
                                 wp_config = business_config.get('wordpress')
                                 if wp_config:
+                                    _ensure_template_fresh(abbreviation.lower(), wp_config)
                                     from wordpress_publisher import WordPressPublisher
                                     publisher = WordPressPublisher.from_config(wp_config)
                                     post_type = wp_config.get('content_type_map', {}).get(
@@ -535,6 +554,7 @@ def run_batch(sheet_range: Optional[str] = None, publish: bool = False) -> None:
                 if not wp_config:
                     print(f"    → No wordpress config in {abbreviation}.json — skipping")
                 else:
+                    _ensure_template_fresh(abbreviation.lower(), wp_config)
                     from wordpress_publisher import WordPressPublisher
                     publisher = WordPressPublisher.from_config(wp_config)
                     post_type = wp_config.get('content_type_map', {}).get(
@@ -684,6 +704,7 @@ def run_batch(sheet_range: Optional[str] = None, publish: bool = False) -> None:
                 if wp_config:
                     try:
                         sys.path.insert(0, str(ROOT / 'data_sources' / 'modules'))
+                        _ensure_template_fresh(abbreviation.lower(), wp_config)
                         from wordpress_publisher import WordPressPublisher
                         publisher = WordPressPublisher.from_config(wp_config)
                         content_type_map = wp_config.get('content_type_map', {})

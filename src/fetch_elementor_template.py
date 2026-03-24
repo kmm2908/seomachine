@@ -4,6 +4,9 @@ fetch_elementor_template.py
 One-time setup script. Fetches the saved Elementor template JSON from WordPress
 and saves it to clients/{abbr}/elementor-template.json for use by the batch runner.
 
+Also exposes refresh_if_stale() — called by the batch runner before each publish
+to auto-update the local template if it has changed in WordPress.
+
 Usage:
     python3 fetch_elementor_template.py gtm
 """
@@ -18,6 +21,52 @@ from dotenv import load_dotenv
 load_dotenv()
 
 CLIENTS_DIR = Path(__file__).parent.parent / "clients"
+
+
+def refresh_if_stale(abbr: str, wp_config: dict) -> bool:
+    """
+    Check if the local Elementor template is out of date and re-fetch if so.
+    Returns True if the template was refreshed, False if already up to date.
+    Silently skips if no template_id is configured or meta file is missing.
+    """
+    template_id = wp_config.get("elementor_template_id")
+    if not template_id:
+        return False
+
+    meta_path = CLIENTS_DIR / abbr.lower() / "elementor-template-meta.json"
+    if not meta_path.exists():
+        return False  # No baseline stored — manual fetch required first
+
+    try:
+        stored_modified = json.loads(meta_path.read_text()).get("modified", "")
+    except Exception:
+        return False
+
+    url = wp_config.get("url", "").rstrip("/")
+    username = wp_config.get("username")
+    app_password = wp_config.get("app_password")
+    verify_ssl = not url.endswith(".local")
+
+    try:
+        resp = requests.get(
+            f"{url}/wp-json/wp/v2/elementor_library/{template_id}?_fields=modified",
+            auth=(username, app_password),
+            timeout=15,
+            verify=verify_ssl,
+        )
+        resp.raise_for_status()
+        wp_modified = resp.json().get("modified", "")
+    except Exception as e:
+        print(f"    → Template check failed (using cached): {e}")
+        return False
+
+    if wp_modified <= stored_modified:
+        return False
+
+    # Template has been updated — re-fetch
+    print(f"    → Template updated in WordPress — re-fetching...")
+    _fetch_and_save(abbr, wp_config)
+    return True
 
 
 def fetch_template(abbr: str) -> None:
@@ -38,9 +87,18 @@ def fetch_template(abbr: str) -> None:
         print("Error: wordpress config must include url, username, app_password, and elementor_template_id")
         sys.exit(1)
 
-    api_url = f"{url}/wp-json/wp/v2/elementor_library/{template_id}?context=edit"
     print(f"Fetching template {template_id} from {url}...")
+    _fetch_and_save(abbr, wp)
 
+
+def _fetch_and_save(abbr: str, wp: dict) -> None:
+    """Fetch template from WP and save JSON + meta sidecar."""
+    url = wp.get("url", "").rstrip("/")
+    username = wp.get("username")
+    app_password = wp.get("app_password")
+    template_id = wp.get("elementor_template_id")
+
+    api_url = f"{url}/wp-json/wp/v2/elementor_library/{template_id}?context=edit"
     verify_ssl = not url.endswith(".local")
     response = requests.get(api_url, auth=(username, app_password), timeout=30, verify=verify_ssl)
 
@@ -60,6 +118,11 @@ def fetch_template(abbr: str) -> None:
 
     output_path = CLIENTS_DIR / abbr.lower() / "elementor-template.json"
     output_path.write_text(json.dumps(template, indent=2, ensure_ascii=False), encoding="utf-8")
+
+    # Save sidecar with WP modified date for stale-check comparisons
+    meta_path = CLIENTS_DIR / abbr.lower() / "elementor-template-meta.json"
+    meta_path.write_text(json.dumps({"modified": data.get("modified", "")}, indent=2), encoding="utf-8")
+
     print(f"Saved to {output_path}")
 
     # Summary
