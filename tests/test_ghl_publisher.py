@@ -132,8 +132,11 @@ def test_week_alternation_even_odd():
     from ghl_publisher import get_x_format_for_date
     from datetime import date
 
-    d_odd = date(2026, 1, 5)   # ISO week 1
-    d_even = date(2026, 1, 12)  # ISO week 2
+    # 2026-01-05 is ISO week 2 (even) → thread
+    # 2026-01-19 is ISO week 4 (even) → thread
+    # 2026-01-12 is ISO week 3 (odd) → standalone
+    d_even = date(2026, 1, 5)
+    d_odd = date(2026, 1, 12)
 
-    assert get_x_format_for_date(d_odd) == 'standalone'
     assert get_x_format_for_date(d_even) == 'thread'
+    assert get_x_format_for_date(d_odd) == 'standalone'

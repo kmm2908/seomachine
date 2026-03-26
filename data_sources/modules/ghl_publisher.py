@@ -22,9 +22,9 @@ REQUEST_DELAY = 0.15
 
 
 def get_x_format_for_date(d: date) -> str:
-    """Return 'thread' for odd ISO weeks, 'standalone' for even."""
+    """Return 'thread' for even ISO weeks, 'standalone' for odd."""
     iso_week = d.isocalendar()[1]
-    return 'thread' if iso_week % 2 == 1 else 'standalone'
+    return 'thread' if iso_week % 2 == 0 else 'standalone'
 
 
 class GHLPublisher:
