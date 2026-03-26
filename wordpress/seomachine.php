@@ -259,6 +259,38 @@ function seo_hub_remote_fetch(string $source, string $type, string $rest_base): 
     return $html;
 }
 
+// ── Hub Source setting (Settings → General) ──────────────────────────────────
+//
+// Adds a single field to Settings → General where you paste the main site URL.
+// Only needed on blog subdomains. Leave blank on main sites.
+
+add_action('admin_init', function() {
+    register_setting('general', 'seo_hub_source', [
+        'type'              => 'string',
+        'sanitize_callback' => function($val) {
+            return $val ? untrailingslashit(esc_url_raw($val)) : '';
+        },
+        'default'           => '',
+    ]);
+
+    add_settings_field(
+        'seo_hub_source',
+        'SEO Hub Source URL',
+        function() {
+            $value = get_option('seo_hub_source', '');
+            echo '<input type="url" name="seo_hub_source" id="seo_hub_source" '
+               . 'value="' . esc_attr($value) . '" class="regular-text" '
+               . 'placeholder="https://main-site.com" />';
+            echo '<p class="description">For blog subdomains: enter the main site URL so the '
+               . '<code>[seo_hub]</code> shortcode can pull location/service links from it. '
+               . 'Leave blank on main sites.</p>';
+        },
+        'general',
+        'default',
+        ['label_for' => 'seo_hub_source']
+    );
+});
+
 // ── Convert Post Type metabox ────────────────────────────────────────────────
 //
 // Adds a "SEO Content Type" sidebar panel to Pages (and Posts).
