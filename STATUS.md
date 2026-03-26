@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-03-26 (session 19 — content repurposing pipeline design: video + social media automation via ElevenLabs, FFmpeg, and GoHighLevel)
+Last updated: 2026-03-26 (session 19 — content repurposing pipeline: design spec + full implementation of video + social media automation via ElevenLabs, FFmpeg, and GoHighLevel)
 
 ---
 
@@ -419,7 +419,7 @@ Reason: caching on the live front-end doesn't affect the REST API. Running conte
 
 ---
 
-## Content Repurposing Pipeline (designed session 19, not yet implemented)
+## Content Repurposing Pipeline (session 19 — designed and implemented)
 
 Design spec: `docs/superpowers/specs/2026-03-26-content-repurposing-pipeline-design.md`
 
@@ -433,19 +433,22 @@ Fully automated pipeline that takes each published blog article and creates vide
 
 ### Implementation status
 - [x] Design spec written and reviewed
-- [ ] Implementation plan (next session)
-- [ ] ElevenLabs TTS wrapper (`data_sources/modules/elevenlabs_tts.py`)
-- [ ] Video producer (`src/social/video_producer.py`) — FFmpeg composition
-- [ ] Social post generator (`src/social/social_post_generator.py`) — Claude-powered
-- [ ] GoHighLevel publisher (`data_sources/modules/ghl_publisher.py`)
-- [ ] Orchestrator (`src/social/repurpose_content.py`)
-- [ ] API credential setup (ElevenLabs, GHL OAuth per client)
-- [ ] End-to-end test
+- [x] ElevenLabs TTS wrapper (`data_sources/modules/elevenlabs_tts.py`) — 4 tests passing
+- [x] GoHighLevel publisher (`data_sources/modules/ghl_publisher.py`) — OAuth auto-refresh, media upload, post scheduling, week alternation — 4 tests passing
+- [x] Social post generator (`src/social/social_post_generator.py`) — Claude-powered video script + social posts from blog HTML — 2 tests passing
+- [x] Video producer (`src/social/video_producer.py`) — FFmpeg long-form + shorts, Ken Burns, slides, thumbnails, SRT captions — 4 tests passing
+- [x] Orchestrator (`src/social/repurpose_content.py`) — CLI with `--abbr`, `--dry-run`, `--status`, `--topic`; CSV logging; email notifications; GHL scheduling — 3 tests passing
+- [x] Client config updated — `elevenlabs.voice_id` + `ghl.location_id` + `ghl.accounts` placeholders added to GTM and SDY config.json
+- [x] Dependencies installed — `elevenlabs>=1.0.0`, `ffmpeg-python>=0.2.0`; FFmpeg binary at `/opt/homebrew/bin/ffmpeg`
+- [x] All 17 unit tests passing
+- [ ] API credential setup (ElevenLabs key, GHL OAuth per client)
+- [ ] End-to-end test with real article
 
 ### API credentials needed (all new)
-- ElevenLabs API key
-- GoHighLevel OAuth (client ID + secret + per-client location tokens)
+- ElevenLabs API key → add to `.env` as `ELEVENLABS_API_KEY`
+- GoHighLevel OAuth → `GHL_CLIENT_ID` and `GHL_CLIENT_SECRET` in `.env`; per-client tokens in `clients/[abbr]/ghl-tokens.json`
 - Platform accounts connected in GHL: YouTube, Facebook, Instagram, LinkedIn, X, TikTok, GBP
+- Per-client: `elevenlabs.voice_id`, `ghl.location_id`, `ghl.accounts.*` in config.json
 
 ---
 

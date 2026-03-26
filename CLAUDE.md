@@ -128,6 +128,40 @@ On final failure: best rewrite saved to disk, row marked `Review` in Sheet, fail
 
 Quality failures logged to `logs/quality-log.csv` (append-only, gitignored).
 
+## Content Repurposing Pipeline
+
+Two-stage automated pipeline: blog publishes first (existing), then `src/social/repurpose_content.py` runs ~2 hours later, generating video + social media content and scheduling via GoHighLevel.
+
+```bash
+python3 src/social/repurpose_content.py --abbr gtm           # process all unrepurposed articles
+python3 src/social/repurpose_content.py --abbr gtm --dry-run  # generate content, skip GHL publishing
+python3 src/social/repurpose_content.py --abbr gtm --status   # show social publishing status
+python3 src/social/repurpose_content.py --abbr gtm --topic "Thai Massage Benefits"  # specific article
+```
+
+Cron example (2hr after blog publish):
+```
+0 11 * * 1 cd /path/to/seomachine && python3 src/social/repurpose_content.py --abbr gtm
+```
+
+**Pipeline flow:** Published article → Claude generates video script + social posts → ElevenLabs TTS voiceover → FFmpeg composes long-form video (slides, Ken Burns, text overlays) + 3-5 shorts → GoHighLevel API schedules everything with staggered weekly spread (YouTube Tue, LinkedIn/FB/GBP Wed, X Thu, Instagram Fri, remaining shorts Sat-Sun).
+
+**Modules:**
+- `src/social/social_post_generator.py` — Claude-powered video script + social post generation
+- `src/social/video_producer.py` — ElevenLabs TTS + FFmpeg video composition (long-form + shorts)
+- `data_sources/modules/elevenlabs_tts.py` — ElevenLabs TTS wrapper with timestamp support
+- `data_sources/modules/ghl_publisher.py` — GoHighLevel Social Planner API client (OAuth, media upload, post scheduling)
+
+**Client config:** `elevenlabs.voice_id` for per-client voice, `ghl.location_id` + `ghl.accounts` for platform account IDs. GHL OAuth tokens stored in `clients/[abbr]/ghl-tokens.json` (gitignored).
+
+**X format alternation:** Even ISO weeks → thread format, odd weeks → standalone tweets staggered across the week. Controlled by `get_x_format_for_date()` in `ghl_publisher.py`.
+
+**Logging:** `logs/social-publish-log.csv` — tracks repurposed articles, video status, shorts count, GHL post IDs, cost.
+
+**Cost:** ~$2.95/article (Claude ~$0.15 + ElevenLabs TTS ~$2.40 + FFmpeg/Pillow free + GHL free).
+
+**Future:** HeyGen AI avatar swap-in (clean TTS interface), per-client schedule config in config.json.
+
 Set `IMAGE_API_PROVIDER=gemini` in `.env` to generate images automatically. Requires `GOOGLE_AI_API_KEY` and `OPENAI_API_KEY`. Leave blank to skip image generation (content-only mode). Cost: ~$0.27/post (Gemini) or ~$0.16/post (DALL-E 3 fallback).
 
 **Image failure handling:** if image generation fails after 3 Gemini retries (30s/60s/120s backoff), the runner automatically falls back to DALL-E 3. If both fail and `--publish` is set, the row is marked `Images o/s` and the file path written to Column F — content is saved locally but not published. Next batch run retries images only (no content regeneration) and publishes on success.
@@ -244,9 +278,10 @@ src/
   research/     ← research_competitors.py, research_quick_wins.py, research_serp_analysis.py, etc.
   publishing/   ← fetch_elementor_template.py
   snippets/     ← generate_directions_snippet.py
+  social/       ← repurpose_content.py, video_producer.py, social_post_generator.py
   competitors/  ← competitor alternative page generators (future)
 tests/          ← test scripts (delete before production)
-data_sources/   ← importable modules (google_sheets, wordpress_publisher, etc.)
+data_sources/   ← importable modules (google_sheets, wordpress_publisher, elevenlabs_tts, ghl_publisher, etc.)
 config/         ← service account keys (gitignored)
 clients/        ← per-client context and config
 ```
