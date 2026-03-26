@@ -18,7 +18,7 @@ Follow this structure in order:
 
 1. **Opening — validate the search** (1–2 paragraphs): Acknowledge why someone might look at the competitor. Be honest about what they do well. Then surface the reason the visitor is still searching — lack of online booking, no pricing visible, can't get an appointment, want to know more about therapist credentials. Do not invent reasons. Use only what the competitor data tells you.
 
-2. **Introduce this business** (1–2 paragraphs): Name the business immediately. Lead with the strongest differentiator — for massage businesses this is typically training credential (Wat Pho), years of experience, or a family practice model. Follow with practical advantages: online booking, transparent pricing, full treatment menu.
+2. **Introduce this business** (1–2 paragraphs): Name the business immediately. Lead with the strongest differentiator — for massage businesses this is typically training credential (Wat Pho), years of experience, or a family practice model. Follow with practical advantages: online booking, transparent pricing, full treatment menu. End this section with a direct booking nudge using the `booking_url` from the business config — e.g. "Book your session online at [URL]" or "You can book your appointment at [URL] — no phone call needed."
 
 3. **Honest comparison** (1–2 paragraphs): Name specific differences that matter. Do not use vague superiority claims ("better", "best", "superior"). Use factual contrasts: "X does not display pricing on their website. Glasgow Thai Massage lists all prices before you book." Acknowledge where the competitor genuinely leads (more reviews, longer-established, more convenient location for some parts of the city).
 
@@ -26,11 +26,11 @@ Follow this structure in order:
 
 5. **Getting here** (1 paragraph + directions widget): Write one paragraph giving walking directions from the competitor's location to this business. Be accurate and specific — street names, landmarks, approximate minutes on foot. Then include the directions widget exactly as provided in the prompt. Do not modify the widget HTML.
 
-6. **Booking CTA** (1 short paragraph): Direct the reader to book online. Use the `booking_url` from the business config. One or two sentences only.
+6. **Booking CTA** (1 short paragraph): Direct the reader to book online. Use the `booking_url` from the business config. One or two sentences only. The CTA must use one of these exact phrasings (to ensure it is detected): "Book online now at [url]", "Book your session today at [url]", or "Book your appointment at [url]".
 
 ---
 
-### Section 2 — FAQ (5–6 questions)
+### Section 2 — FAQ (5–6 questions, then closing CTA)
 
 Write questions a visitor would have when comparing the two businesses. Cover:
 - Does this business offer online booking?
@@ -41,6 +41,8 @@ Write questions a visitor would have when comparing the two businesses. Cover:
 - What is the rating based on?
 
 Answers should be 2–4 sentences. Factual and direct. Do not use comparative language that you cannot support from the provided data.
+
+After the final `<details>` block, add a short closing CTA paragraph (1–2 sentences) using the `booking_url`. Use phrasing like "Book your appointment online at [url]" or "Book your session today at [url]".
 
 ---
 
@@ -123,6 +125,7 @@ After Section 2, output a `<!-- SCHEMA -->` block:
   <summary>[Question]?</summary>
   <p>[Answer]</p>
 </details>
+<p>[Closing CTA — "Book your session today at [booking_url]" or similar]</p>
 
 <!-- SCHEMA -->
 <script type="application/ld+json">

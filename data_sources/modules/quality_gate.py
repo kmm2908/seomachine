@@ -24,8 +24,24 @@ _INPUT_COST_PER_M = 3.00
 _OUTPUT_COST_PER_M = 15.00
 
 MAX_REWRITES = 2
-FLESCH_THRESHOLD = 55        # Flesch Reading Ease >= 55
-ENGAGEMENT_OPTIONAL_MIN = 2  # Must pass >=2 of 3 optional criteria
+
+# Per-content-type quality thresholds.
+# Mandatory criteria (hook, ctas) always apply to every type.
+CONTENT_TYPE_CONFIG = {
+    '_default': {
+        'flesch_threshold': 55,
+        'optional_criteria': ['stories', 'rhythm', 'paragraphs'],
+        'optional_min': 2,          # need >=2 of 3
+    },
+    'comp-alt': {
+        'flesch_threshold': 48,     # comparison pages use proper nouns / denser language
+        'optional_criteria': ['rhythm', 'paragraphs'],  # stories don't fit fact-based pages
+        'optional_min': 1,          # need >=1 of 2
+    },
+}
+
+def _get_type_config(content_type: str) -> dict:
+    return CONTENT_TYPE_CONFIG.get(content_type, CONTENT_TYPE_CONFIG['_default'])
 
 
 @dataclass
@@ -53,6 +69,7 @@ class QualityGate:
           2 — first rewrite (if attempt 1 fails)
           3 — second rewrite (if attempt 2 fails)
         """
+        cfg = _get_type_config(content_type)
         plain = self._to_plain(content)
         current_content = content
         total_cost = 0.0
@@ -64,9 +81,9 @@ class QualityGate:
             print(f"    → Quality check error (skipped): {e}")
             return QualityResult(content=content, passed=True, attempts=1, cost_usd=0.0)
 
-        failures = self._evaluate(eng, read)
-        passing = self._get_passing(eng, read)
-        self._print_quality_line(eng, read, failures, attempt=1, rewriting=bool(failures))
+        failures = self._evaluate(eng, read, cfg)
+        passing = self._get_passing(eng, read, cfg)
+        self._print_quality_line(eng, read, failures, attempt=1, rewriting=bool(failures), flesch_threshold=cfg['flesch_threshold'])
 
         if not failures:
             return QualityResult(content=content, passed=True, attempts=1, cost_usd=0.0)
@@ -104,13 +121,14 @@ class QualityGate:
                     attempts=1 + rewrite_num, cost_usd=total_cost
                 )
 
-            failures = self._evaluate(eng, read)
-            passing = self._get_passing(eng, read)  # update for next iteration
+            failures = self._evaluate(eng, read, cfg)
+            passing = self._get_passing(eng, read, cfg)  # update for next iteration
             is_last = rewrite_num == MAX_REWRITES
             self._print_quality_line(
                 eng, read, failures,
                 attempt=1 + rewrite_num,
-                rewriting=bool(failures) and not is_last
+                rewriting=bool(failures) and not is_last,
+                flesch_threshold=cfg['flesch_threshold']
             )
 
             if not failures:
@@ -126,39 +144,36 @@ class QualityGate:
 
     # ── Private helpers ───────────────────────────────────────────────────────
 
-    def _evaluate(self, eng: dict, read: dict) -> List[str]:
+    def _evaluate(self, eng: dict, read: dict, cfg: dict) -> List[str]:
         """Return list of failure keys. Empty list = passed."""
         failures = []
 
         # Readability
         flesch = read.get('readability_metrics', {}).get('flesch_reading_ease', 0)
-        if flesch < FLESCH_THRESHOLD:
+        if flesch < cfg['flesch_threshold']:
             failures.append('readability')
 
-        # Mandatory engagement criteria
+        # Mandatory engagement criteria (always apply)
         scores = eng.get('scores', {})
         if not scores.get('hook', False):
             failures.append('hook')
         if not scores.get('ctas', False):
             failures.append('ctas')
 
-        # Optional engagement criteria — need >=2 of 3
-        optional_passed = sum([
-            scores.get('stories', False),
-            scores.get('rhythm', False),
-            scores.get('paragraphs', False),
-        ])
-        if optional_passed < ENGAGEMENT_OPTIONAL_MIN:
-            optional_failures = [k for k in ('stories', 'rhythm', 'paragraphs') if not scores.get(k)]
+        # Optional engagement criteria — need >= optional_min of optional_criteria
+        optional = cfg['optional_criteria']
+        optional_passed = sum(scores.get(k, False) for k in optional)
+        if optional_passed < cfg['optional_min']:
+            optional_failures = [k for k in optional if not scores.get(k)]
             failures.extend(optional_failures)
 
         return failures
 
-    def _get_passing(self, eng: dict, read: dict) -> List[str]:
+    def _get_passing(self, eng: dict, read: dict, cfg: dict) -> List[str]:
         """Return list of criterion keys that currently pass."""
         passing = []
         flesch = read.get('readability_metrics', {}).get('flesch_reading_ease', 0)
-        if flesch >= FLESCH_THRESHOLD:
+        if flesch >= cfg['flesch_threshold']:
             passing.append('readability')
         scores = eng.get('scores', {})
         for key in ('hook', 'ctas', 'stories', 'rhythm', 'paragraphs'):
@@ -280,7 +295,7 @@ Content to rewrite:
         return text
 
     def _print_quality_line(self, eng: dict, read: dict, failures: List[str],
-                             attempt: int, rewriting: bool) -> None:
+                             attempt: int, rewriting: bool, flesch_threshold: int = 55) -> None:
         """Print quality summary line to stdout."""
         scores = eng.get('scores', {})
         flesch = read.get('readability_metrics', {}).get('flesch_reading_ease', 0)
@@ -288,7 +303,7 @@ Content to rewrite:
         def tick(key):
             return '✓' if scores.get(key) else '✗'
 
-        flesch_tick = '✓' if flesch >= FLESCH_THRESHOLD else '✗'
+        flesch_tick = '✓' if flesch >= flesch_threshold else '✗'
 
         line = (
             f"    → Quality: Flesch {flesch:.0f} {flesch_tick} | "

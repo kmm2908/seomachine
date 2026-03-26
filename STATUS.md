@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-03-24 (session 17 — auto-deploy pipeline for seomachine.php via GitHub Actions + SFTP)
+Last updated: 2026-03-26 (session 18 — comp-alt scheduled publishing pipeline; quality gate per-type config; 6 comp-alt pages live on GTM + SDY)
 
 ---
 
@@ -231,6 +231,16 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] GTM snippet: `clients/gtm/snippets/gtm-directions.html`
 - [x] SDY snippet: `clients/sdy/snippets/sdy-directions.html`
 
+### comp-alt scheduled publishing pipeline (session 18)
+- [x] `research/gtm/comp-alt-queue.json` — 3 competitors queued: Tiger Lily, Thai House, Phuket; cadence 7 days
+- [x] `research/sdy/comp-alt-queue.json` — 3 competitors queued: Nina Thai, Phuket, Lan Thai; cadence 7 days
+- [x] `publish_scheduled.py` — `--queue` flag added; default `topic-queue.json`; pass `comp-alt-queue.json` for comp-alt schedule
+- [x] `quality_gate.py` — per-content-type config (`CONTENT_TYPE_CONFIG`); comp-alt: Flesch ≥ 48, no stories criterion, optional min 1 of 2 (rhythm/paragraphs); hook + CTAs mandatory on all types
+- [x] `competitor-alt-writer.md` — early booking CTA after step 2; closing CTA paragraph after FAQ section
+- [x] `engagement_analyzer.py` — added `book directly`, `book here`, `you can book` to CTA patterns
+- [x] All 6 comp-alt pages published as WordPress drafts — GTM: 16690/16695/16700; SDY: 702/707/712
+- [x] **Standard process:** multi-run publish batches always use background agent (`run_in_background: true`) — documented in CLAUDE.md
+
 ### comp-alt content type (session 13)
 - [x] `.claude/agents/competitor-alt-writer.md` — new agent for "X alternative" competitor comparison pages
 - [x] `comp-alt` added to `CONTENT_TYPE_AGENTS` and `PROMPT_BUILDERS` in batch runner
@@ -290,9 +300,9 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 ### Priority 6 — Session 13 (needs testing)
 - [x] Deploy `wordpress/seomachine.php` v2.5 to GTM live — done
 - [x] Deploy `wordpress/seomachine.php` v2.5 to SDY live — done
-- [ ] Confirm `seo_comp_alt` CPT appears in wp-admin on GTM and SDY
-- [ ] Confirm `/comp-alt/[slug]/` permalink routing works on GTM and SDY
-- [ ] Test `comp-alt` batch run — set Column E to `comp-alt`, run with `--publish`, confirm Elementor page created under correct CPT
+- [x] Confirm `seo_comp_alt` CPT appears in wp-admin on GTM, SDY, and GTB — confirmed all three
+- [x] Confirm `/comp-alt/[slug]/` permalink routing works on GTM, SDY, and GTB — confirmed all three
+- [x] Test `comp-alt` batch run — 3 GTM + 3 SDY published via scheduled publisher (post IDs: GTM 16690/16695/16700, SDY 702/707/712)
 - [ ] Verify directions snippet auto-generates on first batch publish run (check `clients/[abbr]/snippets/` folder)
 
 ### Priority 7 — GTB client setup (session 14)

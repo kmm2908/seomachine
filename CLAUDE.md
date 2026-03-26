@@ -10,6 +10,17 @@ At the start of every new session, automatically invoke `/start` before respondi
 
 Offload research, writing, file operations, and batch tasks to sub-agents wherever possible to keep the main conversation context clean. Prefer `run_in_background: true` for any task that doesn't need its result before the next step.
 
+**Long-running publish runs must always use a background agent.** Any task that chains multiple `publish_scheduled.py` runs (e.g. publishing a full queue of 3–6 pages) will trip the Claude Code UI timeout ("Not responding") if run directly. The standard pattern:
+
+```
+Agent prompt: "Run these commands in sequence in /path/to/seomachine, one at a time, 300000ms timeout each:
+  python3 src/content/publish_scheduled.py --abbr gtm --queue comp-alt-queue.json  (×N)
+Report back: client, topic, status, post ID, cost per run."
+run_in_background: true
+```
+
+This applies to: `publish_scheduled.py` multi-run batches, `geo_batch_runner.py` on large Sheet ranges, and any other task expected to take >2 minutes total.
+
 ## Project Overview
 
 SEO Machine is a Claude Code workspace for creating SEO-optimised content at scale. It combines custom commands, specialised agents, a Python batch runner, and Google Sheets integration to research, write, optimise, and publish articles for multiple business clients.
@@ -97,13 +108,17 @@ Google Sheet columns: A=Topic/Location, B=Status (`Write Now`/`DONE`/`pause`/`Im
 
 Output: `content/[abbr]/[type]/[slug]-[date]/[slug]-[date].html` (one folder per article; images saved alongside HTML)
 
-**Scheduled publisher** — `src/content/publish_scheduled.py` publishes one topic per cron run from a JSON queue file, bypassing the Google Sheet entirely. Queue file: `research/[abbr]/topic-queue.json`. Generate it with `research_blog_topics.py --queue [--cadence N]`. Each run: picks next `pending` topic → generates content → quality gate → publishes to WordPress → marks topic `published`/`failed`/`review_required` in queue → appends to `logs/scheduled-publish-log.csv` → sends email. Missed-run detection: checks gap since last publish vs cadence + 2-day buffer. `--status` flag prints a formatted queue table (icons: ✓ published · · pending · ⚠ review · ✗ failed). `--dry-run` skips WordPress publish.
+**Scheduled publisher** — `src/content/publish_scheduled.py` publishes one topic per cron run from a JSON queue file, bypassing the Google Sheet entirely. Default queue: `research/[abbr]/topic-queue.json`. Use `--queue <filename>` to point at a different queue file (e.g. `comp-alt-queue.json`). Generate blog queues with `research_blog_topics.py --queue [--cadence N]`; comp-alt queues are hand-curated JSON files. Each run: picks next `pending` topic → generates content → quality gate → publishes to WordPress → marks topic `published`/`failed`/`review_required` in queue → appends to `logs/scheduled-publish-log.csv` → sends email. Missed-run detection: checks gap since last publish vs cadence + 2-day buffer. `--status` flag prints a formatted queue table (icons: ✓ published · · pending · ⚠ review · ✗ failed). `--dry-run` skips WordPress publish.
 
-Cron example (every Monday 09:00): `0 9 * * 1 cd /path/to/seomachine && python3 src/content/publish_scheduled.py --abbr gtb`
+**Comp-alt queue files** — `research/[abbr]/comp-alt-queue.json`. Hand-curated list of competitor names (must match `###` headings in `competitor-analysis.md`). Run via: `python3 src/content/publish_scheduled.py --abbr gtm --queue comp-alt-queue.json`. Always publish via background agent when running multiple topics (see Agent Usage above).
+
+Cron examples:
+- Blog (every Monday 09:00): `0 9 * * 1 cd /path/to/seomachine && python3 src/content/publish_scheduled.py --abbr gtb`
+- Comp-alt (Wednesdays GTM, Thursdays SDY): `0 10 * * 3 ... --abbr gtm --queue comp-alt-queue.json`
 
 **Directions snippet** — `src/snippets/generate_directions_snippet.py` generates a self-contained HTML+JS Google Maps directions widget per client. Saved to `clients/[abbr]/snippets/[abbr]-directions.html`. The batch runner calls `_ensure_directions_snippet()` automatically on the first publish run per client — no manual step needed. The snippet is injected into `comp-alt` page prompts automatically.
 
-**Quality gate** runs after every article is written. Checks Flesch Reading Ease ≥ 55 (readability) and engagement (hook + CTAs mandatory; mini-stories, rhythm, paragraphs — 2/3 optional). If it fails, Claude rewrites with targeted instructions, up to 2 rewrites. Console output:
+**Quality gate** runs after every article is written. Thresholds are per-content-type (`CONTENT_TYPE_CONFIG` in `quality_gate.py`). Hook and CTAs are mandatory for all types. Default (blog/location/service/etc.): Flesch ≥ 55, need 2/3 of stories/rhythm/paragraphs. `comp-alt`: Flesch ≥ 48, no stories criterion, need 1/2 of rhythm/paragraphs. If it fails, Claude rewrites with targeted instructions, up to 2 rewrites. Console output:
 ```
 → Quality: Flesch 55 ✓ | hook ✓ | ctas ✓ | stories ✗ | rhythm ✓ | paras ✓ — passed
 ```
@@ -257,6 +272,8 @@ python3 src/research/research_blog_topics.py --abbr gtb --queue --cadence 14  # 
 python3 src/content/publish_scheduled.py --abbr gtb          # publish next topic from queue
 python3 src/content/publish_scheduled.py --abbr gtb --status # show queue status table
 python3 src/content/publish_scheduled.py --abbr gtb --dry-run  # generate + quality-check, skip WP publish
+python3 src/content/publish_scheduled.py --abbr gtm --queue comp-alt-queue.json          # comp-alt queue
+python3 src/content/publish_scheduled.py --abbr gtm --queue comp-alt-queue.json --status # comp-alt status
 python3 tests/test_dataforseo.py    # test API connectivity
 ```
 

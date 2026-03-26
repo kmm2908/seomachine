@@ -44,9 +44,10 @@ class EngagementAnalyzer:
     # CTA patterns
     CTA_PATTERNS = [
         # Booking — primary massage therapy CTAs
-        r'\bBook\s+(?:now|today|online|your\s+session|a\s+session|your\s+(?:appointment|visit|treatment))\b',
+        r'\bBook\s+(?:now|today|online|directly|here|your\s+session|a\s+session|your\s+(?:appointment|visit|treatment))\b',
         r'\bBook\b.{0,25}(?:session|appointment|visit|treatment)\b',
         r'\b(?:arrange|reserve)\s+(?:your|an?)\s+(?:session|appointment|visit|treatment)\b',
+        r'\bYou\s+can\s+book\b',
         # Phone / contact
         r'\bCall\s+(?:us|now|today)\b',
         r'\bCall\b.{0,15}\b\d{4,}\b',  # "Call us on 0141..."

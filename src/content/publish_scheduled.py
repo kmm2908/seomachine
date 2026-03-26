@@ -13,6 +13,8 @@ Log file:   logs/scheduled-publish-log.csv
 Usage:
     python3 src/content/publish_scheduled.py --abbr gtb
     python3 src/content/publish_scheduled.py --abbr gtb --dry-run
+    python3 src/content/publish_scheduled.py --abbr gtm --queue comp-alt-queue.json
+    python3 src/content/publish_scheduled.py --abbr gtm --queue comp-alt-queue.json --status
 
 Cron example (publish one GTB post every Monday at 09:00):
     0 9 * * 1 cd /path/to/seomachine && python3 src/content/publish_scheduled.py --abbr gtb
@@ -63,12 +65,12 @@ MISSED_RUN_BUFFER_DAYS = 2  # allow this many extra days before flagging a misse
 # Queue file helpers
 # ---------------------------------------------------------------------------
 
-def queue_path(abbr: str) -> Path:
-    return ROOT / 'research' / abbr.lower() / 'topic-queue.json'
+def queue_path(abbr: str, queue_name: str = 'topic-queue.json') -> Path:
+    return ROOT / 'research' / abbr.lower() / queue_name
 
 
-def load_queue(abbr: str) -> dict:
-    path = queue_path(abbr)
+def load_queue(abbr: str, queue_name: str = 'topic-queue.json') -> dict:
+    path = queue_path(abbr, queue_name)
     if not path.exists():
         raise FileNotFoundError(
             f"No topic queue found at {path.relative_to(ROOT)}. "
@@ -78,8 +80,8 @@ def load_queue(abbr: str) -> dict:
         return json.load(f)
 
 
-def save_queue(abbr: str, queue: dict) -> None:
-    path = queue_path(abbr)
+def save_queue(abbr: str, queue: dict, queue_name: str = 'topic-queue.json') -> None:
+    path = queue_path(abbr, queue_name)
     path.write_text(json.dumps(queue, indent=2))
 
 
@@ -320,11 +322,11 @@ def _email_queue_empty(abbr: str) -> None:
 # Main
 # ---------------------------------------------------------------------------
 
-def run(abbr: str, dry_run: bool = False) -> None:
+def run(abbr: str, dry_run: bool = False, queue_name: str = 'topic-queue.json') -> None:
     abbr = abbr.lower()
     print(f"\n→ Scheduled publisher: {abbr.upper()}  [{datetime.now().strftime('%Y-%m-%d %H:%M')}]")
 
-    queue = load_queue(abbr)
+    queue = load_queue(abbr, queue_name)
     cadence_days = queue.get('cadence_days', 7)
     missed_warning = check_missed_run(abbr, cadence_days)
     if missed_warning:
@@ -363,7 +365,7 @@ def run(abbr: str, dry_run: bool = False) -> None:
         queue['topics'][idx]['cost'] = f"${result['cost']:.4f}" if result['cost'] else None
         if result['status'] not in ('published', 'dry_run'):
             queue['topics'][idx]['error'] = result.get('notes', '')
-        save_queue(abbr, queue)
+        save_queue(abbr, queue, queue_name)
 
         # Log
         append_log({
@@ -421,10 +423,10 @@ STATUS_ICONS = {
 }
 
 
-def show_status(abbr: str) -> None:
+def show_status(abbr: str, queue_name: str = 'topic-queue.json') -> None:
     """Print a formatted queue status table."""
     abbr = abbr.lower()
-    queue = load_queue(abbr)
+    queue = load_queue(abbr, queue_name)
     topics = queue.get('topics', [])
     cadence_days = queue.get('cadence_days', 7)
 
@@ -470,17 +472,19 @@ def show_status(abbr: str) -> None:
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Publish next scheduled blog post from queue')
+    parser = argparse.ArgumentParser(description='Publish next scheduled post from queue')
     parser.add_argument('--abbr', required=True, help='Client abbreviation e.g. gtb')
     parser.add_argument('--dry-run', action='store_true',
                         help='Generate and quality-check content but skip WordPress publish')
     parser.add_argument('--status', action='store_true',
                         help='Show queue status table without publishing anything')
+    parser.add_argument('--queue', default='topic-queue.json',
+                        help='Queue filename (default: topic-queue.json, e.g. comp-alt-queue.json)')
     args = parser.parse_args()
     if args.status:
-        show_status(args.abbr)
+        show_status(args.abbr, args.queue)
     else:
-        run(args.abbr, dry_run=args.dry_run)
+        run(args.abbr, dry_run=args.dry_run, queue_name=args.queue)
 
 
 if __name__ == '__main__':
