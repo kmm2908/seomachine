@@ -46,7 +46,7 @@ DEFAULT_SCHEDULE = {
     2: ['youtube_short_1', 'tiktok_short_1', 'facebook_reel_1', 'instagram_reel_1',
         'linkedin', 'facebook', 'gbp'],
     3: ['youtube_short_2', 'tiktok_short_2', 'facebook_reel_2', 'instagram_reel_2',
-        'x'],
+        'x', 'pinterest'],
     4: ['youtube_short_3', 'tiktok_short_3', 'facebook_reel_3', 'instagram_reel_3',
         'instagram'],
     5: ['youtube_short_4', 'tiktok_short_4'],
@@ -66,6 +66,7 @@ _KEY_MAP = {
     'facebook': ('facebook', 'post'),
     'instagram': ('instagram', 'post'),
     'gbp': ('gbp', 'post'),
+    'pinterest': ('pinterest', 'pin'),
     'x': ('x', 'post'),
 }
 
@@ -315,6 +316,18 @@ def _schedule_post(
             return publisher.create_post(
                 account_id=account_id,
                 text=caption,
+                media_urls=[banner_url] if banner_url else None,
+                scheduled_at=scheduled_at,
+            )
+
+        if platform == 'pinterest':
+            pin = posts.get('pinterest', {})
+            title = pin.get('title', '')
+            description = pin.get('description', '')
+            banner_url = media_urls.get('banner')
+            return publisher.create_post(
+                account_id=account_id,
+                text=f'{title}\n\n{description}',
                 media_urls=[banner_url] if banner_url else None,
                 scheduled_at=scheduled_at,
             )

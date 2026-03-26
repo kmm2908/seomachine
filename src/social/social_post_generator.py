@@ -154,6 +154,7 @@ Respond with ONLY valid JSON (no markdown, no code blocks, no explanation):
     "x_thread": [{{"text": "...", "media": "banner"}}, ...],
     "x_standalone": [{{"text": "...", "day_offset": 0}}, ...],
     "instagram": {{"caption": "...", "hashtags": [...], "media": "banner"}},
+    "pinterest": {{"title": "...", "description": "...", "board": "...", "media": "banner"}},
     "gbp": {{"text": "...", "cta_type": "BOOK", "cta_url": "...", "media": "banner"}}
   }}
 }}"""

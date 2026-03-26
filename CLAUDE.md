@@ -271,6 +271,8 @@ Use this when posts need to be re-created in WordPress (e.g. after enabling Elem
 
 **Hub page shortcode** — `[seo_hub type="location"]` registered in `seomachine.php`. Place in an Elementor Shortcode widget (not HTML widget). Renders a `<ul class="seo-hub-links">` of all published posts of that type, sorted A–Z, each wrapped in `<li><h3><a>`. Display text = post excerpt if set, otherwise post title. Supported types: `location`, `service`, `pillar`, `topical`, `blog`. Must be deployed to `wp-content/mu-plugins/seomachine.php` (not inside `plugins/`).
 
+**Cross-site hub (blog subdomains)** — on blog subdomains (GTB, TMB), set `wp option update seo_hub_source "https://main-site-url.com"`. The shortcode fetches posts from the main site's REST API (no auth needed — public CPTs) and caches results for 12 hours. The `blog` type always queries locally. Override per-shortcode: `[seo_hub type="location" source="https://..."]`. Cache bust: `wp transient delete seo_hub_cache_location`.
+
 **Schema handling (non-Elementor)**: `_wrap_schema_block()` moves the `<!-- SCHEMA --><script>` block into a Gutenberg `<!-- wp:html -->` block. The `[DATE]` placeholder is replaced with today's ISO date by the batch runner before saving.
 
 ## Project Structure

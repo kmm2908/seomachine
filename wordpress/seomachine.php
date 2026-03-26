@@ -2,7 +2,7 @@
 /**
  * Plugin Name: SEO Machine
  * Description: Registers SEO content post types and exposes SEO meta fields via REST API. No Yoast dependency.
- * Version: 2.6.3
+ * Version: 2.7.0
  * Author: SEO Machine
  *
  * Installation:
@@ -143,12 +143,20 @@ add_action('rest_api_init', function() {
 
 // ── Hub page shortcode ───────────────────────────────────────────────────────
 //
-// Usage: [seo_hub type="location"]  (or service, pillar, topical, blog)
-// Place in an Elementor HTML widget. Renders a <ul> of all published posts of
-// that type, sorted A–Z. Automatically reflects publish/unpublish changes.
+// Usage: [seo_hub type="location"]
+//        [seo_hub type="service" source="https://example.com"]
+//
+// Place in an Elementor Shortcode widget. Renders a <ul> of all published posts
+// of that type, sorted A–Z.
+//
+// On blog subdomains: set wp_option 'seo_hub_source' to the main site URL.
+// The shortcode will fetch posts from the main site via REST API (no auth needed)
+// and cache results for 12 hours. The 'blog' type always queries locally.
+//
+// Cache bust: wp transient delete seo_hub_cache_location
 
 add_shortcode('seo_hub', function($atts) {
-    $atts = shortcode_atts(['type' => 'location'], $atts, 'seo_hub');
+    $atts = shortcode_atts(['type' => 'location', 'source' => ''], $atts, 'seo_hub');
 
     $type_map = [
         'location' => 'seo_location',
@@ -159,8 +167,16 @@ add_shortcode('seo_hub', function($atts) {
         'comp-alt' => 'seo_comp_alt',
     ];
 
-    $post_type = $type_map[$atts['type']] ?? 'seo_location';
+    $type      = $atts['type'];
+    $post_type = $type_map[$type] ?? 'seo_location';
+    $source    = $atts['source'] ?: get_option('seo_hub_source', '');
 
+    // Remote fetch: source is set and type is not 'blog' (blogs live locally)
+    if ($source && $type !== 'blog') {
+        return seo_hub_remote_fetch($source, $type, $post_type);
+    }
+
+    // Local query (default behaviour)
     $posts = get_posts([
         'post_type'      => $post_type,
         'post_status'    => 'publish',
@@ -181,6 +197,67 @@ add_shortcode('seo_hub', function($atts) {
 
     return '<ul class="seo-hub-links">' . implode('', $items) . '</ul>';
 });
+
+/**
+ * Fetch hub links from a remote WordPress site via REST API.
+ * Results are cached in a transient for 12 hours.
+ */
+function seo_hub_remote_fetch(string $source, string $type, string $rest_base): string {
+    $cache_key = 'seo_hub_cache_' . $type;
+    $cached    = get_transient($cache_key);
+
+    if ($cached !== false) {
+        return $cached;
+    }
+
+    $source = untrailingslashit($source);
+    $all_posts = [];
+    $page = 1;
+
+    do {
+        $url = add_query_arg([
+            'per_page' => 100,
+            'page'     => $page,
+            'orderby'  => 'title',
+            'order'    => 'asc',
+            '_fields'  => 'id,title,excerpt,link',
+            'status'   => 'publish',
+        ], "{$source}/wp-json/wp/v2/{$rest_base}");
+
+        $response = wp_remote_get($url, ['timeout' => 15]);
+
+        if (is_wp_error($response) || wp_remote_retrieve_response_code($response) !== 200) {
+            break;
+        }
+
+        $body = json_decode(wp_remote_retrieve_body($response), true);
+        if (!is_array($body) || empty($body)) {
+            break;
+        }
+
+        $all_posts   = array_merge($all_posts, $body);
+        $total_pages = (int) wp_remote_retrieve_header($response, 'x-wp-totalpages');
+        $page++;
+    } while ($page <= $total_pages);
+
+    if (empty($all_posts)) {
+        set_transient($cache_key, '', 12 * HOUR_IN_SECONDS);
+        return '';
+    }
+
+    $items = array_map(function($item) {
+        $link    = esc_url($item['link'] ?? '');
+        $excerpt = trim(wp_strip_all_tags($item['excerpt']['rendered'] ?? ''));
+        $title   = wp_strip_all_tags($item['title']['rendered'] ?? '');
+        $text    = esc_html($excerpt ?: $title);
+        return "<li><h3><a href=\"{$link}\">{$text}</a></h3></li>";
+    }, $all_posts);
+
+    $html = '<ul class="seo-hub-links">' . implode('', $items) . '</ul>';
+    set_transient($cache_key, $html, 12 * HOUR_IN_SECONDS);
+
+    return $html;
+}
 
 // ── Convert Post Type metabox ────────────────────────────────────────────────
 //

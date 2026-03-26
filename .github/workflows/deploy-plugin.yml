@@ -35,3 +35,18 @@ jobs:
           put wordpress/seomachine.php www/serendipitymassage.co.uk/public_html/wp-content/mu-plugins/seomachine.php
           SFTP
           rm /tmp/deploy_key
+
+  deploy-tmg-tmb:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy to TMG and TMB via SFTP
+        run: |
+          echo "${{ secrets.SITEGROUND_SSH_KEY }}" > /tmp/deploy_key
+          chmod 600 /tmp/deploy_key
+          sftp -i /tmp/deploy_key -P 18765 -o StrictHostKeyChecking=no u3520-kztrwuly6pid@uk1001.siteground.eu << 'SFTP'
+          put wordpress/seomachine.php www/thaimassagegreenock.co.uk/public_html/wp-content/mu-plugins/seomachine.php
+          put wordpress/seomachine.php www/blog.thaimassagegreenock.co.uk/public_html/wp-content/mu-plugins/seomachine.php
+          SFTP
+          rm /tmp/deploy_key
