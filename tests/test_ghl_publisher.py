@@ -9,57 +9,19 @@ ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(ROOT / 'data_sources' / 'modules'))
 
 
-def test_token_refresh_on_expired():
-    """Auto-refreshes token when access_token is expired."""
+def test_constructor_sets_bearer_token():
+    """Constructor sets Authorization header from token."""
     from ghl_publisher import GHLPublisher
 
-    tokens = {
-        'access_token': 'expired-token',
-        'refresh_token': 'valid-refresh',
-        'expires_at': 0,
-    }
-    tokens_path = Path('/tmp/test-ghl-tokens.json')
-    tokens_path.write_text(json.dumps(tokens))
-
-    new_tokens = {
-        'access_token': 'new-access-token',
-        'refresh_token': 'new-refresh-token',
-        'expires_in': 86399,
-    }
-
-    with patch('ghl_publisher.requests.post') as mock_post:
-        mock_resp = MagicMock()
-        mock_resp.status_code = 200
-        mock_resp.json.return_value = new_tokens
-        mock_resp.raise_for_status = MagicMock()
-        mock_post.return_value = mock_resp
-
-        pub = GHLPublisher(
-            location_id='loc123',
-            tokens_path=tokens_path,
-            client_id='cid',
-            client_secret='csec',
-        )
-
-        assert pub._access_token == 'new-access-token'
-        saved = json.loads(tokens_path.read_text())
-        assert saved['access_token'] == 'new-access-token'
-        assert saved['refresh_token'] == 'new-refresh-token'
-
-    tokens_path.unlink(missing_ok=True)
+    with patch('ghl_publisher.requests.Session') as MockSession:
+        pub = GHLPublisher(location_id='loc123', api_token='test-token-abc')
+        assert pub._access_token == 'test-token-abc'
+        assert pub._location_id == 'loc123'
 
 
 def test_create_post_calls_correct_endpoint():
     """create_post hits /social-media-posting/{locationId}/posts."""
     from ghl_publisher import GHLPublisher
-
-    tokens = {
-        'access_token': 'valid-token',
-        'refresh_token': 'refresh',
-        'expires_at': time.time() + 86400,
-    }
-    tokens_path = Path('/tmp/test-ghl-tokens.json')
-    tokens_path.write_text(json.dumps(tokens))
 
     with patch('ghl_publisher.requests.Session') as MockSession:
         mock_session = MockSession.return_value
@@ -69,12 +31,7 @@ def test_create_post_calls_correct_endpoint():
         mock_resp.raise_for_status = MagicMock()
         mock_session.post.return_value = mock_resp
 
-        pub = GHLPublisher(
-            location_id='loc123',
-            tokens_path=tokens_path,
-            client_id='cid',
-            client_secret='csec',
-        )
+        pub = GHLPublisher(location_id='loc123', api_token='test-token')
 
         post_id = pub.create_post(
             account_id='acc-yt-1',
@@ -86,20 +43,10 @@ def test_create_post_calls_correct_endpoint():
         call_args = mock_session.post.call_args
         assert 'social-media-posting/loc123/posts' in call_args[0][0]
 
-    tokens_path.unlink(missing_ok=True)
-
 
 def test_upload_media_returns_url():
     """upload_media uploads file and returns hosted URL."""
     from ghl_publisher import GHLPublisher
-
-    tokens = {
-        'access_token': 'valid-token',
-        'refresh_token': 'refresh',
-        'expires_at': time.time() + 86400,
-    }
-    tokens_path = Path('/tmp/test-ghl-tokens.json')
-    tokens_path.write_text(json.dumps(tokens))
 
     with patch('ghl_publisher.requests.Session') as MockSession:
         mock_session = MockSession.return_value
@@ -109,12 +56,7 @@ def test_upload_media_returns_url():
         mock_resp.raise_for_status = MagicMock()
         mock_session.post.return_value = mock_resp
 
-        pub = GHLPublisher(
-            location_id='loc123',
-            tokens_path=tokens_path,
-            client_id='cid',
-            client_secret='csec',
-        )
+        pub = GHLPublisher(location_id='loc123', api_token='test-token')
 
         dummy = Path('/tmp/test-upload.jpg')
         dummy.write_bytes(b'\xff\xd8\xff\xe0' * 10)
@@ -124,7 +66,26 @@ def test_upload_media_returns_url():
 
         dummy.unlink(missing_ok=True)
 
-    tokens_path.unlink(missing_ok=True)
+
+def test_from_config_reads_token_file():
+    """from_config reads token from ghl-tokens.json."""
+    from ghl_publisher import GHLPublisher
+
+    token_dir = Path('/tmp/test-ghl-client')
+    token_dir.mkdir(exist_ok=True)
+    token_file = token_dir / 'ghl-tokens.json'
+    token_file.write_text(json.dumps({'token': 'file-token-xyz'}))
+
+    with patch('ghl_publisher.requests.Session'):
+        pub = GHLPublisher.from_config(
+            {'location_id': 'loc456'},
+            client_dir=token_dir,
+        )
+        assert pub._access_token == 'file-token-xyz'
+        assert pub._location_id == 'loc456'
+
+    token_file.unlink()
+    token_dir.rmdir()
 
 
 def test_week_alternation_even_odd():
@@ -133,7 +94,6 @@ def test_week_alternation_even_odd():
     from datetime import date
 
     # 2026-01-05 is ISO week 2 (even) → thread
-    # 2026-01-19 is ISO week 4 (even) → thread
     # 2026-01-12 is ISO week 3 (odd) → standalone
     d_even = date(2026, 1, 5)
     d_odd = date(2026, 1, 12)

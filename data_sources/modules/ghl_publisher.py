@@ -1,7 +1,8 @@
 """GoHighLevel Social Planner API client.
 
-Handles OAuth 2.0 token management, media upload, and post scheduling
-across all social platforms via the GHL Social Planner API.
+Uses Private Integration tokens (static Bearer tokens) for authentication.
+Handles media upload and post scheduling across all social platforms
+via the GHL Social Planner API.
 """
 import os
 import sys
@@ -17,7 +18,6 @@ _ROOT = Path(__file__).parent.parent.parent.resolve()
 load_dotenv(_ROOT / '.env')
 
 GHL_API_BASE = 'https://services.leadconnectorhq.com'
-GHL_TOKEN_URL = f'{GHL_API_BASE}/oauth/token'
 REQUEST_DELAY = 0.15
 
 
@@ -28,72 +28,37 @@ def get_x_format_for_date(d: date) -> str:
 
 
 class GHLPublisher:
-    """GoHighLevel Social Planner API client with OAuth auto-refresh."""
+    """GoHighLevel Social Planner API client using Private Integration tokens."""
 
-    def __init__(self, location_id: str, tokens_path: Path,
-                 client_id: str | None = None, client_secret: str | None = None):
+    def __init__(self, location_id: str, api_token: str):
         self._location_id = location_id
-        self._tokens_path = Path(tokens_path)
-        self._client_id = client_id or os.getenv('GHL_CLIENT_ID')
-        self._client_secret = client_secret or os.getenv('GHL_CLIENT_SECRET')
-
-        if not self._client_id or not self._client_secret:
-            raise EnvironmentError('GHL_CLIENT_ID and GHL_CLIENT_SECRET must be set')
+        self._access_token = api_token
 
         self._session = requests.Session()
         self._session.headers.update({
             'Content-Type': 'application/json',
             'Version': '2021-07-28',
+            'Authorization': f'Bearer {api_token}',
             'User-Agent': 'SEOMachine/1.0 (Social Publisher)',
         })
 
-        self._load_tokens()
-
     @classmethod
     def from_config(cls, ghl_config: dict, client_dir: Path) -> 'GHLPublisher':
-        """Create from client config dict."""
+        """Create from client config dict.
+        Reads token from clients/[abbr]/ghl-tokens.json (single line, gitignored).
+        """
+        token_path = client_dir / 'ghl-tokens.json'
+        if not token_path.exists():
+            raise FileNotFoundError(
+                f'GHL token not found at {token_path}. '
+                f'Create a Private Integration token in GHL Settings > Private Integrations, '
+                f'then save it as {{"token": "YOUR_TOKEN"}} in {token_path}'
+            )
+        token_data = json.loads(token_path.read_text())
         return cls(
             location_id=ghl_config['location_id'],
-            tokens_path=client_dir / 'ghl-tokens.json',
+            api_token=token_data['token'],
         )
-
-    def _load_tokens(self) -> None:
-        """Load tokens from disk; refresh if expired."""
-        if not self._tokens_path.exists():
-            raise FileNotFoundError(
-                f'GHL tokens not found at {self._tokens_path}. '
-                f'Run the OAuth onboarding flow first.'
-            )
-
-        tokens = json.loads(self._tokens_path.read_text())
-        expires_at = tokens.get('expires_at', 0)
-
-        if time.time() >= expires_at - 300:
-            self._refresh_tokens(tokens['refresh_token'])
-        else:
-            self._access_token = tokens['access_token']
-            self._session.headers['Authorization'] = f'Bearer {self._access_token}'
-
-    def _refresh_tokens(self, refresh_token: str) -> None:
-        """Refresh OAuth tokens and save to disk."""
-        resp = requests.post(GHL_TOKEN_URL, data={
-            'grant_type': 'refresh_token',
-            'client_id': self._client_id,
-            'client_secret': self._client_secret,
-            'refresh_token': refresh_token,
-        })
-        resp.raise_for_status()
-        data = resp.json()
-
-        self._access_token = data['access_token']
-        self._session.headers['Authorization'] = f'Bearer {self._access_token}'
-
-        tokens = {
-            'access_token': data['access_token'],
-            'refresh_token': data['refresh_token'],
-            'expires_at': time.time() + data.get('expires_in', 86399),
-        }
-        self._tokens_path.write_text(json.dumps(tokens, indent=2))
 
     def _post(self, endpoint: str, payload: dict) -> dict:
         """POST to GHL API with rate limiting."""
