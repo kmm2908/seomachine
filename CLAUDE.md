@@ -46,7 +46,10 @@ Each client lives in a single folder. To add a new client, run `/new-client`.
 ```
 clients/
   gtm/                  ← Glasgow Thai Massage (live, publishing active)
+  gtb/                  ← Glasgow Thai Massage Blog (blog.glasgowthaimassage.co.uk)
   sdy/                  ← Serendipity Massage Therapy & Wellness (live, batch publishing active)
+  tmg/                  ← Thai Massage Greenock (thaimassagegreenock.co.uk)
+  tmb/                  ← Thai Massage Greenock Blog (blog.thaimassagegreenock.co.uk)
     config.json         ← machine-readable config (name, address, WP creds, services)
     brand-voice.md      ← tone, messaging pillars, client-specific writing rules
     seo-guidelines.md   ← keyword strategy, entity optimisation rules

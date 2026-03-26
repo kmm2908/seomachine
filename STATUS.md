@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-03-26 (session 19 — content repurposing pipeline: design, implementation, API onboarding for ElevenLabs + GoHighLevel across all 4 clients)
+Last updated: 2026-03-26 (session 20 — skills installation, TMG/TMB client onboarding, GHL location IDs populated)
 
 ---
 
@@ -37,6 +37,7 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] `clients/gtm/config.json` — client config with WordPress block, `elementor_template_id: 16508`, and `content_type_map` for CPTs
 - [x] `clients/gtm/` — context folder with brand-voice, seo-guidelines, internal-links-map, features, competitor-analysis, target-keywords, writing-examples
 - [x] `clients/README.md` — schema documentation and onboarding guide
+- [x] GHL location IDs populated: GTM/GTB = `HbhlMeHmDvc4pB9eEAZQ`, SDY = `RXcT7rTaqfcrcUWtpdyO`, TMG = `xRaKh2rHTuvOQ3w8bSn5`
 
 ### Content agents (5 writers)
 - [x] `service-page-writer.md`, `location-page-writer.md`, `pillar-page-writer.md`, `topical-writer.md`, `blog-post-writer.md`
@@ -453,6 +454,52 @@ Fully automated pipeline that takes each published blog article and creates vide
 - [x] GHL Private Integration tokens: `clients/[abbr]/ghl-tokens.json` (gitignored, format: `{"token": "pit-..."}`)
 - [x] GHL location IDs: GTM/GTB = `HbhlMeHmDvc4pB9eEAZQ`, SDY = `RXcT7rTaqfcrcUWtpdyO`, TMG = `xRaKh2rHTuvOQ3w8bSn5`
 - [ ] GHL social account IDs (`ghl.accounts.*` in config.json) — waiting for social accounts to be reconnected in GHL
+
+---
+
+## Client: TMG (Thai Massage Greenock) + TMB (Blog Subdomain)
+
+New client added 2026-03-26. Existing WordPress site at `thaimassagegreenock.co.uk`, blog subdomain at `blog.thaimassagegreenock.co.uk`. Same niche as GTM (`thai-massage`). Therapist: Jariya Malone (Wat Po trained). Inverclyde area.
+
+### Setup Status (session 20)
+- [x] `clients/tmg/` folder — config.json, brand-voice.md, seo-guidelines.md, internal-links-map.md, features.md, target-keywords.md, writing-examples.md
+- [x] `clients/tmg/config.json` — WP credentials set, GHL location ID `xRaKh2rHTuvOQ3w8bSn5`, social accounts populated from website, ElevenLabs voice ID set
+- [x] `clients/tmb/` folder — config.json for blog subdomain (`blog.thaimassagegreenock.co.uk`)
+- [x] `clients/tmb/config.json` — WP credentials set (username `kmm-nlgeo-trust43S`, app password configured)
+- [x] Internal links map populated from live site — 6 service pages, 6 location pages, 5 key pages
+- [ ] Deploy `wordpress/seomachine.php` to TMG main site (`thaimassagegreenock.co.uk/wp-content/mu-plugins/`)
+- [ ] Deploy `wordpress/seomachine.php` to TMB blog site (`blog.thaimassagegreenock.co.uk/wp-content/mu-plugins/`)
+- [ ] Fetch Elementor template (if using Elementor) and set `elementor_template_id` in both configs
+- [ ] Run `research_competitors.py --abbr tmg` to generate `clients/tmg/competitor-analysis.md`
+- [ ] Run `research_blog_topics.py --abbr tmb --queue` to generate topic queue
+- [ ] Test batch publish run on TMB
+- [ ] Add TMG/TMB to Google Sheet Column D dropdown
+
+---
+
+## Claude Code Skills (session 20)
+
+Global skills installed at `~/.claude/skills/`. Available across all projects.
+
+### Installed this session
+- [x] `skill-creator` (18 files) — Anthropic official; create, test, iterate on skills
+- [x] `frontend-design` — Anthropic official; production-grade frontend UI with scroll-driven website guidelines
+- [x] `video-to-website` — Turn video into scroll-driven animated website (GSAP, canvas frames)
+- [x] `mcp-builder` — Anthropic official; guide for building MCP servers
+- [x] `webapp-testing` — Anthropic official; Playwright-based web app testing
+- [x] `pdf` — Anthropic official; PDF manipulation (3 files)
+- [x] `php-pro` — PHP 8.1+ conventions, PSR standards (Jeff Allan collection)
+- [x] `python-pro` — Python typing, pytest, async patterns (Jeff Allan collection)
+- [x] `api-designer` — REST/GraphQL API design (Jeff Allan collection)
+- [x] `nextjs-developer` — Next.js 14+ App Router (Jeff Allan collection)
+- [x] `react-expert` — React 18+ / Server Components (Jeff Allan collection)
+- [x] `security-reviewer` — Security audit and vulnerability detection (Jeff Allan collection)
+- [x] `nano-banana-images` — Kie.ai image generation (~$0.04-0.09/image); API key in `.env`
+- [x] `ingest-youtube` — Three-tier fallback YouTube transcript extraction (agentskill.sh)
+- [x] `youtube-uploader` — YouTube upload with full metadata control (agentskill.sh)
+- [x] `ghl-crm` — GoHighLevel CRM API v2 integration (agentskill.sh)
+- [x] `ghl-ai-agents` — GHL Voice AI + Conversation AI setup guide (skillsmp.com)
+- [x] `ghl-email-sms-marketing` — GHL email/SMS/WhatsApp campaign guide (skillsmp.com)
 
 ---
 

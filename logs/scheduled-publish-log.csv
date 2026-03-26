@@ -1,0 +1,14 @@
+date,abbr,topic,content_type,status,post_id,cost,notes
+2026-03-25,gtm,Tiger Lily Thai Spa,comp-alt,review_required,,$0.5589,Quality gate: ctas
+2026-03-25,gtm,Tiger Lily Thai Spa,comp-alt,review_required,,$0.5562,Quality gate: ctas
+2026-03-25,gtm,Tiger Lily Thai Spa,comp-alt,dry_run,,$0.4866,dry-run mode
+2026-03-25,sdy,Nina Thai Massage and Healing,comp-alt,review_required,,$0.5225,Quality gate: readability
+2026-03-25,sdy,Nina Thai Massage and Healing,comp-alt,review_required,,$0.5248,Quality gate: readability
+2026-03-25,sdy,Phuket Thai Massage,comp-alt,review_required,,$0.5343,Quality gate: stories | paragraphs
+2026-03-25,sdy,Nina Thai Massage and Healing,comp-alt,failed,,,name 'FLESCH_THRESHOLD' is not defined
+2026-03-25,sdy,Nina Thai Massage and Healing,comp-alt,published,702,$0.4568,https://serendipitymassage.co.uk/wp-admin/post.php?post=702&action=edit
+2026-03-25,sdy,Phuket Thai Massage,comp-alt,published,707,$0.4547,https://serendipitymassage.co.uk/wp-admin/post.php?post=707&action=edit
+2026-03-25,sdy,Lan Thai Massage in Glasgow,comp-alt,published,712,$0.4555,https://serendipitymassage.co.uk/wp-admin/post.php?post=712&action=edit
+2026-03-25,gtm,Tiger Lily Thai Spa,comp-alt,published,16690,$0.4170,https://glasgowthaimassage.co.uk/wp-admin/post.php?post=16690&action=edit
+2026-03-25,gtm,Thai House Massage & Spa,comp-alt,published,16695,$0.4181,https://glasgowthaimassage.co.uk/wp-admin/post.php?post=16695&action=edit
+2026-03-25,gtm,Phuket Thai Massage,comp-alt,published,16700,$0.4169,https://glasgowthaimassage.co.uk/wp-admin/post.php?post=16700&action=edit
