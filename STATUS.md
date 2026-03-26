@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-03-26 (session 19 — content repurposing pipeline: design spec + full implementation of video + social media automation via ElevenLabs, FFmpeg, and GoHighLevel)
+Last updated: 2026-03-26 (session 19 — content repurposing pipeline: design, implementation, API onboarding for ElevenLabs + GoHighLevel across all 4 clients)
 
 ---
 
@@ -433,22 +433,26 @@ Fully automated pipeline that takes each published blog article and creates vide
 
 ### Implementation status
 - [x] Design spec written and reviewed
-- [x] ElevenLabs TTS wrapper (`data_sources/modules/elevenlabs_tts.py`) — 4 tests passing
-- [x] GoHighLevel publisher (`data_sources/modules/ghl_publisher.py`) — OAuth auto-refresh, media upload, post scheduling, week alternation — 4 tests passing
+- [x] ElevenLabs TTS wrapper (`data_sources/modules/elevenlabs_tts.py`) — uses `stream_with_timestamps` for audio + alignment — 4 tests passing
+- [x] GoHighLevel publisher (`data_sources/modules/ghl_publisher.py`) — Private Integration tokens (not OAuth), media upload, post scheduling, week alternation — 5 tests passing
 - [x] Social post generator (`src/social/social_post_generator.py`) — Claude-powered video script + social posts from blog HTML — 2 tests passing
 - [x] Video producer (`src/social/video_producer.py`) — FFmpeg long-form + shorts, Ken Burns, slides, thumbnails, SRT captions — 4 tests passing
 - [x] Orchestrator (`src/social/repurpose_content.py`) — CLI with `--abbr`, `--dry-run`, `--status`, `--topic`; CSV logging; email notifications; GHL scheduling — 3 tests passing
-- [x] Client config updated — `elevenlabs.voice_id` + `ghl.location_id` + `ghl.accounts` placeholders added to GTM and SDY config.json
+- [x] Client config updated — `elevenlabs.voice_id` + `ghl.location_id` + `ghl.accounts` for all 4 clients (GTM, GTB, SDY, TMG)
 - [x] Dependencies installed — `elevenlabs>=1.0.0`, `ffmpeg-python>=0.2.0`; FFmpeg binary at `/opt/homebrew/bin/ffmpeg`
-- [x] All 17 unit tests passing
-- [ ] API credential setup (ElevenLabs key, GHL OAuth per client)
+- [x] All 18 unit tests passing
+- [x] ElevenLabs API key set in `.env`; both voices (Maliwan, Jariya) verified working with real API
+- [x] GHL Private Integration tokens set for all 4 clients; location endpoints verified working
+- [ ] Connect social media accounts in GHL Social Planner (in progress — reconnecting expired accounts)
+- [ ] Auto-populate `ghl.accounts` IDs from API (once social accounts are connected)
 - [ ] End-to-end test with real article
 
-### API credentials needed (all new)
-- ElevenLabs API key → add to `.env` as `ELEVENLABS_API_KEY`
-- GoHighLevel OAuth → `GHL_CLIENT_ID` and `GHL_CLIENT_SECRET` in `.env`; per-client tokens in `clients/[abbr]/ghl-tokens.json`
-- Platform accounts connected in GHL: YouTube, Facebook, Instagram, LinkedIn, X, TikTok, GBP
-- Per-client: `elevenlabs.voice_id`, `ghl.location_id`, `ghl.accounts.*` in config.json
+### API credentials — current state
+- [x] ElevenLabs API key in `.env`
+- [x] ElevenLabs voice IDs: GTM/GTB = Maliwan (`7LUeVw...`), SDY/TMG = Jariya (`WthqhsW...`)
+- [x] GHL Private Integration tokens: `clients/[abbr]/ghl-tokens.json` (gitignored, format: `{"token": "pit-..."}`)
+- [x] GHL location IDs: GTM/GTB = `HbhlMeHmDvc4pB9eEAZQ`, SDY = `RXcT7rTaqfcrcUWtpdyO`, TMG = `xRaKh2rHTuvOQ3w8bSn5`
+- [ ] GHL social account IDs (`ghl.accounts.*` in config.json) — waiting for social accounts to be reconnected in GHL
 
 ---
 

@@ -150,9 +150,9 @@ Cron example (2hr after blog publish):
 - `src/social/social_post_generator.py` — Claude-powered video script + social post generation
 - `src/social/video_producer.py` — ElevenLabs TTS + FFmpeg video composition (long-form + shorts)
 - `data_sources/modules/elevenlabs_tts.py` — ElevenLabs TTS wrapper with timestamp support
-- `data_sources/modules/ghl_publisher.py` — GoHighLevel Social Planner API client (OAuth, media upload, post scheduling)
+- `data_sources/modules/ghl_publisher.py` — GoHighLevel Social Planner API client (Private Integration tokens, media upload, post scheduling)
 
-**Client config:** `elevenlabs.voice_id` for per-client voice, `ghl.location_id` + `ghl.accounts` for platform account IDs. GHL OAuth tokens stored in `clients/[abbr]/ghl-tokens.json` (gitignored).
+**Client config:** `elevenlabs.voice_id` for per-client voice, `ghl.location_id` + `ghl.accounts` for platform account IDs. GHL Private Integration tokens stored in `clients/[abbr]/ghl-tokens.json` (gitignored, format: `{"token": "pit-..."}`).
 
 **X format alternation:** Even ISO weeks → thread format, odd weeks → standalone tweets staggered across the week. Controlled by `get_x_format_for_date()` in `ghl_publisher.py`.
 
@@ -165,6 +165,8 @@ Cron example (2hr after blog publish):
 Set `IMAGE_API_PROVIDER=gemini` in `.env` to generate images automatically. Requires `GOOGLE_AI_API_KEY` and `OPENAI_API_KEY`. Leave blank to skip image generation (content-only mode). Cost: ~$0.27/post (Gemini) or ~$0.16/post (DALL-E 3 fallback).
 
 **Image failure handling:** if image generation fails after 3 Gemini retries (30s/60s/120s backoff), the runner automatically falls back to DALL-E 3. If both fail and `--publish` is set, the row is marked `Images o/s` and the file path written to Column F — content is saved locally but not published. Next batch run retries images only (no content regeneration) and publishes on success.
+
+**Nano Banana images** — for standalone/on-demand image generation (not batch runner), use the `nano-banana-images` skill (Kie.ai API, ~$0.04–0.09/image). Say "make me a nano banana image of..." to generate hyper-realistic images via Gemini 3.1 Flash. API key: `KIE_AI_API_KEY` in `.env`.
 
 **Image naming:** `{base-slug}-banner.jpg`, `{heading-slug}.jpg` (section 1), `{base-slug}-faq.jpg` (FAQ section). All names are keyword-rich — no generic `section-1.jpg` filenames.
 
