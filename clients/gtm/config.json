@@ -37,6 +37,21 @@
   "city": "Glasgow",
   "place_id": "ChIJnQImbT5FiEgRon5L9CbTr28",
   "niche": "thai-massage",
+  "elevenlabs": {
+    "voice_id": ""
+  },
+  "ghl": {
+    "location_id": "",
+    "accounts": {
+      "youtube": "",
+      "facebook": "",
+      "instagram": "",
+      "linkedin": "",
+      "x": "",
+      "tiktok": "",
+      "gbp": ""
+    }
+  },
   "ai_visibility": {
     "canonical_description": "Glasgow Thai Massage is a traditional Thai massage studio in Glasgow city centre, offering authentic Thai massage, deep tissue, and sports massage from experienced therapists.",
     "brand_associations": ["thai massage glasgow", "traditional thai massage", "sports massage glasgow city centre"],
