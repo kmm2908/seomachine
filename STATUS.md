@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-03-26 (session 20 — skills installation, TMG/TMB client onboarding, GHL location IDs populated)
+Last updated: 2026-03-26 (session 21 — cross-site hub shortcode, Pinterest social support, TMG/TMB deploy pipeline, skills audit + installation)
 
 ---
 
@@ -187,13 +187,12 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] Batch runner calls `_ensure_template_fresh()` once per client per run before every publish (Images o/s, Publish, and Write Now paths)
 - [x] `clients/sdy/elementor-template-meta.json` — created; baseline `modified` date stored
 
-### Auto-deploy pipeline (session 17)
-- [x] `.github/workflows/deploy-plugin.yml` — GitHub Actions workflow; deploys `wordpress/seomachine.php` to GTM, GTB, and SDY via SFTP on every push to main that touches the file
-- [x] SSH key pair generated (`~/.ssh/seomachine_deploy`); public key added to SiteGround SSH Manager; private key stored as `SITEGROUND_SSH_KEY` GitHub Actions secret
-- [x] SFTP credentials: `u2732-2mxetksmslhk@gukm1055.siteground.biz` port 18765
-- [x] Tested and confirmed working — two parallel jobs (GTM/GTB on ukm1.siteground.biz, SDY on gukm1055.siteground.biz)
+### Auto-deploy pipeline (session 17, expanded session 21)
+- [x] `.github/workflows/deploy-plugin.yml` — GitHub Actions workflow; deploys `wordpress/seomachine.php` to all 5 sites via SFTP on every push to main that touches the file
+- [x] SSH key pair generated (`~/.ssh/seomachine_deploy`); public key added to SiteGround SSH Manager on all 3 accounts; private key stored as `SITEGROUND_SSH_KEY` GitHub Actions secret
+- [x] Three parallel jobs: GTM/GTB (`u2168-sqqieazmgeuw@ukm1.siteground.biz`), SDY (`u2732-2mxetksmslhk@gukm1055.siteground.biz`), TMG/TMB (`u3520-kztrwuly6pid@uk1001.siteground.eu`)
+- [x] All 3 jobs tested and confirmed working (session 21)
 - [x] Correct SFTP paths: `www/[domain]/public_html/wp-content/mu-plugins/seomachine.php`
-- [x] GTM mu-plugins directory created (wasn't deployed there before)
 
 ### AI brand visibility & positioning (session 16)
 - [x] `context/ai-brand-visibility.md` — Brian Dean (Backlinko) YouTube video transcribed, summarised, and stored; covers 4 strategies for getting brands cited in LLM/AI answers; includes section translating strategies for local service clients (GTM, SDY)
@@ -338,7 +337,7 @@ Blog subdomain for Glasgow Thai Massage. Separate WordPress install at `blog.gla
 
 ### Setup Status
 - [x] `clients/gtb/` folder — all context files created (brand voice, SEO guidelines, features, target keywords, writing examples, competitor analysis)
-- [x] `clients/gtb/config.json` — URL `blog.glasgowthaimassage.co.uk`, username `kmm_st65inj7`, template ID 22538
+- [x] `clients/gtb/config.json` — URL `blog.glasgowthaimassage.co.uk`, username `kmm_st65inj7`, template ID 22545 (updated session 21)
 - [x] `clients/gtb/elementor-template.json` — fetched; S1/S2 markers confirmed (two-section mode, same as SDY)
 - [x] `seomachine.php` v2.5 deployed to `blog.glasgowthaimassage.co.uk`
 - [ ] Confirm 6 CPTs appear in wp-admin
@@ -427,7 +426,7 @@ Design spec: `docs/superpowers/specs/2026-03-26-content-repurposing-pipeline-des
 Fully automated pipeline that takes each published blog article and creates video + social media content:
 - **Video:** ElevenLabs TTS voiceover + FFmpeg composition (slides, Ken Burns, text overlays) → 8-12 min long-form YouTube video
 - **Shorts:** AI-driven extraction of 3-5 best moments (20-45s each) → YouTube Shorts, TikTok, FB Reels, IG Reels
-- **Social posts:** LinkedIn, Facebook, X (thread/standalone alternating weeks), Instagram, GBP — all platform-specific
+- **Social posts:** LinkedIn, Facebook, X (thread/standalone alternating weeks), Instagram, Pinterest, GBP — all platform-specific
 - **Publishing:** GoHighLevel Social Planner API as single gateway to all platforms (clients already have GHL accounts)
 - **Architecture:** Two-stage pipeline — blog publishes first (existing), then `src/social/repurpose_content.py` runs 2hrs later via cron, generates all assets, schedules everything via GHL with staggered weekly spread
 - **Future:** HeyGen AI avatar swap-in (clean TTS interface), per-client schedule config in config.json
@@ -439,7 +438,8 @@ Fully automated pipeline that takes each published blog article and creates vide
 - [x] Social post generator (`src/social/social_post_generator.py`) — Claude-powered video script + social posts from blog HTML — 2 tests passing
 - [x] Video producer (`src/social/video_producer.py`) — FFmpeg long-form + shorts, Ken Burns, slides, thumbnails, SRT captions — 4 tests passing
 - [x] Orchestrator (`src/social/repurpose_content.py`) — CLI with `--abbr`, `--dry-run`, `--status`, `--topic`; CSV logging; email notifications; GHL scheduling — 3 tests passing
-- [x] Client config updated — `elevenlabs.voice_id` + `ghl.location_id` + `ghl.accounts` for all 4 clients (GTM, GTB, SDY, TMG)
+- [x] Client config updated — `elevenlabs.voice_id` + `ghl.location_id` + `ghl.accounts` for all 5 clients (GTM, GTB, SDY, TMG, TMB)
+- [x] Pinterest support added (session 21) — schedule key, key map, dispatch handler, Claude prompt for pin generation; `pinterest` field in all client configs
 - [x] Dependencies installed — `elevenlabs>=1.0.0`, `ffmpeg-python>=0.2.0`; FFmpeg binary at `/opt/homebrew/bin/ffmpeg`
 - [x] All 18 unit tests passing
 - [x] ElevenLabs API key set in `.env`; both voices (Maliwan, Jariya) verified working with real API
@@ -467,13 +467,31 @@ New client added 2026-03-26. Existing WordPress site at `thaimassagegreenock.co.
 - [x] `clients/tmb/` folder — config.json for blog subdomain (`blog.thaimassagegreenock.co.uk`)
 - [x] `clients/tmb/config.json` — WP credentials set (username `kmm-nlgeo-trust43S`, app password configured)
 - [x] Internal links map populated from live site — 6 service pages, 6 location pages, 5 key pages
-- [ ] Deploy `wordpress/seomachine.php` to TMG main site (`thaimassagegreenock.co.uk/wp-content/mu-plugins/`)
-- [ ] Deploy `wordpress/seomachine.php` to TMB blog site (`blog.thaimassagegreenock.co.uk/wp-content/mu-plugins/`)
+- [x] Deploy `wordpress/seomachine.php` to TMG main site — auto-deploy via GitHub Actions (session 21)
+- [x] Deploy `wordpress/seomachine.php` to TMB blog site — auto-deploy via GitHub Actions (session 21)
+- [x] SSH public key added to TMG SiteGround account (`u3520-kztrwuly6pid@uk1001.siteground.eu`)
 - [ ] Fetch Elementor template (if using Elementor) and set `elementor_template_id` in both configs
 - [ ] Run `research_competitors.py --abbr tmg` to generate `clients/tmg/competitor-analysis.md`
 - [ ] Run `research_blog_topics.py --abbr tmb --queue` to generate topic queue
 - [ ] Test batch publish run on TMB
 - [ ] Add TMG/TMB to Google Sheet Column D dropdown
+
+---
+
+## Cross-Site Hub Shortcode (session 21)
+
+`seomachine.php` v2.7.0 — `[seo_hub]` shortcode now supports fetching posts from a remote WordPress site.
+
+- [x] `seo_hub_remote_fetch()` — REST API fetch with pagination, 12-hour transient cache, graceful error handling
+- [x] `seo_hub_source` wp_option — set on blog subdomains to point at main site URL
+- [x] Settings → General field added — "SEO Hub Source URL" input for easy config in wp-admin
+- [x] `source` shortcode attribute — per-shortcode override (optional)
+- [x] `blog` type always queries locally — blog posts live on the subdomain
+- [x] No auth required — CPTs are `public => true` / `show_in_rest => true`
+- [x] Deployed to all 5 sites via GitHub Actions
+- [ ] Set `seo_hub_source` on GTB (`https://glasgowthaimassage.co.uk`) via Settings → General
+- [ ] Set `seo_hub_source` on TMB (`https://thaimassagegreenock.co.uk`) via Settings → General
+- [ ] Test `[seo_hub type="location"]` on GTB — confirm links point to main site
 
 ---
 
