@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-03-26 (session 18 — comp-alt scheduled publishing pipeline; quality gate per-type config; 6 comp-alt pages live on GTM + SDY)
+Last updated: 2026-03-26 (session 19 — content repurposing pipeline design: video + social media automation via ElevenLabs, FFmpeg, and GoHighLevel)
 
 ---
 
@@ -419,6 +419,36 @@ Reason: caching on the live front-end doesn't affect the REST API. Running conte
 
 ---
 
+## Content Repurposing Pipeline (designed session 19, not yet implemented)
+
+Design spec: `docs/superpowers/specs/2026-03-26-content-repurposing-pipeline-design.md`
+
+Fully automated pipeline that takes each published blog article and creates video + social media content:
+- **Video:** ElevenLabs TTS voiceover + FFmpeg composition (slides, Ken Burns, text overlays) → 8-12 min long-form YouTube video
+- **Shorts:** AI-driven extraction of 3-5 best moments (20-45s each) → YouTube Shorts, TikTok, FB Reels, IG Reels
+- **Social posts:** LinkedIn, Facebook, X (thread/standalone alternating weeks), Instagram, GBP — all platform-specific
+- **Publishing:** GoHighLevel Social Planner API as single gateway to all platforms (clients already have GHL accounts)
+- **Architecture:** Two-stage pipeline — blog publishes first (existing), then `src/social/repurpose_content.py` runs 2hrs later via cron, generates all assets, schedules everything via GHL with staggered weekly spread
+- **Future:** HeyGen AI avatar swap-in (clean TTS interface), per-client schedule config in config.json
+
+### Implementation status
+- [x] Design spec written and reviewed
+- [ ] Implementation plan (next session)
+- [ ] ElevenLabs TTS wrapper (`data_sources/modules/elevenlabs_tts.py`)
+- [ ] Video producer (`src/social/video_producer.py`) — FFmpeg composition
+- [ ] Social post generator (`src/social/social_post_generator.py`) — Claude-powered
+- [ ] GoHighLevel publisher (`data_sources/modules/ghl_publisher.py`)
+- [ ] Orchestrator (`src/social/repurpose_content.py`)
+- [ ] API credential setup (ElevenLabs, GHL OAuth per client)
+- [ ] End-to-end test
+
+### API credentials needed (all new)
+- ElevenLabs API key
+- GoHighLevel OAuth (client ID + secret + per-client location tokens)
+- Platform accounts connected in GHL: YouTube, Facebook, Instagram, LinkedIn, X, TikTok, GBP
+
+---
+
 ## Deferred / Future
 
 - Multi-client Sheet support — currently one Sheet per project; future: Sheet per client or client column filtering
@@ -426,3 +456,7 @@ Reason: caching on the live front-end doesn't affect the REST API. Running conte
 - `/write` command entity-awareness — interactive write command doesn't yet follow entity-first research flow
 - WordPress parent-page support — location pages should be child pages of their location/pillar parent
 - Hub shortcode: consider adding a `limit` attribute and/or grouping by taxonomy for large link lists
+- Per-client social media posting schedule override in config.json (default schedule hardcoded for now)
+- Pinterest, Threads, Bluesky social posting (GHL supports them — add when needed)
+- Social media analytics/performance tracking from platforms
+- Stock video clip integration in video composition
