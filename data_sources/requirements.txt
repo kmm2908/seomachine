@@ -49,3 +49,9 @@ markdown>=3.5.0
 # Image generation
 openai>=1.12.0
 Pillow>=10.0.0
+
+# ElevenLabs TTS SDK
+elevenlabs>=1.0.0
+
+# FFmpeg wrapper (requires ffmpeg binary)
+ffmpeg-python>=0.2.0

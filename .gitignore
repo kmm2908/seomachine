@@ -121,3 +121,6 @@ logs/quality-log.csv
 
 # Firecrawl cache (web scraping artifacts)
 .firecrawl/
+
+# GoHighLevel OAuth tokens (per-client, auto-refreshed)
+clients/*/ghl-tokens.json
