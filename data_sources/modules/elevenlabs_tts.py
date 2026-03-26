@@ -56,7 +56,7 @@ class ElevenLabsTTS:
         output_path = Path(output_path)
         output_path.parent.mkdir(parents=True, exist_ok=True)
 
-        response_chunks = self._client.text_to_speech.convert_with_timestamps(
+        response_chunks = self._client.text_to_speech.stream_with_timestamps(
             text=text,
             voice_id=voice_id,
             model_id=model,
@@ -64,15 +64,29 @@ class ElevenLabsTTS:
         )
 
         audio_bytes = b''
-        alignment = None
+        all_chars = []
+        all_starts = []
+        all_ends = []
         for chunk in response_chunks:
-            if isinstance(chunk, dict):
-                if 'audio_base64' in chunk and chunk['audio_base64']:
-                    audio_bytes += base64.b64decode(chunk['audio_base64'])
-                if 'alignment' in chunk and chunk['alignment']:
-                    alignment = chunk['alignment']
-            else:
-                audio_bytes += chunk
+            audio_b64 = getattr(chunk, 'audio_base_64', None)
+            if audio_b64:
+                try:
+                    audio_bytes += base64.b64decode(audio_b64)
+                except Exception:
+                    pass
+            align_obj = getattr(chunk, 'alignment', None)
+            if align_obj and hasattr(align_obj, 'characters'):
+                all_chars.extend(align_obj.characters)
+                all_starts.extend(align_obj.character_start_times_seconds)
+                all_ends.extend(align_obj.character_end_times_seconds)
+
+        alignment = None
+        if all_chars:
+            alignment = {
+                'characters': all_chars,
+                'character_start_times_seconds': all_starts,
+                'character_end_times_seconds': all_ends,
+            }
 
         with open(output_path, 'wb') as f:
             f.write(audio_bytes)

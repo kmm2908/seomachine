@@ -39,18 +39,18 @@ def test_generate_with_timestamps_returns_alignment():
     """TTS with timestamps returns word-level alignment data."""
     from elevenlabs_tts import ElevenLabsTTS
 
-    mock_audio_bytes = b'\xff\xfb\x90\x00' * 100
-    mock_alignment = {
-        'characters': list('Hello world'),
-        'character_start_times_seconds': [0.0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5],
-        'character_end_times_seconds': [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55],
-    }
+    mock_alignment = MagicMock()
+    mock_alignment.characters = list('Hello world')
+    mock_alignment.character_start_times_seconds = [0.0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5]
+    mock_alignment.character_end_times_seconds = [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55]
+
+    mock_chunk = MagicMock()
+    mock_chunk.audio_base_64 = 'AAAA'
+    mock_chunk.alignment = mock_alignment
 
     with patch('elevenlabs_tts.ElevenLabs') as MockClient:
         mock_client = MockClient.return_value
-        mock_client.text_to_speech.convert_with_timestamps.return_value = iter([
-            {'audio_base64': 'AAAA', 'alignment': mock_alignment}
-        ])
+        mock_client.text_to_speech.stream_with_timestamps.return_value = iter([mock_chunk])
 
         tts = ElevenLabsTTS(api_key='test-key')
         output_dir = Path('/tmp/test_tts_output')
