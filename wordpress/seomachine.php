@@ -2,7 +2,7 @@
 /**
  * Plugin Name: SEO Machine
  * Description: Registers SEO content post types and exposes SEO meta fields via REST API. No Yoast dependency.
- * Version: 2.7.0
+ * Version: 2.8.0
  * Author: SEO Machine
  *
  * Installation:
@@ -21,6 +21,7 @@ define('SEO_MACHINE_POST_TYPES', [
     'seo_topical'   => ['Topical Articles',         'Topical Article',       'seo_topical'],
     'seo_blog'      => ['Blog Posts',               'Blog Post',             'seo_blog'],
     'seo_comp_alt'  => ['Competitor Alternatives',  'Competitor Alternative','seo_comp_alt'],
+    'seo_problem'   => ['Problem Pages',            'Problem Page',          'seo_problem'],
 ]);
 
 // ── CPT registration helper ───────────────────────────────────────────────────
@@ -165,6 +166,7 @@ add_shortcode('seo_hub', function($atts) {
         'topical'  => 'seo_topical',
         'blog'     => 'seo_blog',
         'comp-alt' => 'seo_comp_alt',
+        'problem'  => 'seo_problem',
     ];
 
     $type      = $atts['type'];

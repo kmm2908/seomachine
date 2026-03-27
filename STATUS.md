@@ -489,8 +489,8 @@ New client added 2026-03-26. Existing WordPress site at `thaimassagegreenock.co.
 - [x] `blog` type always queries locally — blog posts live on the subdomain
 - [x] No auth required — CPTs are `public => true` / `show_in_rest => true`
 - [x] Deployed to all 5 sites via GitHub Actions
-- [ ] Set `seo_hub_source` on GTB (`https://glasgowthaimassage.co.uk`) via Settings → General
-- [ ] Set `seo_hub_source` on TMB (`https://thaimassagegreenock.co.uk`) via Settings → General
+- [x] Set `seo_hub_source` on GTB (`https://glasgowthaimassage.co.uk`) via Settings → General
+- [x] Set `seo_hub_source` on TMB (`https://thaimassagegreenock.co.uk`) via Settings → General
 - [ ] Test `[seo_hub type="location"]` on GTB — confirm links point to main site
 
 ---

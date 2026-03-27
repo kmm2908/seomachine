@@ -24,7 +24,8 @@
       "pillar":   "seo_pillar",
       "topical":  "seo_topical",
       "blog":     "seo_blog",
-      "comp-alt": "seo_comp_alt"
+      "comp-alt": "seo_comp_alt",
+      "problem":  "seo_problem"
     },
     "default_post_type": "seo_blog",
     "default_status": "draft",

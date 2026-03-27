@@ -62,6 +62,7 @@ CONTENT_TYPE_AGENTS = {
     'blog':      'blog-post-writer.md',
     'pillar':    'pillar-page-writer.md',
     'comp-alt':  'competitor-alt-writer.md',
+    'problem':   'problem-page-writer.md',
 }
 
 # ── Claude model and pricing ─────────────────────────────────────────────────
@@ -381,12 +382,37 @@ Instructions:
     return prompt
 
 
+def build_problem_prompt(topic: str, business_config: Optional[dict] = None) -> str:
+    """User prompt for problem/condition page content."""
+    today = date.today().isoformat()
+    return f"""Write a problem/condition page for the following:
+
+Condition: {topic}
+Today's date: {today}
+
+Steps you must follow:
+
+1. Use the web_search tool to research this condition:
+   - "{topic} massage therapy benefits"
+   - "{topic} causes symptoms NHS"
+   - "{topic} Wikipedia"
+   Find authoritative sources (Wikipedia, NHS, PubMed, medical journals) to link to.
+
+2. Write a 600-800 word problem page following the structure in your instructions.
+   Include at least 2 outbound links to authoritative sources found via your research.
+   Section 1 (Hook → What Is It → How Massage Helps → What to Expect → Who Benefits)
+   Section 2 (FAQ — 4-6 condition-specific questions)
+
+3. Output three HTML sections starting with <!-- SECTION 1 -->. No frontmatter, no markdown."""
+
+
 PROMPT_BUILDERS = {
     'service':   build_service_prompt,
     'location':  build_location_prompt,
     'topical':   build_topical_prompt,
     'blog':      build_blog_prompt,
     'comp-alt':  build_comp_alt_prompt,
+    'problem':   build_problem_prompt,
 }
 
 

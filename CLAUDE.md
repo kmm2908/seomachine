@@ -96,6 +96,7 @@ The batch runner and agents support 5 content types, selected via Column E in th
 | `topical` | `topical-writer.md` | 600–1000 | Informational/question-based articles |
 | `blog` | `blog-post-writer.md` | 600–1200 | Conversational blog posts |
 | `comp-alt` | `competitor-alt-writer.md` | 500–700 | Competitor alternative / comparison pages |
+| `problem` | `problem-page-writer.md` | 600–800 | Condition/symptom pages with authority outbound links |
 
 Default: `blog` if Column E is empty.
 
@@ -115,13 +116,15 @@ Output: `content/[abbr]/[type]/[slug]-[date]/[slug]-[date].html` (one folder per
 
 **Comp-alt queue files** — `research/[abbr]/comp-alt-queue.json`. Hand-curated list of competitor names (must match `###` headings in `competitor-analysis.md`). Run via: `python3 src/content/publish_scheduled.py --abbr gtm --queue comp-alt-queue.json`. Always publish via background agent when running multiple topics (see Agent Usage above).
 
+**Problem queue files** — `research/[abbr]/problem-queue.json`. List of conditions/symptoms (e.g. sciatica, headaches, stiff neck). Same topic list shared across all Thai massage clients but content is unique per site (different brand voice, local area, therapist context). Run via: `python3 src/content/publish_scheduled.py --abbr gtm --queue problem-queue.json`. Problem pages include mandatory outbound links to authoritative sources (Wikipedia, NHS, PubMed) found via live web search.
+
 Cron examples:
 - Blog (every Monday 09:00): `0 9 * * 1 cd /path/to/seomachine && python3 src/content/publish_scheduled.py --abbr gtb`
 - Comp-alt (Wednesdays GTM, Thursdays SDY): `0 10 * * 3 ... --abbr gtm --queue comp-alt-queue.json`
 
 **Directions snippet** — `src/snippets/generate_directions_snippet.py` generates a self-contained HTML+JS Google Maps directions widget per client. Saved to `clients/[abbr]/snippets/[abbr]-directions.html`. The batch runner calls `_ensure_directions_snippet()` automatically on the first publish run per client — no manual step needed. The snippet is injected into `comp-alt` page prompts automatically.
 
-**Quality gate** runs after every article is written. Thresholds are per-content-type (`CONTENT_TYPE_CONFIG` in `quality_gate.py`). Hook and CTAs are mandatory for all types. Default (blog/location/service/etc.): Flesch ≥ 55, need 2/3 of stories/rhythm/paragraphs. `comp-alt`: Flesch ≥ 48, no stories criterion, need 1/2 of rhythm/paragraphs. If it fails, Claude rewrites with targeted instructions, up to 2 rewrites. Console output:
+**Quality gate** runs after every article is written. Thresholds are per-content-type (`CONTENT_TYPE_CONFIG` in `quality_gate.py`). Hook and CTAs are mandatory for all types. Default (blog/location/service/etc.): Flesch ≥ 55, need 2/3 of stories/rhythm/paragraphs. `comp-alt`: Flesch ≥ 48, no stories criterion, need 1/2 of rhythm/paragraphs. `problem`: Flesch ≥ 55, no stories, need 1/2 of rhythm/paragraphs. If it fails, Claude rewrites with targeted instructions, up to 2 rewrites. Console output:
 ```
 → Quality: Flesch 55 ✓ | hook ✓ | ctas ✓ | stories ✗ | rhythm ✓ | paras ✓ — passed
 ```
@@ -253,7 +256,7 @@ python3 src/content/republish_existing.py --abbr gtm --type blog
 ```
 Use this when posts need to be re-created in WordPress (e.g. after enabling Elementor CPT support).
 
-**Custom post types** — content is published to the correct CPT based on content type. Mapping is in `clients/[abbr]/config.json` under `wordpress.content_type_map`. CPTs: `seo_service`, `seo_location`, `seo_pillar`, `seo_topical`, `seo_blog`, `seo_comp_alt`. All grouped under "SEO Content" in wp-admin. SEO meta fields (`seo_meta` REST field) work without Yoast — keys are Yoast-compatible so they display in Yoast UI if installed.
+**Custom post types** — content is published to the correct CPT based on content type. Mapping is in `clients/[abbr]/config.json` under `wordpress.content_type_map`. CPTs: `seo_service`, `seo_location`, `seo_pillar`, `seo_topical`, `seo_blog`, `seo_comp_alt`, `seo_problem`. All grouped under "SEO Content" in wp-admin. SEO meta fields (`seo_meta` REST field) work without Yoast — keys are Yoast-compatible so they display in Yoast UI if installed.
 
 **Elementor template publishing** (used when `clients/[abbr]/elementor-template.json` exists):
 1. Run `python3 src/publishing/fetch_elementor_template.py [abbr]` once to capture the saved template (reads `wordpress.elementor_template_id` from config). Skips SSL verification automatically for `.local` domains. Saves a `clients/[abbr]/elementor-template-meta.json` sidecar with the WP `modified` date.

@@ -38,6 +38,11 @@ CONTENT_TYPE_CONFIG = {
         'optional_criteria': ['rhythm', 'paragraphs'],  # stories don't fit fact-based pages
         'optional_min': 1,          # need >=1 of 2
     },
+    'problem': {
+        'flesch_threshold': 55,     # medical topics need clear language
+        'optional_criteria': ['rhythm', 'paragraphs'],  # no stories — informational, not narrative
+        'optional_min': 1,          # need >=1 of 2
+    },
 }
 
 def _get_type_config(content_type: str) -> dict:
