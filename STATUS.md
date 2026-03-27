@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-03-27 (session 21 continued — problem content type, cross-site hub shortcode, Pinterest, TMG/TMB deploy, skills installation)
+Last updated: 2026-03-27 (session 21 — skills install, TMG/TMB onboarding, cross-site hub, Pinterest, problem CPT, static direction maps)
 
 ---
 
@@ -230,6 +230,12 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] `_ensure_directions_snippet()` added to batch runner — auto-generates on first publish run per client (runs alongside `_ensure_template_fresh`)
 - [x] GTM snippet: `clients/gtm/snippets/gtm-directions.html`
 - [x] SDY snippet: `clients/sdy/snippets/sdy-directions.html`
+
+### Static direction maps (session 21)
+- [x] SDY static maps: `clients/sdy/snippets/sdy-static-maps.html` — 6 Google Maps embeds from Glasgow landmarks (Central Station, Buchanan Bus Station, Queen Street, St Enoch Subway, George Square, Cowcaddens Subway) to Central Chambers
+- [x] Settings: zoom `!1d1000`, height `400px`, walking directions, building name in address
+- [ ] Generate static maps for GTM (same landmarks, different destination address)
+- [ ] Generate static maps for TMG (Greenock landmarks to South Street)
 
 ### Problem content type (session 21)
 - [x] `seo_problem` CPT registered in `seomachine.php` v2.8.0 — URL pattern `/problem/[slug]/`
