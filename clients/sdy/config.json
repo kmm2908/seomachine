@@ -15,9 +15,9 @@
     "logo_url": "https://serendipitymassage.co.uk/wp-content/uploads/serendipity-logo.png"
   },
   "wordpress": {
-    "url": "https://serendipitymassage.co.uk",
+    "url": "https://sdy.local",
     "username": "kmm-T5r",
-    "app_password": "G8lp 3awQ nhtU C3V1 he5O V5aB",
+    "app_password": "seLS YVoq 0YSU v8CI LDo9 IHib",
     "content_type_map": {
       "service":  "seo_service",
       "location": "seo_location",
@@ -28,6 +28,12 @@
     },
     "default_post_type": "seo_blog",
     "default_status": "draft",
+    "elementor_template_id": 635
+  },
+  "wordpress_live": {
+    "url": "https://serendipitymassage.co.uk",
+    "username": "kmm-T5r",
+    "app_password": "G8lp 3awQ nhtU C3V1 he5O V5aB",
     "elementor_template_id": 564
   },
   "niche": "massage-therapy",
@@ -51,11 +57,5 @@
     "canonical_description": "Serendipity Massage Therapy & Wellness is a holistic massage and wellness studio offering therapeutic massage, relaxation treatments, and wellbeing services.",
     "brand_associations": ["massage therapy", "holistic wellness", "relaxation massage", "therapeutic massage"],
     "positioning_note": "Emphasise: holistic wellbeing, therapeutic benefit, personal care. Tone is warm and nurturing — not clinical, not luxury spa."
-  },
-  "wordpress_local": {
-    "url": "https://sdy.local",
-    "username": "kmm-T5r",
-    "app_password": "seLS YVoq 0YSU v8CI LDo9 IHib",
-    "elementor_template_id": 635
   }
 }

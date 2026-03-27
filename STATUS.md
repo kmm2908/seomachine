@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-03-26 (session 21 — cross-site hub shortcode, Pinterest social support, TMG/TMB deploy pipeline, skills audit + installation)
+Last updated: 2026-03-27 (session 21 continued — problem content type, cross-site hub shortcode, Pinterest, TMG/TMB deploy, skills installation)
 
 ---
 
@@ -78,8 +78,8 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] GTM template fetched and saved — `clients/gtm/elementor-template.json`
 
 ### WordPress Custom Post Types
-- [x] `wordpress/seomachine.php` v2.2 — MU-plugin; must be in `wp-content/mu-plugins/` (not inside `plugins/`)
-- [x] 5 CPTs registered: `seo_service`, `seo_location`, `seo_pillar`, `seo_topical`, `seo_blog`
+- [x] `wordpress/seomachine.php` v2.8.0 — MU-plugin; must be in `wp-content/mu-plugins/` (not inside `plugins/`)
+- [x] 7 CPTs registered: `seo_service`, `seo_location`, `seo_pillar`, `seo_topical`, `seo_blog`, `seo_comp_alt`, `seo_problem`
 - [x] All CPTs grouped under "SEO Content" parent menu in wp-admin
 - [x] `seo_meta` REST field registered on all CPTs — Yoast-compatible meta keys, works without Yoast installed
 - [x] Elementor filter — all 5 CPTs available in Elementor builder (must be enabled in Elementor → Settings first)
@@ -230,6 +230,19 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] `_ensure_directions_snippet()` added to batch runner — auto-generates on first publish run per client (runs alongside `_ensure_template_fresh`)
 - [x] GTM snippet: `clients/gtm/snippets/gtm-directions.html`
 - [x] SDY snippet: `clients/sdy/snippets/sdy-directions.html`
+
+### Problem content type (session 21)
+- [x] `seo_problem` CPT registered in `seomachine.php` v2.8.0 — URL pattern `/problem/[slug]/`
+- [x] `.claude/agents/problem-page-writer.md` — 600–800 word condition/symptom pages with mandatory outbound links to authoritative sources (Wikipedia, NHS, PubMed) via live web search
+- [x] `build_problem_prompt()` in batch runner — web search queries for condition + massage benefits + NHS guidance
+- [x] `CONTENT_TYPE_CONFIG['problem']` in quality gate — Flesch ≥ 55, rhythm/paragraphs, no stories
+- [x] `problem` → `seo_problem` added to GTM and TMG content_type_maps
+- [x] `research/gtm/problem-queue.json` — 12 conditions queued (sciatica, stiff neck, headaches, etc.)
+- [x] `research/tmg/problem-queue.json` — same 12 conditions, unique content per site via brand voice + local context
+- [x] Hub shortcode supports `[seo_hub type="problem"]`
+- [ ] Dry-run test on one topic
+- [ ] Batch publish all 12 for GTM
+- [ ] Batch publish all 12 for TMG
 
 ### comp-alt scheduled publishing pipeline (session 18)
 - [x] `research/gtm/comp-alt-queue.json` — 3 competitors queued: Tiger Lily, Thai House, Phuket; cadence 7 days
