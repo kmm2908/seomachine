@@ -26,22 +26,22 @@ _OUTPUT_COST_PER_M = 15.00
 MAX_REWRITES = 2
 
 # Per-content-type quality thresholds.
-# Mandatory criteria (hook, ctas) always apply to every type.
+# Mandatory criteria (hook, ctas, paragraphs) always apply to every type.
 CONTENT_TYPE_CONFIG = {
     '_default': {
         'flesch_threshold': 55,
-        'optional_criteria': ['stories', 'rhythm', 'paragraphs'],
-        'optional_min': 2,          # need >=2 of 3
+        'optional_criteria': ['stories', 'rhythm'],
+        'optional_min': 1,          # need >=1 of 2
     },
     'comp-alt': {
         'flesch_threshold': 48,     # comparison pages use proper nouns / denser language
-        'optional_criteria': ['rhythm', 'paragraphs'],  # stories don't fit fact-based pages
-        'optional_min': 1,          # need >=1 of 2
+        'optional_criteria': ['rhythm'],  # stories don't fit fact-based pages
+        'optional_min': 0,          # rhythm is nice-to-have
     },
     'problem': {
         'flesch_threshold': 55,     # medical topics need clear language
-        'optional_criteria': ['rhythm', 'paragraphs'],  # no stories — informational, not narrative
-        'optional_min': 1,          # need >=1 of 2
+        'optional_criteria': ['rhythm'],  # no stories — informational, not narrative
+        'optional_min': 0,          # rhythm is nice-to-have
     },
 }
 
@@ -76,11 +76,18 @@ class QualityGate:
         """
         cfg = _get_type_config(content_type)
         plain = self._to_plain(content)
+        body_plain = self._to_body_plain(content)
         current_content = content
         total_cost = 0.0
 
         try:
-            eng = EngagementAnalyzer().analyze(plain)
+            ea = EngagementAnalyzer()
+            eng = ea.analyze(plain)
+            # Re-run CTA and paragraph analysis on body only (excludes FAQ section)
+            eng['ctas'] = ea._analyze_ctas(body_plain)
+            eng['scores']['ctas'] = eng['ctas']['distributed']
+            eng['paragraphs'] = ea._analyze_paragraphs(body_plain)
+            eng['scores']['paragraphs'] = eng['paragraphs']['long_count'] <= 3
             read = ReadabilityScorer().analyze(plain)
         except Exception as e:
             print(f"    → Quality check error (skipped): {e}")
@@ -115,9 +122,15 @@ class QualityGate:
 
             current_content = rewrite_content
             plain = self._to_plain(current_content)
+            body_plain = self._to_body_plain(current_content)
 
             try:
-                eng = EngagementAnalyzer().analyze(plain)
+                ea = EngagementAnalyzer()
+                eng = ea.analyze(plain)
+                eng['ctas'] = ea._analyze_ctas(body_plain)
+                eng['scores']['ctas'] = eng['ctas']['distributed']
+                eng['paragraphs'] = ea._analyze_paragraphs(body_plain)
+                eng['scores']['paragraphs'] = eng['paragraphs']['long_count'] <= 3
                 read = ReadabilityScorer().analyze(plain)
             except Exception as e:
                 print(f"    → Quality check error (skipped): {e}")
@@ -164,6 +177,8 @@ class QualityGate:
             failures.append('hook')
         if not scores.get('ctas', False):
             failures.append('ctas')
+        if not scores.get('paragraphs', False):
+            failures.append('paragraphs')
 
         # Optional engagement criteria — need >= optional_min of optional_criteria
         optional = cfg['optional_criteria']
@@ -220,7 +235,7 @@ class QualityGate:
             )
         if 'paragraphs' in failures:
             instructions.append(
-                "Break any paragraph with more than 4 sentences into two shorter ones."
+                "Break any paragraph with more than 3 sentences into two shorter ones. Aim for 2-3 sentences per paragraph."
             )
         # Preserve instructions — tell Claude not to break what already works
         preserve_instructions = {
@@ -270,6 +285,10 @@ Content to rewrite:
                 messages=[{'role': 'user', 'content': prompt}],
             )
             rewritten = msg.content[0].text.strip()
+            # Strip markdown code fences Claude sometimes wraps around HTML
+            if rewritten.startswith('```'):
+                rewritten = re.sub(r'^```\w*\n?', '', rewritten)
+                rewritten = re.sub(r'\n?```$', '', rewritten).strip()
             cost = (
                 (msg.usage.input_tokens / 1_000_000 * _INPUT_COST_PER_M) +
                 (msg.usage.output_tokens / 1_000_000 * _OUTPUT_COST_PER_M)
@@ -290,6 +309,19 @@ Content to rewrite:
 
     def _to_plain(self, html: str) -> str:
         """Strip HTML to plain text, preserving paragraph breaks for scoring."""
+        return self._strip_html(html)
+
+    def _to_body_plain(self, html: str) -> str:
+        """Strip HTML to plain text, excluding the FAQ section (Section 2).
+
+        Used for CTA analysis — FAQ is a reference section and shouldn't
+        dilute CTA position calculations.
+        """
+        body = html.split('<!-- SECTION 2', 1)[0]
+        return self._strip_html(body)
+
+    @staticmethod
+    def _strip_html(html: str) -> str:
         text = re.sub(r'<!--.*?-->', '', html, flags=re.DOTALL)
         text = re.sub(r'<script[^>]*>.*?</script>', '', text, flags=re.IGNORECASE | re.DOTALL)
         text = re.sub(r'</p>', '\n\n', text, flags=re.IGNORECASE)

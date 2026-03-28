@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-03-27 (session 21 — skills install, TMG/TMB onboarding, cross-site hub, Pinterest, problem CPT, static direction maps)
+Last updated: 2026-03-28 (session 22 — SDY local dev switch, quality gate CTA/paragraph fixes, problem grid shortcode, code fence stripping)
 
 ---
 
@@ -39,10 +39,13 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] `clients/README.md` — schema documentation and onboarding guide
 - [x] GHL location IDs populated: GTM/GTB = `HbhlMeHmDvc4pB9eEAZQ`, SDY = `RXcT7rTaqfcrcUWtpdyO`, TMG = `xRaKh2rHTuvOQ3w8bSn5`
 
-### Content agents (5 writers)
-- [x] `service-page-writer.md`, `location-page-writer.md`, `pillar-page-writer.md`, `topical-writer.md`, `blog-post-writer.md`
-- [x] **FAQ accordion** — all 5 agents output `<details>`/`<summary>` collapsible FAQ (no JS/CSS needed)
-- [x] **Schema markup** — all 5 agents output `<!-- SCHEMA -->` block with JSON-LD `@graph` (primary type + FAQPage + LocalBusiness)
+### Content agents (7 writers)
+- [x] `service-page-writer.md`, `location-page-writer.md`, `pillar-page-writer.md`, `topical-writer.md`, `blog-post-writer.md`, `competitor-alt-writer.md`, `problem-page-writer.md`
+- [x] **FAQ accordion** — all 7 agents output `<details>`/`<summary>` collapsible FAQ (no JS/CSS needed)
+- [x] **Schema markup** — all 7 agents output `<!-- SCHEMA -->` block with JSON-LD `@graph` (primary type + FAQPage + LocalBusiness)
+- [x] **Inline booking CTAs** — all 7 agents include 2-3 inline booking links to `booking_url` (session 22)
+- [x] **Short anchor text** — all 7 agents: 3-6 words per anchor, never wrap full sentences (session 22)
+- [x] **Short paragraphs** — all 7 agents: maximum 3 sentences per paragraph (session 22)
 
 ### SEO guidelines
 - [x] Entity optimisation section added to `clients/gtm/seo-guidelines.md`
@@ -64,10 +67,11 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 
 ### WordPress publisher
 - [x] `WordPressPublisher.from_config(wp_config)` — accepts credentials from client JSON
-- [x] `upload_media()` — returns `(media_id, source_url)` tuple
+- [x] `upload_media()` — returns `(media_id, source_url)` tuple; uses `self.session.post` (session 22 fix: was bypassing SSL skip with bare `requests.post`)
 - [x] `_upload_and_replace_images()` — uploads all local images, rewrites relative src to absolute WP URLs before creating draft
 - [x] `_wrap_schema_block()` — wraps schema in Gutenberg `wp:html` block (non-Elementor path)
 - [x] `publish_html_content()` — HTML publishing path; branches on Elementor vs plain; accepts `excerpt` param
+- [x] **SSL skip for `.local` domains** (session 22) — `self.session.verify = False` when WP URL ends in `.local`; applies to all requests including media upload
 
 ### Elementor template injection
 - [x] `src/fetch_elementor_template.py` — one-time CLI: fetches `elementor_library/{id}` from WP, saves to `clients/[abbr]/elementor-template.json`
@@ -85,14 +89,15 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] Elementor filter — all 5 CPTs available in Elementor builder (must be enabled in Elementor → Settings first)
 - [x] `content_type_map` in client config — batch runner resolves correct CPT from content type
 
-### Hub page shortcode (new session 5)
+### Hub page shortcode (new session 5, updated session 22)
 - [x] `[seo_hub type="location"]` shortcode in `seomachine.php` — renders published posts as `<ul class="seo-hub-links">` with `<li><h3><a>` structure
 - [x] Display text = post excerpt if set, otherwise post title (fallback)
-- [x] Supports all 5 types: location, service, pillar, topical, blog
+- [x] Supports all 7 types: location, service, pillar, topical, blog, comp_alt, problem
 - [x] Sorted A–Z by title; auto-updates on publish/unpublish (WP_Query, status=publish only)
 - [x] Must use Elementor **Shortcode widget** (not HTML widget) — HTML widget does not process shortcodes
 - [x] CSS: `li h3 a { font-size: 0.8rem }` from Elementor Kit applies automatically — no custom CSS needed
 - [x] Line-height for wrapped items: add `.elementor-shortcode .seo-hub-links h3 { line-height: 1.2; }` to site custom CSS if needed
+- [x] **Problem grid layout** (session 22) — `[seo_hub type="problem"]` renders a 3-column CSS grid with bordered cards, disc bullets, inherited link colours, mobile-responsive (stacks to 1 column); items wrapped in `<h3>` tags via `seo_hub_problem_grid()` function
 
 ### Competitor research script (new session 8)
 - [x] `src/research_competitors.py` — standalone script: geocodes client area via Nominatim, pulls top 10 map pack + top 10 organic from DataForSEO, scrapes competitor sites, extracts structured profiles via Claude Haiku, writes `clients/[abbr]/competitor-analysis.md`
@@ -162,7 +167,7 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] `_find_html_widget_marked()` updated to accept configurable `marker` string
 - [x] `clients/sdy/config.json` — `wordpress` block switched to live (`serendipitymassage.co.uk`); app password updated; template ID 564; local credentials preserved in `wordpress_local`
 
-### Quality gate (session 12)
+### Quality gate (session 12, updated session 22)
 - [x] `QualityGate` class in `data_sources/modules/quality_gate.py` — check/rewrite loop, max 2 rewrites
 - [x] Pass thresholds: Flesch Reading Ease ≥ 55 + Hook (mandatory) + CTAs (mandatory) + 2/3 optional (stories, rhythm, paragraphs)
 - [x] Targeted rewrite instructions built from specific failures — only failing criteria included per attempt
@@ -180,6 +185,9 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] Column H (Review #) — increments each time a row is flagged Review, retained on DONE
 - [x] `logs/quality-log.csv` — append-only log of every Review event (date, client, type, topic, attempts, failures)
 - [x] End-to-end tested: Glasgow Central Station passed gate (Flesch 55, 2 rewrites), published to SDY live (ID 677)
+- [x] **CTA body-only analysis** (session 22) — CTA distribution now runs on body text only (excludes FAQ section via `_to_body_plain()`); rule simplified to ≥2 CTAs + first within 500 words
+- [x] **Paragraph body-only analysis** (session 22) — paragraph length check excludes FAQ section (FAQ answers naturally run 4 sentences); threshold tightened from >4 to >3 sentences; paragraphs now **mandatory** (was optional); pass: ≤3 long paragraphs in body
+- [x] **Code fence stripping** (session 22) — `quality_gate.py` strips markdown code fences from rewrite output; `geo_batch_runner.py` strips fences from initial generation too
 
 ### Elementor template auto-refresh (session 12)
 - [x] `fetch_elementor_template.py` — saves `elementor-template-meta.json` sidecar with WP `modified` date on every fetch
@@ -237,16 +245,18 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [ ] Generate static maps for GTM (same landmarks, different destination address)
 - [ ] Generate static maps for TMG (Greenock landmarks to South Street)
 
-### Problem content type (session 21)
+### Problem content type (session 21, expanded session 22)
 - [x] `seo_problem` CPT registered in `seomachine.php` v2.8.0 — URL pattern `/problem/[slug]/`
 - [x] `.claude/agents/problem-page-writer.md` — 600–800 word condition/symptom pages with mandatory outbound links to authoritative sources (Wikipedia, NHS, PubMed) via live web search
 - [x] `build_problem_prompt()` in batch runner — web search queries for condition + massage benefits + NHS guidance
 - [x] `CONTENT_TYPE_CONFIG['problem']` in quality gate — Flesch ≥ 55, rhythm/paragraphs, no stories
-- [x] `problem` → `seo_problem` added to GTM and TMG content_type_maps
+- [x] `problem` → `seo_problem` added to GTM, SDY, and TMG content_type_maps
 - [x] `research/gtm/problem-queue.json` — 12 conditions queued (sciatica, stiff neck, headaches, etc.)
 - [x] `research/tmg/problem-queue.json` — same 12 conditions, unique content per site via brand voice + local context
-- [x] Hub shortcode supports `[seo_hub type="problem"]`
-- [ ] Dry-run test on one topic
+- [x] `research/sdy/problem-queue.json` — 13 conditions queued (session 22)
+- [x] Hub shortcode supports `[seo_hub type="problem"]` with 3-column grid layout (session 22)
+- [x] SDY Sciatica test page published successfully (post 956, session 22)
+- [ ] Batch publish remaining 12 SDY problem pages
 - [ ] Batch publish all 12 for GTM
 - [ ] Batch publish all 12 for TMG
 
@@ -375,13 +385,14 @@ GBP applied for but not yet verified. Abbreviation: `SDY`.
 **Rule: local for setup/design, live for all batch runner content.**
 Reason: caching on the live front-end doesn't affect the REST API. Running content against two environments causes DB divergence. Push local → live once, then stay on live for all publishing.
 
-#### Phase 1 — Local setup (in progress)
+#### Phase 1 — Local setup (done, returned to session 22)
 - [x] Get local site URL and credentials — added to config.json (`wordpress` = local, `wordpress_live` = live)
 - [x] Deploy `wordpress/seomachine.php` to local `wp-content/mu-plugins/`
 - [x] Confirm 5 CPTs appear via REST API (`seo_service`, `seo_location`, `seo_pillar`, `seo_topical`, `seo_blog`)
 - [x] Elementor CPTs auto-enabled via `option_elementor_cpt_support` filter — confirmed all 5 showing in Elementor → Settings
 - [x] Build location page template in Elementor library — S1/S2 HTML widgets with markers
 - [x] Get template ID (635) and run `python3 src/fetch_elementor_template.py sdy`
+- [x] **Returned to local** (session 22) — switched back to `https://sdy.local/` due to server caching issues on live; app password updated; new Elementor template ID 663 (replacing 635); problem grid shortcode deployed to local mu-plugins
 
 #### Phase 2 — Push to live
 - [x] Deploy seomachine.php to live `wp-content/mu-plugins/`
@@ -389,6 +400,7 @@ Reason: caching on the live front-end doesn't affect the REST API. Running conte
 - [x] Import Elementor template to live — template ID 564
 - [x] Update `clients/sdy/config.json` — `wordpress` block now points to live; app password set; template ID 564
 - [x] Run `python3 src/fetch_elementor_template.py sdy` against live — S1/S2 markers confirmed
+- **Note:** SDY currently targeting local (`sdy.local`) as of session 22. Will switch back to live once caching issues are resolved.
 
 #### Phase 3 — Content (after Phase 2)
 - [x] Add `SDY` to Column D dropdown in Google Sheet

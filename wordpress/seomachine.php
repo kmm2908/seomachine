@@ -192,11 +192,17 @@ add_shortcode('seo_hub', function($atts) {
     }
 
     $items = array_map(fn($p) =>
-        '<li><h3><a href="' . esc_url(get_permalink($p)) . '">'
-        . esc_html($p->post_excerpt ?: $p->post_title) . '</a></h3></li>',
+        '<li><a href="' . esc_url(get_permalink($p)) . '">'
+        . esc_html($p->post_excerpt ?: $p->post_title) . '</a></li>',
         $posts
     );
 
+    if ($type === 'problem') {
+        return seo_hub_problem_grid($items);
+    }
+
+    // Wrap items in h3 for standard hub types
+    $items = array_map(fn($li) => str_replace(['<li>', '</li>'], ['<li><h3>', '</h3></li>'], $li), $items);
     return '<ul class="seo-hub-links">' . implode('', $items) . '</ul>';
 });
 
@@ -252,11 +258,47 @@ function seo_hub_remote_fetch(string $source, string $type, string $rest_base): 
         $excerpt = trim(wp_strip_all_tags($item['excerpt']['rendered'] ?? ''));
         $title   = wp_strip_all_tags($item['title']['rendered'] ?? '');
         $text    = esc_html($excerpt ?: $title);
-        return "<li><h3><a href=\"{$link}\">{$text}</a></h3></li>";
+        return "<li><a href=\"{$link}\">{$text}</a></li>";
     }, $all_posts);
 
-    $html = '<ul class="seo-hub-links">' . implode('', $items) . '</ul>';
+    if ($type === 'problem') {
+        $html = seo_hub_problem_grid($items);
+    } else {
+        $items = array_map(fn($li) => str_replace(['<li>', '</li>'], ['<li><h3>', '</h3></li>'], $li), $items);
+        $html = '<ul class="seo-hub-links">' . implode('', $items) . '</ul>';
+    }
     set_transient($cache_key, $html, 12 * HOUR_IN_SECONDS);
+
+    return $html;
+}
+
+// ── Problem hub grid ────────────────────────────────────────────────────────
+//
+// Renders problem-type hub links as a 3-column grid with bordered cards.
+// Used by [seo_hub type="problem"].
+
+function seo_hub_problem_grid(array $items): string {
+    // Wrap each item's link in h3
+    $items = array_map(fn($li) => str_replace(['<li>', '</li>'], ['<li><h3>', '</h3></li>'], $li), $items);
+
+    $cols   = 3;
+    $total  = count($items);
+    $per_col = (int) ceil($total / $cols);
+    $chunks  = array_chunk($items, max($per_col, 1));
+
+    $html = '<style>.seo-hub-problem-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}'
+          . '.seo-hub-problem-grid ul{border:1px solid currentColor;border-radius:8px;padding:1.2rem 1.5rem;margin:0;list-style:disc inside;opacity:.7}'
+          . '.seo-hub-problem-grid li{padding:.4rem 0}'
+          . '.seo-hub-problem-grid h3{display:inline;font-size:inherit;font-weight:inherit;margin:0}'
+          . '.seo-hub-problem-grid a{color:inherit;text-decoration:none}'
+          . '.seo-hub-problem-grid a:hover{text-decoration:underline}'
+          . '@media(max-width:767px){.seo-hub-problem-grid{grid-template-columns:1fr}}</style>';
+
+    $html .= '<div class="seo-hub-problem-grid">';
+    foreach ($chunks as $chunk) {
+        $html .= '<ul>' . implode('', $chunk) . '</ul>';
+    }
+    $html .= '</div>';
 
     return $html;
 }

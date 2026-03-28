@@ -284,14 +284,12 @@ class EngagementAnalyzer:
             first_cta_pos = min(c['position_pct'] for c in ctas)
             words_before_first_cta = int(word_count * first_cta_pos / 100)
 
-        # Check if CTAs are distributed (not all at end)
-        distributed = False
-        if len(ctas) >= 2:
-            positions = [c['position_pct'] for c in ctas]
-            # Check if at least one CTA in first half and at least one in second half
-            has_early = any(p < 50 for p in positions)
-            has_late = any(p > 70 for p in positions)
-            distributed = has_early and has_late
+        # Pass rule: at least 2 CTAs and first one within 500 words
+        distributed = (
+            len(ctas) >= 2
+            and words_before_first_cta is not None
+            and words_before_first_cta <= 500
+        )
 
         return {
             'count': len(ctas),
@@ -321,7 +319,7 @@ class EngagementAnalyzer:
             sentences = re.split(r'[.!?]+(?:\s|$)', para)
             sentences = [s.strip() for s in sentences if s.strip() and len(s.strip()) > 10]
 
-            if len(sentences) > 4:
+            if len(sentences) > 3:
                 long_paragraphs.append({
                     'sentence_count': len(sentences),
                     'preview': para[:60] + '...'

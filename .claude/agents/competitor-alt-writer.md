@@ -62,6 +62,8 @@ After the final `<details>` block, add a short closing CTA paragraph (1–2 sent
 - **No invented competitor weaknesses.** Only contrast on points confirmed by the competitor data provided
 - **No invented business strengths.** Only claim what is supported by the business config and brand voice
 - **No filler phrases**: "In today's busy world", "Look no further", "If you're looking for..."
+- **Short anchor text**: Link text must be a keyword or short phrase (3-6 words). Never wrap a full sentence in a link.
+- **Short paragraphs**: Maximum 3 sentences per paragraph. If a paragraph has 4 or more sentences, split it. Single-sentence paragraphs are fine for emphasis.
 - **Tone**: Warm, direct, credible. This is a conversion page — not a blog post and not an attack piece
 - **No markdown in output.** HTML only
 

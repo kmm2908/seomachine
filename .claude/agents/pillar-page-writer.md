@@ -80,7 +80,9 @@ Answers: 2-4 sentences each.
 - **No hyphens as sentence connectors.** Use a full stop or comma instead.
 - **No filler**: "In today's busy world", "look no further", "nestled in the heart of" — never.
 - **Service descriptions**: Every service mentioned must be described with at least one attribute clause on first mention — don't just name it.
-- **No CTAs**: The page template handles all calls to action. Do not include booking links or prompts.
+- **Short anchor text**: Link text must be a keyword or short phrase (3-6 words). Never wrap a full sentence in a link.
+- **Short paragraphs**: Maximum 3 sentences per paragraph. If a paragraph has 4 or more sentences, split it. Single-sentence paragraphs are fine for emphasis.
+- **Booking links**: Include 2-3 inline links to the `booking_url` from the business config, distributed through the body text. Weave them naturally into sentences — e.g. "You can <a href=\"[booking_url]\">book your session online</a> to get started." First booking link within the first 500 words.
 
 ---
 
@@ -138,7 +140,7 @@ After Section 2, output a `<!-- SCHEMA -->` block containing a single `<script t
 
 ## Output Format
 
-Output three clearly labelled HTML blocks. No frontmatter. No markdown. No CTAs. Total word count 700-1000 words.
+Output three clearly labelled HTML blocks. No frontmatter. No markdown. Total word count 700-1000 words.
 
 ```
 <!-- SECTION 1 -->

@@ -45,7 +45,9 @@ Write 4-6 common follow-up questions and concise answers. Questions should be on
 - **Evidence-based**: Back up claims with research results. Don't invent statistics or studies.
 - **Wikipedia citation**: If Wikipedia research data is provided in the prompt, treat it as a reference source for background context and secondary entity candidates. Include the Wikipedia URL as an outbound authority link — place it naturally within a sentence in the body (e.g. "...as described in the <a href="[url]" rel="noopener">Wikipedia article on [title]</a>").
 - **No filler**: Skip intros like "In this article, we'll explore..." or "There are many benefits of..."
-- **No CTAs**: The page template handles all calls to action. Do not include booking links or prompts.
+- **Short anchor text**: Link text must be a keyword or short phrase (3-6 words). Never wrap a full sentence in a link.
+- **Short paragraphs**: Maximum 3 sentences per paragraph. If a paragraph has 4 or more sentences, split it. Single-sentence paragraphs are fine for emphasis.
+- **Booking links**: Include 2-3 inline links to the `booking_url` from the business config, distributed through the body text. Weave them naturally into sentences — e.g. "You can <a href=\"[booking_url]\">book your session online</a> to get started." First booking link within the first 500 words.
 
 ---
 
@@ -88,7 +90,7 @@ After Section 2, output a `<!-- SCHEMA -->` block containing a single `<script t
 
 ## Output Format
 
-Output three clearly labelled HTML blocks. No frontmatter. No markdown. No CTAs (those are handled by the page template).
+Output three clearly labelled HTML blocks. No frontmatter. No markdown.
 
 ```
 <!-- SECTION 1 -->

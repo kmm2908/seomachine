@@ -57,8 +57,10 @@ Answers should be 2-4 sentences. Practical and locally relevant.
 - **No hyphens as sentence connectors.** Use a full stop or comma instead.
 - **Transport directions must face outward**: Directions go FROM the target area TO the business
 - **No invented transport details**: Only use routes and times confirmed by research
+- **Short anchor text**: Link text must be a keyword or short phrase (3-6 words). Never wrap a full sentence in a link.
+- **Short paragraphs**: Maximum 3 sentences per paragraph. If a paragraph has 4 or more sentences, split it. Single-sentence paragraphs are fine for emphasis.
 - **Match specificity to input**: for a district name, write about the broader area character; for a postcode or street address, include specific transport details and local micro-context
-- **No CTAs**: The page template handles all calls to action. Do not include booking links or prompts.
+- **Booking links**: Include 2-3 inline links to the `booking_url` from the business config, distributed through the body text. Weave them naturally into sentences — e.g. "You can <a href=\"[booking_url]\">book your session online</a> to get started." First booking link within the first 500 words.
 
 ---
 
@@ -103,7 +105,7 @@ After Section 2, output a `<!-- SCHEMA -->` block containing a single `<script t
 
 ## Output Format
 
-Output three clearly labelled HTML blocks. No frontmatter. No markdown. No CTAs (those are handled by the page template).
+Output three clearly labelled HTML blocks. No frontmatter. No markdown.
 
 ```
 <!-- SECTION 1 -->

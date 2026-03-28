@@ -124,7 +124,7 @@ Cron examples:
 
 **Directions snippet** — `src/snippets/generate_directions_snippet.py` generates a self-contained HTML+JS Google Maps directions widget per client. Saved to `clients/[abbr]/snippets/[abbr]-directions.html`. The batch runner calls `_ensure_directions_snippet()` automatically on the first publish run per client — no manual step needed. The snippet is injected into `comp-alt` page prompts automatically.
 
-**Quality gate** runs after every article is written. Thresholds are per-content-type (`CONTENT_TYPE_CONFIG` in `quality_gate.py`). Hook and CTAs are mandatory for all types. Default (blog/location/service/etc.): Flesch ≥ 55, need 2/3 of stories/rhythm/paragraphs. `comp-alt`: Flesch ≥ 48, no stories criterion, need 1/2 of rhythm/paragraphs. `problem`: Flesch ≥ 55, no stories, need 1/2 of rhythm/paragraphs. If it fails, Claude rewrites with targeted instructions, up to 2 rewrites. Console output:
+**Quality gate** runs after every article is written. Thresholds are per-content-type (`CONTENT_TYPE_CONFIG` in `quality_gate.py`). Hook and CTAs are mandatory for all types. Default (blog/location/service/etc.): Flesch ≥ 55, need 2/3 of stories/rhythm/paragraphs. `comp-alt`: Flesch ≥ 48, no stories criterion, need 1/2 of rhythm/paragraphs. `problem`: Flesch ≥ 55, no stories, need 1/2 of rhythm/paragraphs. Paragraphs are mandatory for all types. CTA and paragraph analysis runs on body-only text (excludes FAQ section) — FAQ answers naturally run longer. CTA rule: ≥2 CTAs + first within 500 words. Paragraph rule: ≤3 long paragraphs (>3 sentences) in body. Code fences (` ```html ` / ` ``` `) are stripped from both initial generation and rewrite output. If it fails, Claude rewrites with targeted instructions, up to 2 rewrites. Console output:
 ```
 → Quality: Flesch 55 ✓ | hook ✓ | ctas ✓ | stories ✗ | rhythm ✓ | paras ✓ — passed
 ```
@@ -218,9 +218,9 @@ All commands are in `.claude/commands/`. Key commands:
 
 Located in `.claude/agents/`. Content writers:
 - `service-page-writer.md`, `location-page-writer.md`, `pillar-page-writer.md`
-- `topical-writer.md`, `blog-post-writer.md`
+- `topical-writer.md`, `blog-post-writer.md`, `competitor-alt-writer.md`, `problem-page-writer.md`
 
-All 5 content writers output **three HTML blocks**:
+All 7 content writers include 2-3 inline booking CTAs (short anchor text, 3-6 words), maximum 3 sentences per paragraph, and output **three HTML blocks**:
 1. `<!-- SECTION 1 -->` — main body
 2. `<!-- SECTION 2 FAQ -->` — collapsible accordion using `<details>`/`<summary>` (no JS/CSS)
 3. `<!-- SCHEMA -->` — JSON-LD with `@graph` containing the primary type (`Article`/`BlogPosting`/`Service`/`WebPage`), `FAQPage`, and `LocalBusiness` on every page
@@ -268,11 +268,11 @@ Use this when posts need to be re-created in WordPress (e.g. after enabling Elem
 
 **GTM config:** `clients/gtm/config.json` — `wordpress.elementor_template_id: 16508`, `wordpress.content_type_map` maps all 5 types to CPT slugs
 
-**SDY config:** `clients/sdy/config.json` — `wordpress` block points to live (`serendipitymassage.co.uk`); `elementor_template_id: 564`; `wordpress_local` block preserves local credentials for reference
+**SDY config:** `clients/sdy/config.json` — `wordpress` block currently points to local (`sdy.local`, switched back session 22 due to live caching issues); `elementor_template_id: 663`; `wordpress_live` block preserves live credentials for Phase 2 switch-back
 
 **Elementor CPT auto-enable** — `seomachine.php` filters `option_elementor_cpt_support` and `default_option_elementor_cpt_support` to auto-enable all 5 CPTs in Elementor without manual checkbox step. No Elementor → Settings action required on new installs.
 
-**Hub page shortcode** — `[seo_hub type="location"]` registered in `seomachine.php`. Place in an Elementor Shortcode widget (not HTML widget). Renders a `<ul class="seo-hub-links">` of all published posts of that type, sorted A–Z, each wrapped in `<li><h3><a>`. Display text = post excerpt if set, otherwise post title. Supported types: `location`, `service`, `pillar`, `topical`, `blog`. Must be deployed to `wp-content/mu-plugins/seomachine.php` (not inside `plugins/`).
+**Hub page shortcode** — `[seo_hub type="location"]` registered in `seomachine.php`. Place in an Elementor Shortcode widget (not HTML widget). Renders a `<ul class="seo-hub-links">` of all published posts of that type, sorted A–Z, each wrapped in `<li><h3><a>`. Display text = post excerpt if set, otherwise post title. Supported types: `location`, `service`, `pillar`, `topical`, `blog`, `comp_alt`, `problem`. `[seo_hub type="problem"]` renders a 3-column CSS grid with bordered cards, disc bullets, inherited link colours, mobile-responsive (stacks to 1 column) via `seo_hub_problem_grid()`. Must be deployed to `wp-content/mu-plugins/seomachine.php` (not inside `plugins/`).
 
 **Cross-site hub (blog subdomains)** — on blog subdomains (GTB, TMB), set `wp option update seo_hub_source "https://main-site-url.com"`. The shortcode fetches posts from the main site's REST API (no auth needed — public CPTs) and caches results for 12 hours. The `blog` type always queries locally. Override per-shortcode: `[seo_hub type="location" source="https://..."]`. Cache bust: `wp transient delete seo_hub_cache_location`.
 

@@ -17,18 +17,19 @@
   "wordpress": {
     "url": "https://sdy.local",
     "username": "kmm-T5r",
-    "app_password": "seLS YVoq 0YSU v8CI LDo9 IHib",
+    "app_password": "XbE0 csyh k5kO RlqK m3WY 1VpP",
     "content_type_map": {
       "service":  "seo_service",
       "location": "seo_location",
       "pillar":   "seo_pillar",
       "topical":  "seo_topical",
       "blog":     "seo_blog",
-      "comp-alt": "seo_comp_alt"
+      "comp-alt": "seo_comp_alt",
+      "problem":  "seo_problem"
     },
     "default_post_type": "seo_blog",
     "default_status": "draft",
-    "elementor_template_id": 635
+    "elementor_template_id": 663
   },
   "wordpress_live": {
     "url": "https://serendipitymassage.co.uk",

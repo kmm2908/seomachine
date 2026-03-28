@@ -1,6 +1,6 @@
 [
   {
-    "id": "6d419103",
+    "id": "5a7b5e82",
     "elType": "container",
     "settings": {
       "flex_direction": "column",
@@ -9,7 +9,7 @@
     },
     "elements": [
       {
-        "id": "ab80e38",
+        "id": "44a45e5b",
         "elType": "container",
         "settings": {
           "flex_direction": "column",
@@ -24,155 +24,7 @@
         },
         "elements": [
           {
-            "id": "745761a8",
-            "elType": "container",
-            "settings": {
-              "content_width": "full",
-              "background_background": "classic",
-              "_title": "Hero",
-              "__globals__": {
-                "background_color": "globals/colors?id=2fbee87",
-                "background_overlay_color": ""
-              },
-              "min_height": {
-                "unit": "vh",
-                "size": 50,
-                "sizes": []
-              },
-              "min_height_tablet": {
-                "unit": "vh",
-                "size": "",
-                "sizes": []
-              },
-              "min_height_mobile": {
-                "unit": "vh",
-                "size": "",
-                "sizes": []
-              },
-              "background_color": "#624A48",
-              "background_image": {
-                "url": "http://sdy.local/wp-content/uploads/2026/03/Serendipity-Hero-Home-1536x992.png",
-                "id": 187,
-                "size": "1536x1536",
-                "alt": "Massage therapy with essential oils for relaxation and stress relief.",
-                "source": "library"
-              },
-              "background_position": "center center",
-              "background_repeat": "no-repeat",
-              "background_size": "cover",
-              "background_overlay_background": "classic",
-              "background_overlay_color": "#000000",
-              "background_overlay_color_b": "#261D1F",
-              "background_overlay_opacity": {
-                "unit": "px",
-                "size": 0.37,
-                "sizes": []
-              },
-              "flex_justify_content": "space-between",
-              "flex_align_items": "center",
-              "padding": {
-                "unit": "px",
-                "top": "60",
-                "right": "0",
-                "bottom": "60",
-                "left": "0",
-                "isLinked": false
-              }
-            },
-            "elements": [
-              {
-                "id": "78f1d875",
-                "elType": "container",
-                "settings": {
-                  "content_width": "full",
-                  "margin": {
-                    "unit": "px",
-                    "top": "0",
-                    "right": "0",
-                    "bottom": "0",
-                    "left": "0",
-                    "isLinked": false
-                  }
-                },
-                "elements": [
-                  {
-                    "id": "2d7160c0",
-                    "elType": "widget",
-                    "settings": {
-                      "title": "Add Your Heading Text Here",
-                      "align": "center",
-                      "__dynamic__": {
-                        "title": "[elementor-tag id=\"108d42d\" name=\"post-title\" settings=\"%7B%22before%22%3A%22Welcome%20To%20%22%7D\"]"
-                      },
-                      "__globals__": {
-                        "typography_typography": "globals/typography?id=559743b"
-                      },
-                      "header_size": "h1"
-                    },
-                    "elements": [],
-                    "widgetType": "heading"
-                  }
-                ],
-                "isInner": true
-              },
-              {
-                "id": "54203d98",
-                "elType": "container",
-                "settings": {
-                  "content_width": "full",
-                  "flex_direction": "row",
-                  "flex_justify_content": "space-evenly",
-                  "flex_align_items": "center"
-                },
-                "elements": [
-                  {
-                    "id": "28dc545b",
-                    "elType": "widget",
-                    "settings": {
-                      "text": "Call Now",
-                      "hover_animation": "grow",
-                      "__globals__": {
-                        "button_background_hover_color": "globals/colors?id=2fbee87",
-                        "button_text_color": "globals/colors?id=9ef2338",
-                        "background_color": "globals/colors?id=a160eb5",
-                        "hover_color": "globals/colors?id=9ef2338"
-                      },
-                      "link": {
-                        "url": "tel:+441416736630",
-                        "is_external": "",
-                        "nofollow": "",
-                        "custom_attributes": ""
-                      },
-                      "border_border": "solid"
-                    },
-                    "elements": [],
-                    "widgetType": "button"
-                  },
-                  {
-                    "id": "efab563",
-                    "elType": "widget",
-                    "settings": {
-                      "text": "Book Now",
-                      "hover_animation": "grow",
-                      "__globals__": {
-                        "button_background_hover_color": "globals/colors?id=2fbee87",
-                        "button_text_color": "globals/colors?id=9ef2338",
-                        "background_color": "globals/colors?id=a160eb5",
-                        "hover_color": "globals/colors?id=9ef2338"
-                      },
-                      "border_border": "solid"
-                    },
-                    "elements": [],
-                    "widgetType": "button"
-                  }
-                ],
-                "isInner": true
-              }
-            ],
-            "isInner": true
-          },
-          {
-            "id": "481d548b",
+            "id": "96bd3b9",
             "elType": "container",
             "settings": {
               "content_width": "full",
@@ -223,14 +75,31 @@
             },
             "elements": [
               {
-                "id": "38fc9230",
+                "id": "2c97efb1",
                 "elType": "container",
                 "settings": {
                   "_title": "Inner"
                 },
                 "elements": [
                   {
-                    "id": "8db2762",
+                    "id": "e04579d",
+                    "elType": "widget",
+                    "settings": {
+                      "title": "Add Your Heading Text Here",
+                      "header_size": "h1",
+                      "align": "center",
+                      "__dynamic__": {
+                        "title": "[elementor-tag id=\"0925d10\" name=\"post-title\" settings=\"%7B%7D\"]"
+                      },
+                      "__globals__": {
+                        "typography_typography": "globals/typography?id=96d4962"
+                      }
+                    },
+                    "elements": [],
+                    "widgetType": "heading"
+                  },
+                  {
+                    "id": "124346f1",
                     "elType": "widget",
                     "settings": {
                       "html": "<!-- S1 CONTENT -->"
@@ -245,7 +114,7 @@
             "isInner": true
           },
           {
-            "id": "20d93e8d",
+            "id": "27146b65",
             "elType": "container",
             "settings": {
               "background_background": "classic",
@@ -288,7 +157,7 @@
             },
             "elements": [
               {
-                "id": "4cd23b54",
+                "id": "49e3fc0c",
                 "elType": "widget",
                 "settings": {
                   "text": "Book Now",
@@ -311,14 +180,13 @@
                   "border_border": "solid"
                 },
                 "elements": [],
-                "widgetType": "global",
-                "templateID": "355"
+                "widgetType": "button"
               }
             ],
             "isInner": true
           },
           {
-            "id": "48436811",
+            "id": "1f89a4ae",
             "elType": "container",
             "settings": {
               "content_width": "full",
@@ -369,7 +237,7 @@
             },
             "elements": [
               {
-                "id": "40a57a27",
+                "id": "a9c92d2",
                 "elType": "container",
                 "settings": {
                   "_title": "Inner",
@@ -391,7 +259,7 @@
                 },
                 "elements": [
                   {
-                    "id": "45a06d7",
+                    "id": "7b204399",
                     "elType": "widget",
                     "settings": {
                       "html": "<!-- S2 CONTENT -->"
@@ -406,7 +274,7 @@
             "isInner": true
           },
           {
-            "id": "40f06716",
+            "id": "303bc6fb",
             "elType": "widget",
             "settings": {
               "template_id": "535",
@@ -416,2108 +284,17 @@
             "widgetType": "template"
           },
           {
-            "id": "29f56720",
-            "elType": "container",
+            "id": "4de787f",
+            "elType": "widget",
             "settings": {
-              "content_width": "full",
-              "_title": "Dark1 - Services",
-              "padding": {
-                "unit": "rem",
-                "top": "2",
-                "right": "0",
-                "bottom": "2",
-                "left": "0",
-                "isLinked": false
-              },
-              "padding_tablet": {
-                "unit": "rem",
-                "top": "",
-                "right": "",
-                "bottom": "",
-                "left": "",
-                "isLinked": true
-              },
-              "padding_mobile": {
-                "unit": "rem",
-                "top": "",
-                "right": "",
-                "bottom": "",
-                "left": "",
-                "isLinked": true
-              },
-              "flex_gap": {
-                "column": "0",
-                "row": "0",
-                "isLinked": true,
-                "unit": "px",
-                "size": 0
-              },
-              "css_classes": "servicebox"
+              "template_id": "917",
+              "_title": "Service Box Tpl"
             },
-            "elements": [
-              {
-                "id": "342a0d44",
-                "elType": "container",
-                "settings": {
-                  "_title": "Inner"
-                },
-                "elements": [
-                  {
-                    "id": "638f62e1",
-                    "elType": "widget",
-                    "settings": {
-                      "title": "Thai Massages That We Offer",
-                      "__globals__": {
-                        "typography_typography": "globals/typography?id=559743b"
-                      },
-                      "align": "center"
-                    },
-                    "elements": [],
-                    "widgetType": "heading"
-                  },
-                  {
-                    "id": "c4d2909",
-                    "elType": "widget",
-                    "settings": {
-                      "__globals__": {
-                        "typography_typography": "globals/typography?id=5b9942f",
-                        "text_color": "globals/colors?id=9ef2338"
-                      }
-                    },
-                    "elements": [],
-                    "widgetType": "text-editor"
-                  }
-                ],
-                "isInner": true
-              },
-              {
-                "id": "5b93152d",
-                "elType": "container",
-                "settings": {
-                  "flex_direction": "row",
-                  "flex_justify_content": "center",
-                  "flex_align_items": "stretch",
-                  "flex_gap": {
-                    "column": "1",
-                    "row": "0",
-                    "isLinked": false,
-                    "unit": "rem",
-                    "size": 1
-                  },
-                  "flex_gap_tablet": {
-                    "column": "",
-                    "row": "",
-                    "isLinked": true,
-                    "unit": "rem",
-                    "size": null
-                  },
-                  "flex_gap_mobile": {
-                    "column": "",
-                    "row": "",
-                    "isLinked": true,
-                    "unit": "rem",
-                    "size": null
-                  },
-                  "_title": "Row1"
-                },
-                "elements": [
-                  {
-                    "id": "24911a63",
-                    "elType": "container",
-                    "settings": {
-                      "content_width": "full",
-                      "width": {
-                        "unit": "%",
-                        "size": 32,
-                        "sizes": []
-                      },
-                      "flex_justify_content": "space-around",
-                      "flex_align_items": "center",
-                      "_title": "Service Box",
-                      "background_background": "classic",
-                      "border_border": "groove",
-                      "border_width": {
-                        "unit": "px",
-                        "top": "1",
-                        "right": "1",
-                        "bottom": "1",
-                        "left": "1",
-                        "isLinked": true
-                      },
-                      "border_radius": {
-                        "unit": "px",
-                        "top": "16",
-                        "right": "16",
-                        "bottom": "16",
-                        "left": "16",
-                        "isLinked": true
-                      },
-                      "box_shadow_box_shadow_type": "yes",
-                      "box_shadow_box_shadow": {
-                        "horizontal": 0,
-                        "vertical": 0,
-                        "blur": 10,
-                        "spread": 0,
-                        "color": "rgba(0, 0, 0, 0.64)"
-                      },
-                      "__globals__": {
-                        "background_color": "globals/colors?id=2fbee87",
-                        "border_color": "globals/colors?id=9ef2338"
-                      },
-                      "flex_gap": {
-                        "column": "0",
-                        "row": "0",
-                        "isLinked": true,
-                        "unit": "px",
-                        "size": 0
-                      },
-                      "margin": {
-                        "unit": "px",
-                        "top": "0",
-                        "right": "0",
-                        "bottom": "0",
-                        "left": "0",
-                        "isLinked": true
-                      },
-                      "padding": {
-                        "unit": "px",
-                        "top": "0",
-                        "right": "0",
-                        "bottom": "25",
-                        "left": "0",
-                        "isLinked": false
-                      }
-                    },
-                    "elements": [
-                      {
-                        "id": "4b87a219",
-                        "elType": "widget",
-                        "settings": {
-                          "image_size": "custom",
-                          "_element_custom_width": {
-                            "unit": "px",
-                            "size": 200,
-                            "sizes": []
-                          },
-                          "image": {
-                            "url": "http://sdy.local/wp-content/uploads/2026/03/thai0oil-massage-service-box-scaled.jpg",
-                            "id": 244,
-                            "size": "",
-                            "alt": "",
-                            "source": "library"
-                          },
-                          "image_custom_dimension": {
-                            "width": "200",
-                            "height": "150"
-                          },
-                          "width": {
-                            "unit": "px",
-                            "size": 200,
-                            "sizes": []
-                          },
-                          "width_tablet": {
-                            "unit": "px",
-                            "size": "",
-                            "sizes": []
-                          },
-                          "width_mobile": {
-                            "unit": "px",
-                            "size": "",
-                            "sizes": []
-                          },
-                          "height": {
-                            "unit": "px",
-                            "size": 150,
-                            "sizes": []
-                          }
-                        },
-                        "elements": [],
-                        "widgetType": "image"
-                      },
-                      {
-                        "id": "7e21312b",
-                        "elType": "widget",
-                        "settings": {
-                          "editor": "<h3>Thai Oil <br>Massage</h3>\n<pre>Soft Pressure</pre>",
-                          "align": "center",
-                          "_padding": {
-                            "unit": "px",
-                            "top": "0",
-                            "right": "0",
-                            "bottom": "0",
-                            "left": "0",
-                            "isLinked": true
-                          },
-                          "__globals__": {
-                            "text_color": "globals/colors?id=9ef2338"
-                          }
-                        },
-                        "elements": [],
-                        "widgetType": "text-editor"
-                      },
-                      {
-                        "id": "35ad8f6d",
-                        "elType": "widget",
-                        "settings": {
-                          "text": "Book Now",
-                          "link": {
-                            "url": "http://sdy.local/book-now/",
-                            "is_external": "",
-                            "nofollow": "",
-                            "custom_attributes": ""
-                          },
-                          "hover_animation": "grow",
-                          "__globals__": {
-                            "button_background_hover_color": "globals/colors?id=2fbee87",
-                            "button_text_color": "globals/colors?id=9ef2338",
-                            "background_color": "globals/colors?id=a160eb5",
-                            "hover_color": "globals/colors?id=2fbee87"
-                          },
-                          "border_border": "solid"
-                        },
-                        "elements": [],
-                        "widgetType": "button"
-                      }
-                    ],
-                    "isInner": true
-                  },
-                  {
-                    "id": "6247030d",
-                    "elType": "container",
-                    "settings": {
-                      "content_width": "full",
-                      "width": {
-                        "unit": "%",
-                        "size": 32,
-                        "sizes": []
-                      },
-                      "flex_justify_content": "space-around",
-                      "flex_align_items": "center",
-                      "_title": "Service Box",
-                      "background_background": "classic",
-                      "border_border": "groove",
-                      "border_width": {
-                        "unit": "px",
-                        "top": "1",
-                        "right": "1",
-                        "bottom": "1",
-                        "left": "1",
-                        "isLinked": true
-                      },
-                      "border_radius": {
-                        "unit": "px",
-                        "top": "16",
-                        "right": "16",
-                        "bottom": "16",
-                        "left": "16",
-                        "isLinked": true
-                      },
-                      "box_shadow_box_shadow_type": "yes",
-                      "box_shadow_box_shadow": {
-                        "horizontal": 0,
-                        "vertical": 0,
-                        "blur": 10,
-                        "spread": 0,
-                        "color": "rgba(0, 0, 0, 0.64)"
-                      },
-                      "__globals__": {
-                        "background_color": "globals/colors?id=2fbee87",
-                        "border_color": "globals/colors?id=9ef2338"
-                      },
-                      "flex_gap": {
-                        "column": "0",
-                        "row": "0",
-                        "isLinked": true,
-                        "unit": "px",
-                        "size": 0
-                      },
-                      "margin": {
-                        "unit": "px",
-                        "top": "0",
-                        "right": "0",
-                        "bottom": "0",
-                        "left": "0",
-                        "isLinked": true
-                      },
-                      "padding": {
-                        "unit": "px",
-                        "top": "0",
-                        "right": "0",
-                        "bottom": "25",
-                        "left": "0",
-                        "isLinked": false
-                      }
-                    },
-                    "elements": [
-                      {
-                        "id": "45c94b6",
-                        "elType": "widget",
-                        "settings": {
-                          "image_size": "custom",
-                          "_element_custom_width": {
-                            "unit": "px",
-                            "size": 200,
-                            "sizes": []
-                          },
-                          "image": {
-                            "url": "http://sdy.local/wp-content/uploads/2026/03/deep-tissue-thai-2.png",
-                            "id": 402,
-                            "size": "",
-                            "alt": "Therapist giving a massage to a client’s back in a wellness clinic.",
-                            "source": "library"
-                          },
-                          "image_custom_dimension": {
-                            "width": "200",
-                            "height": "150"
-                          },
-                          "width": {
-                            "unit": "px",
-                            "size": 200,
-                            "sizes": []
-                          },
-                          "width_tablet": {
-                            "unit": "px",
-                            "size": "",
-                            "sizes": []
-                          },
-                          "width_mobile": {
-                            "unit": "px",
-                            "size": "",
-                            "sizes": []
-                          },
-                          "height": {
-                            "unit": "px",
-                            "size": 150,
-                            "sizes": []
-                          }
-                        },
-                        "elements": [],
-                        "widgetType": "image"
-                      },
-                      {
-                        "id": "6533a50",
-                        "elType": "widget",
-                        "settings": {
-                          "editor": "<h3>Thai Oil <br>Massage</h3>\n<pre>Deep Pressure</pre>",
-                          "align": "center",
-                          "_padding": {
-                            "unit": "px",
-                            "top": "0",
-                            "right": "0",
-                            "bottom": "0",
-                            "left": "0",
-                            "isLinked": true
-                          },
-                          "__globals__": {
-                            "text_color": "globals/colors?id=9ef2338"
-                          }
-                        },
-                        "elements": [],
-                        "widgetType": "text-editor"
-                      },
-                      {
-                        "id": "79fdd1b3",
-                        "elType": "widget",
-                        "settings": {
-                          "text": "Book Now",
-                          "link": {
-                            "url": "http://sdy.local/book-now/",
-                            "is_external": "",
-                            "nofollow": "",
-                            "custom_attributes": ""
-                          },
-                          "hover_animation": "grow",
-                          "__globals__": {
-                            "button_background_hover_color": "globals/colors?id=2fbee87",
-                            "button_text_color": "globals/colors?id=9ef2338",
-                            "background_color": "globals/colors?id=a160eb5",
-                            "hover_color": "globals/colors?id=2fbee87"
-                          },
-                          "border_border": "solid"
-                        },
-                        "elements": [],
-                        "widgetType": "button"
-                      }
-                    ],
-                    "isInner": true
-                  },
-                  {
-                    "id": "494b197f",
-                    "elType": "container",
-                    "settings": {
-                      "content_width": "full",
-                      "width": {
-                        "unit": "%",
-                        "size": 32,
-                        "sizes": []
-                      },
-                      "flex_justify_content": "space-around",
-                      "flex_align_items": "center",
-                      "_title": "Service Box",
-                      "background_background": "classic",
-                      "border_border": "groove",
-                      "border_width": {
-                        "unit": "px",
-                        "top": "1",
-                        "right": "1",
-                        "bottom": "1",
-                        "left": "1",
-                        "isLinked": true
-                      },
-                      "border_radius": {
-                        "unit": "px",
-                        "top": "16",
-                        "right": "16",
-                        "bottom": "16",
-                        "left": "16",
-                        "isLinked": true
-                      },
-                      "box_shadow_box_shadow_type": "yes",
-                      "box_shadow_box_shadow": {
-                        "horizontal": 0,
-                        "vertical": 0,
-                        "blur": 10,
-                        "spread": 0,
-                        "color": "rgba(0, 0, 0, 0.64)"
-                      },
-                      "__globals__": {
-                        "background_color": "globals/colors?id=2fbee87",
-                        "border_color": "globals/colors?id=9ef2338"
-                      },
-                      "flex_gap": {
-                        "column": "0",
-                        "row": "0",
-                        "isLinked": true,
-                        "unit": "px",
-                        "size": 0
-                      },
-                      "margin": {
-                        "unit": "px",
-                        "top": "0",
-                        "right": "0",
-                        "bottom": "0",
-                        "left": "0",
-                        "isLinked": true
-                      },
-                      "padding": {
-                        "unit": "px",
-                        "top": "0",
-                        "right": "0",
-                        "bottom": "25",
-                        "left": "0",
-                        "isLinked": false
-                      }
-                    },
-                    "elements": [
-                      {
-                        "id": "454e9650",
-                        "elType": "widget",
-                        "settings": {
-                          "image_size": "custom",
-                          "_element_custom_width": {
-                            "unit": "px",
-                            "size": 200,
-                            "sizes": []
-                          },
-                          "image": {
-                            "url": "http://sdy.local/wp-content/uploads/2026/03/trad-deep-thai-2.png",
-                            "id": 404,
-                            "size": "",
-                            "alt": "",
-                            "source": "library"
-                          },
-                          "image_custom_dimension": {
-                            "width": "200",
-                            "height": "150"
-                          },
-                          "width": {
-                            "unit": "px",
-                            "size": 200,
-                            "sizes": []
-                          },
-                          "width_tablet": {
-                            "unit": "px",
-                            "size": "",
-                            "sizes": []
-                          },
-                          "width_mobile": {
-                            "unit": "px",
-                            "size": "",
-                            "sizes": []
-                          },
-                          "height": {
-                            "unit": "px",
-                            "size": 150,
-                            "sizes": []
-                          }
-                        },
-                        "elements": [],
-                        "widgetType": "image"
-                      },
-                      {
-                        "id": "6b2b2917",
-                        "elType": "widget",
-                        "settings": {
-                          "editor": "<h3>Traditional Thai Massage</h3><pre>Soft Pressure</pre>",
-                          "align": "center",
-                          "_padding": {
-                            "unit": "px",
-                            "top": "0",
-                            "right": "0",
-                            "bottom": "0",
-                            "left": "0",
-                            "isLinked": true
-                          },
-                          "__globals__": {
-                            "text_color": "globals/colors?id=9ef2338"
-                          }
-                        },
-                        "elements": [],
-                        "widgetType": "text-editor"
-                      },
-                      {
-                        "id": "4332b7c1",
-                        "elType": "widget",
-                        "settings": {
-                          "text": "Book Now",
-                          "link": {
-                            "url": "http://sdy.local/book-now/",
-                            "is_external": "",
-                            "nofollow": "",
-                            "custom_attributes": ""
-                          },
-                          "hover_animation": "grow",
-                          "__globals__": {
-                            "button_background_hover_color": "globals/colors?id=2fbee87",
-                            "button_text_color": "globals/colors?id=9ef2338",
-                            "background_color": "globals/colors?id=a160eb5",
-                            "hover_color": "globals/colors?id=2fbee87"
-                          },
-                          "border_border": "solid"
-                        },
-                        "elements": [],
-                        "widgetType": "button"
-                      }
-                    ],
-                    "isInner": true
-                  },
-                  {
-                    "id": "35936b2c",
-                    "elType": "container",
-                    "settings": {
-                      "content_width": "full",
-                      "width": {
-                        "unit": "%",
-                        "size": 32,
-                        "sizes": []
-                      },
-                      "flex_justify_content": "space-around",
-                      "flex_align_items": "center",
-                      "_title": "Service Box",
-                      "background_background": "classic",
-                      "border_border": "groove",
-                      "border_width": {
-                        "unit": "px",
-                        "top": "1",
-                        "right": "1",
-                        "bottom": "1",
-                        "left": "1",
-                        "isLinked": true
-                      },
-                      "border_radius": {
-                        "unit": "px",
-                        "top": "16",
-                        "right": "16",
-                        "bottom": "16",
-                        "left": "16",
-                        "isLinked": true
-                      },
-                      "box_shadow_box_shadow_type": "yes",
-                      "box_shadow_box_shadow": {
-                        "horizontal": 0,
-                        "vertical": 0,
-                        "blur": 10,
-                        "spread": 0,
-                        "color": "rgba(0, 0, 0, 0.64)"
-                      },
-                      "__globals__": {
-                        "background_color": "globals/colors?id=2fbee87",
-                        "border_color": "globals/colors?id=9ef2338"
-                      },
-                      "flex_gap": {
-                        "column": "0",
-                        "row": "0",
-                        "isLinked": true,
-                        "unit": "px",
-                        "size": 0
-                      },
-                      "margin": {
-                        "unit": "px",
-                        "top": "0",
-                        "right": "0",
-                        "bottom": "0",
-                        "left": "0",
-                        "isLinked": true
-                      },
-                      "padding": {
-                        "unit": "px",
-                        "top": "0",
-                        "right": "0",
-                        "bottom": "25",
-                        "left": "0",
-                        "isLinked": false
-                      }
-                    },
-                    "elements": [
-                      {
-                        "id": "62290492",
-                        "elType": "widget",
-                        "settings": {
-                          "image_size": "custom",
-                          "_element_width": "initial",
-                          "_element_custom_width": {
-                            "unit": "px",
-                            "size": 300,
-                            "sizes": []
-                          },
-                          "image": {
-                            "url": "http://sdy.local/wp-content/uploads/2026/03/traditional-thai-2.png",
-                            "id": 388,
-                            "size": "",
-                            "alt": "Relaxing massage therapy session at Serendipity Massage, promoting wellness and stress relief for cl.",
-                            "source": "library"
-                          },
-                          "image_custom_dimension": {
-                            "width": "200",
-                            "height": "150"
-                          },
-                          "width": {
-                            "unit": "px",
-                            "size": 200,
-                            "sizes": []
-                          },
-                          "width_tablet": {
-                            "unit": "px",
-                            "size": "",
-                            "sizes": []
-                          },
-                          "width_mobile": {
-                            "unit": "px",
-                            "size": "",
-                            "sizes": []
-                          },
-                          "height": {
-                            "unit": "px",
-                            "size": 150,
-                            "sizes": []
-                          }
-                        },
-                        "elements": [],
-                        "widgetType": "image"
-                      },
-                      {
-                        "id": "4e43e6a6",
-                        "elType": "widget",
-                        "settings": {
-                          "editor": "<h3>Traditional Thai Massage</h3><pre>Deep Pressure</pre>",
-                          "align": "center",
-                          "_padding": {
-                            "unit": "px",
-                            "top": "0",
-                            "right": "0",
-                            "bottom": "0",
-                            "left": "0",
-                            "isLinked": true
-                          },
-                          "__globals__": {
-                            "text_color": "globals/colors?id=9ef2338"
-                          }
-                        },
-                        "elements": [],
-                        "widgetType": "text-editor"
-                      },
-                      {
-                        "id": "5372d0d4",
-                        "elType": "widget",
-                        "settings": {
-                          "text": "Book Now",
-                          "link": {
-                            "url": "http://sdy.local/book-now/",
-                            "is_external": "",
-                            "nofollow": "",
-                            "custom_attributes": ""
-                          },
-                          "hover_animation": "grow",
-                          "__globals__": {
-                            "button_background_hover_color": "globals/colors?id=2fbee87",
-                            "button_text_color": "globals/colors?id=9ef2338",
-                            "background_color": "globals/colors?id=a160eb5",
-                            "hover_color": "globals/colors?id=2fbee87"
-                          },
-                          "border_border": "solid"
-                        },
-                        "elements": [],
-                        "widgetType": "button"
-                      }
-                    ],
-                    "isInner": true
-                  }
-                ],
-                "isInner": true
-              },
-              {
-                "id": "17191410",
-                "elType": "container",
-                "settings": {
-                  "flex_direction": "row",
-                  "flex_justify_content": "center",
-                  "flex_align_items": "stretch",
-                  "flex_gap": {
-                    "column": "1",
-                    "row": "0",
-                    "isLinked": false,
-                    "unit": "rem",
-                    "size": 1
-                  },
-                  "flex_gap_tablet": {
-                    "column": "",
-                    "row": "",
-                    "isLinked": true,
-                    "unit": "rem",
-                    "size": null
-                  },
-                  "flex_gap_mobile": {
-                    "column": "",
-                    "row": "",
-                    "isLinked": true,
-                    "unit": "rem",
-                    "size": null
-                  },
-                  "_title": "Row2"
-                },
-                "elements": [
-                  {
-                    "id": "272a7f79",
-                    "elType": "container",
-                    "settings": {
-                      "content_width": "full",
-                      "width": {
-                        "unit": "%",
-                        "size": 32,
-                        "sizes": []
-                      },
-                      "flex_justify_content": "space-around",
-                      "flex_align_items": "center",
-                      "_title": "Service Box",
-                      "background_background": "classic",
-                      "border_border": "groove",
-                      "border_width": {
-                        "unit": "px",
-                        "top": "1",
-                        "right": "1",
-                        "bottom": "1",
-                        "left": "1",
-                        "isLinked": true
-                      },
-                      "border_radius": {
-                        "unit": "px",
-                        "top": "16",
-                        "right": "16",
-                        "bottom": "16",
-                        "left": "16",
-                        "isLinked": true
-                      },
-                      "box_shadow_box_shadow_type": "yes",
-                      "box_shadow_box_shadow": {
-                        "horizontal": 0,
-                        "vertical": 0,
-                        "blur": 10,
-                        "spread": 0,
-                        "color": "rgba(0, 0, 0, 0.64)"
-                      },
-                      "__globals__": {
-                        "background_color": "globals/colors?id=2fbee87",
-                        "border_color": "globals/colors?id=9ef2338"
-                      },
-                      "flex_gap": {
-                        "column": "0",
-                        "row": "0",
-                        "isLinked": true,
-                        "unit": "px",
-                        "size": 0
-                      },
-                      "margin": {
-                        "unit": "px",
-                        "top": "0",
-                        "right": "0",
-                        "bottom": "0",
-                        "left": "0",
-                        "isLinked": true
-                      },
-                      "padding": {
-                        "unit": "px",
-                        "top": "0",
-                        "right": "0",
-                        "bottom": "25",
-                        "left": "0",
-                        "isLinked": false
-                      }
-                    },
-                    "elements": [
-                      {
-                        "id": "61fce18c",
-                        "elType": "widget",
-                        "settings": {
-                          "image_size": "custom",
-                          "_element_custom_width": {
-                            "unit": "px",
-                            "size": 200,
-                            "sizes": []
-                          },
-                          "image": {
-                            "url": "http://sdy.local/wp-content/uploads/2026/03/head-thai-2-2.png",
-                            "id": 405,
-                            "size": "",
-                            "alt": "Relaxing massage therapy session at Serendipity Massage.",
-                            "source": "library"
-                          },
-                          "image_custom_dimension": {
-                            "width": "200",
-                            "height": "150"
-                          },
-                          "width": {
-                            "unit": "px",
-                            "size": 200,
-                            "sizes": []
-                          },
-                          "width_tablet": {
-                            "unit": "px",
-                            "size": "",
-                            "sizes": []
-                          },
-                          "width_mobile": {
-                            "unit": "px",
-                            "size": "",
-                            "sizes": []
-                          },
-                          "height": {
-                            "unit": "px",
-                            "size": 150,
-                            "sizes": []
-                          }
-                        },
-                        "elements": [],
-                        "widgetType": "image"
-                      },
-                      {
-                        "id": "7a7ff8ec",
-                        "elType": "widget",
-                        "settings": {
-                          "editor": "<h3>Thai Head<br />Massage</h3><pre>Soft Pressure</pre>",
-                          "align": "center",
-                          "_padding": {
-                            "unit": "px",
-                            "top": "0",
-                            "right": "0",
-                            "bottom": "0",
-                            "left": "0",
-                            "isLinked": true
-                          },
-                          "__globals__": {
-                            "text_color": "globals/colors?id=9ef2338"
-                          }
-                        },
-                        "elements": [],
-                        "widgetType": "text-editor"
-                      },
-                      {
-                        "id": "7382bab9",
-                        "elType": "widget",
-                        "settings": {
-                          "text": "Book Now",
-                          "link": {
-                            "url": "http://sdy.local/book-now/",
-                            "is_external": "",
-                            "nofollow": "",
-                            "custom_attributes": ""
-                          },
-                          "hover_animation": "grow",
-                          "__globals__": {
-                            "button_background_hover_color": "globals/colors?id=2fbee87",
-                            "button_text_color": "globals/colors?id=9ef2338",
-                            "background_color": "globals/colors?id=a160eb5",
-                            "hover_color": "globals/colors?id=2fbee87"
-                          },
-                          "border_border": "solid"
-                        },
-                        "elements": [],
-                        "widgetType": "button"
-                      }
-                    ],
-                    "isInner": true
-                  },
-                  {
-                    "id": "1647a2aa",
-                    "elType": "container",
-                    "settings": {
-                      "content_width": "full",
-                      "width": {
-                        "unit": "%",
-                        "size": 32,
-                        "sizes": []
-                      },
-                      "flex_justify_content": "space-around",
-                      "flex_align_items": "center",
-                      "_title": "Service Box",
-                      "background_background": "classic",
-                      "border_border": "groove",
-                      "border_width": {
-                        "unit": "px",
-                        "top": "1",
-                        "right": "1",
-                        "bottom": "1",
-                        "left": "1",
-                        "isLinked": true
-                      },
-                      "border_radius": {
-                        "unit": "px",
-                        "top": "16",
-                        "right": "16",
-                        "bottom": "16",
-                        "left": "16",
-                        "isLinked": true
-                      },
-                      "box_shadow_box_shadow_type": "yes",
-                      "box_shadow_box_shadow": {
-                        "horizontal": 0,
-                        "vertical": 0,
-                        "blur": 10,
-                        "spread": 0,
-                        "color": "rgba(0, 0, 0, 0.64)"
-                      },
-                      "__globals__": {
-                        "background_color": "globals/colors?id=2fbee87",
-                        "border_color": "globals/colors?id=9ef2338"
-                      },
-                      "flex_gap": {
-                        "column": "0",
-                        "row": "0",
-                        "isLinked": true,
-                        "unit": "px",
-                        "size": 0
-                      },
-                      "margin": {
-                        "unit": "px",
-                        "top": "0",
-                        "right": "0",
-                        "bottom": "0",
-                        "left": "0",
-                        "isLinked": true
-                      },
-                      "padding": {
-                        "unit": "px",
-                        "top": "0",
-                        "right": "0",
-                        "bottom": "25",
-                        "left": "0",
-                        "isLinked": false
-                      }
-                    },
-                    "elements": [
-                      {
-                        "id": "3449c3f9",
-                        "elType": "widget",
-                        "settings": {
-                          "image_size": "custom",
-                          "_element_custom_width": {
-                            "unit": "px",
-                            "size": 200,
-                            "sizes": []
-                          },
-                          "image": {
-                            "url": "http://sdy.local/wp-content/uploads/2026/03/aroma-thai.png",
-                            "id": 385,
-                            "size": "",
-                            "alt": "Traditional herbal compresses for massage therapy and relaxation.",
-                            "source": "library"
-                          },
-                          "image_custom_dimension": {
-                            "width": "200",
-                            "height": "150"
-                          },
-                          "width": {
-                            "unit": "px",
-                            "size": 200,
-                            "sizes": []
-                          },
-                          "width_tablet": {
-                            "unit": "px",
-                            "size": "",
-                            "sizes": []
-                          },
-                          "width_mobile": {
-                            "unit": "px",
-                            "size": "",
-                            "sizes": []
-                          },
-                          "height": {
-                            "unit": "px",
-                            "size": 150,
-                            "sizes": []
-                          }
-                        },
-                        "elements": [],
-                        "widgetType": "image"
-                      },
-                      {
-                        "id": "3a311fa8",
-                        "elType": "widget",
-                        "settings": {
-                          "editor": "<h3>Thai Aromatherapy<br />Massage</h3><pre>Soft Pressure</pre>",
-                          "align": "center",
-                          "_padding": {
-                            "unit": "px",
-                            "top": "0",
-                            "right": "0",
-                            "bottom": "0",
-                            "left": "0",
-                            "isLinked": true
-                          },
-                          "__globals__": {
-                            "text_color": "globals/colors?id=9ef2338"
-                          }
-                        },
-                        "elements": [],
-                        "widgetType": "text-editor"
-                      },
-                      {
-                        "id": "9f1a200",
-                        "elType": "widget",
-                        "settings": {
-                          "text": "Book Now",
-                          "link": {
-                            "url": "http://sdy.local/book-now/",
-                            "is_external": "",
-                            "nofollow": "",
-                            "custom_attributes": ""
-                          },
-                          "hover_animation": "grow",
-                          "__globals__": {
-                            "button_background_hover_color": "globals/colors?id=2fbee87",
-                            "button_text_color": "globals/colors?id=9ef2338",
-                            "background_color": "globals/colors?id=a160eb5",
-                            "hover_color": "globals/colors?id=2fbee87"
-                          },
-                          "border_border": "solid"
-                        },
-                        "elements": [],
-                        "widgetType": "button"
-                      }
-                    ],
-                    "isInner": true
-                  },
-                  {
-                    "id": "d93fbb3",
-                    "elType": "container",
-                    "settings": {
-                      "content_width": "full",
-                      "width": {
-                        "unit": "%",
-                        "size": 32,
-                        "sizes": []
-                      },
-                      "flex_justify_content": "space-around",
-                      "flex_align_items": "center",
-                      "_title": "Service Box",
-                      "background_background": "classic",
-                      "border_border": "groove",
-                      "border_width": {
-                        "unit": "px",
-                        "top": "1",
-                        "right": "1",
-                        "bottom": "1",
-                        "left": "1",
-                        "isLinked": true
-                      },
-                      "border_radius": {
-                        "unit": "px",
-                        "top": "16",
-                        "right": "16",
-                        "bottom": "16",
-                        "left": "16",
-                        "isLinked": true
-                      },
-                      "box_shadow_box_shadow_type": "yes",
-                      "box_shadow_box_shadow": {
-                        "horizontal": 0,
-                        "vertical": 0,
-                        "blur": 10,
-                        "spread": 0,
-                        "color": "rgba(0, 0, 0, 0.64)"
-                      },
-                      "__globals__": {
-                        "background_color": "globals/colors?id=2fbee87",
-                        "border_color": "globals/colors?id=9ef2338"
-                      },
-                      "flex_gap": {
-                        "column": "0",
-                        "row": "0",
-                        "isLinked": true,
-                        "unit": "px",
-                        "size": 0
-                      },
-                      "margin": {
-                        "unit": "px",
-                        "top": "0",
-                        "right": "0",
-                        "bottom": "0",
-                        "left": "0",
-                        "isLinked": true
-                      },
-                      "padding": {
-                        "unit": "px",
-                        "top": "0",
-                        "right": "0",
-                        "bottom": "25",
-                        "left": "0",
-                        "isLinked": false
-                      }
-                    },
-                    "elements": [
-                      {
-                        "id": "79e593d8",
-                        "elType": "widget",
-                        "settings": {
-                          "image": {
-                            "url": "http://sdy.local/wp-content/uploads/2026/03/Aromatherapy-02.png",
-                            "id": 504,
-                            "size": "",
-                            "alt": "",
-                            "source": "library"
-                          },
-                          "image_size": "content-square",
-                          "image_custom_dimension": {
-                            "width": "200",
-                            "height": "150"
-                          },
-                          "width": {
-                            "unit": "px",
-                            "size": 200,
-                            "sizes": []
-                          },
-                          "width_tablet": {
-                            "unit": "px",
-                            "size": "",
-                            "sizes": []
-                          },
-                          "width_mobile": {
-                            "unit": "px",
-                            "size": "",
-                            "sizes": []
-                          },
-                          "height": {
-                            "unit": "px",
-                            "size": 150,
-                            "sizes": []
-                          },
-                          "_element_custom_width": {
-                            "unit": "px",
-                            "size": 200,
-                            "sizes": []
-                          }
-                        },
-                        "elements": [],
-                        "widgetType": "image"
-                      },
-                      {
-                        "id": "4a498e19",
-                        "elType": "widget",
-                        "settings": {
-                          "editor": "<h3>Thai Aromatherapy Massage</h3><pre>Deep Pressure</pre>",
-                          "align": "center",
-                          "_padding": {
-                            "unit": "px",
-                            "top": "0",
-                            "right": "0",
-                            "bottom": "0",
-                            "left": "0",
-                            "isLinked": true
-                          },
-                          "__globals__": {
-                            "text_color": "globals/colors?id=9ef2338"
-                          }
-                        },
-                        "elements": [],
-                        "widgetType": "text-editor"
-                      },
-                      {
-                        "id": "5ab5e14f",
-                        "elType": "widget",
-                        "settings": {
-                          "text": "Book Now",
-                          "link": {
-                            "url": "http://sdy.local/book-now/",
-                            "is_external": "",
-                            "nofollow": "",
-                            "custom_attributes": ""
-                          },
-                          "hover_animation": "grow",
-                          "__globals__": {
-                            "button_background_hover_color": "globals/colors?id=2fbee87",
-                            "button_text_color": "globals/colors?id=9ef2338",
-                            "background_color": "globals/colors?id=a160eb5",
-                            "hover_color": "globals/colors?id=2fbee87"
-                          },
-                          "border_border": "solid"
-                        },
-                        "elements": [],
-                        "widgetType": "button"
-                      }
-                    ],
-                    "isInner": true
-                  },
-                  {
-                    "id": "37ce12d2",
-                    "elType": "container",
-                    "settings": {
-                      "content_width": "full",
-                      "width": {
-                        "unit": "%",
-                        "size": 32,
-                        "sizes": []
-                      },
-                      "flex_justify_content": "space-around",
-                      "flex_align_items": "center",
-                      "_title": "Service Box",
-                      "background_background": "classic",
-                      "border_border": "groove",
-                      "border_width": {
-                        "unit": "px",
-                        "top": "1",
-                        "right": "1",
-                        "bottom": "1",
-                        "left": "1",
-                        "isLinked": true
-                      },
-                      "border_radius": {
-                        "unit": "px",
-                        "top": "16",
-                        "right": "16",
-                        "bottom": "16",
-                        "left": "16",
-                        "isLinked": true
-                      },
-                      "box_shadow_box_shadow_type": "yes",
-                      "box_shadow_box_shadow": {
-                        "horizontal": 0,
-                        "vertical": 0,
-                        "blur": 10,
-                        "spread": 0,
-                        "color": "rgba(0, 0, 0, 0.64)"
-                      },
-                      "__globals__": {
-                        "background_color": "globals/colors?id=2fbee87",
-                        "border_color": "globals/colors?id=9ef2338"
-                      },
-                      "flex_gap": {
-                        "column": "0",
-                        "row": "0",
-                        "isLinked": true,
-                        "unit": "px",
-                        "size": 0
-                      },
-                      "margin": {
-                        "unit": "px",
-                        "top": "0",
-                        "right": "0",
-                        "bottom": "0",
-                        "left": "0",
-                        "isLinked": true
-                      },
-                      "padding": {
-                        "unit": "px",
-                        "top": "0",
-                        "right": "0",
-                        "bottom": "25",
-                        "left": "0",
-                        "isLinked": false
-                      }
-                    },
-                    "elements": [
-                      {
-                        "id": "6a76d430",
-                        "elType": "widget",
-                        "settings": {
-                          "image_size": "custom",
-                          "_element_custom_width": {
-                            "unit": "px",
-                            "size": 200,
-                            "sizes": []
-                          },
-                          "image": {
-                            "url": "http://sdy.local/wp-content/uploads/2026/03/foot-thai-2.png",
-                            "id": 393,
-                            "size": "",
-                            "alt": "Therapist performing foot massage on client for relaxation and stress relief.",
-                            "source": "library"
-                          },
-                          "image_custom_dimension": {
-                            "width": "200",
-                            "height": "150"
-                          },
-                          "width": {
-                            "unit": "px",
-                            "size": 200,
-                            "sizes": []
-                          },
-                          "width_tablet": {
-                            "unit": "px",
-                            "size": "",
-                            "sizes": []
-                          },
-                          "width_mobile": {
-                            "unit": "px",
-                            "size": "",
-                            "sizes": []
-                          },
-                          "height": {
-                            "unit": "px",
-                            "size": 150,
-                            "sizes": []
-                          }
-                        },
-                        "elements": [],
-                        "widgetType": "image"
-                      },
-                      {
-                        "id": "13b83c0d",
-                        "elType": "widget",
-                        "settings": {
-                          "editor": "<h3>Thai Foot  Massage</h3><pre>Soft Pressure</pre>",
-                          "align": "center",
-                          "_padding": {
-                            "unit": "px",
-                            "top": "0",
-                            "right": "0",
-                            "bottom": "0",
-                            "left": "0",
-                            "isLinked": true
-                          },
-                          "__globals__": {
-                            "text_color": "globals/colors?id=9ef2338"
-                          }
-                        },
-                        "elements": [],
-                        "widgetType": "text-editor"
-                      },
-                      {
-                        "id": "6e980b9",
-                        "elType": "widget",
-                        "settings": {
-                          "text": "Book Now",
-                          "link": {
-                            "url": "http://sdy.local/book-now/",
-                            "is_external": "",
-                            "nofollow": "",
-                            "custom_attributes": ""
-                          },
-                          "hover_animation": "grow",
-                          "__globals__": {
-                            "button_background_hover_color": "globals/colors?id=2fbee87",
-                            "button_text_color": "globals/colors?id=9ef2338",
-                            "background_color": "globals/colors?id=a160eb5",
-                            "hover_color": "globals/colors?id=2fbee87"
-                          },
-                          "border_border": "solid"
-                        },
-                        "elements": [],
-                        "widgetType": "button"
-                      }
-                    ],
-                    "isInner": true
-                  }
-                ],
-                "isInner": true
-              },
-              {
-                "id": "6a1e6906",
-                "elType": "container",
-                "settings": {
-                  "flex_direction": "row",
-                  "flex_justify_content": "center",
-                  "flex_align_items": "stretch",
-                  "flex_gap": {
-                    "column": "1",
-                    "row": "0",
-                    "isLinked": false,
-                    "unit": "rem",
-                    "size": 1
-                  },
-                  "flex_gap_tablet": {
-                    "column": "",
-                    "row": "",
-                    "isLinked": true,
-                    "unit": "rem",
-                    "size": null
-                  },
-                  "flex_gap_mobile": {
-                    "column": "",
-                    "row": "",
-                    "isLinked": true,
-                    "unit": "rem",
-                    "size": null
-                  },
-                  "_title": "Row3"
-                },
-                "elements": [
-                  {
-                    "id": "1fbde68",
-                    "elType": "container",
-                    "settings": {
-                      "content_width": "full",
-                      "width": {
-                        "unit": "%",
-                        "size": 32,
-                        "sizes": []
-                      },
-                      "flex_justify_content": "space-around",
-                      "flex_align_items": "center",
-                      "_title": "Service Box",
-                      "background_background": "classic",
-                      "border_border": "groove",
-                      "border_width": {
-                        "unit": "px",
-                        "top": "1",
-                        "right": "1",
-                        "bottom": "1",
-                        "left": "1",
-                        "isLinked": true
-                      },
-                      "border_radius": {
-                        "unit": "px",
-                        "top": "16",
-                        "right": "16",
-                        "bottom": "16",
-                        "left": "16",
-                        "isLinked": true
-                      },
-                      "box_shadow_box_shadow_type": "yes",
-                      "box_shadow_box_shadow": {
-                        "horizontal": 0,
-                        "vertical": 0,
-                        "blur": 10,
-                        "spread": 0,
-                        "color": "rgba(0, 0, 0, 0.64)"
-                      },
-                      "__globals__": {
-                        "background_color": "globals/colors?id=2fbee87",
-                        "border_color": "globals/colors?id=9ef2338"
-                      },
-                      "flex_gap": {
-                        "column": "0",
-                        "row": "0",
-                        "isLinked": true,
-                        "unit": "px",
-                        "size": 0
-                      },
-                      "margin": {
-                        "unit": "px",
-                        "top": "0",
-                        "right": "0",
-                        "bottom": "0",
-                        "left": "0",
-                        "isLinked": true
-                      },
-                      "padding": {
-                        "unit": "px",
-                        "top": "0",
-                        "right": "0",
-                        "bottom": "25",
-                        "left": "0",
-                        "isLinked": false
-                      }
-                    },
-                    "elements": [
-                      {
-                        "id": "58872b33",
-                        "elType": "widget",
-                        "settings": {
-                          "image_size": "custom",
-                          "_element_custom_width": {
-                            "unit": "px",
-                            "size": 200,
-                            "sizes": []
-                          },
-                          "image": {
-                            "url": "http://sdy.local/wp-content/uploads/2026/03/stone-thai.png",
-                            "id": 380,
-                            "size": "",
-                            "alt": "Hot stones for massage therapy with candle in background, spa treatment scene.",
-                            "source": "library"
-                          },
-                          "image_custom_dimension": {
-                            "width": "200",
-                            "height": "150"
-                          },
-                          "width": {
-                            "unit": "px",
-                            "size": 200,
-                            "sizes": []
-                          },
-                          "width_tablet": {
-                            "unit": "px",
-                            "size": "",
-                            "sizes": []
-                          },
-                          "width_mobile": {
-                            "unit": "px",
-                            "size": "",
-                            "sizes": []
-                          },
-                          "height": {
-                            "unit": "px",
-                            "size": 150,
-                            "sizes": []
-                          }
-                        },
-                        "elements": [],
-                        "widgetType": "image"
-                      },
-                      {
-                        "id": "2c468a5e",
-                        "elType": "widget",
-                        "settings": {
-                          "editor": "<h3>Hot Stone<br />Massage</h3><pre>Soft Pressure</pre>",
-                          "align": "center",
-                          "_padding": {
-                            "unit": "px",
-                            "top": "0",
-                            "right": "0",
-                            "bottom": "0",
-                            "left": "0",
-                            "isLinked": true
-                          },
-                          "__globals__": {
-                            "text_color": "globals/colors?id=9ef2338"
-                          }
-                        },
-                        "elements": [],
-                        "widgetType": "text-editor"
-                      },
-                      {
-                        "id": "29a91438",
-                        "elType": "widget",
-                        "settings": {
-                          "text": "Book Now",
-                          "link": {
-                            "url": "http://sdy.local/book-now/",
-                            "is_external": "",
-                            "nofollow": "",
-                            "custom_attributes": ""
-                          },
-                          "hover_animation": "grow",
-                          "__globals__": {
-                            "button_background_hover_color": "globals/colors?id=2fbee87",
-                            "button_text_color": "globals/colors?id=9ef2338",
-                            "background_color": "globals/colors?id=a160eb5",
-                            "hover_color": "globals/colors?id=2fbee87"
-                          },
-                          "border_border": "solid"
-                        },
-                        "elements": [],
-                        "widgetType": "button"
-                      }
-                    ],
-                    "isInner": true
-                  },
-                  {
-                    "id": "5c9e4a6a",
-                    "elType": "container",
-                    "settings": {
-                      "content_width": "full",
-                      "width": {
-                        "unit": "%",
-                        "size": 32,
-                        "sizes": []
-                      },
-                      "flex_justify_content": "space-around",
-                      "flex_align_items": "center",
-                      "_title": "Service Box",
-                      "background_background": "classic",
-                      "border_border": "groove",
-                      "border_width": {
-                        "unit": "px",
-                        "top": "1",
-                        "right": "1",
-                        "bottom": "1",
-                        "left": "1",
-                        "isLinked": true
-                      },
-                      "border_radius": {
-                        "unit": "px",
-                        "top": "16",
-                        "right": "16",
-                        "bottom": "16",
-                        "left": "16",
-                        "isLinked": true
-                      },
-                      "box_shadow_box_shadow_type": "yes",
-                      "box_shadow_box_shadow": {
-                        "horizontal": 0,
-                        "vertical": 0,
-                        "blur": 10,
-                        "spread": 0,
-                        "color": "rgba(0, 0, 0, 0.64)"
-                      },
-                      "__globals__": {
-                        "background_color": "globals/colors?id=2fbee87",
-                        "border_color": "globals/colors?id=9ef2338"
-                      },
-                      "flex_gap": {
-                        "column": "0",
-                        "row": "0",
-                        "isLinked": true,
-                        "unit": "px",
-                        "size": 0
-                      },
-                      "margin": {
-                        "unit": "px",
-                        "top": "0",
-                        "right": "0",
-                        "bottom": "0",
-                        "left": "0",
-                        "isLinked": true
-                      },
-                      "padding": {
-                        "unit": "px",
-                        "top": "0",
-                        "right": "0",
-                        "bottom": "25",
-                        "left": "0",
-                        "isLinked": false
-                      }
-                    },
-                    "elements": [
-                      {
-                        "id": "1f8619b2",
-                        "elType": "widget",
-                        "settings": {
-                          "image_size": "custom",
-                          "_element_custom_width": {
-                            "unit": "px",
-                            "size": 200,
-                            "sizes": []
-                          },
-                          "image": {
-                            "url": "http://sdy.local/wp-content/uploads/2026/03/sports-thai-2.png",
-                            "id": 401,
-                            "size": "",
-                            "alt": "Relaxing massage therapy for stress relief and muscle relaxation in a professional setting.",
-                            "source": "library"
-                          },
-                          "image_custom_dimension": {
-                            "width": "200",
-                            "height": "150"
-                          },
-                          "width": {
-                            "unit": "px",
-                            "size": 200,
-                            "sizes": []
-                          },
-                          "width_tablet": {
-                            "unit": "px",
-                            "size": "",
-                            "sizes": []
-                          },
-                          "width_mobile": {
-                            "unit": "px",
-                            "size": "",
-                            "sizes": []
-                          },
-                          "height": {
-                            "unit": "px",
-                            "size": 150,
-                            "sizes": []
-                          }
-                        },
-                        "elements": [],
-                        "widgetType": "image"
-                      },
-                      {
-                        "id": "1d30d19c",
-                        "elType": "widget",
-                        "settings": {
-                          "editor": "<h3>Sports<br />Massage</h3><pre>Soft Pressure</pre>",
-                          "align": "center",
-                          "_padding": {
-                            "unit": "px",
-                            "top": "0",
-                            "right": "0",
-                            "bottom": "0",
-                            "left": "0",
-                            "isLinked": true
-                          },
-                          "__globals__": {
-                            "text_color": "globals/colors?id=9ef2338"
-                          }
-                        },
-                        "elements": [],
-                        "widgetType": "text-editor"
-                      },
-                      {
-                        "id": "ebb4ce7",
-                        "elType": "widget",
-                        "settings": {
-                          "text": "Book Now",
-                          "link": {
-                            "url": "http://sdy.local/book-now/",
-                            "is_external": "",
-                            "nofollow": "",
-                            "custom_attributes": ""
-                          },
-                          "hover_animation": "grow",
-                          "__globals__": {
-                            "button_background_hover_color": "globals/colors?id=2fbee87",
-                            "button_text_color": "globals/colors?id=9ef2338",
-                            "background_color": "globals/colors?id=a160eb5",
-                            "hover_color": "globals/colors?id=2fbee87"
-                          },
-                          "border_border": "solid"
-                        },
-                        "elements": [],
-                        "widgetType": "button"
-                      }
-                    ],
-                    "isInner": true
-                  },
-                  {
-                    "id": "3c2c1ca2",
-                    "elType": "container",
-                    "settings": {
-                      "content_width": "full",
-                      "width": {
-                        "unit": "%",
-                        "size": 32,
-                        "sizes": []
-                      },
-                      "flex_justify_content": "space-around",
-                      "flex_align_items": "center",
-                      "_title": "Service Box",
-                      "background_background": "classic",
-                      "border_border": "groove",
-                      "border_width": {
-                        "unit": "px",
-                        "top": "1",
-                        "right": "1",
-                        "bottom": "1",
-                        "left": "1",
-                        "isLinked": true
-                      },
-                      "border_radius": {
-                        "unit": "px",
-                        "top": "16",
-                        "right": "16",
-                        "bottom": "16",
-                        "left": "16",
-                        "isLinked": true
-                      },
-                      "box_shadow_box_shadow_type": "yes",
-                      "box_shadow_box_shadow": {
-                        "horizontal": 0,
-                        "vertical": 0,
-                        "blur": 10,
-                        "spread": 0,
-                        "color": "rgba(0, 0, 0, 0.64)"
-                      },
-                      "__globals__": {
-                        "background_color": "globals/colors?id=2fbee87",
-                        "border_color": "globals/colors?id=9ef2338"
-                      },
-                      "flex_gap": {
-                        "column": "0",
-                        "row": "0",
-                        "isLinked": true,
-                        "unit": "px",
-                        "size": 0
-                      },
-                      "margin": {
-                        "unit": "px",
-                        "top": "0",
-                        "right": "0",
-                        "bottom": "0",
-                        "left": "0",
-                        "isLinked": true
-                      },
-                      "padding": {
-                        "unit": "px",
-                        "top": "0",
-                        "right": "0",
-                        "bottom": "25",
-                        "left": "0",
-                        "isLinked": false
-                      }
-                    },
-                    "elements": [
-                      {
-                        "id": "67a21ebc",
-                        "elType": "widget",
-                        "settings": {
-                          "image_size": "custom",
-                          "_element_custom_width": {
-                            "unit": "px",
-                            "size": 200,
-                            "sizes": []
-                          },
-                          "image": {
-                            "url": "http://sdy.local/wp-content/uploads/2026/03/swedish-massage.png",
-                            "id": 505,
-                            "size": "",
-                            "alt": "",
-                            "source": "library"
-                          },
-                          "image_custom_dimension": {
-                            "width": "200",
-                            "height": "150"
-                          },
-                          "width": {
-                            "unit": "px",
-                            "size": 200,
-                            "sizes": []
-                          },
-                          "width_tablet": {
-                            "unit": "px",
-                            "size": "",
-                            "sizes": []
-                          },
-                          "width_mobile": {
-                            "unit": "px",
-                            "size": "",
-                            "sizes": []
-                          },
-                          "height": {
-                            "unit": "px",
-                            "size": 150,
-                            "sizes": []
-                          }
-                        },
-                        "elements": [],
-                        "widgetType": "image"
-                      },
-                      {
-                        "id": "44091878",
-                        "elType": "widget",
-                        "settings": {
-                          "editor": "<h3>Swedish <br>Massage</h3>\n<pre>Soft Pressure</pre>",
-                          "align": "center",
-                          "_padding": {
-                            "unit": "px",
-                            "top": "0",
-                            "right": "0",
-                            "bottom": "0",
-                            "left": "0",
-                            "isLinked": true
-                          },
-                          "__globals__": {
-                            "text_color": "globals/colors?id=9ef2338"
-                          }
-                        },
-                        "elements": [],
-                        "widgetType": "text-editor"
-                      },
-                      {
-                        "id": "13d83bf6",
-                        "elType": "widget",
-                        "settings": {
-                          "text": "Book Now",
-                          "link": {
-                            "url": "http://sdy.local/book-now/",
-                            "is_external": "",
-                            "nofollow": "",
-                            "custom_attributes": ""
-                          },
-                          "hover_animation": "grow",
-                          "__globals__": {
-                            "button_background_hover_color": "globals/colors?id=2fbee87",
-                            "button_text_color": "globals/colors?id=9ef2338",
-                            "background_color": "globals/colors?id=a160eb5",
-                            "hover_color": "globals/colors?id=2fbee87"
-                          },
-                          "border_border": "solid"
-                        },
-                        "elements": [],
-                        "widgetType": "button"
-                      }
-                    ],
-                    "isInner": true
-                  },
-                  {
-                    "id": "72fbc40",
-                    "elType": "container",
-                    "settings": {
-                      "content_width": "full",
-                      "width": {
-                        "unit": "%",
-                        "size": 32,
-                        "sizes": []
-                      },
-                      "flex_justify_content": "space-around",
-                      "flex_align_items": "center",
-                      "_title": "Service Box",
-                      "background_background": "classic",
-                      "border_border": "groove",
-                      "border_width": {
-                        "unit": "px",
-                        "top": "1",
-                        "right": "1",
-                        "bottom": "1",
-                        "left": "1",
-                        "isLinked": true
-                      },
-                      "border_radius": {
-                        "unit": "px",
-                        "top": "16",
-                        "right": "16",
-                        "bottom": "16",
-                        "left": "16",
-                        "isLinked": true
-                      },
-                      "box_shadow_box_shadow_type": "yes",
-                      "box_shadow_box_shadow": {
-                        "horizontal": 0,
-                        "vertical": 0,
-                        "blur": 10,
-                        "spread": 0,
-                        "color": "rgba(0, 0, 0, 0.64)"
-                      },
-                      "__globals__": {
-                        "background_color": "globals/colors?id=2fbee87",
-                        "border_color": "globals/colors?id=9ef2338"
-                      },
-                      "flex_gap": {
-                        "column": "0",
-                        "row": "0",
-                        "isLinked": true,
-                        "unit": "px",
-                        "size": 0
-                      },
-                      "margin": {
-                        "unit": "px",
-                        "top": "0",
-                        "right": "0",
-                        "bottom": "0",
-                        "left": "0",
-                        "isLinked": true
-                      },
-                      "padding": {
-                        "unit": "px",
-                        "top": "0",
-                        "right": "0",
-                        "bottom": "25",
-                        "left": "0",
-                        "isLinked": false
-                      }
-                    },
-                    "elements": [
-                      {
-                        "id": "5a0e5921",
-                        "elType": "widget",
-                        "settings": {
-                          "image_size": "custom",
-                          "_element_custom_width": {
-                            "unit": "px",
-                            "size": 200,
-                            "sizes": []
-                          },
-                          "image": {
-                            "url": "http://sdy.local/wp-content/uploads/2026/03/facial-thai-2.png",
-                            "id": 394,
-                            "size": "",
-                            "alt": "Relaxing facial massage with skincare treatment in a spa setting.",
-                            "source": "library"
-                          },
-                          "image_custom_dimension": {
-                            "width": "200",
-                            "height": "150"
-                          },
-                          "width": {
-                            "unit": "px",
-                            "size": 200,
-                            "sizes": []
-                          },
-                          "width_tablet": {
-                            "unit": "px",
-                            "size": "",
-                            "sizes": []
-                          },
-                          "width_mobile": {
-                            "unit": "px",
-                            "size": "",
-                            "sizes": []
-                          },
-                          "height": {
-                            "unit": "px",
-                            "size": 150,
-                            "sizes": []
-                          }
-                        },
-                        "elements": [],
-                        "widgetType": "image"
-                      },
-                      {
-                        "id": "50f406c5",
-                        "elType": "widget",
-                        "settings": {
-                          "editor": "<h3>Thai Facial  Massage</h3><pre>Soft Pressure</pre>",
-                          "align": "center",
-                          "_padding": {
-                            "unit": "px",
-                            "top": "0",
-                            "right": "0",
-                            "bottom": "0",
-                            "left": "0",
-                            "isLinked": true
-                          },
-                          "__globals__": {
-                            "text_color": "globals/colors?id=9ef2338"
-                          }
-                        },
-                        "elements": [],
-                        "widgetType": "text-editor"
-                      },
-                      {
-                        "id": "67de792",
-                        "elType": "widget",
-                        "settings": {
-                          "text": "Book Now",
-                          "link": {
-                            "url": "http://sdy.local/book-now/",
-                            "is_external": "",
-                            "nofollow": "",
-                            "custom_attributes": ""
-                          },
-                          "hover_animation": "grow",
-                          "__globals__": {
-                            "button_background_hover_color": "globals/colors?id=2fbee87",
-                            "button_text_color": "globals/colors?id=9ef2338",
-                            "background_color": "globals/colors?id=a160eb5",
-                            "hover_color": "globals/colors?id=2fbee87"
-                          },
-                          "border_border": "solid"
-                        },
-                        "elements": [],
-                        "widgetType": "button"
-                      }
-                    ],
-                    "isInner": true
-                  }
-                ],
-                "isInner": true
-              }
-            ],
-            "isInner": true
+            "elements": [],
+            "widgetType": "template"
           },
           {
-            "id": "4f38fd41",
+            "id": "1bc66124",
             "elType": "container",
             "settings": {
               "content_width": "full",
@@ -2553,14 +330,14 @@
             },
             "elements": [
               {
-                "id": "3cc02c63",
+                "id": "2f3c3a84",
                 "elType": "container",
                 "settings": {
                   "_title": "Inner"
                 },
                 "elements": [
                   {
-                    "id": "19759deb",
+                    "id": "70f56958",
                     "elType": "widget",
                     "settings": {
                       "title": "Take A Look At What Our Clients Are Saying About Us",
@@ -2574,7 +351,7 @@
                     "widgetType": "heading"
                   },
                   {
-                    "id": "5196ca5b",
+                    "id": "12e54fa3",
                     "elType": "widget",
                     "settings": {
                       "html": "<script type='text/javascript' src='https://reputationhub.site/reputation/assets/review-widget.js'></script><iframe class='lc_reviews_widget' src='https://reputationhub.site/reputation/widgets/review_widget/HbhlMeHmDvc4pB9eEAZQ' frameborder='0' scrolling='no' style='min-width: 100%; width: 100%;'></iframe>"
@@ -2583,7 +360,7 @@
                     "widgetType": "html"
                   },
                   {
-                    "id": "7478d1d8",
+                    "id": "1c762488",
                     "elType": "widget",
                     "settings": {
                       "text": "Book Now",
@@ -2603,11 +380,34 @@
                         "border_color": "globals/colors?id=9ef2338"
                       },
                       "align": "center",
-                      "border_border": "solid"
+                      "border_border": "solid",
+                      "_padding": {
+                        "unit": "rem",
+                        "top": "1",
+                        "right": "0",
+                        "bottom": "0",
+                        "left": "0",
+                        "isLinked": false
+                      },
+                      "_padding_tablet": {
+                        "unit": "rem",
+                        "top": "",
+                        "right": "",
+                        "bottom": "",
+                        "left": "",
+                        "isLinked": true
+                      },
+                      "_padding_mobile": {
+                        "unit": "rem",
+                        "top": "",
+                        "right": "",
+                        "bottom": "",
+                        "left": "",
+                        "isLinked": true
+                      }
                     },
                     "elements": [],
-                    "widgetType": "global",
-                    "templateID": "355"
+                    "widgetType": "button"
                   }
                 ],
                 "isInner": true
@@ -2619,7 +419,7 @@
         "isInner": true
       },
       {
-        "id": "441c3b91",
+        "id": "6e1d9622",
         "elType": "container",
         "settings": {
           "flex_direction": "column",
@@ -2656,14 +456,14 @@
         },
         "elements": [
           {
-            "id": "c71954c",
+            "id": "5d2c1351",
             "elType": "container",
             "settings": {
               "_title": "Inner Maps"
             },
             "elements": [
               {
-                "id": "2382007e",
+                "id": "3764d3f2",
                 "elType": "widget",
                 "settings": {
                   "address": "Floor 1, Suite 50 Central Chambers 93 Hope Street Glasgow G2 6LD",
@@ -2682,208 +482,127 @@
                 "widgetType": "google_maps"
               },
               {
-                "id": "497e3fa0",
-                "elType": "container",
-                "settings": {
-                  "flex_direction": "row",
-                  "content_width": "full",
-                  "flex_justify_content": "space-between",
-                  "padding": {
-                    "unit": "rem",
-                    "top": "2",
-                    "right": "0",
-                    "bottom": "0",
-                    "left": "0",
-                    "isLinked": false
-                  },
-                  "padding_tablet": {
-                    "unit": "rem",
-                    "top": "",
-                    "right": "",
-                    "bottom": "",
-                    "left": "",
-                    "isLinked": true
-                  },
-                  "padding_mobile": {
-                    "unit": "rem",
-                    "top": "",
-                    "right": "",
-                    "bottom": "",
-                    "left": "",
-                    "isLinked": true
-                  }
-                },
-                "elements": [
-                  {
-                    "id": "21416e84",
-                    "elType": "widget",
-                    "settings": {
-                      "html": "Driving Directions"
-                    },
-                    "elements": [],
-                    "widgetType": "html"
-                  },
-                  {
-                    "id": "7176ff34",
-                    "elType": "widget",
-                    "settings": {
-                      "html": "Driving Directions"
-                    },
-                    "elements": [],
-                    "widgetType": "html"
-                  },
-                  {
-                    "id": "23ad3c2",
-                    "elType": "widget",
-                    "settings": {
-                      "html": "Driving Directions"
-                    },
-                    "elements": [],
-                    "widgetType": "html"
-                  }
-                ],
-                "isInner": true
-              },
-              {
-                "id": "5c411110",
-                "elType": "container",
-                "settings": {
-                  "flex_direction": "row",
-                  "content_width": "full",
-                  "flex_justify_content": "space-between",
-                  "padding": {
-                    "unit": "rem",
-                    "top": "2",
-                    "right": "0",
-                    "bottom": "0",
-                    "left": "0",
-                    "isLinked": false
-                  },
-                  "padding_tablet": {
-                    "unit": "rem",
-                    "top": "",
-                    "right": "",
-                    "bottom": "",
-                    "left": "",
-                    "isLinked": true
-                  },
-                  "padding_mobile": {
-                    "unit": "rem",
-                    "top": "",
-                    "right": "",
-                    "bottom": "",
-                    "left": "",
-                    "isLinked": true
-                  }
-                },
-                "elements": [
-                  {
-                    "id": "78a768f6",
-                    "elType": "widget",
-                    "settings": {
-                      "html": "Driving Directions"
-                    },
-                    "elements": [],
-                    "widgetType": "html"
-                  },
-                  {
-                    "id": "78c71379",
-                    "elType": "widget",
-                    "settings": {
-                      "html": "Driving Directions"
-                    },
-                    "elements": [],
-                    "widgetType": "html"
-                  },
-                  {
-                    "id": "41560cf2",
-                    "elType": "widget",
-                    "settings": {
-                      "html": "Driving Directions"
-                    },
-                    "elements": [],
-                    "widgetType": "html"
-                  }
-                ],
-                "isInner": true
-              }
-            ],
-            "isInner": true
-          }
-        ],
-        "isInner": true
-      },
-      {
-        "id": "6f4aee9f",
-        "elType": "container",
-        "settings": {
-          "flex_direction": "column",
-          "padding": {
-            "unit": "rem",
-            "top": "2",
-            "right": "0",
-            "bottom": "2",
-            "left": "0",
-            "isLinked": false
-          },
-          "padding_tablet": {
-            "unit": "rem",
-            "top": "",
-            "right": "",
-            "bottom": "",
-            "left": "",
-            "isLinked": true
-          },
-          "padding_mobile": {
-            "unit": "rem",
-            "top": "",
-            "right": "",
-            "bottom": "",
-            "left": "",
-            "isLinked": true
-          },
-          "_title": "Purple3 - Video",
-          "flex_justify_content": "center",
-          "flex_align_items": "center",
-          "background_background": "classic",
-          "margin": {
-            "unit": "px",
-            "top": "-22",
-            "right": "0",
-            "bottom": "0",
-            "left": "0",
-            "isLinked": false
-          },
-          "__globals__": {
-            "background_color": "globals/colors?id=a160eb5"
-          }
-        },
-        "elements": [
-          {
-            "id": "3b4c194f",
-            "elType": "container",
-            "settings": {
-              "content_width": "full",
-              "width": {
-                "unit": "%",
-                "size": 55,
-                "sizes": []
-              },
-              "flex_justify_content": "center",
-              "flex_align_items": "center"
-            },
-            "elements": [
-              {
-                "id": "9c9baa4",
+                "id": "3dc466c",
                 "elType": "widget",
                 "settings": {
-                  "youtube_url": "https://www.youtube.com/watch?v=XHOmBV4js_E",
-                  "vimeo_url": "https://vimeo.com/235215203",
-                  "dailymotion_url": "https://www.dailymotion.com/video/x6tqhqb",
-                  "videopress_url": "https://videopress.com/v/ZCAOzTNk"
+                  "html": "<!-- Driving Directions Widget — Serendipity Massage Therapy & Wellness -->\n<!-- Generated by generate_directions_snippet.py | Using address as destination — add \"place_id\" to config.json for more accurate routing. -->\n<div class=\"seo-directions\" style=\"margin:1.5em 0;\">\n  <p style=\"margin-bottom:0.75em;\">Get driving directions to Serendipity Massage Therapy & Wellness:</p>\n  <div style=\"display:flex;gap:0.5em;flex-wrap:wrap;align-items:stretch;\">\n    <input\n      type=\"text\"\n      id=\"seo-dir-origin-sdy\"\n      placeholder=\"Enter your postcode or address\"\n      style=\"flex:1 1 220px;padding:0.55em 0.75em;font-size:1rem;border:1px solid #ccc;border-radius:4px;\"\n      onkeydown=\"if(event.key==='Enter')seoGetDirections_sdy()\"\n    />\n    <button\n      onclick=\"seoGetDirections_sdy()\"\n      style=\"padding:0.55em 1.25em;font-size:1rem;background:#2c6e49;color:#fff;border:none;border-radius:4px;cursor:pointer;white-space:nowrap;\"\n    >Get Directions</button>\n  </div>\n  <p style=\"margin-top:0.6em;font-size:0.85em; font-weight: bold;\"0>Serendipity Massage Therapy & Wellness &mdash; Floor 1, Suite 50, Central Chambers, 93 Hope Street, Glasgow G2 6LD</p>\n</div>\n<script>\nfunction seoGetDirections_sdy() {\n  var origin = document.getElementById('seo-dir-origin-sdy').value.trim();\n  if (!origin) {\n    alert('Please enter your starting location.');\n    return;\n  }\n  var url = 'https://www.google.com/maps/dir/?api=1'\n    + '&origin=' + encodeURIComponent(origin)\n    + '&destination=Floor+1%2C+Suite+50%2C+Central+Chambers%2C+93+Hope+Street%2C+Glasgow+G2+6LD'\n    + '&travelmode=driving';\n  window.open(url, '_blank');\n}\n</script>\n<!-- End Driving Directions Widget -->"
                 },
                 "elements": [],
-                "widgetType": "video"
+                "widgetType": "html"
+              },
+              {
+                "id": "3ec09ad",
+                "elType": "container",
+                "settings": {
+                  "flex_direction": "row",
+                  "content_width": "full",
+                  "flex_justify_content": "space-between",
+                  "padding": {
+                    "unit": "rem",
+                    "top": "2",
+                    "right": "0",
+                    "bottom": "0",
+                    "left": "0",
+                    "isLinked": false
+                  },
+                  "padding_tablet": {
+                    "unit": "rem",
+                    "top": "",
+                    "right": "",
+                    "bottom": "",
+                    "left": "",
+                    "isLinked": true
+                  },
+                  "padding_mobile": {
+                    "unit": "rem",
+                    "top": "",
+                    "right": "",
+                    "bottom": "",
+                    "left": "",
+                    "isLinked": true
+                  },
+                  "_title": "Drive Maps 1"
+                },
+                "elements": [
+                  {
+                    "id": "5407b8a",
+                    "elType": "widget",
+                    "settings": {
+                      "html": "<!-- 1. Glasgow Central Station → Central Chambers -->\n<iframe src=\"https://www.google.com/maps/embed?pb=!1m28!1m12!1m3!1d1000!2d-4.2590!3d55.8600!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m13!3e2!4m5!1s0x488846a3a5f7142d%3A0x28929c8e41810040!2sGlasgow+Central+Station!3m2!1d55.8602!2d-4.2582!4m5!1s0x4888469f45214927%3A0x6ba7f044c6948b6f!2sCentral+Chambers%2C+93+Hope+Street%2C+Glasgow+G2+6LD!3m2!1d55.8612!2d-4.2575!5e0!3m2!1sen!2suk!4v1\" width=\"100%\" height=\"400\" style=\"border:0;\" allowfullscreen=\"\" loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade\" title=\"Directions from Glasgow Central Station to Serendipity Massage\"></iframe>\n",
+                      "_element_width": "inherit"
+                    },
+                    "elements": [],
+                    "widgetType": "html"
+                  },
+                  {
+                    "id": "fa5a12c",
+                    "elType": "widget",
+                    "settings": {
+                      "html": "<!-- 2. Buchanan Street Bus Station → Central Chambers -->\n<iframe src=\"https://www.google.com/maps/embed?pb=!1m28!1m12!1m3!1d2000!2d-4.2550!3d55.8630!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m13!3e2!4m5!1s0x488846a830ee0541%3A0x1e8040fb3fcd124e!2sBuchanan+Bus+Station%2C+Glasgow!3m2!1d55.8654!2d-4.2525!4m5!1s0x4888469f45214927%3A0x6ba7f044c6948b6f!2sCentral+Chambers%2C+93+Hope+Street%2C+Glasgow+G2+6LD!3m2!1d55.8612!2d-4.2575!5e0!3m2!1sen!2suk!4v1\" width=\"100%\" height=\"400\" style=\"border:0;\" allowfullscreen=\"\" loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade\" title=\"Directions from Buchanan Bus Station to Serendipity Massage\"></iframe>\n",
+                      "_element_width": "inherit"
+                    },
+                    "elements": [],
+                    "widgetType": "html"
+                  }
+                ],
+                "isInner": true
+              },
+              {
+                "id": "53c56bd",
+                "elType": "container",
+                "settings": {
+                  "flex_direction": "row",
+                  "content_width": "full",
+                  "flex_justify_content": "space-between",
+                  "padding": {
+                    "unit": "rem",
+                    "top": "2",
+                    "right": "0",
+                    "bottom": "0",
+                    "left": "0",
+                    "isLinked": false
+                  },
+                  "padding_tablet": {
+                    "unit": "rem",
+                    "top": "",
+                    "right": "",
+                    "bottom": "",
+                    "left": "",
+                    "isLinked": true
+                  },
+                  "padding_mobile": {
+                    "unit": "rem",
+                    "top": "",
+                    "right": "",
+                    "bottom": "",
+                    "left": "",
+                    "isLinked": true
+                  },
+                  "_title": "Drive Maps 2"
+                },
+                "elements": [
+                  {
+                    "id": "6156a82",
+                    "elType": "widget",
+                    "settings": {
+                      "html": "<!-- 4. St Enoch Subway → Central Chambers -->\n<iframe src=\"https://www.google.com/maps/embed?pb=!1m28!1m12!1m3!1d1000!2d-4.2565!3d55.8590!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m13!3e2!4m5!1s0x488846a659d1d65f%3A0x4d7a5eed8f6d1e94!2sSt+Enoch+Subway+Station%2C+Glasgow!3m2!1d55.8563!2d-4.2554!4m5!1s0x4888469f45214927%3A0x6ba7f044c6948b6f!2sCentral+Chambers%2C+93+Hope+Street%2C+Glasgow+G2+6LD!3m2!1d55.8612!2d-4.2575!5e0!3m2!1sen!2suk!4v1\" width=\"100%\" height=\"400\" style=\"border:0;\" allowfullscreen=\"\" loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade\" title=\"Directions from St Enoch Subway to Serendipity Massage\"></iframe>\n",
+                      "_element_width": "inherit"
+                    },
+                    "elements": [],
+                    "widgetType": "html"
+                  },
+                  {
+                    "id": "13fe346",
+                    "elType": "widget",
+                    "settings": {
+                      "html": "<!-- 6. Cowcaddens Subway → Central Chambers -->\n<iframe src=\"https://www.google.com/maps/embed?pb=!1m28!1m12!1m3!1d1000!2d-4.2570!3d55.8640!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m13!3e2!4m5!1s0x488846a918ab29d3%3A0xba8e9782e9b6d9e3!2sCowcaddens+Subway+Station%2C+Glasgow!3m2!1d55.8664!2d-4.2564!4m5!1s0x4888469f45214927%3A0x6ba7f044c6948b6f!2sCentral+Chambers%2C+93+Hope+Street%2C+Glasgow+G2+6LD!3m2!1d55.8612!2d-4.2575!5e0!3m2!1sen!2suk!4v1\" width=\"100%\" height=\"400\" style=\"border:0;\" allowfullscreen=\"\" loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade\" title=\"Directions from Cowcaddens Subway to Serendipity Massage\"></iframe>\n",
+                      "_element_width": "inherit"
+                    },
+                    "elements": [],
+                    "widgetType": "html"
+                  }
+                ],
+                "isInner": true
               }
             ],
             "isInner": true
@@ -2892,7 +611,7 @@
         "isInner": true
       },
       {
-        "id": "735fcde0",
+        "id": "6995834b",
         "elType": "container",
         "settings": {
           "flex_direction": "column",
@@ -2925,10 +644,10 @@
           "__globals__": {
             "background_color": "globals/colors?id=2fbee87"
           },
-          "_title": "Dark4 - CTA",
+          "_title": "Dark4 - Vid+CTA",
           "margin": {
             "unit": "px",
-            "top": "-22",
+            "top": "-30",
             "right": "0",
             "bottom": "0",
             "left": "0",
@@ -2937,70 +656,184 @@
         },
         "elements": [
           {
-            "id": "2f10cbbf",
+            "id": "17930b6",
             "elType": "container",
             "settings": {
-              "_title": "Inner CTA"
+              "flex_direction": "row",
+              "padding": {
+                "unit": "rem",
+                "top": "0",
+                "right": "0",
+                "bottom": "2",
+                "left": "0",
+                "isLinked": false
+              },
+              "padding_tablet": {
+                "unit": "rem",
+                "top": "",
+                "right": "",
+                "bottom": "",
+                "left": "",
+                "isLinked": true
+              },
+              "padding_mobile": {
+                "unit": "rem",
+                "top": "",
+                "right": "",
+                "bottom": "",
+                "left": "",
+                "isLinked": true
+              },
+              "_title": "Dark3 - Video",
+              "content_width": "full"
             },
             "elements": [
               {
-                "id": "51e1a78f",
+                "id": "eb53231",
                 "elType": "widget",
                 "settings": {
-                  "editor": "<strong data-darkreader-inline-color=\"\">If you would like to book an appointment over the phone please call us on:\n<div style=\"font-size: 140%;\">0141 673 6630</div></strong>",
-                  "align": "center",
-                  "typography_typography": "custom",
-                  "typography_font_family": "Open Sans",
-                  "typography_line_height": {
-                    "unit": "custom",
-                    "size": "2",
+                  "youtube_url": "https://www.youtube.com/watch?v=XHOmBV4js_E",
+                  "vimeo_url": "https://vimeo.com/235215203",
+                  "dailymotion_url": "https://www.dailymotion.com/video/x6tqhqb",
+                  "videopress_url": "https://videopress.com/v/ZCAOzTNk",
+                  "_element_width": "initial",
+                  "_element_custom_width": {
+                    "unit": "%",
+                    "size": 50,
                     "sizes": []
                   },
-                  "typography_line_height_tablet": {
-                    "unit": "custom",
-                    "size": "",
-                    "sizes": []
-                  },
-                  "typography_line_height_mobile": {
-                    "unit": "custom",
-                    "size": "",
-                    "sizes": []
-                  },
-                  "text_color": "#CFBCC6",
-                  "__globals__": {
-                    "text_color": "globals/colors?id=9ef2338",
-                    "typography_typography": ""
-                  }
+                  "_flex_align_self": "center"
                 },
                 "elements": [],
-                "widgetType": "text-editor"
+                "widgetType": "video"
               },
               {
-                "id": "752af892",
-                "elType": "widget",
+                "id": "1a459a8",
+                "elType": "container",
                 "settings": {
-                  "text": "Book Now",
-                  "link": {
-                    "url": "http://sdy.local/book-now/",
-                    "is_external": "",
-                    "nofollow": "",
-                    "custom_attributes": ""
+                  "_title": "Inner CTA",
+                  "content_width": "full",
+                  "width": {
+                    "unit": "%",
+                    "size": 52,
+                    "sizes": []
                   },
-                  "hover_animation": "grow",
-                  "__globals__": {
-                    "button_background_hover_color": "globals/colors?id=2fbee87",
-                    "button_text_color": "globals/colors?id=9ef2338",
-                    "background_color": "globals/colors?id=2fbee87",
-                    "button_hover_border_color": "globals/colors?id=accent",
-                    "hover_color": "globals/colors?id=2fbee87",
-                    "border_color": "globals/colors?id=9ef2338"
+                  "flex_justify_content": "space-around",
+                  "padding": {
+                    "unit": "rem",
+                    "top": "0",
+                    "right": "1",
+                    "bottom": "0",
+                    "left": "1",
+                    "isLinked": false
                   },
-                  "align": "center",
-                  "border_border": "solid"
+                  "padding_tablet": {
+                    "unit": "rem",
+                    "top": "",
+                    "right": "",
+                    "bottom": "",
+                    "left": "",
+                    "isLinked": true
+                  },
+                  "padding_mobile": {
+                    "unit": "rem",
+                    "top": "",
+                    "right": "",
+                    "bottom": "",
+                    "left": "",
+                    "isLinked": true
+                  },
+                  "_flex_align_self": "center"
                 },
-                "elements": [],
-                "widgetType": "global",
-                "templateID": "355"
+                "elements": [
+                  {
+                    "id": "70a5157",
+                    "elType": "widget",
+                    "settings": {
+                      "editor": "<p><strong data-darkreader-inline-color=\"\">If you would like to book an appointment over the phone<br />please call us on:<br /></strong>0141 673 6630</p>",
+                      "align": "center",
+                      "typography_typography": "custom",
+                      "typography_font_family": "Open Sans",
+                      "typography_line_height": {
+                        "unit": "custom",
+                        "size": "2",
+                        "sizes": []
+                      },
+                      "typography_line_height_tablet": {
+                        "unit": "custom",
+                        "size": "",
+                        "sizes": []
+                      },
+                      "typography_line_height_mobile": {
+                        "unit": "custom",
+                        "size": "",
+                        "sizes": []
+                      },
+                      "text_color": "#CFBCC6",
+                      "__globals__": {
+                        "text_color": "globals/colors?id=9ef2338",
+                        "typography_typography": ""
+                      },
+                      "typography_word_spacing": {
+                        "unit": "em",
+                        "size": "",
+                        "sizes": []
+                      },
+                      "drop_cap_typography_line_height": {
+                        "unit": "em",
+                        "size": "",
+                        "sizes": []
+                      },
+                      "drop_cap_typography_word_spacing": {
+                        "unit": "em",
+                        "size": "",
+                        "sizes": []
+                      }
+                    },
+                    "elements": [],
+                    "widgetType": "text-editor"
+                  },
+                  {
+                    "id": "8cb2d45",
+                    "elType": "widget",
+                    "settings": {
+                      "text": "Book Now",
+                      "link": {
+                        "url": "http://sdy.local/book-now/",
+                        "is_external": "",
+                        "nofollow": "",
+                        "custom_attributes": ""
+                      },
+                      "hover_animation": "grow",
+                      "__globals__": {
+                        "button_background_hover_color": "globals/colors?id=2fbee87",
+                        "button_text_color": "globals/colors?id=9ef2338",
+                        "background_color": "globals/colors?id=a160eb5",
+                        "button_hover_border_color": "globals/colors?id=accent",
+                        "hover_color": "globals/colors?id=2fbee87"
+                      },
+                      "align": "center",
+                      "border_border": "solid",
+                      "typography_line_height": {
+                        "unit": "em",
+                        "size": "",
+                        "sizes": []
+                      },
+                      "typography_word_spacing": {
+                        "unit": "em",
+                        "size": "",
+                        "sizes": []
+                      },
+                      "background_gradient_position_tablet": "center center",
+                      "background_gradient_position_mobile": "center center",
+                      "button_background_hover_gradient_position_tablet": "center center",
+                      "button_background_hover_gradient_position_mobile": "center center"
+                    },
+                    "elements": [],
+                    "widgetType": "button"
+                  }
+                ],
+                "isInner": true
               }
             ],
             "isInner": true
@@ -3009,12 +842,11 @@
         "isInner": true
       },
       {
-        "id": "514775e",
+        "id": "614a30c8",
         "elType": "container",
         "settings": {
           "flex_direction": "row",
           "flex_justify_content": "space-between",
-          "custom_css": "selector h2{\n    font-size: 2rem;\n}\nli.h3{\n    1.4rem\n}",
           "_title": "Purple4 - Service-Loc",
           "padding": {
             "unit": "rem",
@@ -3067,34 +899,59 @@
           },
           "__globals__": {
             "background_color": "globals/colors?id=a160eb5"
-          }
+          },
+          "custom_css": "selector h2{\n    font-size: 2rem;\n}\nli.h3{\n    1rem\n}\n"
         },
         "elements": [
           {
-            "id": "6376ce7",
+            "id": "31dbf029",
             "elType": "container",
             "settings": {
               "content_width": "full"
             },
             "elements": [
               {
-                "id": "2487c8b0",
+                "id": "16c70736",
                 "elType": "widget",
                 "settings": {
-                  "editor": "<h2>Our Services</h2><ul><li><h3><a href=\"#\">Thai Massage</a></h3></li><li><h3><a href=\"#\">Thai Oil Massage</a></h3></li></ul>",
+                  "editor": "<h2>Our Services</h2>",
                   "typography_font_family": "Open Sans",
                   "typography_font_weight": "400",
                   "custom_css": "selector h3 , selector h3 a:link, selector h3 a:visited{ \n    font-size: 1rem;\n}\n selector h3 a:hover{\n     color: yellow;\n     text-decoration: underline;\n }\n    ",
                   "__globals__": {
                     "typography_typography": "",
                     "text_color": "globals/colors?id=9ef2338"
+                  },
+                  "_margin": {
+                    "unit": "rem",
+                    "top": "0",
+                    "right": "0",
+                    "bottom": "-2.5",
+                    "left": "0",
+                    "isLinked": false
+                  },
+                  "_margin_tablet": {
+                    "unit": "rem",
+                    "top": "",
+                    "right": "",
+                    "bottom": "",
+                    "left": "",
+                    "isLinked": true
+                  },
+                  "_margin_mobile": {
+                    "unit": "rem",
+                    "top": "",
+                    "right": "",
+                    "bottom": "",
+                    "left": "",
+                    "isLinked": true
                   }
                 },
                 "elements": [],
                 "widgetType": "text-editor"
               },
               {
-                "id": "2d46546",
+                "id": "56fea3ce",
                 "elType": "widget",
                 "settings": {
                   "shortcode": "[seo_hub type=\"service\"]   "
@@ -3106,30 +963,54 @@
             "isInner": true
           },
           {
-            "id": "73da414",
+            "id": "661e9836",
             "elType": "container",
             "settings": {
               "content_width": "full"
             },
             "elements": [
               {
-                "id": "3543a51a",
+                "id": "75b327e0",
                 "elType": "widget",
                 "settings": {
-                  "editor": "<h2><span style=\"font-size: 52px;\">Our Locations</span></h2><ul><li><h3><a href=\"#\">Thai Massage</a></h3></li><li><h3><a href=\"#\">Thai Oil Massage</a></h3></li></ul>",
+                  "editor": "<h2><span style=\"font-size: 52px;\">Our Locations</span></h2>",
                   "typography_font_family": "Open Sans",
                   "typography_font_weight": "400",
                   "custom_css": "selector h3 , selector h3 a:link, selector h3 a:visited{ \n    font-size: 1rem;\n}\n selector h3 a:hover{\n     color: yellow;\n     text-decoration: underline;\n }\n    ",
                   "__globals__": {
                     "typography_typography": "",
                     "text_color": "globals/colors?id=9ef2338"
+                  },
+                  "_margin": {
+                    "unit": "rem",
+                    "top": "0",
+                    "right": "0",
+                    "bottom": "-2.5",
+                    "left": "0",
+                    "isLinked": false
+                  },
+                  "_margin_tablet": {
+                    "unit": "rem",
+                    "top": "",
+                    "right": "",
+                    "bottom": "",
+                    "left": "",
+                    "isLinked": true
+                  },
+                  "_margin_mobile": {
+                    "unit": "rem",
+                    "top": "",
+                    "right": "",
+                    "bottom": "",
+                    "left": "",
+                    "isLinked": true
                   }
                 },
                 "elements": [],
                 "widgetType": "text-editor"
               },
               {
-                "id": "67e3ebb",
+                "id": "3c6bf927",
                 "elType": "widget",
                 "settings": {
                   "shortcode": "[seo_hub type=\"location\"]   "
@@ -3144,7 +1025,7 @@
         "isInner": true
       },
       {
-        "id": "473a2730",
+        "id": "6f820f4a",
         "elType": "container",
         "settings": {
           "flex_direction": "column",
@@ -3176,7 +1057,7 @@
         },
         "elements": [
           {
-            "id": "c565f0c",
+            "id": "479f30fc",
             "elType": "widget",
             "settings": {
               "text": "Book Now",
@@ -3199,8 +1080,7 @@
               "border_border": "solid"
             },
             "elements": [],
-            "widgetType": "global",
-            "templateID": "355"
+            "widgetType": "button"
           }
         ],
         "isInner": true

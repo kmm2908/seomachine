@@ -511,6 +511,15 @@ def generate_content(topic: str, abbreviation: str, content_type: str,
     if not text_blocks:
         raise ValueError("No text content in response")
 
+    # Strip markdown code fences that Claude sometimes wraps around HTML output
+    cleaned = []
+    for block in text_blocks:
+        if block.startswith('```'):
+            block = re.sub(r'^```\w*\n?', '', block)
+            block = re.sub(r'\n?```$', '', block)
+        cleaned.append(block.strip())
+    text_blocks = cleaned
+
     # Prefer the block that starts with the Section 1 HTML comment
     for block in text_blocks:
         if block.startswith('<!-- SECTION 1 -->'):

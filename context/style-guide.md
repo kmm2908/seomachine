@@ -348,6 +348,7 @@ Fill in this template with Castos-specific style preferences. Update as the styl
 - Write at 8th-10th grade level
 - Define technical terms on first use
 - Use short sentences and paragraphs
+- **Paragraph length**: Maximum 3 sentences. Split longer paragraphs. Single-sentence paragraphs are fine for emphasis or transitions.
 - Break complex ideas into digestible chunks
 
 ---

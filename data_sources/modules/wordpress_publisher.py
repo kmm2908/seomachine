@@ -45,6 +45,8 @@ class WordPressPublisher:
             'Content-Type': 'application/json',
             'User-Agent': 'SEOMachine/1.0 (WordPress Content Publisher)'
         })
+        if '.local' in self.url:
+            self.session.verify = False
 
         # Cache for categories and tags
         self._categories_cache: Optional[Dict[str, int]] = None
@@ -98,14 +100,13 @@ class WordPressPublisher:
         content_type = mime_types.get(suffix, 'image/jpeg')
 
         with open(path, 'rb') as f:
-            response = requests.post(
+            response = self.session.post(
                 f"{self.api_base}/media",
                 headers={
                     'Content-Disposition': f'attachment; filename="{path.name}"',
                     'Content-Type': content_type,
                 },
                 data=f,
-                auth=(self.username, self.app_password),
             )
         response.raise_for_status()
         data = response.json()
