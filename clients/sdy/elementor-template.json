@@ -684,8 +684,7 @@
                 "left": "",
                 "isLinked": true
               },
-              "_title": "Dark3 - Video",
-              "content_width": "full"
+              "_title": "Dark3 - Video"
             },
             "elements": [
               {
@@ -773,21 +772,6 @@
                       "__globals__": {
                         "text_color": "globals/colors?id=9ef2338",
                         "typography_typography": ""
-                      },
-                      "typography_word_spacing": {
-                        "unit": "em",
-                        "size": "",
-                        "sizes": []
-                      },
-                      "drop_cap_typography_line_height": {
-                        "unit": "em",
-                        "size": "",
-                        "sizes": []
-                      },
-                      "drop_cap_typography_word_spacing": {
-                        "unit": "em",
-                        "size": "",
-                        "sizes": []
                       }
                     },
                     "elements": [],
@@ -813,21 +797,7 @@
                         "hover_color": "globals/colors?id=2fbee87"
                       },
                       "align": "center",
-                      "border_border": "solid",
-                      "typography_line_height": {
-                        "unit": "em",
-                        "size": "",
-                        "sizes": []
-                      },
-                      "typography_word_spacing": {
-                        "unit": "em",
-                        "size": "",
-                        "sizes": []
-                      },
-                      "background_gradient_position_tablet": "center center",
-                      "background_gradient_position_mobile": "center center",
-                      "button_background_hover_gradient_position_tablet": "center center",
-                      "button_background_hover_gradient_position_mobile": "center center"
+                      "border_border": "solid"
                     },
                     "elements": [],
                     "widgetType": "button"

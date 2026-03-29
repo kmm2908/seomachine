@@ -12,3 +12,58 @@ date,abbr,topic,content_type,status,post_id,cost,notes
 2026-03-25,gtm,Tiger Lily Thai Spa,comp-alt,published,16690,$0.4170,https://glasgowthaimassage.co.uk/wp-admin/post.php?post=16690&action=edit
 2026-03-25,gtm,Thai House Massage & Spa,comp-alt,published,16695,$0.4181,https://glasgowthaimassage.co.uk/wp-admin/post.php?post=16695&action=edit
 2026-03-25,gtm,Phuket Thai Massage,comp-alt,published,16700,$0.4169,https://glasgowthaimassage.co.uk/wp-admin/post.php?post=16700&action=edit
+2026-03-28,sdy,Traditional Thai Massage,blog,review_required,,$0.5476,Quality gate: ctas
+2026-03-28,sdy,Traditional Thai Massage,service,published,901,$0.6425,https://sdy.local/wp-admin/post.php?post=901&action=edit
+2026-03-28,sdy,Backache,problem,review_required,,$0.8809,Quality gate: ctas
+2026-03-28,sdy,Sciatica,problem,published,927,$0.7397,https://sdy.local/wp-admin/post.php?post=927&action=edit
+2026-03-28,sdy,Stiff Neck or Shoulders,problem,review_required,,$0.8691,Quality gate: rewrite_api_error
+2026-03-28,sdy,Stiff Neck or Shoulders,problem,review_required,,$0.7622,Quality gate: rewrite_api_error
+2026-03-28,sdy,Stiff Neck or Shoulders,problem,review_required,,$0.8659,Quality gate: rewrite_api_error
+2026-03-28,sdy,Sciatica,problem,review_required,,$0.8053,Quality gate: readability | paragraphs
+2026-03-28,sdy,Sciatica,problem,review_required,,$0.7280,Quality gate: readability | paragraphs
+2026-03-28,sdy,Sciatica,problem,review_required,,$0.7268,Quality gate: paragraphs
+2026-03-28,sdy,Sciatica,problem,published,956,$0.7293,https://sdy.local/wp-admin/post.php?post=956&action=edit
+2026-03-28,sdy,Sciatica,problem,published,975,$0.7383,https://sdy.local/wp-admin/post.php?post=975&action=edit
+2026-03-28,sdy,Backache,problem,published,980,$0.8645,https://sdy.local/wp-admin/post.php?post=980&action=edit
+2026-03-28,sdy,Thai Oil Massage,service,published,985,$0.6473,https://sdy.local/wp-admin/post.php?post=985&action=edit
+2026-03-28,sdy,Stiff Neck or Shoulders,problem,review_required,,$0.7679,Quality gate: rewrite_api_error
+2026-03-28,sdy,Thai Aromatherapy Massage,service,failed,,,"Error code: 429 - {'type': 'error', 'error': {'type': 'rate_limit_error', 'message': ""This request would exceed your organization's rate limit of 30,000 input tokens per minute (org: 189b98bd-3b2d-4615-924c-23fd484d2dfa, model: claude-sonnet-4-6). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Please reduce the prompt length or the maximum tokens requested, or try again later. You may also contact sales at https://claude.com/contact-sales to discuss your options for a rate limit increase.""}, 'request_id': 'req_011CZVy2GvAWoquGDtWmD4Fe'}"
+2026-03-28,sdy,Thai Aromatherapy Massage,service,review_required,,$0.5396,Quality gate: rewrite_api_error
+2026-03-28,sdy,Refresh Sore Muscles,problem,review_required,,$0.6627,Quality gate: rewrite_api_error
+2026-03-28,sdy,Hot Stone Massage,service,review_required,,$0.5915,Quality gate: rewrite_api_error
+2026-03-28,sdy,Melt Away The Blues,problem,review_required,,$0.7888,Quality gate: rewrite_api_error
+2026-03-28,sdy,Sports Massage,service,failed,,,"Error code: 429 - {'type': 'error', 'error': {'type': 'rate_limit_error', 'message': ""This request would exceed your organization's rate limit of 30,000 input tokens per minute (org: 189b98bd-3b2d-4615-924c-23fd484d2dfa, model: claude-sonnet-4-6). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Please reduce the prompt length or the maximum tokens requested, or try again later. You may also contact sales at https://claude.com/contact-sales to discuss your options for a rate limit increase.""}, 'request_id': 'req_011CZVz4mKPN8DsF5QX9tUvc'}"
+2026-03-28,sdy,Sports Massage,service,review_required,,$0.5847,Quality gate: rewrite_api_error
+2026-03-28,sdy,Relieve Stress and Tension,problem,review_required,,$0.7581,Quality gate: rewrite_api_error
+2026-03-28,sdy,Swedish Massage,service,failed,,,"Error code: 429 - {'type': 'error', 'error': {'type': 'rate_limit_error', 'message': ""This request would exceed your organization's rate limit of 30,000 input tokens per minute (org: 189b98bd-3b2d-4615-924c-23fd484d2dfa, model: claude-sonnet-4-6). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Please reduce the prompt length or the maximum tokens requested, or try again later. You may also contact sales at https://claude.com/contact-sales to discuss your options for a rate limit increase.""}, 'request_id': 'req_011CZVzbKxG5Y9cPbEPYetUA'}"
+2026-03-28,sdy,Thai Aromatherapy Massage,service,review_required,,$0.5372,Quality gate: rewrite_api_error
+2026-03-28,sdy,Injury Rehabilitation,problem,review_required,,$0.9357,Quality gate: rewrite_api_error
+2026-03-28,sdy,Hot Stone Massage,service,failed,,,"Error code: 429 - {'type': 'error', 'error': {'type': 'rate_limit_error', 'message': ""This request would exceed your organization's rate limit of 30,000 input tokens per minute (org: 189b98bd-3b2d-4615-924c-23fd484d2dfa, model: claude-sonnet-4-6). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Please reduce the prompt length or the maximum tokens requested, or try again later. You may also contact sales at https://claude.com/contact-sales to discuss your options for a rate limit increase.""}, 'request_id': 'req_011CZW1PQKUgxP4BLtTiS2FH'}"
+2026-03-28,sdy,Hot Stone Massage,service,failed,,,"Error code: 429 - {'type': 'error', 'error': {'type': 'rate_limit_error', 'message': ""This request would exceed your organization's rate limit of 30,000 input tokens per minute (org: 189b98bd-3b2d-4615-924c-23fd484d2dfa, model: claude-sonnet-4-6). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Please reduce the prompt length or the maximum tokens requested, or try again later. You may also contact sales at https://claude.com/contact-sales to discuss your options for a rate limit increase.""}, 'request_id': 'req_011CZW1iPrUppy688wK9v7Au'}"
+2026-03-28,sdy,Headaches and Migraines,problem,failed,,,"Error code: 429 - {'type': 'error', 'error': {'type': 'rate_limit_error', 'message': ""This request would exceed your organization's rate limit of 30,000 input tokens per minute (org: 189b98bd-3b2d-4615-924c-23fd484d2dfa, model: claude-sonnet-4-6). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Please reduce the prompt length or the maximum tokens requested, or try again later. You may also contact sales at https://claude.com/contact-sales to discuss your options for a rate limit increase.""}, 'request_id': 'req_011CZW1v65V3BMzPyK9zPcsZ'}"
+2026-03-28,sdy,Thai Aromatherapy Massage,service,published,990,$0.6534,https://sdy.local/wp-admin/post.php?post=990&action=edit
+2026-03-28,sdy,Headaches and Migraines,problem,review_required,,$0.8012,Quality gate: readability | paragraphs
+2026-03-28,sdy,Hot Stone Massage,service,published,995,$0.6458,https://sdy.local/wp-admin/post.php?post=995&action=edit
+2026-03-28,sdy,Improved Flexibility,problem,review_required,,$0.8687,Quality gate: readability
+2026-03-28,sdy,Sports Massage,service,published,1000,$0.5903,https://sdy.local/wp-admin/post.php?post=1000&action=edit
+2026-03-28,sdy,Renew Tired Aching Feet,problem,published,1005,$0.7893,https://sdy.local/wp-admin/post.php?post=1005&action=edit
+2026-03-28,sdy,Swedish Massage,service,published,1010,$0.6881,https://sdy.local/wp-admin/post.php?post=1010&action=edit
+2026-03-28,sdy,Remove Knots and Relax Tight Muscles,problem,published,1015,$0.8053,https://sdy.local/wp-admin/post.php?post=1015&action=edit
+2026-03-28,sdy,Injury Prevention,problem,review_required,,$0.8367,Quality gate: readability | paragraphs
+2026-03-28,sdy,Thai Head Massage,service,published,1020,$0.6467,https://sdy.local/wp-admin/post.php?post=1020&action=edit
+2026-03-28,sdy,Diabetic Neuropathy and Nerve Pain,problem,review_required,,$0.8087,Quality gate: readability
+2026-03-28,sdy,Thai Facial Massage,service,published,1025,$0.6374,https://sdy.local/wp-admin/post.php?post=1025&action=edit
+2026-03-28,sdy,Thai Foot Massage,service,published,1030,$0.6400,https://sdy.local/wp-admin/post.php?post=1030&action=edit
+2026-03-28,sdy,Glasgow City Centre,location,review_required,,$0.7139,Quality gate: readability
+2026-03-28,sdy,Blythswood,location,published,1035,$1.3921,https://sdy.local/wp-admin/post.php?post=1035&action=edit
+2026-03-28,sdy,Merchant City,location,review_required,,$0.6463,Quality gate: readability
+2026-03-28,sdy,West End,location,review_required,,$0.7628,Quality gate: readability
+2026-03-28,sdy,Finnieston,location,review_required,,$0.7807,Quality gate: paragraphs
+2026-03-28,sdy,Charing Cross,location,published,1040,$0.8155,https://sdy.local/wp-admin/post.php?post=1040&action=edit
+2026-03-28,sdy,Cowcaddens,location,review_required,,$0.7966,Quality gate: readability
+2026-03-28,sdy,Southside,location,review_required,,$0.7925,Quality gate: readability
+2026-03-28,sdy,Partick,location,published,1045,$0.8259,https://sdy.local/wp-admin/post.php?post=1045&action=edit
+2026-03-28,sdy,Hillhead,location,review_required,,$0.9706,Quality gate: readability
+2026-03-29,sdy,Stiff Neck or Shoulders,problem,published,1050,$0.9784,https://sdy.local/wp-admin/post.php?post=1050&action=edit
+2026-03-29,sdy,Refresh Sore Muscles,problem,published,1055,$0.7351,https://sdy.local/wp-admin/post.php?post=1055&action=edit
+2026-03-29,sdy,Melt Away The Blues,problem,published,1060,$0.7915,https://sdy.local/wp-admin/post.php?post=1060&action=edit

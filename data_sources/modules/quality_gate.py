@@ -8,6 +8,7 @@ Returns QualityResult with final content, pass/fail status, and costs.
 
 import re
 import sys
+import time
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import List
@@ -38,8 +39,13 @@ CONTENT_TYPE_CONFIG = {
         'optional_criteria': ['rhythm'],  # stories don't fit fact-based pages
         'optional_min': 0,          # rhythm is nice-to-have
     },
+    'location': {
+        'flesch_threshold': 50,     # place names and geographic terms drag down Flesch scores
+        'optional_criteria': ['stories', 'rhythm'],
+        'optional_min': 1,
+    },
     'problem': {
-        'flesch_threshold': 55,     # medical topics need clear language
+        'flesch_threshold': 48,     # medical/health topics use denser language
         'optional_criteria': ['rhythm'],  # no stories — informational, not narrative
         'optional_min': 0,          # rhythm is nice-to-have
     },
@@ -110,6 +116,8 @@ class QualityGate:
             if rewrite_content is None:
                 # API error — keep original failures so next retry still gets correct instructions
                 if rewrite_num < MAX_REWRITES:
+                    print(f"    → Waiting 65s before rewrite retry...")
+                    time.sleep(65)
                     continue
                 # Exhausted all retries
                 return QualityResult(

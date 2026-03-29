@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-03-28 (session 22 cont — Flesch threshold tuning, rate limit retry, overnight batch 15/31 published, short anchor text rule)
+Last updated: 2026-03-29 (session 22 cont — Flesch threshold tuning, rate limit retry, overnight batch 18/31 published, short anchor text rule)
 
 ---
 
@@ -262,17 +262,17 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] SDY Sciatica test page published successfully (post 956, session 22)
 - [x] SDY service queue created: `research/sdy/service-queue.json` — 8 topics (session 22)
 - [x] SDY location queue created: `research/sdy/location-queue.json` — 10 topics (session 22)
-- [ ] Batch publish remaining 12 SDY problem pages (9 reset to pending after Flesch threshold lowered)
+- [ ] Batch publish remaining 6 SDY problem pages (reset to pending after Flesch threshold lowered)
 - [ ] Batch publish all 12 for GTM
 - [ ] Batch publish all 12 for TMG
 
 ### SDY overnight batch results (session 22)
 - [x] Services: 8/8 published (post IDs 985–1030), zero failures, $5.15 total
-- [x] Problems: 4/13 published (Sciatica 975, Backache 980, Renew Tired Aching Feet 1005, Remove Knots 1015), 9 failed (rate limits + Flesch), ~$3.50
+- [x] Problems: 7/13 published (Sciatica 975, Backache 980, Renew Tired Aching Feet 1005, Remove Knots 1015, Stiff Neck 1050, Refresh Sore Muscles 1055, Melt Away The Blues 1060), 6 pending
 - [x] Locations: 3/10 published (Blythswood 1035, Charing Cross 1040, Partick 1045), 7 failed (Flesch readability), $8.00
-- [x] Total: 15/31 published, 16 need re-running from terminal (rate limit contention with active Claude Code session)
-- [x] 9 problem + 7 location topics reset to pending with lowered Flesch thresholds
-- [ ] Re-run failed problem topics (9) from terminal — separate from Claude Code session to avoid rate limit contention
+- [x] Total: 18/31 published, 13 need re-running from terminal (rate limit contention with active Claude Code session)
+- [x] 6 problem + 7 location topics reset to pending with lowered Flesch thresholds
+- [ ] Re-run failed problem topics (6) from terminal — separate from Claude Code session to avoid rate limit contention
 - [ ] Re-run failed location topics (7) from terminal
 
 ### Batch summary email (planned, session 22)
