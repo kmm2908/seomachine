@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-03-28 (session 22 — SDY local dev switch, quality gate CTA/paragraph fixes, problem grid shortcode, code fence stripping)
+Last updated: 2026-03-28 (session 22 cont — Flesch threshold tuning, rate limit retry, overnight batch 15/31 published, short anchor text rule)
 
 ---
 
@@ -169,7 +169,7 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 
 ### Quality gate (session 12, updated session 22)
 - [x] `QualityGate` class in `data_sources/modules/quality_gate.py` — check/rewrite loop, max 2 rewrites
-- [x] Pass thresholds: Flesch Reading Ease ≥ 55 + Hook (mandatory) + CTAs (mandatory) + 2/3 optional (stories, rhythm, paragraphs)
+- [x] Pass thresholds: Hook (mandatory) + CTAs (mandatory) + 2/3 optional (stories, rhythm, paragraphs); Flesch per type: default ≥ 55, location ≥ 50, comp-alt ≥ 48, problem ≥ 48
 - [x] Targeted rewrite instructions built from specific failures — only failing criteria included per attempt
 - [x] Preserve instructions — passing criteria explicitly protected from regression in each rewrite
 - [x] API error on rewrite: continues loop if retries remain, returns failed after exhausting
@@ -188,6 +188,9 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] **CTA body-only analysis** (session 22) — CTA distribution now runs on body text only (excludes FAQ section via `_to_body_plain()`); rule simplified to ≥2 CTAs + first within 500 words
 - [x] **Paragraph body-only analysis** (session 22) — paragraph length check excludes FAQ section (FAQ answers naturally run 4 sentences); threshold tightened from >4 to >3 sentences; paragraphs now **mandatory** (was optional); pass: ≤3 long paragraphs in body
 - [x] **Code fence stripping** (session 22) — `quality_gate.py` strips markdown code fences from rewrite output; `geo_batch_runner.py` strips fences from initial generation too
+- [x] **Location Flesch threshold** (session 22) — `location` content type config added: Flesch ≥ 50 (place names and geographic terms drag down readability scores)
+- [x] **Problem Flesch threshold** (session 22) — `problem` content type: Flesch lowered from 55 to 48 (medical/health content is naturally denser)
+- [x] **Rate limit retry sleep** (session 22) — 65-second sleep between rewrite retry attempts when API returns rate limit error (was failing immediately before)
 
 ### Elementor template auto-refresh (session 12)
 - [x] `fetch_elementor_template.py` — saves `elementor-template-meta.json` sidecar with WP `modified` date on every fetch
@@ -249,16 +252,31 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] `seo_problem` CPT registered in `seomachine.php` v2.8.0 — URL pattern `/problem/[slug]/`
 - [x] `.claude/agents/problem-page-writer.md` — 600–800 word condition/symptom pages with mandatory outbound links to authoritative sources (Wikipedia, NHS, PubMed) via live web search
 - [x] `build_problem_prompt()` in batch runner — web search queries for condition + massage benefits + NHS guidance
-- [x] `CONTENT_TYPE_CONFIG['problem']` in quality gate — Flesch ≥ 55, rhythm/paragraphs, no stories
+- [x] `CONTENT_TYPE_CONFIG['problem']` in quality gate — Flesch ≥ 48 (lowered from 55, session 22), rhythm/paragraphs, no stories
 - [x] `problem` → `seo_problem` added to GTM, SDY, and TMG content_type_maps
 - [x] `research/gtm/problem-queue.json` — 12 conditions queued (sciatica, stiff neck, headaches, etc.)
 - [x] `research/tmg/problem-queue.json` — same 12 conditions, unique content per site via brand voice + local context
 - [x] `research/sdy/problem-queue.json` — 13 conditions queued (session 22)
 - [x] Hub shortcode supports `[seo_hub type="problem"]` with 3-column grid layout (session 22)
+- [x] **Problem grid h3 fix** (session 22) — `seo_hub_problem_grid()`: h3 wrapping now happens BEFORE `array_chunk()` so chunks contain the wrapped items (was wrapping after chunking, so h3 tags never appeared in output)
 - [x] SDY Sciatica test page published successfully (post 956, session 22)
-- [ ] Batch publish remaining 12 SDY problem pages
+- [x] SDY service queue created: `research/sdy/service-queue.json` — 8 topics (session 22)
+- [x] SDY location queue created: `research/sdy/location-queue.json` — 10 topics (session 22)
+- [ ] Batch publish remaining 12 SDY problem pages (9 reset to pending after Flesch threshold lowered)
 - [ ] Batch publish all 12 for GTM
 - [ ] Batch publish all 12 for TMG
+
+### SDY overnight batch results (session 22)
+- [x] Services: 8/8 published (post IDs 985–1030), zero failures, $5.15 total
+- [x] Problems: 4/13 published (Sciatica 975, Backache 980, Renew Tired Aching Feet 1005, Remove Knots 1015), 9 failed (rate limits + Flesch), ~$3.50
+- [x] Locations: 3/10 published (Blythswood 1035, Charing Cross 1040, Partick 1045), 7 failed (Flesch readability), $8.00
+- [x] Total: 15/31 published, 16 need re-running from terminal (rate limit contention with active Claude Code session)
+- [x] 9 problem + 7 location topics reset to pending with lowered Flesch thresholds
+- [ ] Re-run failed problem topics (9) from terminal — separate from Claude Code session to avoid rate limit contention
+- [ ] Re-run failed location topics (7) from terminal
+
+### Batch summary email (planned, session 22)
+- [ ] Daily digest email instead of per-article emails — standalone script reading `logs/scheduled-publish-log.csv`, sends summary of all publishes/failures for the day
 
 ### comp-alt scheduled publishing pipeline (session 18)
 - [x] `research/gtm/comp-alt-queue.json` — 3 competitors queued: Tiger Lily, Thai House, Phuket; cadence 7 days
@@ -563,3 +581,4 @@ Global skills installed at `~/.claude/skills/`. Available across all projects.
 - Pinterest, Threads, Bluesky social posting (GHL supports them — add when needed)
 - Social media analytics/performance tracking from platforms
 - Stock video clip integration in video composition
+- Batch summary email — daily digest replacing per-article notifications; script reads `logs/scheduled-publish-log.csv`
