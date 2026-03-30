@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-03-30 (session 23 — published_review status, all SDY queues complete)
+Last updated: 2026-03-30 (session 24 — wp-elementor skill improved with workshop safe-editing approach)
 
 ---
 
