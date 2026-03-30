@@ -764,16 +764,21 @@ def run_batch(sheet_range: Optional[str] = None, publish: bool = False) -> None:
             cost_usd += gate_result.cost_usd    # add rewrite costs to row total
 
             if not gate_result.passed:
-                filepath.write_text(content, encoding='utf-8')   # save best rewrite attempt
+                failures_str = ' | '.join(gate_result.failures)
+                # Inject review notice into content
+                notice = f'<p><strong>★★★★★ Quality gate failures: {failures_str}. Review and edit before removing this notice. ★★★★★</strong></p>'
+                content = re.sub(r'(<h2[^>]*>)(.*?)(</h2>)', rf'\1\2 ★★★★★\3\n{notice}', content, count=1)
+                filepath.write_text(content, encoding='utf-8')
+
                 new_review_count = review_count + 1
                 update_status(row, REVIEW_REQUIRED_VALUE)
                 update_file_path(row, str(filepath.relative_to(ROOT)))
                 try:
                     update_cost(row, f"${cost_usd:.4f}")
                 except Exception:
-                    pass  # Cost tracking is non-critical
+                    pass
                 try:
-                    update_notes(row, ' | '.join(gate_result.failures))
+                    update_notes(row, failures_str)
                 except Exception:
                     pass
                 try:
@@ -783,8 +788,42 @@ def run_batch(sheet_range: Optional[str] = None, publish: bool = False) -> None:
                 _append_quality_log(ROOT, abbreviation, content_type, address, gate_result.attempts, gate_result.failures)
                 total_cost_usd += cost_usd
                 written_files.append(str(filepath.relative_to(ROOT)))
-                print(f"[{i}/{total}] ⚠ Review: {filepath.relative_to(ROOT)} ({word_count} words, ${cost_usd:.4f})")
-                print(f"    Failed: {', '.join(gate_result.failures)}")
+
+                # Publish to WordPress with review notice if --publish is set
+                if publish:
+                    wp_config = business_config.get('wordpress')
+                    if wp_config:
+                        try:
+                            sys.path.insert(0, str(ROOT / 'data_sources' / 'modules'))
+                            _ensure_directions_snippet(abbreviation.lower())
+                            _ensure_template_fresh(abbreviation.lower(), wp_config)
+                            from wordpress_publisher import WordPressPublisher
+                            publisher = WordPressPublisher.from_config(wp_config)
+                            content_type_map = wp_config.get('content_type_map', {})
+                            post_type = content_type_map.get(content_type, wp_config.get('default_post_type', 'post'))
+                            slug = slugify(address)
+                            banner_candidates = list(filepath.parent.glob('*-banner.jpg'))
+                            featured_image = str(banner_candidates[0]) if banner_candidates else None
+                            elementor_template = CLIENTS_DIR / abbreviation.lower() / 'elementor-template.json'
+                            elementor_template_path = str(elementor_template) if elementor_template.exists() else None
+                            result = publisher.publish_html_content(
+                                html_content=content,
+                                slug=slug,
+                                post_type=post_type,
+                                featured_image_path=featured_image,
+                                elementor_template_path=elementor_template_path,
+                                excerpt=address,
+                            )
+                            print(f"[{i}/{total}] ✎ Published for review (ID: {result['post_id']}): {filepath.relative_to(ROOT)} ({word_count} words, ${cost_usd:.4f})")
+                            print(f"    Failed: {', '.join(gate_result.failures)}")
+                        except Exception as e:
+                            print(f"[{i}/{total}] ⚠ Review (WP publish failed): {filepath.relative_to(ROOT)} ({word_count} words, ${cost_usd:.4f})")
+                            print(f"    Failed: {', '.join(gate_result.failures)}")
+                            print(f"    → WP publish failed: {e}")
+                else:
+                    print(f"[{i}/{total}] ⚠ Review: {filepath.relative_to(ROOT)} ({word_count} words, ${cost_usd:.4f})")
+                    print(f"    Failed: {', '.join(gate_result.failures)}")
+
                 if i < total:
                     time.sleep(65)
                 continue

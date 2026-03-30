@@ -128,9 +128,9 @@ Cron examples:
 ```
 → Quality: Flesch 55 ✓ | hook ✓ | ctas ✓ | stories ✗ | rhythm ✓ | paras ✓ — passed
 ```
-On final failure: best rewrite saved to disk, row marked `Review` in Sheet, failures written to Column G, publish skipped.
+On final failure: article is still published to WordPress as a draft with a review notice — `★★★★★` appended to the title and a failure-reasons paragraph injected after the `<h2>`. Status: `published_review` (scheduled publisher) or `Review` with WP draft (batch runner with `--publish`). This lets the user review and edit directly in wp-admin instead of hunting for local HTML files. Queue `--status` shows `✎` icon for these items.
 
-**Review workflow:** manually edit the HTML file (path in Column F, failures in Column G), then set Column B to `Publish`. Next batch run publishes the file without regenerating content, marks DONE, clears G and F.
+**Review workflow:** open the draft in wp-admin (stars in title make it easy to spot), fix the flagged issues, remove the star notice paragraph and title suffix, then publish. No round-trip through SEO Machine needed.
 
 Quality failures logged to `logs/quality-log.csv` (append-only, gitignored).
 

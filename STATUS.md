@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-03-29 (session 22 cont — Flesch threshold tuning, rate limit retry, overnight batch 18/31 published, short anchor text rule)
+Last updated: 2026-03-30 (session 23 — published_review status, all SDY queues complete)
 
 ---
 
@@ -191,6 +191,7 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] **Location Flesch threshold** (session 22) — `location` content type config added: Flesch ≥ 50 (place names and geographic terms drag down readability scores)
 - [x] **Problem Flesch threshold** (session 22) — `problem` content type: Flesch lowered from 55 to 48 (medical/health content is naturally denser)
 - [x] **Rate limit retry sleep** (session 22) — 65-second sleep between rewrite retry attempts when API returns rate limit error (was failing immediately before)
+- [x] **`published_review` status** (session 23) — quality gate failures now publish to WordPress as drafts with ★★★★★ in title + failure notice paragraph; status `published_review` in queue; `✎` icon in `--status` display; user reviews directly in wp-admin instead of editing local HTML files
 
 ### Elementor template auto-refresh (session 12)
 - [x] `fetch_elementor_template.py` — saves `elementor-template-meta.json` sidecar with WP `modified` date on every fetch
@@ -260,20 +261,18 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] Hub shortcode supports `[seo_hub type="problem"]` with 3-column grid layout (session 22)
 - [x] **Problem grid h3 fix** (session 22) — `seo_hub_problem_grid()`: h3 wrapping now happens BEFORE `array_chunk()` so chunks contain the wrapped items (was wrapping after chunking, so h3 tags never appeared in output)
 - [x] SDY Sciatica test page published successfully (post 956, session 22)
-- [x] SDY service queue created: `research/sdy/service-queue.json` — 8 topics (session 22)
-- [x] SDY location queue created: `research/sdy/location-queue.json` — 10 topics (session 22)
-- [ ] Batch publish remaining 6 SDY problem pages (reset to pending after Flesch threshold lowered)
+- [x] SDY service queue created and completed: `research/sdy/service-queue.json` — 8/8 published (session 22)
+- [x] SDY location queue created and completed: `research/sdy/location-queue.json` — 10/10 (9 clean + 1 review, session 23)
+- [x] SDY problem queue completed: `research/sdy/problem-queue.json` — 13/13 (10 clean + 3 review, session 23)
+- [x] Batch publish all 13 SDY problem pages — complete (10 clean + 3 published_review)
 - [ ] Batch publish all 12 for GTM
 - [ ] Batch publish all 12 for TMG
 
-### SDY overnight batch results (session 22)
+### SDY batch results (sessions 22–23)
 - [x] Services: 8/8 published (post IDs 985–1030), zero failures, $5.15 total
-- [x] Problems: 7/13 published (Sciatica 975, Backache 980, Renew Tired Aching Feet 1005, Remove Knots 1015, Stiff Neck 1050, Refresh Sore Muscles 1055, Melt Away The Blues 1060), 6 pending
-- [x] Locations: 3/10 published (Blythswood 1035, Charing Cross 1040, Partick 1045), 7 failed (Flesch readability), $8.00
-- [x] Total: 18/31 published, 13 need re-running from terminal (rate limit contention with active Claude Code session)
-- [x] 6 problem + 7 location topics reset to pending with lowered Flesch thresholds
-- [ ] Re-run failed problem topics (6) from terminal — separate from Claude Code session to avoid rate limit contention
-- [ ] Re-run failed location topics (7) from terminal
+- [x] Problems: 13/13 complete — 10 published clean, 3 published for review (Injury Rehabilitation 1149, Injury Prevention 1154, Diabetic Neuropathy 1159)
+- [x] Locations: 10/10 complete — 9 published clean, 1 published for review (Cowcaddens 1164)
+- [x] Total: 31/31 complete — all SDY content queues finished
 
 ### Batch summary email (planned, session 22)
 - [ ] Daily digest email instead of per-article emails — standalone script reading `logs/scheduled-publish-log.csv`, sends summary of all publishes/failures for the day

@@ -24,6 +24,7 @@ import argparse
 import csv
 import json
 import os
+import re
 import sys
 import traceback
 from datetime import date, datetime, timedelta
@@ -208,12 +209,50 @@ def publish_topic(topic_dict: dict, abbr: str, dry_run: bool = False) -> dict:
 
     if not gate_result.passed:
         failures_str = ' | '.join(gate_result.failures)
-        print(f"    → Quality gate failed: {failures_str}")
+        print(f"    → Quality gate failed: {failures_str} — publishing with review notice")
+
+        # Inject review notice into content
+        notice = f'<p><strong>★★★★★ Quality gate failures: {failures_str}. Review and edit before removing this notice. ★★★★★</strong></p>'
+        content = re.sub(r'(<h2[^>]*>)(.*?)(</h2>)', rf'\1\2 ★★★★★\3\n{notice}', content, count=1)
+        filepath.write_text(content, encoding='utf-8')
+
+        if not dry_run:
+            # Publish to WordPress with review notice
+            _ensure_directions_snippet(abbr.lower())
+            _ensure_template_fresh(abbr.lower(), wp_config)
+
+            from wordpress_publisher import WordPressPublisher
+            publisher = WordPressPublisher.from_config(wp_config)
+            post_type = wp_config.get('content_type_map', {}).get(
+                content_type, wp_config.get('default_post_type', 'post')
+            )
+            banner_candidates = list(filepath.parent.glob('*-banner.jpg'))
+            featured_image = str(banner_candidates[0]) if banner_candidates else None
+            elementor_template = CLIENTS_DIR / abbr.lower() / 'elementor-template.json'
+
+            result = publisher.publish_html_content(
+                html_content=content,
+                slug=slugify(topic),
+                post_type=post_type,
+                featured_image_path=featured_image,
+                elementor_template_path=str(elementor_template) if elementor_template.exists() else None,
+                excerpt=topic,
+            )
+            print(f"    → Published for review (ID: {result['post_id']}): {result['edit_url']}")
+
+            return {
+                'status': 'published_review',
+                'post_id': result['post_id'],
+                'cost': cost_usd,
+                'notes': f"Quality gate: {failures_str} | {result.get('edit_url', '')}",
+                'filepath': filepath,
+            }
+
         return {
-            'status': 'review_required',
+            'status': 'published_review',
             'post_id': None,
             'cost': cost_usd,
-            'notes': f"Quality gate: {failures_str}",
+            'notes': f"Quality gate: {failures_str} (dry run)",
             'filepath': filepath,
         }
 
@@ -363,7 +402,9 @@ def run(abbr: str, dry_run: bool = False, queue_name: str = 'topic-queue.json') 
         queue['topics'][idx]['published_at'] = date.today().isoformat()
         queue['topics'][idx]['post_id'] = result['post_id']
         queue['topics'][idx]['cost'] = f"${result['cost']:.4f}" if result['cost'] else None
-        if result['status'] not in ('published', 'dry_run'):
+        if result['status'] not in ('published', 'published_review', 'dry_run'):
+            queue['topics'][idx]['error'] = result.get('notes', '')
+        if result['status'] == 'published_review':
             queue['topics'][idx]['error'] = result.get('notes', '')
         save_queue(abbr, queue, queue_name)
 
@@ -384,6 +425,9 @@ def run(abbr: str, dry_run: bool = False, queue_name: str = 'topic-queue.json') 
         if result['status'] == 'published':
             print(f"✓ Done: {topic} (${result['cost']:.4f})")
             _email_success(abbr, topic, content_type, result, remaining_after, missed_warning)
+        elif result['status'] == 'published_review':
+            print(f"✎ Published for review: {topic} (${result['cost']:.4f})")
+            _email_failure(abbr, topic, result.get('notes', 'quality gate — published for review'), missed_warning)
         elif result['status'] == 'dry_run':
             print(f"✓ Dry run complete: {topic}")
         else:
@@ -415,11 +459,12 @@ def run(abbr: str, dry_run: bool = False, queue_name: str = 'topic-queue.json') 
 
 
 STATUS_ICONS = {
-    'published':       '✓',
-    'pending':         '·',
-    'failed':          '✗',
-    'review_required': '⚠',
-    'dry_run':         '~',
+    'published':        '✓',
+    'published_review': '✎',
+    'pending':          '·',
+    'failed':           '✗',
+    'review_required':  '⚠',
+    'dry_run':          '~',
 }
 
 
@@ -447,8 +492,10 @@ def show_status(abbr: str, queue_name: str = 'topic-queue.json') -> None:
         schedule_str = "no posts published yet"
 
     print(f"\n{abbr.upper()} topic queue  |  cadence: every {cadence_days}d  |  {schedule_str}")
+    pub_count = counts.get('published', 0) + counts.get('published_review', 0)
     print(f"{'pending':<8} {counts.get('pending', 0)}  "
-          f"{'published':<10} {counts.get('published', 0)}  "
+          f"{'published':<10} {pub_count}  "
+          f"{'needs edit':<10} {counts.get('published_review', 0)}  "
           f"{'review':<8} {counts.get('review_required', 0)}  "
           f"{'failed':<7} {counts.get('failed', 0)}")
     print("─" * 72)
