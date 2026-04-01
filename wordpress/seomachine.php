@@ -64,6 +64,12 @@ register_activation_hook(__FILE__, function () {
     flush_rewrite_rules();
 });
 
+// Register built-in category taxonomy for seo_blog so blog posts can be
+// assigned to WordPress categories (Thai Massage, Stay Healthy, etc.)
+add_action('init', function() {
+    register_taxonomy_for_object_type('category', 'seo_blog');
+}, 5);
+
 
 // Parent admin menu — redirects to Services list
 add_action('admin_menu', function() {

@@ -390,6 +390,41 @@ Blog subdomain for Glasgow Thai Massage. Separate WordPress install at `blog.gla
 - [ ] Add `GTB` to Google Sheet Column D dropdown
 - [ ] Test batch publish run
 
+### Blog Category Schedule (session 25)
+
+Four WordPress post categories with separate queue files per category.
+
+| Category | Queue file | Initial batch | Ongoing |
+|----------|-----------|--------------|---------|
+| Thai Massage | `thai-massage-queue.json` | 4 posts | 2/week (Mon + Thu) |
+| Stay Healthy | `stay-healthy-queue.json` | 2 posts | 1/week (Tue) |
+| Glasgow News | `glasgow-news-queue.json` | 2 posts | 1/week (Wed) |
+| Yoga & Stretching | `yoga-stretching-queue.json` | 2 posts | 1/week (Fri) |
+
+- [x] Queue files created in `research/gtb/` — all 4 categories, topics populated from existing research
+- [x] `wp_category` field added to queue entry format — publisher assigns WP category on publish
+- [x] `seomachine.php` — `category` taxonomy registered for `seo_blog` CPT
+- [x] `wordpress_publisher.py` — `category` param added to `publish_html_content()`; `_create_elementor_page()` forwards category IDs
+- [x] `publish_scheduled.py` — reads `wp_category` from queue entry and passes to publisher
+- [ ] Set up cron jobs for all 4 category queues (once first dry-run passes)
+- [ ] Glasgow News topics: curate 2 real local news/wellness angles before publishing
+- [ ] Yoga & Stretching: find YouTube URLs, use `/ingest-youtube` + `/write` to produce content before publishing
+
+**Cron schedule (to set up):**
+```
+0 9 * * 1 python3 src/content/publish_scheduled.py --abbr gtb --queue thai-massage-queue.json
+0 9 * * 2 python3 src/content/publish_scheduled.py --abbr gtb --queue stay-healthy-queue.json
+0 9 * * 3 python3 src/content/publish_scheduled.py --abbr gtb --queue glasgow-news-queue.json
+0 9 * * 4 python3 src/content/publish_scheduled.py --abbr gtb --queue thai-massage-queue.json
+0 9 * * 5 python3 src/content/publish_scheduled.py --abbr gtb --queue yoga-stretching-queue.json
+```
+
+**YouTube workflow (Yoga & Stretching category):**
+1. Find a relevant yoga/stretching YouTube video
+2. `/ingest-youtube [URL]` — extracts transcript + summary
+3. `/write [topic]` — use transcript as source material
+4. Add to `yoga-stretching-queue.json` with `status: pending`
+
 ---
 
 ## Client: SDY (Serendipity Massage Therapy & Wellness)

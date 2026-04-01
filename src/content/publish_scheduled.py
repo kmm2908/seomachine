@@ -153,6 +153,7 @@ def publish_topic(topic_dict: dict, abbr: str, dry_run: bool = False) -> dict:
     """
     topic = topic_dict['topic']
     content_type = topic_dict.get('content_type', 'blog')
+    wp_category = topic_dict.get('wp_category', '')
 
     api_key = os.getenv('ANTHROPIC_API_KEY')
     if not api_key:
@@ -237,6 +238,7 @@ def publish_topic(topic_dict: dict, abbr: str, dry_run: bool = False) -> dict:
                 featured_image_path=featured_image,
                 elementor_template_path=str(elementor_template) if elementor_template.exists() else None,
                 excerpt=topic,
+                category=wp_category,
             )
             print(f"    → Published for review (ID: {result['post_id']}): {result['edit_url']}")
 
@@ -286,6 +288,7 @@ def publish_topic(topic_dict: dict, abbr: str, dry_run: bool = False) -> dict:
         featured_image_path=featured_image,
         elementor_template_path=str(elementor_template) if elementor_template.exists() else None,
         excerpt=topic,
+        category=wp_category,
     )
 
     print(f"    → Published (ID: {result['post_id']}): {result['edit_url']}")

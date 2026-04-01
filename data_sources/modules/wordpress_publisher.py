@@ -540,7 +540,8 @@ class WordPressPublisher:
         return template
 
     def _create_elementor_page(
-        self, title: str, template_dict: dict, slug: str, excerpt: str = "", post_type: str = "seo_location"
+        self, title: str, template_dict: dict, slug: str, excerpt: str = "", post_type: str = "seo_location",
+        category_ids: Optional[List[int]] = None,
     ) -> dict:
         """Create a WordPress post/page/CPT pre-populated with an Elementor layout."""
         import json as _json
@@ -556,6 +557,8 @@ class WordPressPublisher:
                 "_elementor_edit_mode": "builder",
             },
         }
+        if category_ids:
+            post_data["categories"] = category_ids
         response = self.session.post(f"{self.api_base}/{endpoint}", json=post_data)
         response.raise_for_status()
         return response.json()
@@ -600,6 +603,7 @@ class WordPressPublisher:
         featured_image_path: Optional[str] = None,
         elementor_template_path: Optional[str] = None,
         excerpt: str = '',
+        category: str = '',
     ) -> Dict:
         """
         Publish raw HTML content (as produced by the batch runner agents) to WordPress.
@@ -646,10 +650,20 @@ class WordPressPublisher:
         # Clear any unfilled token (e.g. when no images are generated)
         html_content = html_content.replace('[BANNER_IMAGE_URL]', '')
 
+        # Resolve category if provided (auto-creates in WordPress if it doesn't exist)
+        category_ids = []
+        if category:
+            category_ids = [self.get_or_create_category(category)]
+
         # Elementor path: inject HTML into the saved template layout
         if elementor_template_path and Path(elementor_template_path).exists():
             modified_template = self._inject_elementor(html_content, elementor_template_path)
-            post = self._create_elementor_page(title, modified_template, slug, excerpt=excerpt or meta_description, post_type=post_type)
+            post = self._create_elementor_page(
+                title, modified_template, slug,
+                excerpt=excerpt or meta_description,
+                post_type=post_type,
+                category_ids=category_ids or None,
+            )
         else:
             post = self.create_draft(
                 title=title,
@@ -657,6 +671,7 @@ class WordPressPublisher:
                 slug=slug,
                 excerpt=excerpt or meta_description,
                 post_type=api_endpoint,
+                category_ids=category_ids or None,
             )
         post_id = post['id']
 
