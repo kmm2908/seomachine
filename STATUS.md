@@ -274,8 +274,9 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] Locations: 10/10 complete — 9 published clean, 1 published for review (Cowcaddens 1164)
 - [x] Total: 31/31 complete — all SDY content queues finished
 
-### Batch summary email (planned, session 22)
-- [ ] Daily digest email instead of per-article emails — standalone script reading `logs/scheduled-publish-log.csv`, sends summary of all publishes/failures for the day
+### Batch summary email (session 22 planned, session 25 partial)
+- [x] Per-article emails removed from `publish_scheduled.py` — no more per-post notifications (session 25)
+- [ ] Daily digest script — reads `logs/scheduled-publish-log.csv`, sends one summary email per day with all publishes/failures grouped by client
 
 ### comp-alt scheduled publishing pipeline (session 18)
 - [x] `research/gtm/comp-alt-queue.json` — 3 competitors queued: Tiger Lily, Thai House, Phuket; cadence 7 days

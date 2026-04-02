@@ -387,7 +387,6 @@ def run(abbr: str, dry_run: bool = False, queue_name: str = 'topic-queue.json') 
             'cost': '',
             'notes': 'No pending topics',
         })
-        _email_queue_empty(abbr)
         return
 
     topic = topic_dict['topic']
@@ -427,15 +426,12 @@ def run(abbr: str, dry_run: bool = False, queue_name: str = 'topic-queue.json') 
 
         if result['status'] == 'published':
             print(f"✓ Done: {topic} (${result['cost']:.4f})")
-            _email_success(abbr, topic, content_type, result, remaining_after, missed_warning)
         elif result['status'] == 'published_review':
             print(f"✎ Published for review: {topic} (${result['cost']:.4f})")
-            _email_failure(abbr, topic, result.get('notes', 'quality gate — published for review'), missed_warning)
         elif result['status'] == 'dry_run':
             print(f"✓ Dry run complete: {topic}")
         else:
             print(f"⚠ Needs review: {topic} — {result.get('notes', '')}")
-            _email_failure(abbr, topic, result.get('notes', 'quality gate failed'), missed_warning)
 
     except Exception as e:
         error_msg = str(e) or type(e).__name__
@@ -457,8 +453,6 @@ def run(abbr: str, dry_run: bool = False, queue_name: str = 'topic-queue.json') 
             'cost': '',
             'notes': error_msg,
         })
-
-        _email_failure(abbr, topic, f"{error_msg}\n\n{tb}", missed_warning)
 
 
 STATUS_ICONS = {

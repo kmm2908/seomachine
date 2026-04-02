@@ -197,11 +197,10 @@ add_shortcode('seo_hub', function($atts) {
         return '';
     }
 
-    $items = array_map(fn($p) =>
-        '<li><a href="' . esc_url(get_permalink($p)) . '">'
-        . esc_html($p->post_excerpt ?: $p->post_title) . '</a></li>',
-        $posts
-    );
+    $items = array_map(function($p) {
+        $text = wp_trim_words($p->post_excerpt ?: $p->post_title, 7, '');
+        return '<li><a href="' . esc_url(get_permalink($p)) . '">' . esc_html($text) . '</a></li>';
+    }, $posts);
 
     if ($type === 'problem') {
         return seo_hub_problem_grid($items);
@@ -263,7 +262,7 @@ function seo_hub_remote_fetch(string $source, string $type, string $rest_base): 
         $link    = esc_url($item['link'] ?? '');
         $excerpt = trim(wp_strip_all_tags($item['excerpt']['rendered'] ?? ''));
         $title   = wp_strip_all_tags($item['title']['rendered'] ?? '');
-        $text    = esc_html($excerpt ?: $title);
+        $text    = esc_html(wp_trim_words($excerpt ?: $title, 7, ''));
         return "<li><a href=\"{$link}\">{$text}</a></li>";
     }, $all_posts);
 
