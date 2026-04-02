@@ -89,9 +89,10 @@ add_action('admin_menu', function() {
 add_action('init', function() {
     $all_types = array_merge(['post', 'page'], array_keys(SEO_MACHINE_POST_TYPES));
     $meta_keys = [
-        '_yoast_wpseo_focuskw'  => 'SEO Focus Keyphrase',
-        '_yoast_wpseo_title'    => 'SEO Title',
-        '_yoast_wpseo_metadesc' => 'SEO Meta Description',
+        '_yoast_wpseo_focuskw'       => 'SEO Focus Keyphrase',
+        '_yoast_wpseo_title'         => 'SEO Title',
+        '_yoast_wpseo_metadesc'      => 'SEO Meta Description',
+        '_seo_machine_focus_keyword' => 'SEO Machine Focus Keyword',
     ];
 
     foreach ($all_types as $type) {
@@ -145,6 +146,59 @@ add_action('rest_api_init', function() {
                 ],
             ],
         ]);
+    }
+});
+
+// ── SEO Machine Admin Panel ──────────────────────────────────────────────────
+// TODO: add brand styling before public/commercial release (plain WP metabox for now)
+
+add_action('add_meta_boxes', function() {
+    $types = array_keys(SEO_MACHINE_POST_TYPES);
+    foreach ($types as $type) {
+        add_meta_box(
+            'seo_machine_panel',
+            'SEO Machine',
+            'seo_machine_panel_render',
+            $type,
+            'side',
+            'high'
+        );
+    }
+});
+
+function seo_machine_panel_render(WP_Post $post): void {
+    wp_nonce_field('seo_machine_panel_save', 'seo_machine_panel_nonce');
+    $keyword = get_post_meta($post->ID, '_seo_machine_focus_keyword', true);
+    ?>
+    <p>
+        <label for="seo_machine_focus_keyword"><strong>Target Keyword</strong></label><br>
+        <input
+            type="text"
+            id="seo_machine_focus_keyword"
+            name="seo_machine_focus_keyword"
+            value="<?php echo esc_attr($keyword); ?>"
+            style="width:100%;margin-top:4px;"
+        >
+    </p>
+    <?php
+}
+
+add_action('save_post', function(int $post_id): void {
+    if (
+        !isset($_POST['seo_machine_panel_nonce']) ||
+        !wp_verify_nonce($_POST['seo_machine_panel_nonce'], 'seo_machine_panel_save') ||
+        defined('DOING_AUTOSAVE') && DOING_AUTOSAVE ||
+        !current_user_can('edit_post', $post_id)
+    ) {
+        return;
+    }
+
+    if (isset($_POST['seo_machine_focus_keyword'])) {
+        update_post_meta(
+            $post_id,
+            '_seo_machine_focus_keyword',
+            sanitize_text_field($_POST['seo_machine_focus_keyword'])
+        );
     }
 });
 

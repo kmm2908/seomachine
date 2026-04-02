@@ -82,10 +82,12 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] GTM template fetched and saved — `clients/gtm/elementor-template.json`
 
 ### WordPress Custom Post Types
-- [x] `wordpress/seomachine.php` v2.8.0 — MU-plugin; must be in `wp-content/mu-plugins/` (not inside `plugins/`)
+- [x] `wordpress/seomachine.php` v2.9.0 — MU-plugin; must be in `wp-content/mu-plugins/` (not inside `plugins/`)
 - [x] 7 CPTs registered: `seo_service`, `seo_location`, `seo_pillar`, `seo_topical`, `seo_blog`, `seo_comp_alt`, `seo_problem`
 - [x] All CPTs grouped under "SEO Content" parent menu in wp-admin
 - [x] `seo_meta` REST field registered on all CPTs — Yoast-compatible meta keys, works without Yoast installed
+- [x] **SEO Machine admin panel** (session 25) — "SEO Machine" metabox on all 7 CPTs; sidebar, high priority; Target Keyword field (`_seo_machine_focus_keyword`); plain WP styling for now — **TODO: brand styling before public release**
+- [x] `_seo_machine_focus_keyword` registered as REST-readable/writable meta on all CPTs
 - [x] Elementor filter — all 5 CPTs available in Elementor builder (must be enabled in Elementor → Settings first)
 - [x] `content_type_map` in client config — batch runner resolves correct CPT from content type
 
