@@ -112,14 +112,22 @@ Google Sheet columns: A=Topic/Location, B=Status (`Write Now`/`DONE`/`pause`/`Im
 
 Output: `content/[abbr]/[type]/[slug]-[date]/[slug]-[date].html` (one folder per article; images saved alongside HTML)
 
-**Scheduled publisher** — `src/content/publish_scheduled.py` publishes one topic per cron run from a JSON queue file, bypassing the Google Sheet entirely. Default queue: `research/[abbr]/topic-queue.json`. Use `--queue <filename>` to point at a different queue file (e.g. `comp-alt-queue.json`). Generate blog queues with `research_blog_topics.py --queue [--cadence N]`; comp-alt queues are hand-curated JSON files. Each run: picks next `pending` topic → generates content → quality gate → publishes to WordPress → marks topic `published`/`failed`/`review_required` in queue → appends to `logs/scheduled-publish-log.csv` → sends email. Missed-run detection: checks gap since last publish vs cadence + 2-day buffer. `--status` flag prints a formatted queue table (icons: ✓ published · · pending · ⚠ review · ✗ failed). `--dry-run` skips WordPress publish.
+**Scheduled publisher** — `src/content/publish_scheduled.py` publishes one topic per cron run from a JSON queue file, bypassing the Google Sheet entirely. Default queue: `research/[abbr]/topic-queue.json`. Use `--queue <filename>` to point at a different queue file (e.g. `comp-alt-queue.json`). Generate blog queues with `research_blog_topics.py --queue [--cadence N]`; comp-alt queues are hand-curated JSON files. Each run: picks next `pending` topic → generates content → quality gate → publishes to WordPress → marks topic `published`/`failed`/`review_required` in queue → appends to `logs/scheduled-publish-log.csv`. **No per-article emails** — email notifications are suppressed; a daily digest script is planned. Missed-run detection: checks gap since last publish vs cadence + 2-day buffer. `--status` flag prints a formatted queue table (icons: ✓ published · · pending · ⚠ review · ✗ failed). `--dry-run` skips WordPress publish.
+
+**Queue entry format** — each entry supports a `wp_category` field to assign a WordPress category on publish:
+```json
+{"topic": "Thai Massage Benefits", "content_type": "blog", "status": "pending", "wp_category": "Thai Massage"}
+```
 
 **Comp-alt queue files** — `research/[abbr]/comp-alt-queue.json`. Hand-curated list of competitor names (must match `###` headings in `competitor-analysis.md`). Run via: `python3 src/content/publish_scheduled.py --abbr gtm --queue comp-alt-queue.json`. Always publish via background agent when running multiple topics (see Agent Usage above).
 
 **Problem queue files** — `research/[abbr]/problem-queue.json`. List of conditions/symptoms (e.g. sciatica, headaches, stiff neck). Same topic list shared across all Thai massage clients but content is unique per site (different brand voice, local area, therapist context). Run via: `python3 src/content/publish_scheduled.py --abbr gtm --queue problem-queue.json`. Problem pages include mandatory outbound links to authoritative sources (Wikipedia, NHS, PubMed) found via live web search.
 
 Cron examples:
-- Blog (every Monday 09:00): `0 9 * * 1 cd /path/to/seomachine && python3 src/content/publish_scheduled.py --abbr gtb`
+- GTB Thai Massage (Mon + Thu 09:00): `0 9 * * 1,4 cd /path/to/seomachine && python3 src/content/publish_scheduled.py --abbr gtb --queue thai-massage-queue.json`
+- GTB Stay Healthy (Tue 09:00): `0 9 * * 2 ... --abbr gtb --queue stay-healthy-queue.json`
+- GTB Glasgow News (Wed 09:00): `0 9 * * 3 ... --abbr gtb --queue glasgow-news-queue.json`
+- GTB Yoga & Stretching (Fri 09:00): `0 9 * * 5 ... --abbr gtb --queue yoga-stretching-queue.json`
 - Comp-alt (Wednesdays GTM, Thursdays SDY): `0 10 * * 3 ... --abbr gtm --queue comp-alt-queue.json`
 
 **Directions snippet** — `src/snippets/generate_directions_snippet.py` generates a self-contained HTML+JS Google Maps directions widget per client. Saved to `clients/[abbr]/snippets/[abbr]-directions.html`. The batch runner calls `_ensure_directions_snippet()` automatically on the first publish run per client — no manual step needed. The snippet is injected into `comp-alt` page prompts automatically.
@@ -256,7 +264,11 @@ python3 src/content/republish_existing.py --abbr gtm --type blog
 ```
 Use this when posts need to be re-created in WordPress (e.g. after enabling Elementor CPT support).
 
-**Custom post types** — content is published to the correct CPT based on content type. Mapping is in `clients/[abbr]/config.json` under `wordpress.content_type_map`. CPTs: `seo_service`, `seo_location`, `seo_pillar`, `seo_topical`, `seo_blog`, `seo_comp_alt`, `seo_problem`. All grouped under "SEO Content" in wp-admin. SEO meta fields (`seo_meta` REST field) work without Yoast — keys are Yoast-compatible so they display in Yoast UI if installed.
+**Custom post types** — content is published to the correct CPT based on content type. Mapping is in `clients/[abbr]/config.json` under `wordpress.content_type_map`. CPTs: `seo_service`, `seo_location`, `seo_pillar`, `seo_topical`, `seo_comp_alt`, `seo_problem`. **`blog` content type maps to the standard WordPress `post` type** (not a CPT) so posts appear in normal blog loops, RSS feeds, and category archives. `seo_blog` CPT retained in plugin for backward compatibility only. All CPTs grouped under "SEO Content" in wp-admin. SEO meta fields (`seo_meta` REST field) work without Yoast — keys are Yoast-compatible so they display in Yoast UI if installed.
+
+**SEO Machine admin panel** — "SEO Machine" metabox registered on all 7 CPTs and standard `post` type. Currently shows Target Keyword field, saved to `_seo_machine_focus_keyword` meta key (no third-party plugin references). Plain WP styling for now; brand styling planned before public/commercial release.
+
+**WordPress category support** — `publish_scheduled.py` reads `wp_category` from each queue entry and passes it through to the publisher. `publish_html_content()` accepts a `category` param; auto-creates the WordPress category if it doesn't exist and assigns it on publish. Works on both Elementor and non-Elementor paths. The built-in `category` taxonomy is registered for the `post` type natively; no extra registration needed.
 
 **Elementor template publishing** (used when `clients/[abbr]/elementor-template.json` exists):
 1. Run `python3 src/publishing/fetch_elementor_template.py [abbr]` once to capture the saved template (reads `wordpress.elementor_template_id` from config). Skips SSL verification automatically for `.local` domains. Saves a `clients/[abbr]/elementor-template-meta.json` sidecar with the WP `modified` date.

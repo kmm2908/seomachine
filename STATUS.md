@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-03-30 (session 24 — wp-elementor skill improved with workshop safe-editing approach)
+Last updated: 2026-04-02 (session 25 — GTB blog category schedule, blog→post type, SEO Machine panel)
 
 ---
 
@@ -276,6 +276,38 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] Locations: 10/10 complete — 9 published clean, 1 published for review (Cowcaddens 1164)
 - [x] Total: 31/31 complete — all SDY content queues finished
 
+### Blog content type → standard WordPress post (session 25)
+- [x] `blog` content type now maps to native `post` type in all 5 client configs (was `seo_blog` CPT)
+- [x] Posts appear in standard WP blog loops, RSS feeds, category archives, theme templates
+- [x] `seo_hub` shortcode type_map updated: `blog → post` (queries `/wp-json/wp/v2/posts`)
+- [x] `seo_blog` CPT retained in plugin for backward compatibility with existing content
+
+### WordPress category support in scheduled publisher (session 25)
+- [x] `publish_scheduled.py` reads `wp_category` from queue entry, passes to `publish_html_content()`
+- [x] `publish_html_content()` accepts `category: str = ''` param; calls `get_or_create_category()`, passes IDs through both Elementor and non-Elementor paths
+- [x] `_create_elementor_page()` accepts `category_ids` and includes in POST data
+- [x] Queue entry format: `{"topic": "...", "content_type": "blog", "status": "pending", "wp_category": "Thai Massage"}`
+- [x] `seomachine.php` — `category` taxonomy registered for `seo_blog` CPT (for any legacy content)
+
+### GTB blog category schedule (session 25)
+- [x] 4 categories defined: Thai Massage (2/wk), Stay Healthy (1/wk), Glasgow News (1/wk), Yoga & Stretching (1/wk)
+- [x] Queue files created: `research/gtb/thai-massage-queue.json` (8 topics), `stay-healthy-queue.json` (8), `glasgow-news-queue.json` (2), `yoga-stretching-queue.json` (2 with YouTube URLs)
+- [x] Initial batch of 8 posts published as standard WP posts with categories — GTB post IDs: 22603/22608/22613/22618 (Thai Massage), 22623/22628 (Stay Healthy), 22633/22638 (Glasgow News — 2 need review)
+- [x] Total batch cost: ~$5.29
+- [ ] Set up cron jobs for all 4 GTB category queues
+- [ ] Yoga & Stretching: YouTube embed format (not batch-runner content) — separate workflow TBD
+- [ ] Glasgow News hook failures recurring — consider lowering hook threshold for news-angle topics
+
+### SEO Machine admin panel (session 25)
+- [x] `seomachine.php` — "SEO Machine" metabox on all 7 CPTs + standard `post` type; sidebar, high priority
+- [x] Target Keyword field (`_seo_machine_focus_keyword`) — no third-party plugin references
+- [x] `_seo_machine_focus_keyword` registered as REST-readable/writable meta on all CPTs
+- [x] Plain WP metabox styling — **TODO: brand styling pass before public/commercial release**
+- [ ] Additional fields TBD (meta description, SEO title, etc.)
+
+### seo_hub display fix (session 25)
+- [x] Hub link text truncated to 7 words (`wp_trim_words`) on both local and remote paths — prevents auto-generated excerpts overflowing into multi-line links
+
 ### Batch summary email (session 22 planned, session 25 partial)
 - [x] Per-article emails removed from `publish_scheduled.py` — no more per-post notifications (session 25)
 - [ ] Daily digest script — reads `logs/scheduled-publish-log.csv`, sends one summary email per day with all publishes/failures grouped by client
@@ -388,10 +420,11 @@ Blog subdomain for Glasgow Thai Massage. Separate WordPress install at `blog.gla
 - [x] `clients/gtb/` folder — all context files created (brand voice, SEO guidelines, features, target keywords, writing examples, competitor analysis)
 - [x] `clients/gtb/config.json` — URL `blog.glasgowthaimassage.co.uk`, username `kmm_st65inj7`, template ID 22545 (updated session 21)
 - [x] `clients/gtb/elementor-template.json` — fetched; S1/S2 markers confirmed (two-section mode, same as SDY)
-- [x] `seomachine.php` v2.5 deployed to `blog.glasgowthaimassage.co.uk`
-- [ ] Confirm 6 CPTs appear in wp-admin
+- [x] `seomachine.php` v2.9.0 deployed to `blog.glasgowthaimassage.co.uk` (auto-deploy via GitHub Actions)
+- [x] Initial batch of 8 blog posts published as standard WP posts with categories (session 25)
+- [ ] Confirm CPTs appear in wp-admin on `blog.glasgowthaimassage.co.uk`
 - [ ] Add `GTB` to Google Sheet Column D dropdown
-- [ ] Test batch publish run
+- [ ] Set up cron jobs for 4 category queues
 
 ### Blog Category Schedule (session 25)
 
@@ -406,12 +439,13 @@ Four WordPress post categories with separate queue files per category.
 
 - [x] Queue files created in `research/gtb/` — all 4 categories, topics populated from existing research
 - [x] `wp_category` field added to queue entry format — publisher assigns WP category on publish
-- [x] `seomachine.php` — `category` taxonomy registered for `seo_blog` CPT
 - [x] `wordpress_publisher.py` — `category` param added to `publish_html_content()`; `_create_elementor_page()` forwards category IDs
 - [x] `publish_scheduled.py` — reads `wp_category` from queue entry and passes to publisher
-- [ ] Set up cron jobs for all 4 category queues (once first dry-run passes)
-- [ ] Glasgow News topics: curate 2 real local news/wellness angles before publishing
-- [ ] Yoga & Stretching: find YouTube URLs, use `/ingest-youtube` + `/write` to produce content before publishing
+- [x] Glasgow News topics curated — Physical Activity Strategy 2025-2035 + Burnout Crisis 2026
+- [x] Yoga & Stretching YouTube URLs populated — Yoga At Your Desk (`tAUf7aajBWE`), Todd McLaughlin Thai massage (`4pSFX5XvxWk`)
+- [x] Initial batch of 8 published as standard WP posts with categories (session 25)
+- [ ] Set up cron jobs for all 4 category queues
+- [ ] Yoga & Stretching posts: YouTube embed format, not batch-runner content — workflow TBD
 
 **Cron schedule (to set up):**
 ```
