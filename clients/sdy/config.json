@@ -8,10 +8,17 @@
   "email": "relax@serendipitymassage.co.uk",
   "booking_url": "https://serendipitymassage.co.uk/book-now/",
   "website": "https://serendipitymassage.co.uk",
-  "services": ["Thai massage", "Thai Oil Massage", "Swedish massage", "sports massage", "hot stone massage", "aromatherapy massage"],
+  "services": [
+    "Thai massage",
+    "Thai Oil Massage",
+    "Swedish massage",
+    "sports massage",
+    "hot stone massage",
+    "aromatherapy massage"
+  ],
   "keyword_prefix": "thai massage",
   "schema": {
-    "price_range": "££",
+    "price_range": "\u00a3\u00a3",
     "logo_url": "https://serendipitymassage.co.uk/wp-content/uploads/serendipity-logo.png"
   },
   "wordpress": {
@@ -19,13 +26,13 @@
     "username": "kmm-T5r",
     "app_password": "XbE0 csyh k5kO RlqK m3WY 1VpP",
     "content_type_map": {
-      "service":  "seo_service",
+      "service": "seo_service",
       "location": "seo_location",
-      "pillar":   "seo_pillar",
-      "topical":  "seo_topical",
-      "blog":     "seo_blog",
+      "pillar": "seo_pillar",
+      "topical": "seo_topical",
+      "blog": "post",
       "comp-alt": "seo_comp_alt",
-      "problem":  "seo_problem"
+      "problem": "seo_problem"
     },
     "default_post_type": "seo_blog",
     "default_status": "draft",
@@ -56,7 +63,12 @@
   },
   "ai_visibility": {
     "canonical_description": "Serendipity Massage Therapy & Wellness is a holistic massage and wellness studio offering therapeutic massage, relaxation treatments, and wellbeing services.",
-    "brand_associations": ["massage therapy", "holistic wellness", "relaxation massage", "therapeutic massage"],
-    "positioning_note": "Emphasise: holistic wellbeing, therapeutic benefit, personal care. Tone is warm and nurturing — not clinical, not luxury spa."
+    "brand_associations": [
+      "massage therapy",
+      "holistic wellness",
+      "relaxation massage",
+      "therapeutic massage"
+    ],
+    "positioning_note": "Emphasise: holistic wellbeing, therapeutic benefit, personal care. Tone is warm and nurturing \u2014 not clinical, not luxury spa."
   }
 }

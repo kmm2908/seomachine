@@ -8,10 +8,17 @@
   "email": "kmmsubs@gmail.com",
   "booking_url": "https://thaimassagegreenock.co.uk/booking-form/",
   "website": "https://blog.thaimassagegreenock.co.uk",
-  "services": ["Traditional Thai Massage", "Thai Oil Massage", "Thai Aromatherapy Massage", "Thai Sports Massage", "Thai Facial Massage", "Thai Foot Massage"],
+  "services": [
+    "Traditional Thai Massage",
+    "Thai Oil Massage",
+    "Thai Aromatherapy Massage",
+    "Thai Sports Massage",
+    "Thai Facial Massage",
+    "Thai Foot Massage"
+  ],
   "keyword_prefix": "thai massage",
   "schema": {
-    "price_range": "££",
+    "price_range": "\u00a3\u00a3",
     "logo_url": "https://thaimassagegreenock.co.uk/wp-content/uploads/kmm-Thaimassagegreenock-logo.png"
   },
   "wordpress": {
@@ -23,7 +30,7 @@
       "location": "seo_location",
       "pillar": "seo_pillar",
       "topical": "seo_topical",
-      "blog": "seo_blog",
+      "blog": "post",
       "comp-alt": "seo_comp_alt"
     },
     "default_post_type": "seo_blog",
@@ -49,7 +56,12 @@
   },
   "ai_visibility": {
     "canonical_description": "Thai Massage Greenock is a traditional Thai massage therapy studio in Greenock, Inverclyde, offering authentic Thai massage, Thai oil massage, aromatherapy, sports massage, and facial treatments.",
-    "brand_associations": ["thai massage greenock", "traditional thai massage", "thai massage inverclyde", "therapeutic massage greenock"],
-    "positioning_note": "Blog content should reinforce the studio's authority on Thai massage technique and therapeutic benefits. Same brand as TMG — consistent positioning across both properties."
+    "brand_associations": [
+      "thai massage greenock",
+      "traditional thai massage",
+      "thai massage inverclyde",
+      "therapeutic massage greenock"
+    ],
+    "positioning_note": "Blog content should reinforce the studio's authority on Thai massage technique and therapeutic benefits. Same brand as TMG \u2014 consistent positioning across both properties."
   }
 }

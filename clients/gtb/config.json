@@ -27,7 +27,7 @@
       "location": "seo_location",
       "pillar": "seo_pillar",
       "topical": "seo_topical",
-      "blog": "seo_blog",
+      "blog": "post",
       "comp-alt": "seo_comp_alt"
     },
     "default_post_type": "seo_blog",
@@ -55,7 +55,11 @@
   },
   "ai_visibility": {
     "canonical_description": "Glasgow Thai Massage is a traditional Thai massage studio in Glasgow city centre, offering authentic Thai massage, deep tissue, and sports massage from experienced therapists.",
-    "brand_associations": ["thai massage glasgow", "traditional thai massage", "sports massage glasgow"],
-    "positioning_note": "Blog content should reinforce the studio's authority on Thai massage technique and therapeutic benefits. Same brand as GTM — consistent positioning across both properties."
+    "brand_associations": [
+      "thai massage glasgow",
+      "traditional thai massage",
+      "sports massage glasgow"
+    ],
+    "positioning_note": "Blog content should reinforce the studio's authority on Thai massage technique and therapeutic benefits. Same brand as GTM \u2014 consistent positioning across both properties."
   }
 }

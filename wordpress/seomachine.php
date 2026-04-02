@@ -153,7 +153,7 @@ add_action('rest_api_init', function() {
 // TODO: add brand styling before public/commercial release (plain WP metabox for now)
 
 add_action('add_meta_boxes', function() {
-    $types = array_keys(SEO_MACHINE_POST_TYPES);
+    $types = array_merge(['post'], array_keys(SEO_MACHINE_POST_TYPES));
     foreach ($types as $type) {
         add_meta_box(
             'seo_machine_panel',
@@ -224,7 +224,7 @@ add_shortcode('seo_hub', function($atts) {
         'service'  => 'seo_service',
         'pillar'   => 'seo_pillar',
         'topical'  => 'seo_topical',
-        'blog'     => 'seo_blog',
+        'blog'     => 'post',
         'comp-alt' => 'seo_comp_alt',
         'problem'  => 'seo_problem',
     ];
