@@ -2,7 +2,21 @@
 *****************************
 Add YACCs feature
 *************************
-Add blog post one per category per week
-Thai Massage category
-add 2 pw
-*************************Responsibility
+Check schema processes
+Would like it to:
+1 check every page on the site for optimum schema
+2 create optimum schema for every new page that we add to the site
+https://backlinko.com/tools/schema-markup-generator
+https://backlinko.com/schema-markup-guide
+*****************************
+internal linking/link whisper?
+*****************************
+Yoga/Strecthing:
+Embed videos
+Write own scripts from curated videos and create our own YouTube posts
+*****************************
+Add site audit process
+
+*****************************
+Add GBP audit process
+*****************************

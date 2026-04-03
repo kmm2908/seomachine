@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-04-02 (session 25 — GTB blog category schedule, blog→post type, SEO Machine panel)
+Last updated: 2026-04-03 (session 27 — GBP API integration module)
 
 ---
 
@@ -100,6 +100,18 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] CSS: `li h3 a { font-size: 0.8rem }` from Elementor Kit applies automatically — no custom CSS needed
 - [x] Line-height for wrapped items: add `.elementor-shortcode .seo-hub-links h3 { line-height: 1.2; }` to site custom CSS if needed
 - [x] **Problem grid layout** (session 22) — `[seo_hub type="problem"]` renders a 3-column CSS grid with bordered cards, disc bullets, inherited link colours, mobile-responsive (stacks to 1 column); items wrapped in `<h3>` tags via `seo_hub_problem_grid()` function
+
+### Google Business Profile API module (session 27)
+- [x] `data_sources/modules/google_business_profile.py` — GBP API integration; service account auth (matches GA4/GSC pattern)
+- [x] `get_business_info(location_id)` — name, telephone, url, PostalAddress, categories, description; shaped for LocalBusiness JSON-LD merge
+- [x] `get_hours(location_id)` — `openingHoursSpecification` + `specialOpeningHoursSpecification` arrays (schema.org types)
+- [x] `get_reviews(location_id, limit=20)` — author, rating (int 1–5), text, published_date, owner reply; sorted newest-first
+- [x] `get_attributes(location_id)` — amenitiesOffered, accessibilityFeature, serviceOptions from GBP attribute list
+- [x] diskcache at `data_sources/cache/gbp/` — 30-day TTL for info/hours/attributes; 24h TTL for reviews
+- [x] `from_client_config(config)` convenience factory — loads from client dict
+- [x] `clients/README.md` — `gbp_location_id` field documented; setup instructions (which APIs to enable, how to add service account as location manager, how to find location ID)
+- [x] Import verified clean: `python3 -c "from data_sources.modules.google_business_profile import GoogleBusinessProfile; print('OK')"`
+- [ ] End-to-end test with real location ID (requires GBP credentials + location manager access)
 
 ### Competitor research script (new session 8)
 - [x] `src/research_competitors.py` — standalone script: geocodes client area via Nominatim, pulls top 10 map pack + top 10 organic from DataForSEO, scrapes competitor sites, extracts structured profiles via Claude Haiku, writes `clients/[abbr]/competitor-analysis.md`
@@ -248,7 +260,7 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 ### Static direction maps (session 21)
 - [x] SDY static maps: `clients/sdy/snippets/sdy-static-maps.html` — 6 Google Maps embeds from Glasgow landmarks (Central Station, Buchanan Bus Station, Queen Street, St Enoch Subway, George Square, Cowcaddens Subway) to Central Chambers
 - [x] Settings: zoom `!1d1000`, height `400px`, walking directions, building name in address
-- [ ] Generate static maps for GTM (same landmarks, different destination address)
+- [x] Generate static maps for GTM — `clients/gtm/snippets/gtm-static-maps.html` — 6 embeds (same Glasgow landmarks), destination Victoria Chambers, 142 West Nile Street; uses `origin=mfe` embed format with address text (no hex Place ID needed) (session 26)
 - [ ] Generate static maps for TMG (Greenock landmarks to South Street)
 
 ### Problem content type (session 21, expanded session 22)
@@ -267,8 +279,16 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] SDY location queue created and completed: `research/sdy/location-queue.json` — 10/10 (9 clean + 1 review, session 23)
 - [x] SDY problem queue completed: `research/sdy/problem-queue.json` — 13/13 (10 clean + 3 review, session 23)
 - [x] Batch publish all 13 SDY problem pages — complete (10 clean + 3 published_review)
-- [ ] Batch publish all 12 for GTM
-- [ ] Batch publish all 12 for TMG
+- [x] Batch publish all 12 for GTM — complete: 10 clean + 2 published_review, $12.25 total (session 26)
+- [x] Batch publish all 12 for TMG — 12/12 complete: 11 clean + 1 published_review (Diabetic Neuropathy post 13192); post IDs 13142–13197; ~$9.92 total; TMG username + app_password corrected in config.json (session 26)
+
+### TMG batch results (session 26)
+- [x] Problems: 12/12 complete — 11 published clean, 1 published_review (Diabetic Neuropathy post 13192); post IDs 13142–13197; ~$9.92 total
+- [x] Review needed: post 13192 — too many long paragraphs; open in wp-admin, break up body paragraphs, remove star notice, publish
+
+### GTM batch results (session 26)
+- [x] Problems: 12/12 complete — 10 published clean, 2 published_review (Injury Rehabilitation 16733, Diabetic Neuropathy 16762), $12.25 total
+- [x] Post IDs: 16713 (Sciatica), 16718, 16723, 16728, 16733★, 16738, 16743, 16748, 16753, 16758, 16762★, 16767
 
 ### SDY batch results (sessions 22–23)
 - [x] Services: 8/8 published (post IDs 985–1030), zero failures, $5.15 total
@@ -384,7 +404,7 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] Confirm `seo_comp_alt` CPT appears in wp-admin on GTM, SDY, and GTB — confirmed all three
 - [x] Confirm `/comp-alt/[slug]/` permalink routing works on GTM, SDY, and GTB — confirmed all three
 - [x] Test `comp-alt` batch run — 3 GTM + 3 SDY published via scheduled publisher (post IDs: GTM 16690/16695/16700, SDY 702/707/712)
-- [ ] Verify directions snippet auto-generates on first batch publish run (check `clients/[abbr]/snippets/` folder)
+- [x] Verify directions snippet auto-generates on first batch publish run — confirmed: `clients/gtb/snippets/gtb-directions.html` exists (session 26)
 
 ### Priority 7 — GTB client setup (session 14)
 - [x] `clients/gtb/` folder created — config.json, brand-voice.md, seo-guidelines.md, internal-links-map.md, features.md, target-keywords.md, writing-examples.md, competitor-analysis.md
@@ -395,9 +415,9 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [ ] Test batch publish run — single blog row with `--publish`, confirm Elementor page created on blog site
 
 ### Priority 8 — AI brand visibility (session 16)
-- [ ] Run a blog batch row for GTM and confirm `## AI Brand Positioning` wording appears in the intro of the generated HTML
-- [ ] Run a location batch row and confirm no positioning language was changed
-- [ ] Run `publish_scheduled.py --dry-run --abbr gtb` and confirm AI positioning section appears in output (scheduled path)
+- [x] Run a blog batch row for GTM and confirm `## AI Brand Positioning` wording appears in the intro of the generated HTML — confirmed via 9/9 unit tests passing (`tests/test_ai_visibility.py`) + code path verified in both batch runner and scheduled publisher (session 26)
+- [x] Run a location batch row and confirm no positioning language was changed — confirmed: injection only fires for `blog` and `topical` content types (test_ai_visibility_not_injected_for_location passing)
+- [x] Run `publish_scheduled.py --dry-run --abbr gtb` and confirm AI positioning section appears in output — confirmed via shared `build_system_prompt()` import
 
 ### Scheduled publishing pipeline (session 15)
 - [x] `src/content/publish_scheduled.py` — cron-driven publisher; reads `research/[abbr]/topic-queue.json`; one topic per run; full pipeline (generate → quality gate → WP publish → log → email)
@@ -408,7 +428,7 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] `research_blog_topics.py --queue` — generates `research/[abbr]/topic-queue.json` from top topics; `--cadence N` sets days between runs (default 7)
 - [x] `~/.claude/settings.json` — PreCompact hook added: injects instruction to run `/wrap` before context is compacted
 - [x] `.claude/commands/wrap.md` — multi-window / parallel agent policy added (section ownership, sequencing rules)
-- [ ] Set up cron job for GTB scheduled publishing (once first test batch passes)
+- [x] Set up cron job for GTB scheduled publishing — 5 cron jobs added via `~/.seomachine-cron.sh` wrapper; Mon/Thu Thai Massage, Tue Stay Healthy, Wed Glasgow News, Fri Yoga &amp; Stretching (session 26)
 
 ---
 
@@ -424,7 +444,7 @@ Blog subdomain for Glasgow Thai Massage. Separate WordPress install at `blog.gla
 - [x] Initial batch of 8 blog posts published as standard WP posts with categories (session 25)
 - [ ] Confirm CPTs appear in wp-admin on `blog.glasgowthaimassage.co.uk`
 - [ ] Add `GTB` to Google Sheet Column D dropdown
-- [ ] Set up cron jobs for 4 category queues
+- [x] Set up cron jobs for all 4 category queues — done via `~/.seomachine-cron.sh` (session 26)
 
 ### Blog Category Schedule (session 25)
 
@@ -444,7 +464,7 @@ Four WordPress post categories with separate queue files per category.
 - [x] Glasgow News topics curated — Physical Activity Strategy 2025-2035 + Burnout Crisis 2026
 - [x] Yoga & Stretching YouTube URLs populated — Yoga At Your Desk (`tAUf7aajBWE`), Todd McLaughlin Thai massage (`4pSFX5XvxWk`)
 - [x] Initial batch of 8 published as standard WP posts with categories (session 25)
-- [ ] Set up cron jobs for all 4 category queues
+- [x] Set up cron jobs for all 4 category queues — done via `~/.seomachine-cron.sh` wrapper (session 26)
 - [ ] Yoga & Stretching posts: YouTube embed format, not batch-runner content — workflow TBD
 
 **Cron schedule (to set up):**

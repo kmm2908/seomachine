@@ -3,17 +3,114 @@
   "cadence_days": 1,
   "created_at": "2026-03-27",
   "topics": [
-    {"topic": "Sciatica", "content_type": "problem", "status": "pending", "created_at": "2026-03-27"},
-    {"topic": "Stiff Neck or Shoulders", "content_type": "problem", "status": "pending", "created_at": "2026-03-27"},
-    {"topic": "Refresh Sore Muscles", "content_type": "problem", "status": "pending", "created_at": "2026-03-27"},
-    {"topic": "Relieve Stress and Tension", "content_type": "problem", "status": "pending", "created_at": "2026-03-27"},
-    {"topic": "Injury Rehabilitation", "content_type": "problem", "status": "pending", "created_at": "2026-03-27"},
-    {"topic": "Headaches and Migraines", "content_type": "problem", "status": "pending", "created_at": "2026-03-27"},
-    {"topic": "Improved Flexibility", "content_type": "problem", "status": "pending", "created_at": "2026-03-27"},
-    {"topic": "Renew Tired Aching Feet", "content_type": "problem", "status": "pending", "created_at": "2026-03-27"},
-    {"topic": "Remove Knots and Relax Tight Muscles", "content_type": "problem", "status": "pending", "created_at": "2026-03-27"},
-    {"topic": "Injury Prevention", "content_type": "problem", "status": "pending", "created_at": "2026-03-27"},
-    {"topic": "Diabetic Neuropathy and Nerve Pain", "content_type": "problem", "status": "pending", "created_at": "2026-03-27"},
-    {"topic": "Melt Away The Blues When Feeling Low", "content_type": "problem", "status": "pending", "created_at": "2026-03-27"}
+    {
+      "topic": "Sciatica",
+      "content_type": "problem",
+      "status": "published",
+      "created_at": "2026-03-27",
+      "published_at": "2026-04-03",
+      "post_id": 13142,
+      "cost": "$0.6978"
+    },
+    {
+      "topic": "Stiff Neck or Shoulders",
+      "content_type": "problem",
+      "status": "published",
+      "created_at": "2026-03-27",
+      "published_at": "2026-04-03",
+      "post_id": 13147,
+      "cost": "$0.8269"
+    },
+    {
+      "topic": "Refresh Sore Muscles",
+      "content_type": "problem",
+      "status": "published",
+      "created_at": "2026-03-27",
+      "published_at": "2026-04-03",
+      "post_id": 13152,
+      "cost": "$0.8982"
+    },
+    {
+      "topic": "Relieve Stress and Tension",
+      "content_type": "problem",
+      "status": "published",
+      "created_at": "2026-03-27",
+      "published_at": "2026-04-03",
+      "post_id": 13157,
+      "cost": "$0.7780"
+    },
+    {
+      "topic": "Injury Rehabilitation",
+      "content_type": "problem",
+      "status": "published",
+      "created_at": "2026-03-27",
+      "published_at": "2026-04-03",
+      "post_id": 13162,
+      "cost": "$0.9316"
+    },
+    {
+      "topic": "Headaches and Migraines",
+      "content_type": "problem",
+      "status": "published",
+      "created_at": "2026-03-27",
+      "published_at": "2026-04-03",
+      "post_id": 13167,
+      "cost": "$0.7732"
+    },
+    {
+      "topic": "Improved Flexibility",
+      "content_type": "problem",
+      "status": "published",
+      "created_at": "2026-03-27",
+      "published_at": "2026-04-03",
+      "post_id": 13172,
+      "cost": "$0.7695"
+    },
+    {
+      "topic": "Renew Tired Aching Feet",
+      "content_type": "problem",
+      "status": "published",
+      "created_at": "2026-03-27",
+      "published_at": "2026-04-03",
+      "post_id": 13177,
+      "cost": "$0.9306"
+    },
+    {
+      "topic": "Remove Knots and Relax Tight Muscles",
+      "content_type": "problem",
+      "status": "published",
+      "created_at": "2026-03-27",
+      "published_at": "2026-04-03",
+      "post_id": 13182,
+      "cost": "$0.7768"
+    },
+    {
+      "topic": "Injury Prevention",
+      "content_type": "problem",
+      "status": "published",
+      "created_at": "2026-03-27",
+      "published_at": "2026-04-03",
+      "post_id": 13187,
+      "cost": "$0.8507"
+    },
+    {
+      "topic": "Diabetic Neuropathy and Nerve Pain",
+      "content_type": "problem",
+      "status": "published_review",
+      "created_at": "2026-03-27",
+      "published_at": "2026-04-03",
+      "post_id": 13192,
+      "cost": "$0.8634",
+      "error": "Quality gate: paragraphs | https://thaimassagegreenock.co.uk/wp-admin/post.php?post=13192&action=edit"
+    },
+    {
+      "topic": "Melt Away The Blues When Feeling Low",
+      "content_type": "problem",
+      "status": "published",
+      "created_at": "2026-03-27",
+      "published_at": "2026-04-03",
+      "post_id": 13197,
+      "cost": "$0.8192"
+    }
   ]
 }

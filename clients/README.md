@@ -38,6 +38,7 @@ clients/
     "brand_associations": ["brand-problem phrase 1", "brand-problem phrase 2"],
     "positioning_note": "Plain-English tone guidance — what to emphasise and what to avoid."
   },
+  "gbp_location_id": "123456789012345678",
   "wordpress": {
     "url": "https://example.com",
     "username": "wp-username",
@@ -55,6 +56,7 @@ clients/
 - **abbreviation** — Must match exactly (case-insensitive) what is in Column D of the Google Sheet.
 - **wordpress.app_password** — WordPress Application Password generated in WP Admin → Users → Profile → Application Passwords. Never the login password.
 - **ai_visibility** — Optional. Injected as `## AI Brand Positioning` in system prompts for `blog` and `topical` content types. Implements the consistent-phrasing strategy from `context/ai-brand-visibility.md`. All three sub-fields are optional; omit the block entirely to disable.
+- **gbp_location_id** — Optional. Numeric Google Business Profile location ID (e.g. `"123456789012345678"`). Enables `data_sources/modules/google_business_profile.py` to fetch live business info, hours, reviews, and attributes from the GBP API. Requires the "My Business Business Information API" and "My Business Reviews API" enabled in Google Cloud, plus a service account with Manager access to the location (added via business.google.com → Settings → Managers). Credentials path set via `GBP_CREDENTIALS_PATH` in `.env`. Omit this field if GBP sync is not needed.
 
 ---
 

@@ -93,3 +93,46 @@ date,abbr,topic,content_type,status,post_id,cost,notes
 2026-03-29,sdy,,,queue_empty,,,No pending topics
 2026-03-29,sdy,,,queue_empty,,,No pending topics
 2026-03-29,sdy,,,queue_empty,,,No pending topics
+2026-04-01,gtb,Thai Massage Benefits,blog,dry_run,,$0.6684,dry-run mode
+2026-04-01,gtb,Thai Massage Benefits,blog,published_review,22557,$0.6557,Quality gate: readability | https://blog.glasgowthaimassage.co.uk/wp-admin/post.php?post=22557&action=edit
+2026-04-01,gtb,What Is Thai Massage,topical,published,22562,$0.9124,https://blog.glasgowthaimassage.co.uk/wp-admin/post.php?post=22562&action=edit
+2026-04-01,gtb,Thai Massage vs Swedish Massage,blog,published_review,22567,$0.6645,Quality gate: ctas | https://blog.glasgowthaimassage.co.uk/wp-admin/post.php?post=22567&action=edit
+2026-04-01,gtb,Thai Massage What to Expect,topical,published,22571,$0.7210,https://blog.glasgowthaimassage.co.uk/wp-admin/post.php?post=22571&action=edit
+2026-04-01,gtb,Benefits of Regular Massage for Stress Relief,blog,published,22576,$0.6664,https://blog.glasgowthaimassage.co.uk/wp-admin/post.php?post=22576&action=edit
+2026-04-01,gtb,How Often Should You Get a Massage,topical,published,22581,$0.6897,https://blog.glasgowthaimassage.co.uk/wp-admin/post.php?post=22581&action=edit
+2026-04-01,gtb,Glasgow's Physical Activity Strategy 2025-2035: Why Massage is Your Perfect Recovery Partner,blog,published_review,22586,$0.7489,Quality gate: hook | https://blog.glasgowthaimassage.co.uk/wp-admin/post.php?post=22586&action=edit
+2026-04-01,gtb,Burnout Crisis 2026: Why Glasgow Workers Need a Recovery Wellness Plan,blog,published,22591,$0.8337,https://blog.glasgowthaimassage.co.uk/wp-admin/post.php?post=22591&action=edit
+2026-04-02,gtb,Thai Massage Benefits,blog,published,22603,$0.6679,https://blog.glasgowthaimassage.co.uk/wp-admin/post.php?post=22603&action=edit
+2026-04-02,gtb,What Is Thai Massage,blog,published,22608,$0.6606,https://blog.glasgowthaimassage.co.uk/wp-admin/post.php?post=22608&action=edit
+2026-04-02,gtb,Thai Massage vs Swedish Massage,blog,published,22613,$0.6605,https://blog.glasgowthaimassage.co.uk/wp-admin/post.php?post=22613&action=edit
+2026-04-02,gtb,Thai Massage What to Expect,blog,published,22618,$0.6030,https://blog.glasgowthaimassage.co.uk/wp-admin/post.php?post=22618&action=edit
+2026-04-02,gtb,Benefits of Regular Massage for Stress Relief,blog,published,22623,$0.6772,https://blog.glasgowthaimassage.co.uk/wp-admin/post.php?post=22623&action=edit
+2026-04-02,gtb,How Often Should You Get a Massage,blog,published,22628,$0.6689,https://blog.glasgowthaimassage.co.uk/wp-admin/post.php?post=22628&action=edit
+2026-04-02,gtb,Glasgow's Physical Activity Strategy 2025-2035: Why Massage is Your Perfect Recovery Partner,blog,published_review,22633,$0.7547,Quality gate: hook | https://blog.glasgowthaimassage.co.uk/wp-admin/post.php?post=22633&action=edit
+2026-04-02,gtb,Burnout Crisis 2026: Why Glasgow Workers Need a Recovery Wellness Plan,blog,published_review,22638,$0.7558,Quality gate: paragraphs | https://blog.glasgowthaimassage.co.uk/wp-admin/post.php?post=22638&action=edit
+2026-04-02,gtm,Sciatica,problem,published,16713,$0.9124,https://glasgowthaimassage.co.uk/wp-admin/post.php?post=16713&action=edit
+2026-04-02,gtm,Stiff Neck or Shoulders,problem,published,16718,$0.8423,https://glasgowthaimassage.co.uk/wp-admin/post.php?post=16718&action=edit
+2026-04-02,tmg,Sciatica,problem,failed,,,401 Client Error: Unauthorized for url: https://thaimassagegreenock.co.uk/wp-json/wp/v2/seo_problem
+2026-04-02,gtm,Refresh Sore Muscles,problem,published,16723,$0.9110,https://glasgowthaimassage.co.uk/wp-admin/post.php?post=16723&action=edit
+2026-04-02,gtm,Relieve Stress and Tension,problem,published,16728,$1.1305,https://glasgowthaimassage.co.uk/wp-admin/post.php?post=16728&action=edit
+2026-04-02,gtm,Injury Rehabilitation,problem,published_review,16733,$1.4748,Quality gate: readability | https://glasgowthaimassage.co.uk/wp-admin/post.php?post=16733&action=edit
+2026-04-02,gtm,Headaches and Migraines,problem,published,16738,$0.9163,https://glasgowthaimassage.co.uk/wp-admin/post.php?post=16738&action=edit
+2026-04-02,gtm,Improved Flexibility,problem,published,16743,$0.7705,https://glasgowthaimassage.co.uk/wp-admin/post.php?post=16743&action=edit
+2026-04-02,gtm,Renew Tired Aching Feet,problem,published,16748,$1.1967,https://glasgowthaimassage.co.uk/wp-admin/post.php?post=16748&action=edit
+2026-04-02,gtm,Remove Knots and Relax Tight Muscles,problem,published,16753,$1.0303,https://glasgowthaimassage.co.uk/wp-admin/post.php?post=16753&action=edit
+2026-04-02,gtm,Injury Prevention,problem,published,16758,$0.9973,https://glasgowthaimassage.co.uk/wp-admin/post.php?post=16758&action=edit
+2026-04-02,gtm,Diabetic Neuropathy and Nerve Pain,problem,published_review,16762,$1.0481,Quality gate: paragraphs | https://glasgowthaimassage.co.uk/wp-admin/post.php?post=16762&action=edit
+2026-04-02,gtm,Melt Away The Blues When Feeling Low,problem,published,16767,$1.0188,https://glasgowthaimassage.co.uk/wp-admin/post.php?post=16767&action=edit
+2026-04-03,tmg,Sciatica,problem,failed,,,401 Client Error: Unauthorized for url: https://thaimassagegreenock.co.uk/wp-json/wp/v2/seo_problem
+2026-04-03,tmg,Sciatica,problem,published,13142,$0.6978,https://thaimassagegreenock.co.uk/wp-admin/post.php?post=13142&action=edit
+2026-04-03,tmg,Stiff Neck or Shoulders,problem,published,13147,$0.8269,https://thaimassagegreenock.co.uk/wp-admin/post.php?post=13147&action=edit
+2026-04-03,tmg,Refresh Sore Muscles,problem,published,13152,$0.8982,https://thaimassagegreenock.co.uk/wp-admin/post.php?post=13152&action=edit
+2026-04-03,tmg,Relieve Stress and Tension,problem,published,13157,$0.7780,https://thaimassagegreenock.co.uk/wp-admin/post.php?post=13157&action=edit
+2026-04-03,tmg,Injury Rehabilitation,problem,published,13162,$0.9316,https://thaimassagegreenock.co.uk/wp-admin/post.php?post=13162&action=edit
+2026-04-03,tmg,Headaches and Migraines,problem,published,13167,$0.7732,https://thaimassagegreenock.co.uk/wp-admin/post.php?post=13167&action=edit
+2026-04-03,tmg,Improved Flexibility,problem,published,13172,$0.7695,https://thaimassagegreenock.co.uk/wp-admin/post.php?post=13172&action=edit
+2026-04-03,tmg,Renew Tired Aching Feet,problem,published,13177,$0.9306,https://thaimassagegreenock.co.uk/wp-admin/post.php?post=13177&action=edit
+2026-04-03,tmg,Remove Knots and Relax Tight Muscles,problem,published,13182,$0.7768,https://thaimassagegreenock.co.uk/wp-admin/post.php?post=13182&action=edit
+2026-04-03,tmg,Injury Prevention,problem,published,13187,$0.8507,https://thaimassagegreenock.co.uk/wp-admin/post.php?post=13187&action=edit
+2026-04-03,tmg,Diabetic Neuropathy and Nerve Pain,problem,published_review,13192,$0.8634,Quality gate: paragraphs | https://thaimassagegreenock.co.uk/wp-admin/post.php?post=13192&action=edit
+2026-04-03,tmg,Melt Away The Blues When Feeling Low,problem,published,13197,$0.8192,https://thaimassagegreenock.co.uk/wp-admin/post.php?post=13197&action=edit
