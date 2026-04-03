@@ -125,11 +125,11 @@ Output: `content/[abbr]/[type]/[slug]-[date]/[slug]-[date].html` (one folder per
 
 **Problem queue files** — `research/[abbr]/problem-queue.json`. List of conditions/symptoms (e.g. sciatica, headaches, stiff neck). Same topic list shared across all Thai massage clients but content is unique per site (different brand voice, local area, therapist context). Run via: `python3 src/content/publish_scheduled.py --abbr gtm --queue problem-queue.json`. Problem pages include mandatory outbound links to authoritative sources (Wikipedia, NHS, PubMed) found via live web search.
 
-Cron examples:
-- GTB Thai Massage (Mon + Thu 09:00): `0 9 * * 1,4 cd /path/to/seomachine && python3 src/content/publish_scheduled.py --abbr gtb --queue thai-massage-queue.json`
-- GTB Stay Healthy (Tue 09:00): `0 9 * * 2 ... --abbr gtb --queue stay-healthy-queue.json`
-- GTB Glasgow News (Wed 09:00): `0 9 * * 3 ... --abbr gtb --queue glasgow-news-queue.json`
-- GTB Yoga & Stretching (Fri 09:00): `0 9 * * 5 ... --abbr gtb --queue yoga-stretching-queue.json`
+Cron setup: all jobs run via `~/.seomachine-cron.sh <abbr> <queue>` wrapper (handles path-with-spaces; logs to `logs/cron-[abbr].log`). Live cron entries (active):
+- GTB Thai Massage (Mon + Thu 09:00): `0 9 * * 1 ~/.seomachine-cron.sh gtb thai-massage-queue.json` and `0 9 * * 4 ~/.seomachine-cron.sh gtb thai-massage-queue.json`
+- GTB Stay Healthy (Tue 09:00): `0 9 * * 2 ~/.seomachine-cron.sh gtb stay-healthy-queue.json`
+- GTB Glasgow News (Wed 09:00): `0 9 * * 3 ~/.seomachine-cron.sh gtb glasgow-news-queue.json`
+- GTB Yoga & Stretching (Fri 09:00): `0 9 * * 5 ~/.seomachine-cron.sh gtb yoga-stretching-queue.json`
 - Comp-alt (Wednesdays GTM, Thursdays SDY): `0 10 * * 3 ... --abbr gtm --queue comp-alt-queue.json`
 
 **Directions snippet** — `src/snippets/generate_directions_snippet.py` generates a self-contained HTML+JS Google Maps directions widget per client. Saved to `clients/[abbr]/snippets/[abbr]-directions.html`. The batch runner calls `_ensure_directions_snippet()` automatically on the first publish run per client — no manual step needed. The snippet is injected into `comp-alt` page prompts automatically.
