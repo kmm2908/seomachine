@@ -45,7 +45,7 @@ class WordPressPublisher:
             'Content-Type': 'application/json',
             'User-Agent': 'SEOMachine/1.0 (WordPress Content Publisher)'
         })
-        if '.local' in self.url:
+        if '.local' in self.url or 'staging' in self.url:
             self.session.verify = False
 
         # Cache for categories and tags
@@ -630,6 +630,27 @@ class WordPressPublisher:
         # Extract title from first <h2> tag in the content
         h2_match = re.search(r'<h2[^>]*>(.*?)</h2>', html_content, re.IGNORECASE | re.DOTALL)
         title = re.sub(r'<[^>]+>', '', h2_match.group(1)).strip() if h2_match else slug.replace('-', ' ').title()
+        # Titles must not contain commas or full stops
+        title = title.replace(',', '').replace('.', '')
+
+        # Inject heading classes for stylesheet targeting
+        element_classes = {
+            'h1': 'hdr-xl', 'h2': 'hdr-l', 'h3': 'hdr-m', 'h4': 'hdr-s', 'h5': 'hdr-xs',
+            'p': 'txt-m', 'small': 'txt-s',
+        }
+        def _inject_element_class(m, cls):
+            tag, attrs, content = m.group(1), m.group(2), m.group(3)
+            class_match = re.search(r'\bclass="([^"]*)"', attrs)
+            if class_match:
+                return f'<{tag}{attrs}>{content}</{tag}>'  # already has a class — respect it
+            attrs = f' class="{cls}"' + attrs
+            return f'<{tag}{attrs}>{content}</{tag}>'
+        for tag, cls in element_classes.items():
+            html_content = re.sub(
+                rf'<({tag})((?:\s[^>]*)?)>(.*?)</{tag}>',
+                lambda m, c=cls: _inject_element_class(m, c),
+                html_content, flags=re.IGNORECASE | re.DOTALL
+            )
 
         # Upload all local images and rewrite their src to absolute WordPress URLs
         # before creating the draft, so the post content has working image URLs.

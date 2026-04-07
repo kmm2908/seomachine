@@ -1,0 +1,5 @@
+{
+  "plan": "dev",
+  "licensed_features": ["rankfactory", "bulk_sites", "lead_tracking"],
+  "license_key": "SM-DEV-LOCAL"
+}

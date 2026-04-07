@@ -154,6 +154,7 @@ def publish_topic(topic_dict: dict, abbr: str, dry_run: bool = False) -> dict:
     topic = topic_dict['topic']
     content_type = topic_dict.get('content_type', 'blog')
     wp_category = topic_dict.get('wp_category', '')
+    brief = topic_dict.get('brief', '')
 
     api_key = os.getenv('ANTHROPIC_API_KEY')
     if not api_key:
@@ -173,7 +174,7 @@ def publish_topic(topic_dict: dict, abbr: str, dry_run: bool = False) -> dict:
         )
 
     # Generate content
-    content, cost_usd = generate_content(topic, abbr, content_type, client, business_config)
+    content, cost_usd = generate_content(topic, abbr, content_type, client, business_config, brief=brief)
 
     if not content or len(content) < 100:
         raise ValueError("Generated content is too short or empty")

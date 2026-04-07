@@ -141,7 +141,7 @@ Output three clearly labelled HTML blocks. No frontmatter. No markdown.
 <p>[Specific demographics and scenarios]</p>
 
 <!-- SECTION 2 FAQ -->
-<h2>Frequently Asked Questions</h2>
+<h2 class="hdr-m">Frequently Asked Questions</h2>
 <details>
   <summary>[Condition-specific question]?</summary>
   <p>[Evidence-informed answer]</p>

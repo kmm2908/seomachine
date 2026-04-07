@@ -162,7 +162,7 @@
                 "settings": {
                   "text": "Book Now",
                   "link": {
-                    "url": "http://sdy.local/book-now/",
+                    "url": "https://staging2.serendipitymassage.co.uk/book-now/",
                     "is_external": "",
                     "nofollow": "",
                     "custom_attributes": ""
@@ -351,13 +351,13 @@
                     "widgetType": "heading"
                   },
                   {
-                    "id": "12e54fa3",
+                    "id": "cdfa81c",
                     "elType": "widget",
                     "settings": {
-                      "html": "<script type='text/javascript' src='https://reputationhub.site/reputation/assets/review-widget.js'></script><iframe class='lc_reviews_widget' src='https://reputationhub.site/reputation/widgets/review_widget/HbhlMeHmDvc4pB9eEAZQ' frameborder='0' scrolling='no' style='min-width: 100%; width: 100%;'></iframe>"
+                      "template_id": "1174"
                     },
                     "elements": [],
-                    "widgetType": "html"
+                    "widgetType": "template"
                   },
                   {
                     "id": "1c762488",
@@ -365,7 +365,7 @@
                     "settings": {
                       "text": "Book Now",
                       "link": {
-                        "url": "http://sdy.local/book-now/",
+                        "url": "https://staging2.serendipitymassage.co.uk/book-now/",
                         "is_external": "",
                         "nofollow": "",
                         "custom_attributes": ""
@@ -783,7 +783,7 @@
                     "settings": {
                       "text": "Book Now",
                       "link": {
-                        "url": "http://sdy.local/book-now/",
+                        "url": "https://staging2.serendipitymassage.co.uk/book-now/",
                         "is_external": "",
                         "nofollow": "",
                         "custom_attributes": ""
@@ -877,14 +877,15 @@
             "id": "31dbf029",
             "elType": "container",
             "settings": {
-              "content_width": "full"
+              "content_width": "full",
+              "flex_align_items": "flex-start"
             },
             "elements": [
               {
                 "id": "16c70736",
                 "elType": "widget",
                 "settings": {
-                  "editor": "<h2>Our Services</h2>",
+                  "editor": "<h2 style=\"text-align: center;\">Our Services</h2>",
                   "typography_font_family": "Open Sans",
                   "typography_font_weight": "400",
                   "custom_css": "selector h3 , selector h3 a:link, selector h3 a:visited{ \n    font-size: 1rem;\n}\n selector h3 a:hover{\n     color: yellow;\n     text-decoration: underline;\n }\n    ",
@@ -896,7 +897,7 @@
                     "unit": "rem",
                     "top": "0",
                     "right": "0",
-                    "bottom": "-2.5",
+                    "bottom": "-2",
                     "left": "0",
                     "isLinked": false
                   },
@@ -924,7 +925,8 @@
                 "id": "56fea3ce",
                 "elType": "widget",
                 "settings": {
-                  "shortcode": "[seo_hub type=\"service\"]   "
+                  "shortcode": "[seo_hub type=\"service\"]   ",
+                  "_flex_align_self": "flex-start"
                 },
                 "elements": [],
                 "widgetType": "shortcode"
@@ -936,7 +938,8 @@
             "id": "661e9836",
             "elType": "container",
             "settings": {
-              "content_width": "full"
+              "content_width": "full",
+              "flex_align_items": "flex-start"
             },
             "elements": [
               {
@@ -955,7 +958,7 @@
                     "unit": "rem",
                     "top": "0",
                     "right": "0",
-                    "bottom": "-2.5",
+                    "bottom": "-2",
                     "left": "0",
                     "isLinked": false
                   },
@@ -1032,7 +1035,7 @@
             "settings": {
               "text": "Book Now",
               "link": {
-                "url": "http://sdy.local/book-now/",
+                "url": "https://staging2.serendipitymassage.co.uk/book-now/",
                 "is_external": "",
                 "nofollow": "",
                 "custom_attributes": ""

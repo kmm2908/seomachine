@@ -243,17 +243,18 @@ def build_wiki_block(wiki_data: Optional[dict]) -> str:
     )
 
 
-def build_service_prompt(topic: str, business_config: Optional[dict] = None) -> str:
+def build_service_prompt(topic: str, business_config: Optional[dict] = None, brief: str = '') -> str:
     """User prompt for service page content."""
     today = date.today().isoformat()
     business_name = business_config.get('name', '') if business_config else ''
     services = business_config.get('services', []) if business_config else []
+    brief_section = f"\n\nClient-supplied description to incorporate into the page (use this as source material, not verbatim copy):\n\"\"\"\n{brief.strip()}\n\"\"\"" if brief else ''
     return f"""Write a service page for the following:
 
 Service/Topic: {topic}
 Business: {business_name}
 Services offered: {', '.join(services)}
-Today's date: {today}
+Today's date: {today}{brief_section}
 
 Steps you must follow:
 
@@ -418,12 +419,14 @@ PROMPT_BUILDERS = {
 
 def build_user_prompt(topic: str, content_type: str,
                       business_config: Optional[dict] = None,
-                      wiki_data: Optional[dict] = None) -> str:
+                      wiki_data: Optional[dict] = None,
+                      brief: str = '') -> str:
     """Build the user prompt for the given content type."""
     builder = PROMPT_BUILDERS.get(content_type, build_blog_prompt)
-    # Only geo, location, and topical support wiki_data
     if content_type in ('location', 'topical'):
         return builder(topic, business_config, wiki_data)
+    if content_type == 'service' and brief:
+        return builder(topic, business_config, brief=brief)
     return builder(topic, business_config)
 
 
@@ -459,7 +462,8 @@ def calculate_cost(usage) -> float:
 
 def generate_content(topic: str, abbreviation: str, content_type: str,
                      client: anthropic.Anthropic,
-                     business_config: Optional[dict] = None):
+                     business_config: Optional[dict] = None,
+                     brief: str = ''):
     """Call Claude API to research and write content.
     Returns (content: str, cost_usd: float).
     """
@@ -473,7 +477,7 @@ def generate_content(topic: str, abbreviation: str, content_type: str,
         else:
             print(f"    Wikipedia: no page found for '{topic}'")
 
-    user_prompt = build_user_prompt(topic, content_type, business_config, wiki_data=wiki_data)
+    user_prompt = build_user_prompt(topic, content_type, business_config, wiki_data=wiki_data, brief=brief)
 
     # Retry once on rate limit (wait 70 seconds then retry)
     for attempt in range(2):

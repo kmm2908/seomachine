@@ -45,7 +45,7 @@ def refresh_if_stale(abbr: str, wp_config: dict) -> bool:
     url = wp_config.get("url", "").rstrip("/")
     username = wp_config.get("username")
     app_password = wp_config.get("app_password")
-    verify_ssl = not url.endswith(".local")
+    verify_ssl = not (url.endswith(".local") or "staging" in url)
 
     try:
         resp = requests.get(
@@ -99,7 +99,7 @@ def _fetch_and_save(abbr: str, wp: dict) -> None:
     template_id = wp.get("elementor_template_id")
 
     api_url = f"{url}/wp-json/wp/v2/elementor_library/{template_id}?context=edit"
-    verify_ssl = not url.endswith(".local")
+    verify_ssl = not (url.endswith(".local") or "staging" in url)
     response = requests.get(api_url, auth=(username, app_password), timeout=30, verify=verify_ssl)
 
     if response.status_code == 404:

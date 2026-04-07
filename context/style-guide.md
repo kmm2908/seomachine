@@ -7,6 +7,14 @@ Fill in this template with Castos-specific style preferences. Update as the styl
 
 ---
 
+## Universal Rules (apply to all content, all clients)
+
+### Post Titles & Page Headings
+- **No commas or full stops in titles** — post titles and `<h2>` page headings must never contain commas (`,`) or full stops (`.`). Use a dash or rewrite the heading instead.
+- No hyphens in titles or headings (same rule as body copy — see below).
+
+---
+
 ## Grammar & Mechanics
 
 ### Capitalization

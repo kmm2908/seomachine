@@ -1,0 +1,41 @@
+{
+  "abbreviation": "rnr-{slug}",
+  "business_name": "{business_name}",
+  "niche": "{niche}",
+  "city": "{city}",
+  "state_or_region": "{region}",
+  "country": "{country}",
+  "domain": "{domain}",
+  "phone": "{phone}",
+  "site_type": "rank-and-rent",
+  "wordpress": {
+    "url": "https://{domain}",
+    "username": "admin",
+    "app_password": "{wp_app_password}",
+    "elementor_template_id": null
+  },
+  "content_type_map": {
+    "service": "services",
+    "location": "locations",
+    "pillar": "pillar-pages",
+    "topical": "topical-articles",
+    "blog": "posts",
+    "comp-alt": "competitor-alternatives",
+    "problem": "problem-pages"
+  },
+  "lead_tracking": {
+    "twilio_phone": null,
+    "twilio_phone_sid": null,
+    "forward_to": null,
+    "monthly_rent": 0
+  },
+  "hosting": {
+    "provider": "hetzner",
+    "server_id": null,
+    "server_ip": null,
+    "monthly_cost": 3.99
+  },
+  "build_cost": 0,
+  "build_date": null,
+  "status": "new"
+}

@@ -116,9 +116,10 @@ Output: `content/[abbr]/[type]/[slug]-[date]/[slug]-[date].html` (one folder per
 
 **Scheduled publisher** — `src/content/publish_scheduled.py` publishes one topic per cron run from a JSON queue file, bypassing the Google Sheet entirely. Default queue: `research/[abbr]/topic-queue.json`. Use `--queue <filename>` to point at a different queue file (e.g. `comp-alt-queue.json`). Generate blog queues with `research_blog_topics.py --queue [--cadence N]`; comp-alt queues are hand-curated JSON files. Each run: picks next `pending` topic → generates content → quality gate → publishes to WordPress → marks topic `published`/`failed`/`review_required` in queue → appends to `logs/scheduled-publish-log.csv`. **No per-article emails** — email notifications are suppressed; a daily digest script is planned. Missed-run detection: checks gap since last publish vs cadence + 2-day buffer. `--status` flag prints a formatted queue table (icons: ✓ published · · pending · ⚠ review · ✗ failed). `--dry-run` skips WordPress publish.
 
-**Queue entry format** — each entry supports a `wp_category` field to assign a WordPress category on publish:
+**Queue entry format** — each entry supports a `wp_category` field to assign a WordPress category on publish, and a `brief` field to pass client-supplied description text to the writer (service pages only — used as source material, not verbatim copy):
 ```json
 {"topic": "Thai Massage Benefits", "content_type": "blog", "status": "pending", "wp_category": "Thai Massage"}
+{"topic": "Couples Thai Massage", "content_type": "service", "status": "pending", "brief": "A shared experience..."}
 ```
 
 **Comp-alt queue files** — `research/[abbr]/comp-alt-queue.json`. Hand-curated list of competitor names (must match `###` headings in `competitor-analysis.md`). Run via: `python3 src/content/publish_scheduled.py --abbr gtm --queue comp-alt-queue.json`. Always publish via background agent when running multiple topics (see Agent Usage above).
@@ -258,6 +259,13 @@ Publishing uses the WordPress REST API. Credentials are stored in `clients/[abbr
 
 **Batch runner publishing** uses `publish_html_content()` — extracts title from `<h2>`, uploads all local images to WP media library (rewriting relative `src` to absolute URLs), sets first image as featured image. The original topic/address from the Sheet is passed as `excerpt` — this powers the `[seo_hub]` shortcode display text.
 
+**CSS class injection** — `publish_html_content()` automatically injects CSS classes into all headings and paragraphs before sending to WordPress. Class map: `h1→hdr-xl`, `h2→hdr-l`, `h3→hdr-m`, `h4→hdr-s`, `h5→hdr-xs`, `p→txt-m`, `small→txt-s`. Elements with an existing `class` attribute are left untouched (preserves intentional overrides). FAQ `<h2>` outputs `class="hdr-m"` from the agent so it is kept as `hdr-m`, not overridden to `hdr-l`. To backfill classes on already-published posts:
+```bash
+python3 src/publishing/update_post_classes.py --abbr sdy --type service
+python3 src/publishing/update_post_classes.py --abbr gtm --type all
+python3 src/publishing/update_post_classes.py --abbr sdy --type all --dry-run
+```
+
 **Re-publishing existing HTML files** (without regenerating content):
 ```bash
 python3 src/content/republish_existing.py                # republish all gtm location files
@@ -282,7 +290,7 @@ Use this when posts need to be re-created in WordPress (e.g. after enabling Elem
 
 **GTM config:** `clients/gtm/config.json` — `wordpress.elementor_template_id: 16508`, `wordpress.content_type_map` maps all 5 types to CPT slugs
 
-**SDY config:** `clients/sdy/config.json` — `wordpress` block currently points to local (`sdy.local`, switched back session 22 due to live caching issues); `elementor_template_id: 663`; `wordpress_live` block preserves live credentials for Phase 2 switch-back
+**SDY config:** `clients/sdy/config.json` — `wordpress` block currently points to staging (`staging2.serendipitymassage.co.uk`); `wordpress_local` preserves local credentials; `wordpress_live` block preserves live credentials for Phase 2 switch-back. SSL verification skipped for staging (self-signed cert — same as `.local`).
 
 **Elementor CPT auto-enable** — `seomachine.php` filters `option_elementor_cpt_support` and `default_option_elementor_cpt_support` to auto-enable all 5 CPTs in Elementor without manual checkbox step. No Elementor → Settings action required on new installs.
 
@@ -300,7 +308,7 @@ All Python executables live in `src/` under module subfolders. Test scripts live
 src/
   content/      ← geo_batch_runner.py, republish_existing.py, publish_scheduled.py
   research/     ← research_competitors.py, research_quick_wins.py, research_serp_analysis.py, etc.
-  publishing/   ← fetch_elementor_template.py
+  publishing/   ← fetch_elementor_template.py, update_post_classes.py
   snippets/     ← generate_directions_snippet.py
   social/       ← repurpose_content.py, video_producer.py, social_post_generator.py
   competitors/  ← competitor alternative page generators (future)

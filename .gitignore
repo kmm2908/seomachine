@@ -124,3 +124,4 @@ logs/quality-log.csv
 
 # GoHighLevel OAuth tokens (per-client, auto-refreshed)
 clients/*/ghl-tokens.json
+.playwright-mcp/

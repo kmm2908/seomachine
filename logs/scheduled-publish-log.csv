@@ -136,3 +136,16 @@ date,abbr,topic,content_type,status,post_id,cost,notes
 2026-04-03,tmg,Injury Prevention,problem,published,13187,$0.8507,https://thaimassagegreenock.co.uk/wp-admin/post.php?post=13187&action=edit
 2026-04-03,tmg,Diabetic Neuropathy and Nerve Pain,problem,published_review,13192,$0.8634,Quality gate: paragraphs | https://thaimassagegreenock.co.uk/wp-admin/post.php?post=13192&action=edit
 2026-04-03,tmg,Melt Away The Blues When Feeling Low,problem,published,13197,$0.8192,https://thaimassagegreenock.co.uk/wp-admin/post.php?post=13197&action=edit
+2026-04-03,gtb,Morning Stretching Routine for Office Workers,blog,published,22643,$0.6951,https://blog.glasgowthaimassage.co.uk/wp-admin/post.php?post=22643&action=edit
+2026-04-06,gtb,What Is Thai Oil Massage,blog,published,22648,$0.5429,https://blog.glasgowthaimassage.co.uk/wp-admin/post.php?post=22648&action=edit
+2026-04-06,gtb,Full Body Thai Massage Benefits,blog,published,22653,$0.6701,https://blog.glasgowthaimassage.co.uk/wp-admin/post.php?post=22653&action=edit
+2026-04-06,sdy,Couples Thai Massage,service,failed,,,"HTTPSConnectionPool(host='sdy.local', port=443): Max retries exceeded with url: /wp-json/wp/v2/seo_service (Caused by NewConnectionError(""HTTPSConnection(host='sdy.local', port=443): Failed to establish a new connection: [Errno 61] Connection refused""))"
+2026-04-06,sdy,Couples Thai Massage,service,published,738,$0.6425,https://serendipitymassage.co.uk/wp-admin/post.php?post=738&action=edit
+2026-04-06,sdy,Couples Thai Massage,service,published,1611,$0.6365,https://staging2.serendipitymassage.co.uk/wp-admin/post.php?post=1611&action=edit
+2026-04-06,sdy,Couples Thai Oil Massage,service,published,1617,$0.6947,https://staging2.serendipitymassage.co.uk/wp-admin/post.php?post=1617&action=edit
+2026-04-06,sdy,Tailored Facial Treatment,service,published,1634,$0.6423,https://staging2.serendipitymassage.co.uk/wp-admin/post.php?post=1634&action=edit
+2026-04-06,sdy,Thai Reflexology,service,published,1693,$0.6972,https://staging2.serendipitymassage.co.uk/wp-admin/post.php?post=1693&action=edit
+2026-04-06,sdy,Hair Oiling Treatment,service,published,1704,$0.7074,https://staging2.serendipitymassage.co.uk/wp-admin/post.php?post=1704&action=edit
+2026-04-06,sdy,,,queue_empty,,,No pending topics
+2026-04-06,sdy,Head and Hair Oiling,service,published,1709,$0.6512,https://staging2.serendipitymassage.co.uk/wp-admin/post.php?post=1709&action=edit
+2026-04-07,gtb,Benefits of Deep Tissue Massage,blog,published,22658,$0.6708,https://blog.glasgowthaimassage.co.uk/wp-admin/post.php?post=22658&action=edit

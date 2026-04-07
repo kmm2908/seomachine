@@ -48,7 +48,7 @@ Repeat the H2 + H3s structure for each service covered on this page. Typically 3
 
 ### Section 2 — FAQ
 
-Use `<h2>Frequently Asked Questions</h2>`. Wrap each question and answer in a `<details>` element — the question in `<summary>`, the answer in `<p>` inside the same `<details>` block.
+Use `<h2 class="hdr-m">Frequently Asked Questions</h2>`. Wrap each question and answer in a `<details>` element — the question in `<summary>`, the answer in `<p>` inside the same `<details>` block.
 
 Write 4-6 questions targeting long-tail, question-based keywords that the H1/H2/H3 structure doesn't naturally accommodate. Focus on:
 - Category-level questions ("What types of massage do you offer?", "What's the difference between Thai massage and sports massage?")
@@ -162,7 +162,7 @@ Output three clearly labelled HTML blocks. No frontmatter. No markdown. Total wo
 [Repeat for 3-5 services total]
 
 <!-- SECTION 2 FAQ -->
-<h2>Frequently Asked Questions</h2>
+<h2 class="hdr-m">Frequently Asked Questions</h2>
 <details>
   <summary>[Question]?</summary>
   <p>[Answer]</p>

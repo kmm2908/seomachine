@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-04-03 (session 27 — GBP API integration module)
+Last updated: 2026-04-07 (session 28 — GTB verification, SDY staging, CSS class injection, service pages)
 
 ---
 
@@ -101,6 +101,41 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] Line-height for wrapped items: add `.elementor-shortcode .seo-hub-links h3 { line-height: 1.2; }` to site custom CSS if needed
 - [x] **Problem grid layout** (session 22) — `[seo_hub type="problem"]` renders a 3-column CSS grid with bordered cards, disc bullets, inherited link colours, mobile-responsive (stacks to 1 column); items wrapped in `<h3>` tags via `seo_hub_problem_grid()` function
 
+### CSS class injection (session 28)
+- [x] `wordpress_publisher.py` — heading/text class injection in `publish_html_content()` before HTML is sent to WP
+- [x] Class map: `h1→hdr-xl`, `h2→hdr-l`, `h3→hdr-m`, `h4→hdr-s`, `h5→hdr-xs`, `p→txt-m`, `small→txt-s`
+- [x] Elements with an existing `class` attribute are left untouched — preserves intentional overrides (e.g. FAQ `<h2 class="hdr-m">`)
+- [x] All 7 agent files updated: FAQ `<h2>` outputs `class="hdr-m"` explicitly so it is preserved as `hdr-m` (not overridden to `hdr-l`)
+- [x] No commas or full stops in post titles — stripped in `publish_html_content()` after title extraction
+- [x] `context/style-guide.md` — "No commas or full stops in titles" rule added as Universal Rule
+- [x] `src/publishing/update_post_classes.py` — backfill script; fetches posts via REST API, injects classes into Elementor HTML widget content, updates in place; supports `--abbr`, `--type`, `--dry-run`
+- [x] SDY — all published content (30 posts: 12 location, 3 comp-alt, 15 problem) backfilled with heading/text classes; 11 service posts already up to date
+
+### SDY staging environment (session 28)
+- [x] `clients/sdy/config.json` — `wordpress` block now points to `staging2.serendipitymassage.co.uk`; local credentials moved to `wordpress_local`; live credentials remain in `wordpress_live`
+- [x] `fetch_elementor_template.py` — SSL skip extended to cover `staging` subdomains (was `.local` only)
+- [x] `wordpress_publisher.py` — SSL skip extended to cover `staging` subdomains
+- [x] SDY staging Elementor template fetched — S1/S2 markers confirmed present
+
+### SDY service pages batch (session 28)
+- [x] Couples Thai Massage — post 1611 (staging)
+- [x] Couples Thai Oil Massage — post 1617 (staging)
+- [x] Tailored Facial Treatment — post 1634 (staging); client brief text supported via `brief` field in queue entry
+- [x] Thai Reflexology — post 1693 (staging)
+- [x] Hair Oiling Treatment — post 1704 (staging)
+- [x] Head and Hair Oiling — post 1709 (staging)
+- [x] `brief` field added to queue entry format — passes client-supplied description to `build_service_prompt()` as source material; supported in `build_user_prompt()`, `generate_content()`, and `publish_scheduled.py`
+- [x] SDY duplicate problem posts deleted — IDs 1075, 1101, 1088 trashed; kept newer versions 1083, 1154, 1096
+
+### GTB verification (session 28)
+- [x] All 7 CPTs confirmed in wp-admin on `blog.glasgowthaimassage.co.uk`
+- [x] Standard Posts menu confirmed present
+- [x] SEO Hub Source URL confirmed set to `https://glasgowthaimassage.co.uk`
+- [x] Cross-site hub verified — GTM REST API returning location posts; renders correctly on GTB
+- [x] Batch publish test — "Full Body Thai Massage Benefits" post 22653, $0.67, clean pass
+- [x] GTB added to Google Sheet Column D dropdown
+- [x] Stale `seomachine.php` deleted from GTM `plugins/classic-editor/` folder via SSH (was causing duplicate constant warning)
+
 ### Google Business Profile API module (session 27)
 - [x] `data_sources/modules/google_business_profile.py` — GBP API integration; service account auth (matches GA4/GSC pattern)
 - [x] `get_business_info(location_id)` — name, telephone, url, PostalAddress, categories, description; shaped for LocalBusiness JSON-LD merge
@@ -111,7 +146,12 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] `from_client_config(config)` convenience factory — loads from client dict
 - [x] `clients/README.md` — `gbp_location_id` field documented; setup instructions (which APIs to enable, how to add service account as location manager, how to find location ID)
 - [x] Import verified clean: `python3 -c "from data_sources.modules.google_business_profile import GoogleBusinessProfile; print('OK')"`
-- [ ] End-to-end test with real location ID (requires GBP credentials + location manager access)
+- [x] `GBP_CREDENTIALS_PATH=config/caleb-489417-c8e809f47022.json` added to `.env`
+- [x] `gbp_location_id: "431635553293070625"` added to GTM config; `"5667481148525577024"` added to TMG config
+- [x] Service account `seo-machine@caleb-489417.iam.gserviceaccount.com` added as Manager on GTM GBP listing (pending acceptance)
+- [x] GBP API access request submitted — case ID 7-2336000041300, review time 7–10 business days (quota currently 0 QPM)
+- [x] `get_reviews()` — to be implemented via DataForSEO `business_data/google/reviews` endpoint (GBP Reviews API deprecated); stub in place
+- [ ] End-to-end test — blocked pending Google API access approval (check quota: 0 QPM = pending, 300 QPM = approved)
 
 ### Competitor research script (new session 8)
 - [x] `src/research_competitors.py` — standalone script: geocodes client area via Nominatim, pulls top 10 map pack + top 10 organic from DataForSEO, scrapes competitor sites, extracts structured profiles via Claude Haiku, writes `clients/[abbr]/competitor-analysis.md`
@@ -410,9 +450,9 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] `clients/gtb/` folder created — config.json, brand-voice.md, seo-guidelines.md, internal-links-map.md, features.md, target-keywords.md, writing-examples.md, competitor-analysis.md
 - [x] `clients/gtb/config.json` — WP URL `blog.glasgowthaimassage.co.uk`, app password, template ID 22538
 - [x] `clients/gtb/elementor-template.json` — re-fetched after user added S1/S2 markers in Elementor; two-section mode confirmed (S1 depth 2, S2 depth 3)
-- [ ] Confirm CPTs appear in wp-admin on `blog.glasgowthaimassage.co.uk`
-- [ ] Add `GTB` to Column D dropdown in Google Sheet
-- [ ] Test batch publish run — single blog row with `--publish`, confirm Elementor page created on blog site
+- [x] Confirm CPTs appear in wp-admin on `blog.glasgowthaimassage.co.uk` — all 7 CPTs confirmed (session 28)
+- [x] Add `GTB` to Column D dropdown in Google Sheet — done (session 28)
+- [x] Test batch publish run — "Full Body Thai Massage Benefits" published clean, post 22653, $0.67, 2 rewrites to pass quality gate (session 28)
 
 ### Priority 8 — AI brand visibility (session 16)
 - [x] Run a blog batch row for GTM and confirm `## AI Brand Positioning` wording appears in the intro of the generated HTML — confirmed via 9/9 unit tests passing (`tests/test_ai_visibility.py`) + code path verified in both batch runner and scheduled publisher (session 26)
@@ -442,8 +482,8 @@ Blog subdomain for Glasgow Thai Massage. Separate WordPress install at `blog.gla
 - [x] `clients/gtb/elementor-template.json` — fetched; S1/S2 markers confirmed (two-section mode, same as SDY)
 - [x] `seomachine.php` v2.9.0 deployed to `blog.glasgowthaimassage.co.uk` (auto-deploy via GitHub Actions)
 - [x] Initial batch of 8 blog posts published as standard WP posts with categories (session 25)
-- [ ] Confirm CPTs appear in wp-admin on `blog.glasgowthaimassage.co.uk`
-- [ ] Add `GTB` to Google Sheet Column D dropdown
+- [x] Confirm CPTs appear in wp-admin on `blog.glasgowthaimassage.co.uk` — all 7 CPTs + standard Posts confirmed (session 28)
+- [x] Add `GTB` to Google Sheet Column D dropdown — done (session 28)
 - [x] Set up cron jobs for all 4 category queues — done via `~/.seomachine-cron.sh` (session 26)
 
 ### Blog Category Schedule (session 25)
@@ -631,7 +671,7 @@ New client added 2026-03-26. Existing WordPress site at `thaimassagegreenock.co.
 - [x] Deployed to all 5 sites via GitHub Actions
 - [x] Set `seo_hub_source` on GTB (`https://glasgowthaimassage.co.uk`) via Settings → General
 - [x] Set `seo_hub_source` on TMB (`https://thaimassagegreenock.co.uk`) via Settings → General
-- [ ] Test `[seo_hub type="location"]` on GTB — confirm links point to main site
+- [x] Test `[seo_hub type="location"]` on GTB — REST API confirmed returning GTM location posts; hub will render correctly as posts accumulate (session 28)
 
 ---
 

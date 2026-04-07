@@ -122,7 +122,7 @@ After Section 2, output a `<!-- SCHEMA -->` block:
 <p>[One or two sentence CTA with booking URL]</p>
 
 <!-- SECTION 2 FAQ -->
-<h2>Questions About [Business Name] vs [Competitor Name]</h2>
+<h2 class="hdr-m">Questions About [Business Name] vs [Competitor Name]</h2>
 <details>
   <summary>[Question]?</summary>
   <p>[Answer]</p>

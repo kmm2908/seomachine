@@ -37,7 +37,7 @@ Choose one structure depending on the topic:
 
 ### Section 2 — FAQ
 
-Use `<h2>Frequently Asked Questions</h2>` as the section header. Wrap each question and answer in a `<details>` element — the question in `<summary>`, the answer in `<p>` inside the same `<details>` block.
+Use `<h2 class="hdr-m">Frequently Asked Questions</h2>` as the section header. Wrap each question and answer in a `<details>` element — the question in `<summary>`, the answer in `<p>` inside the same `<details>` block.
 
 Write 4-5 common questions related to the blog topic with practical answers. Questions should be what a reader would actually search for. Answers: 2-4 sentences each.
 
@@ -124,7 +124,7 @@ Structure:
 <p>[Closing paragraph]</p>
 
 <!-- SECTION 2 FAQ -->
-<h2>Frequently Asked Questions</h2>
+<h2 class="hdr-m">Frequently Asked Questions</h2>
 <details>
   <summary>[Question]?</summary>
   <p>[Answer]</p>
