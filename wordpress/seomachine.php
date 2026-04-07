@@ -621,18 +621,3 @@ add_filter('default_option_elementor_cpt_support', function() {
     return array_keys(SEO_MACHINE_POST_TYPES);
 });
 
-// ── Frontend CSS ─────────────────────────────────────────────────────────────
-//
-// Mobile fixes for custom-class elements built in Elementor.
-
-add_action('wp_head', function() { ?>
-<style>
-@media (max-width: 767px) {
-    .service-box {
-        margin-left: 1rem !important;
-        margin-right: 1rem !important;
-        margin-bottom: 1rem !important;
-    }
-}
-</style>
-<?php });
