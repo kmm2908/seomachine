@@ -2,7 +2,7 @@
 /**
  * Plugin Name: SEO Machine
  * Description: Registers SEO content post types and exposes SEO meta fields via REST API. No Yoast dependency.
- * Version: 2.8.0
+ * Version: 2.9.1
  * Author: SEO Machine
  *
  * Installation:
@@ -351,7 +351,9 @@ function seo_hub_problem_grid(array $items): string {
           . '.seo-hub-problem-grid h3{display:inline;font-size:inherit;font-weight:inherit;margin:0}'
           . '.seo-hub-problem-grid a{color:inherit;text-decoration:none}'
           . '.seo-hub-problem-grid a:hover{text-decoration:underline}'
-          . '@media(max-width:767px){.seo-hub-problem-grid{grid-template-columns:1fr}}</style>';
+          . '@media(max-width:767px){.seo-hub-problem-grid{grid-template-columns:1fr;gap:0;margin:0 1rem;border:1px solid currentColor;border-radius:8px}'
+          . '.seo-hub-problem-grid ul{border:none;border-radius:0;border-top:1px solid currentColor}'
+          . '.seo-hub-problem-grid ul:first-child{border-top:none}}</style>';
 
     $html .= '<div class="seo-hub-problem-grid">';
     foreach ($chunks as $chunk) {
@@ -618,3 +620,19 @@ add_filter('option_elementor_cpt_support', function($value) {
 add_filter('default_option_elementor_cpt_support', function() {
     return array_keys(SEO_MACHINE_POST_TYPES);
 });
+
+// ── Frontend CSS ─────────────────────────────────────────────────────────────
+//
+// Mobile fixes for custom-class elements built in Elementor.
+
+add_action('wp_head', function() { ?>
+<style>
+@media (max-width: 767px) {
+    .service-box {
+        margin-left: 1rem !important;
+        margin-right: 1rem !important;
+        margin-bottom: 1rem !important;
+    }
+}
+</style>
+<?php });

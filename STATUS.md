@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-04-07 (session 29 — TMG static maps)
+Last updated: 2026-04-07 (session 30 — mobile CSS fixes)
 
 ---
 
@@ -100,6 +100,11 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] CSS: `li h3 a { font-size: 0.8rem }` from Elementor Kit applies automatically — no custom CSS needed
 - [x] Line-height for wrapped items: add `.elementor-shortcode .seo-hub-links h3 { line-height: 1.2; }` to site custom CSS if needed
 - [x] **Problem grid layout** (session 22) — `[seo_hub type="problem"]` renders a 3-column CSS grid with bordered cards, disc bullets, inherited link colours, mobile-responsive (stacks to 1 column); items wrapped in `<h3>` tags via `seo_hub_problem_grid()` function
+- [x] **Problem grid mobile fix** (session 30) — on mobile: `gap:0`, border moved to container (single outer border), individual `<ul>` borders replaced with `border-top` dividers, `margin:0 1rem` outer spacing so border never touches screen edge
+
+### Frontend CSS hook (session 30)
+- [x] `wp_head` action added to `seomachine.php` v2.9.1 — injects site-wide mobile CSS
+- [x] `.service-box` mobile fix — `margin: 0 1rem 1rem` on mobile so Elementor service cards have outer breathing room and gap between stacked cards
 
 ### CSS class injection (session 28)
 - [x] `wordpress_publisher.py` — heading/text class injection in `publish_html_content()` before HTML is sent to WP
