@@ -351,8 +351,8 @@ function seo_hub_problem_grid(array $items): string {
           . '.seo-hub-problem-grid h3{display:inline;font-size:inherit;font-weight:inherit;margin:0}'
           . '.seo-hub-problem-grid a{color:inherit;text-decoration:none}'
           . '.seo-hub-problem-grid a:hover{text-decoration:underline}'
-          . '@media(max-width:767px){.seo-hub-problem-grid{grid-template-columns:1fr;gap:0;margin:0 1rem;border:1px solid currentColor;border-radius:8px}'
-          . '.seo-hub-problem-grid ul{border:none;border-radius:0;border-top:1px solid currentColor}'
+          . '@media(max-width:767px){.seo-hub-problem-grid{grid-template-columns:1fr;gap:0;margin:0 1rem;border:1px solid currentColor;border-radius:8px;overflow:hidden}'
+          . '.seo-hub-problem-grid ul{border:none;border-top:1px solid currentColor;border-radius:0;margin:0}'
           . '.seo-hub-problem-grid ul:first-child{border-top:none}}</style>';
 
     $html .= '<div class="seo-hub-problem-grid">';
