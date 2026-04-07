@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-04-07 (session 28 — GTB verification, SDY staging, CSS class injection, service pages)
+Last updated: 2026-04-07 (session 29 — TMG static maps)
 
 ---
 
@@ -301,7 +301,7 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] SDY static maps: `clients/sdy/snippets/sdy-static-maps.html` — 6 Google Maps embeds from Glasgow landmarks (Central Station, Buchanan Bus Station, Queen Street, St Enoch Subway, George Square, Cowcaddens Subway) to Central Chambers
 - [x] Settings: zoom `!1d1000`, height `400px`, walking directions, building name in address
 - [x] Generate static maps for GTM — `clients/gtm/snippets/gtm-static-maps.html` — 6 embeds (same Glasgow landmarks), destination Victoria Chambers, 142 West Nile Street; uses `origin=mfe` embed format with address text (no hex Place ID needed) (session 26)
-- [ ] Generate static maps for TMG (Greenock landmarks to South Street)
+- [x] Generate static maps for TMG — `clients/tmg/snippets/tmg-static-maps.html` — 6 embeds (Greenock Central/West stations, Bus Station, Oak Mall, Custom House Quay, Port Glasgow Station), destination 16 South Street PA16 8UE (session 29)
 
 ### Problem content type (session 21, expanded session 22)
 - [x] `seo_problem` CPT registered in `seomachine.php` v2.8.0 — URL pattern `/problem/[slug]/`
