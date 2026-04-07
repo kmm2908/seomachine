@@ -100,11 +100,8 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] CSS: `li h3 a { font-size: 0.8rem }` from Elementor Kit applies automatically — no custom CSS needed
 - [x] Line-height for wrapped items: add `.elementor-shortcode .seo-hub-links h3 { line-height: 1.2; }` to site custom CSS if needed
 - [x] **Problem grid layout** (session 22) — `[seo_hub type="problem"]` renders a 3-column CSS grid with bordered cards, disc bullets, inherited link colours, mobile-responsive (stacks to 1 column); items wrapped in `<h3>` tags via `seo_hub_problem_grid()` function
-- [x] **Problem grid mobile fix** (session 30) — on mobile: `gap:0`, border moved to container (single outer border), individual `<ul>` borders replaced with `border-top` dividers, `margin:0 1rem` outer spacing so border never touches screen edge
-
-### Frontend CSS hook (session 30)
-- [x] `wp_head` action added to `seomachine.php` v2.9.1 — injects site-wide mobile CSS
-- [x] `.service-box` mobile fix — `margin: 0 1rem 1rem` on mobile so Elementor service cards have outer breathing room and gap between stacked cards
+- [x] **Problem grid mobile fix** (session 30) — on mobile: `gap:0`, `overflow:hidden`, border moved to container (single outer border + `border-radius:8px`), individual `<ul>` borders replaced with `border-top` dividers, explicit `margin:0` on `ul` to override theme styles, `margin:0 1rem` outer spacing so border never touches screen edge
+- [x] **Service box mobile fix** (session 30) — user applied via WordPress Customizer Additional CSS on SDY staging: `width:calc(100% - 2rem); margin:0 1rem 1rem` — keeps Elementor layout intact by pairing margin with matching width reduction
 
 ### CSS class injection (session 28)
 - [x] `wordpress_publisher.py` — heading/text class injection in `publish_html_content()` before HTML is sent to WP
@@ -264,6 +261,7 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] Three parallel jobs: GTM/GTB (`u2168-sqqieazmgeuw@ukm1.siteground.biz`), SDY (`u2732-2mxetksmslhk@gukm1055.siteground.biz`), TMG/TMB (`u3520-kztrwuly6pid@uk1001.siteground.eu`)
 - [x] All 3 jobs tested and confirmed working (session 21)
 - [x] Correct SFTP paths: `www/[domain]/public_html/wp-content/mu-plugins/seomachine.php`
+- [x] `staging2.serendipitymassage.co.uk` added to SDY deploy job (session 30) — staging now stays in sync with live automatically
 
 ### AI brand visibility & positioning (session 16)
 - [x] `context/ai-brand-visibility.md` — Brian Dean (Backlinko) YouTube video transcribed, summarised, and stored; covers 4 strategies for getting brands cited in LLM/AI answers; includes section translating strategies for local service clients (GTM, SDY)
