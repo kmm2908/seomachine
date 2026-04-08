@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-04-08 (session 32 — audit tool)
+Last updated: 2026-04-08 (session 33 — audit tool bug fixes)
 
 ---
 
@@ -371,7 +371,7 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 ### seo_hub display fix (session 25)
 - [x] Hub link text truncated to 7 words (`wp_trim_words`) on both local and remote paths — prevents auto-generated excerpts overflowing into multi-line links
 
-### Audit tool (session 32)
+### Audit tool (session 32, bugs fixed session 33)
 - [x] `src/audit/` — full SEO audit pipeline: 6 scored categories (Schema 20%, Content 20%, GBP 20%, Reviews 15%, NAP 15%, Technical 10%) + unscored Competitor Benchmark
 - [x] `src/audit/collectors.py` — data collectors for all 6 categories; auth'd requests via WP app password; `seomachine/v1/audit` endpoint as primary source (bypasses bot protection)
 - [x] `src/audit/scoring.py` — typed dataclasses + per-category score computation; grade A–F
@@ -383,7 +383,14 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] `wordpress/seomachine.php` v3.0.0 — `GET /wp-json/seomachine/v1/audit` endpoint (auth required; returns all post counts in one call)
 - [x] `send_email.py` — `--attachment` flag added for PDF delivery
 - [x] `data_sources/requirements.txt` — `playwright>=1.40.0` added
-- [ ] End-to-end test — plugin deployed (v3.0.0 live on all 5 sites); run once SiteGround IP block clears: `python3 src/audit/run_audit.py --abbr gtm --no-email`
+- [x] **Bug fix (session 33):** `_is_captcha()` — now detects HTTP 200 SiteGround challenge pages (was only checking 202/503); SiteGround can return 200 with captcha HTML
+- [x] **Bug fix (session 33):** blog count fallback — condition changed from `blog_count == 0 AND service_count == 0` to just `blog_count == 0` so blog count is fetched even when service count was populated via nav scraping
+- [x] **Bug fix (session 33):** JSON extraction from Playwright HTML — now uses BeautifulSoup `<pre>` tag extraction (Chromium wraps JSON in `<pre>`); falls back to regex only if no `<pre>` found
+- [x] **Bug fix (session 33):** schema collector — now fetches a published service/location/post URL via WP REST API to check for LocalBusiness schema (our schema lives on content pages, not the homepage)
+- [x] **Enhancement (session 33):** `_playwright_fetch()` — replaces `_playwright_get()`; stealth mode (disables AutomationControlled, hides `navigator.webdriver`); navigates to homepage first to solve challenge, then uses `page.evaluate(fetch())` for API calls (inherits solved cookies); detects IPC (IP Challenge) and emits a clear warning
+- [x] Scoring logic unit-tested: 80/100 for a well-optimised site with no GBP configured
+- [ ] End-to-end test — blocked by SiteGround IP rate limit (temporary; caused by dev testing). Run after block clears (~1–4 hours): `python3 src/audit/run_audit.py --abbr gtm --no-email`
+  - **IP challenge note:** SiteGround has two challenge types: (1) JS PoW challenge — solved by Playwright automatically; (2) IPC (IP rate-limit challenge) — requires CAPTCHA, not automatable; expires after ~30 min–4 hours. Both are now properly detected.
 
 ### Batch summary email (session 22 planned, session 25 partial)
 - [x] Per-article emails removed from `publish_scheduled.py` — no more per-post notifications (session 25)

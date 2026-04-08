@@ -47,10 +47,16 @@ _TIMEOUT = 15
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
 def _is_captcha(r: requests.Response) -> bool:
-    """Detect SiteGround or Cloudflare bot-challenge responses."""
-    if r.status_code in (202, 503) and 'sgcaptcha' in r.text:
+    """Detect SiteGround or Cloudflare bot-challenge responses.
+    SiteGround may return HTTP 200 with a JS challenge page (sgchallenge cookie),
+    HTTP 202 with a meta-refresh to /.well-known/sgcaptcha/, or HTTP 503.
+    """
+    text_sample = r.text[:2000] if r.text else ''
+    if 'sgchallenge' in text_sample or '/.well-known/captcha/' in text_sample:
         return True
-    if r.status_code == 403 and 'Cloudflare' in r.text:
+    if r.status_code in (202, 503) and 'sgcaptcha' in text_sample:
+        return True
+    if r.status_code == 403 and 'Cloudflare' in text_sample:
         return True
     return False
 
@@ -70,6 +76,161 @@ def _get(url: str, wp_config: Optional[Dict] = None, **kwargs) -> Optional[reque
     except Exception as e:
         logger.debug(f'GET {url} failed: {e}')
         return None
+
+
+def _make_playwright_context(playwright):
+    """Create a browser context that looks like a real browser (anti-bot measures)."""
+    browser = playwright.chromium.launch(
+        headless=True,
+        args=[
+            '--disable-blink-features=AutomationControlled',
+            '--no-sandbox',
+        ],
+    )
+    context = browser.new_context(
+        user_agent=(
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) '
+            'AppleWebKit/537.36 (KHTML, like Gecko) '
+            'Chrome/124.0.0.0 Safari/537.36'
+        ),
+        locale='en-GB',
+        timezone_id='Europe/London',
+    )
+    # Hide webdriver flag — key for bypassing SiteGround bot detection
+    context.add_init_script(
+        'Object.defineProperty(navigator, "webdriver", {get: () => undefined})'
+    )
+    return browser, context
+
+
+def _playwright_fetch(
+    site_url: str,
+    target_url: str,
+    wp_config: Optional[Dict] = None,
+    *,
+    is_api: bool = False,
+) -> Optional[str]:
+    """
+    Fetch target_url via Playwright using a shared session.
+
+    Strategy:
+    1. Navigate to site homepage first (solves SiteGround JS challenge, sets cookies).
+    2. Wait until the challenge redirect completes (title is no longer "Robot Challenge").
+    3. For API targets: use page.evaluate(fetch(...)) so the call inherits solved cookies.
+    4. For HTML targets: navigate directly after challenge is solved.
+
+    This avoids the problem where each fresh Playwright browser has to solve the
+    challenge independently — instead, one challenge solve covers all API calls.
+    """
+    try:
+        from playwright.sync_api import sync_playwright
+    except ImportError:
+        return None
+
+    import base64
+    auth_header = ''
+    if wp_config:
+        creds = f"{wp_config.get('username','')}:{wp_config.get('app_password','')}".encode()
+        auth_header = 'Basic ' + base64.b64encode(creds).decode()
+
+    try:
+        with sync_playwright() as p:
+            browser, context = _make_playwright_context(p)
+            page = context.new_page()
+
+            homepage = site_url.rstrip('/')
+            logger.debug(f'Playwright: loading homepage {homepage} to solve challenge...')
+
+            # Step 1: Navigate to homepage (may get bot challenge with 202 redirect)
+            try:
+                page.goto(homepage, wait_until='commit', timeout=60000)
+            except Exception:
+                pass  # Execution context destruction during challenge redirect is expected
+
+            # Step 2: Wait for challenge to complete and redirect to real page
+            try:
+                page.wait_for_load_state('networkidle', timeout=40000)
+            except Exception:
+                pass
+
+            # Check if we're stuck on a challenge/captcha page
+            current_url = page.url
+            if '/.well-known/' in current_url or 'captcha' in current_url.lower():
+                logger.warning(
+                    'SiteGround IP challenge active — Playwright cannot bypass CAPTCHA. '
+                    'Wait ~30 minutes for IP block to expire, or run audit from a different network.'
+                )
+                browser.close()
+                return None
+
+            if 'sgchallenge' in (page.content()[:2000]):
+                logger.debug('Playwright: challenge page still active after wait')
+                browser.close()
+                return None
+
+            logger.debug(f'Playwright: challenge cleared, at {current_url!r}')
+
+            # Step 3: Fetch the target
+            if target_url.rstrip('/') == homepage or target_url == homepage + '/':
+                result = page.content()
+            elif is_api:
+                # Use fetch() from within the browser context (inherits solved cookies)
+                headers_json = json.dumps({'Authorization': auth_header} if auth_header else {})
+                js_fetch = f'''async () => {{
+                    try {{
+                        const r = await fetch({json.dumps(target_url)}, {{
+                            headers: {headers_json}
+                        }});
+                        return await r.text();
+                    }} catch(e) {{
+                        return null;
+                    }}
+                }}'''
+                try:
+                    result = page.evaluate(js_fetch)
+                except Exception as e:
+                    logger.debug(f'Playwright fetch() eval failed: {e}')
+                    result = None
+            else:
+                try:
+                    resp = page.goto(target_url, wait_until='networkidle', timeout=30000)
+                    result = page.content() if (resp and resp.ok) else None
+                except Exception:
+                    result = page.content() if page.url else None
+
+            browser.close()
+            return result if result else None
+
+    except Exception as e:
+        logger.debug(f'Playwright error for {target_url}: {e}')
+        return None
+
+
+# Module-level site_url cache so callers don't need to pass it everywhere
+_SITE_URL_CACHE: Optional[str] = None
+
+
+def _get_with_fallback(
+    url: str,
+    wp_config: Optional[Dict] = None,
+    site_url: Optional[str] = None,
+) -> Optional[str]:
+    """Try requests first; fall back to Playwright if blocked."""
+    global _SITE_URL_CACHE
+
+    # Cache the site_url so subsequent calls can use it for challenge resolution
+    if site_url:
+        _SITE_URL_CACHE = site_url
+
+    r = _get(url, wp_config=wp_config)
+    if r is not None and r.status_code < 400:
+        return r.text
+
+    # Playwright fallback — need a site_url to solve the challenge first
+    effective_site = _SITE_URL_CACHE or url
+    # Is this an API/JSON endpoint?
+    is_api = '/wp-json/' in url
+    return _playwright_fetch(effective_site, url, wp_config=wp_config, is_api=is_api)
 
 
 def _soup(html: str) -> BeautifulSoup:
@@ -114,34 +275,50 @@ def collect_schema(site_url: str, wp_config: Optional[Dict] = None) -> SchemaRes
     result = SchemaResult()
     pages_to_check = [site_url]
 
-    # Add one extra page from the nav if we can find it
-    r = _get(site_url, wp_config=wp_config)
-    if r is None or r.status_code >= 400:
+    # Fetch homepage — fall back to Playwright if requests is blocked by bot protection
+    html = _get_with_fallback(site_url, wp_config=wp_config, site_url=site_url)
+    if not html:
         result.findings.append(
             'Could not reach site to check schema — '
-            'site may have bot protection (SiteGround/Cloudflare). '
-            'Schema data collected from WP API where available.'
+            'site may have persistent bot protection. '
+            'Try running the audit from a different network.'
         )
         return result
 
-    soup = _soup(r.text)
-    # Pick first internal link from nav as a sample page
-    nav = soup.find('nav') or soup.find('header')
-    if nav:
-        for a in nav.find_all('a', href=True):
-            href = a['href']
-            if href.startswith('/') or site_url in href:
-                full = urljoin(site_url, href)
-                if full != site_url and full not in pages_to_check:
-                    pages_to_check.append(full)
+    soup = _soup(html)
+    # Try to find a published service/location post URL via WP REST API
+    # (GTM-style sites embed LocalBusiness schema on content pages, not the homepage)
+    content_url = None
+    for cpt in ['seo_service', 'seo_location', 'posts']:
+        api_url = site_url.rstrip('/') + f'/wp-json/wp/v2/{cpt}?per_page=1&status=publish&_fields=link'
+        r2 = _get(api_url, wp_config=wp_config)
+        if r2 is not None and r2.status_code == 200:
+            try:
+                items = json.loads(r2.text)
+                if items and isinstance(items, list):
+                    content_url = items[0].get('link')
                     break
+            except Exception:
+                pass
+    if content_url and content_url not in pages_to_check:
+        pages_to_check.append(content_url)
+    elif not content_url:
+        # Fall back to first internal nav link
+        nav = soup.find('nav') or soup.find('header')
+        if nav:
+            for a in nav.find_all('a', href=True):
+                href = a['href']
+                if href.startswith('/') or site_url in href:
+                    full = urljoin(site_url, href)
+                    if full != site_url and full not in pages_to_check:
+                        pages_to_check.append(full)
+                        break
 
     all_blocks: List[Dict] = []
     for url in pages_to_check[:2]:
-        pr = _get(url, wp_config=wp_config)
-        if pr is not None and pr.status_code < 400:
-            s = _soup(pr.text)
-            all_blocks.extend(_extract_jsonld(s))
+        page_html = _get_with_fallback(url, wp_config=wp_config)
+        if page_html:
+            all_blocks.extend(_extract_jsonld(_soup(page_html)))
     result.pages_checked = len(pages_to_check[:2])
 
     # Check for schema types
@@ -198,12 +375,22 @@ def collect_schema(site_url: str, wp_config: Optional[Dict] = None) -> SchemaRes
 def collect_content(site_url: str, wp_config: Optional[Dict] = None) -> ContentResult:
     result = ContentResult()
 
-    # ── Try SEO Machine audit endpoint (single auth'd call, bypasses bot protection) ──
+    # ── Try SEO Machine audit endpoint (single auth'd call) ──────────────────────
+    # Falls back to Playwright if plain requests are blocked by bot protection.
     audit_url = site_url.rstrip('/') + '/wp-json/seomachine/v1/audit'
-    r = _get(audit_url, wp_config=wp_config)
-    if r is not None and r.status_code == 200:
+    audit_html = _get_with_fallback(audit_url, wp_config=wp_config, site_url=site_url)
+    if audit_html:
         try:
-            counts = r.json().get('post_counts', {})
+            # Playwright wraps JSON in an HTML <pre> tag (Chromium JSON viewer)
+            # Try <pre> extraction first; fall back to regex
+            soup_json = _soup(audit_html)
+            pre = soup_json.find('pre')
+            raw_json = pre.get_text() if pre else audit_html
+            # Strip any leading/trailing HTML if <pre> wasn't found
+            if not pre:
+                json_match = re.search(r'\{.*\}', raw_json, re.DOTALL)
+                raw_json = json_match.group(0) if json_match else raw_json
+            counts = json.loads(raw_json).get('post_counts', {})
             result.blog_count     = counts.get('post', 0)
             result.page_count     = counts.get('page', 0)
             result.service_count  = counts.get('seo_service', 0)
@@ -212,7 +399,7 @@ def collect_content(site_url: str, wp_config: Optional[Dict] = None) -> ContentR
             pass
 
     # ── Fallback: individual WP REST API calls ─────────────────────────────────
-    if result.blog_count == 0 and result.service_count == 0:
+    if result.blog_count == 0:
         api_base = site_url.rstrip('/') + '/wp-json/wp/v2'
 
         def _api_total(endpoint: str) -> int:
@@ -228,9 +415,9 @@ def collect_content(site_url: str, wp_config: Optional[Dict] = None) -> ContentR
 
     # If still no service pages, try inferring from homepage navigation
     if result.service_count == 0:
-        r = _get(site_url, wp_config=wp_config)
-        if r is not None and r.status_code < 400:
-            soup = _soup(r.text)
+        home_html = _get_with_fallback(site_url, wp_config=wp_config)
+        if home_html:
+            soup = _soup(home_html)
             service_keywords = ['massage', 'therapy', 'treatment', 'service',
                                  'facial', 'reflexology', 'sports']
             service_like = set()
@@ -245,10 +432,10 @@ def collect_content(site_url: str, wp_config: Optional[Dict] = None) -> ContentR
 
     # Sitemap check
     for sitemap_path in ['/sitemap.xml', '/sitemap_index.xml', '/wp-sitemap.xml']:
-        r = _get(site_url.rstrip('/') + sitemap_path, wp_config=wp_config)
-        if r is not None and r.status_code == 200 and '<' in r.text:
+        sm_html = _get_with_fallback(site_url.rstrip('/') + sitemap_path, wp_config=wp_config)
+        if sm_html and '<' in sm_html:
             result.has_sitemap = True
-            result.sitemap_url_count = r.text.count('<loc>')
+            result.sitemap_url_count = sm_html.count('<loc>')
             break
 
     # Build findings
@@ -399,9 +586,9 @@ def collect_nap(config: Dict, schema: SchemaResult, site_url: str,
     result.config_phone = config.get('phone', '')
 
     # Extract NAP from site schema
-    r = _get(site_url, wp_config=wp_config)
-    if r is not None and r.status_code < 400:
-        blocks = _extract_jsonld(_soup(r.text))
+    site_html = _get_with_fallback(site_url, wp_config=wp_config)
+    if site_html:
+        blocks = _extract_jsonld(_soup(site_html))
         lb = next(
             (b for b in blocks
              if _type_of(b) in ('LocalBusiness', 'MassageTherapist',
@@ -481,15 +668,15 @@ def collect_technical(site_url: str, wp_config: Optional[Dict] = None) -> Techni
     # SSL
     result.has_ssl = site_url.startswith('https://')
 
-    # Fetch homepage
+    # Fetch homepage (Playwright fallback handles bot protection)
     start = time.time()
-    r = _get(site_url, wp_config=wp_config)
-    if r is None or r.status_code >= 400:
+    home_html = _get_with_fallback(site_url, wp_config=wp_config)
+    if not home_html:
         result.findings.append('Could not reach site.')
         return result
     result.response_time_ms = int((time.time() - start) * 1000)
 
-    soup = _soup(r.text)
+    soup = _soup(home_html)
 
     # Meta title
     title_tag = soup.find('title')
@@ -503,16 +690,13 @@ def collect_technical(site_url: str, wp_config: Optional[Dict] = None) -> Techni
     result.has_h1 = bool(soup.find('h1'))
 
     # robots.txt
-    robots_r = _get(site_url.rstrip('/') + '/robots.txt', wp_config=wp_config)
-    result.has_robots = bool(
-        robots_r is not None and robots_r.status_code == 200
-        and 'user-agent' in robots_r.text.lower()
-    )
+    robots_html = _get_with_fallback(site_url.rstrip('/') + '/robots.txt', wp_config=wp_config)
+    result.has_robots = bool(robots_html and 'user-agent' in robots_html.lower())
 
     # sitemap
     for path in ['/sitemap.xml', '/sitemap_index.xml', '/wp-sitemap.xml']:
-        sm_r = _get(site_url.rstrip('/') + path, wp_config=wp_config)
-        if sm_r is not None and sm_r.status_code == 200 and '<' in sm_r.text:
+        sm_html = _get_with_fallback(site_url.rstrip('/') + path, wp_config=wp_config)
+        if sm_html and '<' in sm_html:
             result.has_sitemap = True
             break
 
