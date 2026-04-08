@@ -31,23 +31,33 @@ MAX_REWRITES = 2
 CONTENT_TYPE_CONFIG = {
     '_default': {
         'flesch_threshold': 55,
+        'mandatory_criteria': ['hook', 'ctas', 'paragraphs'],
         'optional_criteria': ['stories', 'rhythm'],
         'optional_min': 1,          # need >=1 of 2
     },
     'comp-alt': {
         'flesch_threshold': 48,     # comparison pages use proper nouns / denser language
+        'mandatory_criteria': ['hook', 'ctas', 'paragraphs'],
         'optional_criteria': ['rhythm'],  # stories don't fit fact-based pages
         'optional_min': 0,          # rhythm is nice-to-have
     },
     'location': {
         'flesch_threshold': 50,     # place names and geographic terms drag down Flesch scores
+        'mandatory_criteria': ['hook', 'ctas', 'paragraphs'],
         'optional_criteria': ['stories', 'rhythm'],
         'optional_min': 1,
     },
     'problem': {
         'flesch_threshold': 48,     # medical/health topics use denser language
+        'mandatory_criteria': ['hook', 'ctas', 'paragraphs'],
         'optional_criteria': ['rhythm'],  # no stories — informational, not narrative
         'optional_min': 0,          # rhythm is nice-to-have
+    },
+    'news': {
+        'flesch_threshold': 52,     # proper nouns + statistics drag Flesch down
+        'mandatory_criteria': ['ctas', 'paragraphs'],  # hook not mandatory for news leads
+        'optional_criteria': ['hook', 'stories', 'rhythm'],
+        'optional_min': 1,          # need at least 1 of hook/stories/rhythm
     },
 }
 
@@ -179,14 +189,12 @@ class QualityGate:
         if flesch < cfg['flesch_threshold']:
             failures.append('readability')
 
-        # Mandatory engagement criteria (always apply)
+        # Mandatory engagement criteria (from config — allows per-type overrides)
         scores = eng.get('scores', {})
-        if not scores.get('hook', False):
-            failures.append('hook')
-        if not scores.get('ctas', False):
-            failures.append('ctas')
-        if not scores.get('paragraphs', False):
-            failures.append('paragraphs')
+        mandatory = cfg.get('mandatory_criteria', ['hook', 'ctas', 'paragraphs'])
+        for criterion in mandatory:
+            if not scores.get(criterion, False):
+                failures.append(criterion)
 
         # Optional engagement criteria — need >= optional_min of optional_criteria
         optional = cfg['optional_criteria']

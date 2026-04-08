@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-04-07 (session 30 — mobile CSS fixes)
+Last updated: 2026-04-08 (session 32 — audit tool)
 
 ---
 
@@ -383,7 +383,7 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] `wordpress/seomachine.php` v3.0.0 — `GET /wp-json/seomachine/v1/audit` endpoint (auth required; returns all post counts in one call)
 - [x] `send_email.py` — `--attachment` flag added for PDF delivery
 - [x] `data_sources/requirements.txt` — `playwright>=1.40.0` added
-- [ ] End-to-end test — pending plugin deploy (bot protection blocked test runs; audit endpoint fixes this)
+- [ ] End-to-end test — plugin deployed (v3.0.0 live on all 5 sites); run once SiteGround IP block clears: `python3 src/audit/run_audit.py --abbr gtm --no-email`
 
 ### Batch summary email (session 22 planned, session 25 partial)
 - [x] Per-article emails removed from `publish_scheduled.py` — no more per-post notifications (session 25)

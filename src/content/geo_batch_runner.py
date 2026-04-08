@@ -60,6 +60,7 @@ CONTENT_TYPE_AGENTS = {
     'location':  'location-page-writer.md',
     'topical':   'topical-writer.md',
     'blog':      'blog-post-writer.md',
+    'news':      'blog-post-writer.md',  # news-angle posts; hook threshold relaxed in quality gate
     'pillar':    'pillar-page-writer.md',
     'comp-alt':  'competitor-alt-writer.md',
     'problem':   'problem-page-writer.md',

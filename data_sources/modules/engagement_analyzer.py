@@ -39,6 +39,17 @@ class EngagementAnalyzer:
         r'^(?:What if|Imagine|Picture this|Here\'s (?:the thing|a secret))',
         r'^(?:Last|In) (?:week|month|year|January|February|March|April|May|June|July|August|September|October|November|December)',
         r'^[A-Z][a-z]+\s+(?:discovered|realized|learned|found|spent|launched|started)',  # Name + past verb (story)
+        # News-style openers — present perfect announcement or lead sentence
+        r'\bhas\s+(?:announced|launched|revealed|published|introduced|released|unveiled|set out|confirmed|outlined|committed)\b',
+        r'^(?:New|Latest)\s+\w',  # "New figures show..." / "Latest research reveals..."
+        r'^\d{4}[\s:–\-]',  # Year-led: "2026: Why Glasgow workers..." / "2025 – The strategy..."
+        # Additional news/journalistic lead patterns
+        r'^A\s+new\s+(?:report|study|strategy|plan|initiative|survey|analysis|programme)\b',
+        r'^(?:According to|Research (?:from|by)|Data (?:from|by)|Figures (?:from|show))\b',
+        r'^\d+\s+(?:in\s+\d+|percent|Glaswegians?|Scots?|workers?|adults?|people)\b',
+        r'\boutlines?\b.{0,60}\b(?:plan|strategy|approach|ambition|vision|commitment)\b',
+        r'^(?:Glasgow|Scotland|Scottish|UK|Britain)\b.{0,50}\bhas\b',
+        r'^\w+(?:\s+\w+){0,3}\s+is\s+(?:facing|tackling|battling|grappling|experiencing)\b',
     ]
 
     # CTA patterns
@@ -132,21 +143,21 @@ class EngagementAnalyzer:
         first_sentence_match = re.match(r'^([^.!?]+[.!?])', first_para)
         first_sentence = first_sentence_match.group(1) if first_sentence_match else first_para[:150]
 
+        # Check for good hook patterns first — lets news-style openers win before generic check
+        for pattern in self.GOOD_HOOK_PATTERNS:
+            if re.search(pattern, first_para):
+                return {
+                    'is_good': True,
+                    'reason': 'Good hook pattern found',
+                    'opening': first_sentence[:100]
+                }
+
         # Check for generic openers (bad)
         for pattern in self.GENERIC_OPENERS:
             if re.search(pattern, first_para, re.IGNORECASE):
                 return {
                     'is_good': False,
                     'reason': f'Generic opening detected',
-                    'opening': first_sentence[:100]
-                }
-
-        # Check for good hook patterns
-        for pattern in self.GOOD_HOOK_PATTERNS:
-            if re.search(pattern, first_para):
-                return {
-                    'is_good': True,
-                    'reason': 'Good hook pattern found',
                     'opening': first_sentence[:100]
                 }
 
