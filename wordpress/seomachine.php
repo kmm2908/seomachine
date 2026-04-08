@@ -2,7 +2,7 @@
 /**
  * Plugin Name: SEO Machine
  * Description: Registers SEO content post types and exposes SEO meta fields via REST API. No Yoast dependency.
- * Version: 2.9.1
+ * Version: 3.0.0
  * Author: SEO Machine
  *
  * Installation:
@@ -147,6 +147,39 @@ add_action('rest_api_init', function() {
             ],
         ]);
     }
+});
+
+// ── Audit API endpoint ────────────────────────────────────────────────────────
+// GET /wp-json/seomachine/v1/audit — requires authentication (app password).
+// Returns post counts for all SEO Machine types in a single call, bypassing
+// any per-route bot-protection that may block rapid sequential requests.
+
+add_action('rest_api_init', function() {
+    register_rest_route('seomachine/v1', '/audit', [
+        'methods'             => 'GET',
+        'callback'            => function(WP_REST_Request $request) {
+            $types = array_merge(['post', 'page'], array_keys(SEO_MACHINE_POST_TYPES));
+            $counts = [];
+            foreach ($types as $type) {
+                $q = new WP_Query([
+                    'post_type'      => $type,
+                    'post_status'    => 'publish',
+                    'posts_per_page' => 1,
+                    'fields'         => 'ids',
+                    'no_found_rows'  => false,
+                ]);
+                $counts[$type] = (int) $q->found_posts;
+            }
+            return rest_ensure_response([
+                'post_counts'    => $counts,
+                'plugin_version' => '3.0.0',
+                'site_url'       => get_site_url(),
+            ]);
+        },
+        'permission_callback' => function() {
+            return current_user_can('edit_posts');
+        },
+    ]);
 });
 
 // ── SEO Machine Admin Panel ──────────────────────────────────────────────────
