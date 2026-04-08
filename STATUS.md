@@ -357,9 +357,9 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] Queue files created: `research/gtb/thai-massage-queue.json` (8 topics), `stay-healthy-queue.json` (8), `glasgow-news-queue.json` (2), `yoga-stretching-queue.json` (2 with YouTube URLs)
 - [x] Initial batch of 8 posts published as standard WP posts with categories — GTB post IDs: 22603/22608/22613/22618 (Thai Massage), 22623/22628 (Stay Healthy), 22633/22638 (Glasgow News — 2 need review)
 - [x] Total batch cost: ~$5.29
-- [ ] Set up cron jobs for all 4 GTB category queues
+- [x] Set up cron jobs for all 4 GTB category queues — done via ~/.seomachine-cron.sh (session 26)
 - [ ] Yoga & Stretching: YouTube embed format (not batch-runner content) — separate workflow TBD
-- [ ] Glasgow News hook failures recurring — consider lowering hook threshold for news-angle topics
+- [x] Glasgow News hook failures — fixed (session 31): `news` content type added with hook optional; 6 new GOOD_HOOK_PATTERNS for journalistic leads; 4 new pending topics in glasgow-news-queue.json with `content_type: "news"`
 
 ### SEO Machine admin panel (session 25)
 - [x] `seomachine.php` — "SEO Machine" metabox on all 7 CPTs + standard `post` type; sidebar, high priority
@@ -371,9 +371,23 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 ### seo_hub display fix (session 25)
 - [x] Hub link text truncated to 7 words (`wp_trim_words`) on both local and remote paths — prevents auto-generated excerpts overflowing into multi-line links
 
+### Audit tool (session 32)
+- [x] `src/audit/` — full SEO audit pipeline: 6 scored categories (Schema 20%, Content 20%, GBP 20%, Reviews 15%, NAP 15%, Technical 10%) + unscored Competitor Benchmark
+- [x] `src/audit/collectors.py` — data collectors for all 6 categories; auth'd requests via WP app password; `seomachine/v1/audit` endpoint as primary source (bypasses bot protection)
+- [x] `src/audit/scoring.py` — typed dataclasses + per-category score computation; grade A–F
+- [x] `src/audit/report.py` — internal markdown report + OMG-branded prospect HTML (PAS framework: Problem → Agitate → Solution)
+- [x] `src/audit/pdf_gen.py` — Playwright HTML→PDF conversion
+- [x] `src/audit/queue_gen.py` — pending content queue from audit gaps (all `status: pending`)
+- [x] `src/audit/run_audit.py` — CLI: `--abbr` (existing client) or `--url` (prospect); `--no-pdf`, `--no-email` flags
+- [x] `.claude/commands/audit.md` — `/audit [abbr or URL]` slash command
+- [x] `wordpress/seomachine.php` v3.0.0 — `GET /wp-json/seomachine/v1/audit` endpoint (auth required; returns all post counts in one call)
+- [x] `send_email.py` — `--attachment` flag added for PDF delivery
+- [x] `data_sources/requirements.txt` — `playwright>=1.40.0` added
+- [ ] End-to-end test — pending plugin deploy (bot protection blocked test runs; audit endpoint fixes this)
+
 ### Batch summary email (session 22 planned, session 25 partial)
 - [x] Per-article emails removed from `publish_scheduled.py` — no more per-post notifications (session 25)
-- [ ] Daily digest script — reads `logs/scheduled-publish-log.csv`, sends one summary email per day with all publishes/failures grouped by client
+- [x] Daily digest script — `src/reporting/daily_digest.py`; reads `logs/scheduled-publish-log.csv`; groups by client; shows published/review/failed with WP links and cost; cron at 22:00 daily → `logs/cron-digest.log`; `--date` and `--dry-run` flags (session 31)
 
 ### comp-alt scheduled publishing pipeline (session 18)
 - [x] `research/gtm/comp-alt-queue.json` — 3 competitors queued: Tiger Lily, Thai House, Phuket; cadence 7 days

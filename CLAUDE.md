@@ -97,6 +97,7 @@ The batch runner and agents support 5 content types, selected via Column E in th
 | `pillar` | `pillar-page-writer.md` | 700–1000 | GBP category landing pages (hub pages) |
 | `topical` | `topical-writer.md` | 600–1000 | Informational/question-based articles |
 | `blog` | `blog-post-writer.md` | 600–1200 | Conversational blog posts |
+| `news` | `blog-post-writer.md` | 600–1200 | News-angle posts (e.g. Glasgow News category); hook is optional in quality gate |
 | `comp-alt` | `competitor-alt-writer.md` | 500–700 | Competitor alternative / comparison pages |
 | `problem` | `problem-page-writer.md` | 600–800 | Condition/symptom pages with authority outbound links |
 
@@ -220,6 +221,7 @@ All commands are in `.claude/commands/`. Key commands:
 - `/publish-draft [file]` — publish to WordPress via REST API
 - `/optimize [file]` — final SEO polish pass
 - `/analyze-existing [URL or file]` — content health audit
+- `/audit [abbr or URL]` — full 6-category SEO audit; outputs internal markdown report + OMG-branded prospect PDF + pending content queue; runs `src/audit/run_audit.py`
 - `/cluster [topic]` — topic cluster strategy
 
 **Landing Pages:**
@@ -311,6 +313,7 @@ src/
   publishing/   ← fetch_elementor_template.py, update_post_classes.py
   snippets/     ← generate_directions_snippet.py
   social/       ← repurpose_content.py, video_producer.py, social_post_generator.py
+  audit/        ← run_audit.py, collectors.py, scoring.py, report.py, pdf_gen.py, queue_gen.py
   competitors/  ← competitor alternative page generators (future)
 tests/          ← test scripts (delete before production)
 data_sources/   ← importable modules (google_sheets, wordpress_publisher, elevenlabs_tts, ghl_publisher, etc.)
@@ -342,7 +345,15 @@ python3 src/content/publish_scheduled.py --abbr gtb --dry-run  # generate + qual
 python3 src/content/publish_scheduled.py --abbr gtm --queue comp-alt-queue.json          # comp-alt queue
 python3 src/content/publish_scheduled.py --abbr gtm --queue comp-alt-queue.json --status # comp-alt status
 python3 tests/test_dataforseo.py    # test API connectivity
+python3 src/reporting/daily_digest.py                    # send today's digest email
+python3 src/reporting/daily_digest.py --date 2026-04-07  # specific date
+python3 src/reporting/daily_digest.py --dry-run          # print without sending
+python3 src/audit/run_audit.py --abbr gtm                # full SEO audit (existing client)
+python3 src/audit/run_audit.py --abbr gtm --no-pdf       # audit, skip PDF generation
+python3 src/audit/run_audit.py --url https://... --name "Business" --no-email  # prospect audit
 ```
+
+**`run_audit.py`** — full SEO audit script. Runs 6 scored checks (schema 20pts, content 20pts, GBP 20pts, reviews 15pts, NAP 15pts, technical 10pts) + competitor benchmark. Outputs: `audits/[abbr]/[date]/audit-internal.md` (raw data), `audit-prospect.html/pdf` (OMG-branded PAS report), `pending-queue.json` (content gaps as pending queue items). PDF emailed to `kmmsubs@gmail.com` on completion. **Note:** SiteGround's bot protection blocks unauthenticated web scraping — schema/technical collectors use WP app password auth to bypass this. Requires `playwright` + `playwright install chromium` for PDF generation (gracefully skips to HTML if not installed).
 
 **`research_competitors.py`** — standalone competitor intelligence script. Reads `clients/[abbr]/config.json`, geocodes the `area` field via Nominatim (strips "City Centre" etc. before geocoding), queries DataForSEO for top 10 map pack results (`location_name` approach) + top 10 organic (UK, location code 2826), filters directory domains, scrapes each competitor site, extracts structured profiles via Claude Haiku, writes `clients/[abbr]/competitor-analysis.md`. Integrated into `/new-client` workflow as Step 5.
 

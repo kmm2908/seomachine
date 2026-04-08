@@ -55,3 +55,7 @@ elevenlabs>=1.0.0
 
 # FFmpeg wrapper (requires ffmpeg binary)
 ffmpeg-python>=0.2.0
+
+# Audit tool — HTML to PDF conversion
+# After install: playwright install chromium
+playwright>=1.40.0
