@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 """
 Image Generation Test Script
-Tests DALL-E 3, GPT-image-1, Gemini Flash/Pro, Stability AI, Ideogram
+Tests gpt-image-1, Gemini Flash/Pro, Stability AI, Ideogram
 against GTM-specific prompts to evaluate quality before full pipeline integration.
+
+Note: DALL-E 2 and DALL-E 3 are deprecated by OpenAI (May 12, 2026).
+The production fallback now uses gpt-image-1.
 
 Usage:
     python3 test_image_generation.py                         # run all available models
-    python3 test_image_generation.py --model dalle3          # DALL-E 3
-    python3 test_image_generation.py --model gpt-image-1    # GPT-image-1 (OpenAI newest)
+    python3 test_image_generation.py --model gpt-image-1    # gpt-image-1 (production fallback)
     python3 test_image_generation.py --model gemini-flash    # Gemini 3.1 Flash Image Preview
     python3 test_image_generation.py --model gemini-pro      # Gemini 3 Pro Image Preview
     python3 test_image_generation.py --topic "deep tissue massage Glasgow"
@@ -97,9 +99,9 @@ DEFAULT_TOPICS = [
     "couples massage relaxation treatment",
 ]
 
-# ─── DALL-E (OpenAI) ──────────────────────────────────────────────────────────
+# ─── gpt-image-1 (OpenAI — replaces deprecated DALL-E 2/3) ───────────────────
 
-def generate_dalle(topic: str, image_type: str, model: str = "dall-e-3") -> Path | None:
+def generate_dalle(topic: str, image_type: str, model: str = "gpt-image-1") -> Path | None:
     api_key = os.getenv("OPENAI_API_KEY")
     if not api_key:
         print("  ✗ OPENAI_API_KEY not set — skipping")
@@ -115,8 +117,7 @@ def generate_dalle(topic: str, image_type: str, model: str = "dall-e-3") -> Path
     topic_context = build_topic_context(topic, image_type)
     if image_type == "banner":
         prompt = BANNER_PROMPT_TEMPLATE.format(topic_context=topic_context)
-        # DALL-E 3: 1792x1024 is the widest available; we'll crop to 1200x500
-        size = "1792x1024" if model == "dall-e-3" else "1024x1024"
+        size = "1536x1024"  # widest landscape for gpt-image-1; crop to 1200x500
     else:
         prompt = SECTION_PROMPT_TEMPLATE.format(topic_context=topic_context)
         size = "1024x1024"  # will crop to 400x300
@@ -128,16 +129,16 @@ def generate_dalle(topic: str, image_type: str, model: str = "dall-e-3") -> Path
             model=model,
             prompt=prompt,
             size=size,
-            quality="standard",
+            quality="medium",
             n=1,
         )
         elapsed = time.time() - t0
-        image_url = response.data[0].url
 
-        # Download and save
+        # gpt-image-1 always returns base64 (no URL support)
+        import base64 as _b64
+        img_data = _b64.b64decode(response.data[0].b64_json)
         slug = topic.lower().replace(" ", "-")[:40]
         filename = OUTPUT_DIR / f"{model}-{image_type}-{slug}.png"
-        img_data = requests.get(image_url, timeout=30).content
         filename.write_bytes(img_data)
 
         # Crop to target dimensions
@@ -243,11 +244,8 @@ def generate_gpt_image1(topic: str, image_type: str) -> Path | None:
         slug = topic.lower().replace(" ", "-")[:40]
         filename = OUTPUT_DIR / f"gpt-image1-{image_type}-{slug}.png"
 
-        if item.url:
-            img_data = requests.get(item.url, timeout=30).content
-        else:
-            import base64
-            img_data = base64.b64decode(item.b64_json)
+        import base64
+        img_data = base64.b64decode(item.b64_json)  # gpt-image-1 always returns base64
         filename.write_bytes(img_data)
 
         target = (1200, 500) if image_type == "banner" else (400, 300)
@@ -413,7 +411,7 @@ def crop_image(path: Path, target: tuple[int, int]) -> None:
 def main():
     parser = argparse.ArgumentParser(description="Test image generation APIs")
     parser.add_argument("--model",
-                        choices=["dalle3", "dalle2", "gpt-image-1", "gemini-flash", "gemini-pro",
+                        choices=["gpt-image-1", "gemini-flash", "gemini-pro",
                                  "stability", "ideogram", "all"],
                         default="all", help="Which model to test")
     parser.add_argument("--topic", default=None, help="Custom topic (overrides default test topics)")
@@ -435,17 +433,9 @@ def main():
         for image_type in types:
             print(f"\n  [{image_type.upper()}]")
 
-            if args.model in ("dalle3", "all"):
-                print("  → DALL-E 3")
-                generate_dalle(topic, image_type, model="dall-e-3")
-
-            if args.model in ("dalle2", "all"):
-                print("  → DALL-E 2")
-                generate_dalle(topic, image_type, model="dall-e-2")
-
             if args.model in ("gpt-image-1", "all"):
-                print("  → GPT-image-1")
-                generate_gpt_image1(topic, image_type)
+                print("  → gpt-image-1 (production fallback)")
+                generate_dalle(topic, image_type, model="gpt-image-1")
 
             if args.model in ("gemini-flash", "all"):
                 print("  → Gemini 3.1 Flash Image Preview")

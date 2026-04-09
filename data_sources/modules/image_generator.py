@@ -25,15 +25,15 @@ GEMINI_URL = (
     f"{GEMINI_MODEL}:generateContent"
 )
 
-# ── DALL-E 3 API (fallback) ───────────────────────────────────────────────────
+# ── gpt-image-1 API (fallback, replaces deprecated DALL-E 3) ─────────────────
 
-DALLE_URL = "https://api.openai.com/v1/images/generations"
+GPT_IMAGE_URL = "https://api.openai.com/v1/images/generations"
 
 # ── Pricing ───────────────────────────────────────────────────────────────────
 
 COST_PER_IMAGE = 0.09        # Gemini 3.1 Flash, 2K image
-DALLE_COST_BANNER = 0.080    # DALL-E 3, 1792x1024 standard
-DALLE_COST_SECTION = 0.040   # DALL-E 3, 1024x1024 standard
+DALLE_COST_BANNER = 0.063    # gpt-image-1, 1536x1024, medium quality
+DALLE_COST_SECTION = 0.042   # gpt-image-1, 1024x1024, medium quality
 
 # ── Gemini retry settings ─────────────────────────────────────────────────────
 
@@ -257,7 +257,7 @@ class ImageGenerator:
         return BANNER_FALLBACK_SCENE if image_type == "banner" else SECTION_FALLBACK_SCENE
 
     def _generate(self, prompt: str, output_path: Path, image_type: str) -> float:
-        """Try Gemini with retries on 503, fall back to DALL-E 3. Returns image cost."""
+        """Try Gemini with retries on 503, fall back to gpt-image-1. Returns image cost."""
         last_err = None
         for attempt, delay in enumerate(GEMINI_RETRY_DELAYS):
             try:
@@ -274,9 +274,9 @@ class ImageGenerator:
 
         if not self.openai_api_key:
             raise RuntimeError(
-                f"Gemini failed ({last_err}) and OPENAI_API_KEY not set for DALL-E fallback"
+                f"Gemini failed ({last_err}) and OPENAI_API_KEY not set for gpt-image-1 fallback"
             )
-        print(f"    → DALL-E 3 fallback...")
+        print(f"    → gpt-image-1 fallback...")
         self._generate_dalle(prompt, output_path, image_type)
         return DALLE_COST_BANNER if image_type == "banner" else DALLE_COST_SECTION
 
@@ -325,36 +325,39 @@ class ImageGenerator:
         return output_path
 
     def _generate_dalle(self, prompt: str, output_path: Path, image_type: str) -> Path:
-        """Call DALL-E 3 API, download image, save and crop."""
-        size = "1792x1024" if image_type == "banner" else "1024x1024"
+        """Call gpt-image-1 API, decode base64 response, save and crop.
+
+        gpt-image-1 differences from DALL-E 3:
+        - Always returns base64 (no response_format=url support)
+        - Max landscape size is 1536x1024 (was 1792x1024)
+        - Quality values: low/medium/high (was standard/hd)
+        """
+        size = "1536x1024" if image_type == "banner" else "1024x1024"
         crop_target = (1200, 500) if image_type == "banner" else (400, 300)
 
         response = requests.post(
-            DALLE_URL,
+            GPT_IMAGE_URL,
             headers={
                 "Authorization": f"Bearer {self.openai_api_key}",
                 "Content-Type": "application/json",
             },
             json={
-                "model": "dall-e-3",
+                "model": "gpt-image-1",
                 "prompt": prompt,
                 "size": size,
-                "quality": "standard",
+                "quality": "medium",
                 "n": 1,
-                "response_format": "url",
             },
             timeout=90,
         )
 
         if response.status_code != 200:
             raise RuntimeError(
-                f"DALL-E API error {response.status_code}: {response.text[:300]}"
+                f"gpt-image-1 API error {response.status_code}: {response.text[:300]}"
             )
 
-        image_url = response.json()["data"][0]["url"]
-        img_response = requests.get(image_url, timeout=60)
-        img_response.raise_for_status()
-        output_path.write_bytes(img_response.content)
+        img_bytes = base64.b64decode(response.json()["data"][0]["b64_json"])
+        output_path.write_bytes(img_bytes)
         self._crop_image(output_path, crop_target)
         return output_path
 
