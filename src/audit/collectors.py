@@ -206,29 +206,115 @@ def _playwright_fetch(
         return None
 
 
-# Module-level site_url cache so callers don't need to pass it everywhere
+# Module-level caches
 _SITE_URL_CACHE: Optional[str] = None
+_SSH_CONFIG_CACHE: Optional[Dict] = None
+
+
+def _get_via_ssh(url: str, wp_config: Optional[Dict] = None) -> Optional[str]:
+    """
+    Fetch a URL by SSHing into the SiteGround server and running curl on localhost.
+
+    This bypasses SiteGround's CDN/WAF entirely — the request goes server-to-server
+    on 127.0.0.1, so no IP challenge, no bot detection, ever.
+
+    Requires: `_SSH_CONFIG_CACHE` set by the caller (via `_get_with_fallback(ssh_config=...)`).
+    SSH key: ~/.ssh/seomachine_deploy (same key used by GitHub Actions deploy pipeline).
+    """
+    import subprocess, base64, shlex
+    from urllib.parse import urlparse
+
+    ssh_cfg = _SSH_CONFIG_CACHE
+    if not ssh_cfg:
+        return None
+
+    parsed = urlparse(url)
+    domain = parsed.netloc
+    path = parsed.path or '/'
+    if parsed.query:
+        path += '?' + parsed.query
+
+    # Build auth header
+    auth_header = ''
+    if wp_config:
+        creds = f"{wp_config.get('username','')}:{wp_config.get('app_password','')}".encode()
+        auth_header = 'Basic ' + base64.b64encode(creds).decode()
+
+    # curl on localhost with Host header — bypasses CDN completely
+    # Use HTTPS with -k (skip cert verify) since localhost uses the site's cert
+    curl_parts = [
+        'curl', '-sk', '--max-time', '20',
+        '-H', f'Host: {domain}',
+        '-H', 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Chrome/124.0.0.0',
+        '-H', 'Accept: */*',
+    ]
+    if auth_header:
+        curl_parts += ['-H', f'Authorization: {auth_header}']
+    curl_parts.append(f'https://127.0.0.1{path}')
+
+    # Wrap in SSH command
+    key_path = str(Path(ssh_cfg['key'].replace('~', str(Path.home()))).expanduser())
+    ssh_cmd = [
+        'ssh',
+        '-i', key_path,
+        '-p', str(ssh_cfg.get('port', 18765)),
+        '-o', 'StrictHostKeyChecking=no',
+        '-o', 'BatchMode=yes',
+        '-o', 'ConnectTimeout=15',
+        f"{ssh_cfg['user']}@{ssh_cfg['host']}",
+        ' '.join(shlex.quote(p) for p in curl_parts),
+    ]
+
+    try:
+        result = subprocess.run(
+            ssh_cmd, capture_output=True, text=True, timeout=30,
+        )
+        if result.returncode == 0 and result.stdout:
+            logger.debug(f'SSH fetch succeeded for {url} ({len(result.stdout)} bytes)')
+            return result.stdout
+        if result.returncode != 0:
+            logger.debug(f'SSH fetch failed (exit {result.returncode}): {result.stderr[:200]}')
+        return None
+    except subprocess.TimeoutExpired:
+        logger.debug(f'SSH fetch timed out for {url}')
+        return None
+    except Exception as e:
+        logger.debug(f'SSH fetch error for {url}: {e}')
+        return None
 
 
 def _get_with_fallback(
     url: str,
     wp_config: Optional[Dict] = None,
     site_url: Optional[str] = None,
+    ssh_config: Optional[Dict] = None,
 ) -> Optional[str]:
-    """Try requests first; fall back to Playwright if blocked."""
-    global _SITE_URL_CACHE
+    """
+    Fetch a URL with three-tier fallback:
+      1. requests (fast, no overhead)
+      2. SSH localhost curl (bypasses SiteGround CDN/WAF entirely — permanent fix)
+      3. Playwright headless (JS challenge bypass, but blocked by IPC rate-limit)
+    """
+    global _SITE_URL_CACHE, _SSH_CONFIG_CACHE
 
-    # Cache the site_url so subsequent calls can use it for challenge resolution
     if site_url:
         _SITE_URL_CACHE = site_url
+    if ssh_config:
+        _SSH_CONFIG_CACHE = ssh_config
 
+    # Tier 1: plain requests
     r = _get(url, wp_config=wp_config)
     if r is not None and r.status_code < 400:
         return r.text
 
-    # Playwright fallback — need a site_url to solve the challenge first
+    # Tier 2: SSH localhost curl (preferred — no IP block risk)
+    if _SSH_CONFIG_CACHE:
+        result = _get_via_ssh(url, wp_config=wp_config)
+        if result:
+            return result
+
+    # Tier 3: Playwright (handles JS challenges, but blocked by hard IPC rate-limit)
     effective_site = _SITE_URL_CACHE or url
-    # Is this an API/JSON endpoint?
     is_api = '/wp-json/' in url
     return _playwright_fetch(effective_site, url, wp_config=wp_config, is_api=is_api)
 
@@ -291,10 +377,15 @@ def collect_schema(site_url: str, wp_config: Optional[Dict] = None) -> SchemaRes
     content_url = None
     for cpt in ['seo_service', 'seo_location', 'posts']:
         api_url = site_url.rstrip('/') + f'/wp-json/wp/v2/{cpt}?per_page=1&status=publish&_fields=link'
-        r2 = _get(api_url, wp_config=wp_config)
-        if r2 is not None and r2.status_code == 200:
+        raw = _get_with_fallback(api_url, wp_config=wp_config)
+        if raw:
             try:
-                items = json.loads(r2.text)
+                # Strip HTML wrapper if present (Playwright/SSH may return raw JSON or HTML-wrapped)
+                text = raw
+                if raw.lstrip().startswith('<'):
+                    pre = _soup(raw).find('pre')
+                    text = pre.get_text() if pre else raw
+                items = json.loads(text)
                 if items and isinstance(items, list):
                     content_url = items[0].get('link')
                     break
@@ -395,11 +486,16 @@ def collect_content(site_url: str, wp_config: Optional[Dict] = None) -> ContentR
             result.page_count     = counts.get('page', 0)
             result.service_count  = counts.get('seo_service', 0)
             result.location_count = counts.get('seo_location', 0)
-        except Exception:
-            pass
+        except Exception as _e:
+            logger.debug(f'Audit endpoint parse failed: {_e}')
 
     # ── Fallback: individual WP REST API calls ─────────────────────────────────
-    if result.blog_count == 0:
+    # Only run for counts that are still 0 (audit endpoint may have populated some already)
+    _need_fallback = (
+        result.blog_count == 0 or result.service_count == 0
+        or result.location_count == 0 or result.page_count == 0
+    )
+    if _need_fallback:
         api_base = site_url.rstrip('/') + '/wp-json/wp/v2'
 
         def _api_total(endpoint: str) -> int:
@@ -408,10 +504,14 @@ def collect_content(site_url: str, wp_config: Optional[Dict] = None) -> ContentR
                 return int(r2.headers.get('X-WP-Total', 0))
             return 0
 
-        result.blog_count     = _api_total('posts?per_page=1&status=publish')
-        result.page_count     = _api_total('pages?per_page=1&status=publish')
-        result.service_count  = _api_total('seo_service?per_page=1&status=publish')
-        result.location_count = _api_total('seo_location?per_page=1&status=publish')
+        if result.blog_count == 0:
+            result.blog_count = _api_total('posts?per_page=1&status=publish')
+        if result.page_count == 0:
+            result.page_count = _api_total('pages?per_page=1&status=publish')
+        if result.service_count == 0:
+            result.service_count = _api_total('seo_service?per_page=1&status=publish')
+        if result.location_count == 0:
+            result.location_count = _api_total('seo_location?per_page=1&status=publish')
 
     # If still no service pages, try inferring from homepage navigation
     if result.service_count == 0:
@@ -474,8 +574,8 @@ def collect_gbp(config: Dict) -> GBPResult:
         return result
 
     try:
-        from google_business_profile import GoogleBusinessProfile
-        gbp = GoogleBusinessProfile.from_client_config(config)
+        from google_business_profile import GoogleBusinessProfile, from_client_config as _gbp_from_config
+        gbp = _gbp_from_config(config)
         result.available = True
 
         info = gbp.get_business_info(location_id)
@@ -538,8 +638,8 @@ def collect_reviews(config: Dict) -> ReviewResult:
         return result
 
     try:
-        from google_business_profile import GoogleBusinessProfile
-        gbp = GoogleBusinessProfile.from_client_config(config)
+        from google_business_profile import GoogleBusinessProfile, from_client_config as _gbp_from_config
+        gbp = _gbp_from_config(config)
         reviews = gbp.get_reviews(location_id, limit=50)
         result.available = True
 

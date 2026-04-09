@@ -46,6 +46,7 @@ from scoring import (
 from collectors import (
     collect_schema, collect_content, collect_gbp, collect_reviews,
     collect_nap, collect_technical, collect_competitor,
+    _get_with_fallback as _prime_fallback_cache,
 )
 from report import build_markdown, build_prospect_html
 from pdf_gen import generate_pdf
@@ -139,6 +140,16 @@ def run_audit(
         raise ValueError('No site URL found in config. Pass --url or add `website` to config.json.')
 
     logger.info(f'Auditing {site_name} ({site_url})')
+
+    # Prime the SSH + site_url caches in collectors before any collection starts.
+    # All subsequent _get_with_fallback() calls inherit these automatically.
+    ssh_config = config.get('ssh')
+    if ssh_config:
+        logger.info(f'SSH tunnel available: {ssh_config["user"]}@{ssh_config["host"]}')
+    _prime_fallback_cache.__module__  # no-op import check
+    import collectors as _collectors_mod
+    _collectors_mod._SITE_URL_CACHE = site_url
+    _collectors_mod._SSH_CONFIG_CACHE = ssh_config
 
     # ── Collect ──────────────────────────────────────────────────────────────
     logger.info('Collecting schema data...')

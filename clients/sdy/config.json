@@ -1,80 +1,86 @@
 {
-  "name": "Serendipity Massage Therapy & Wellness",
-  "abbreviation": "SDY",
-  "address": "Floor 1, Suite 50, Central Chambers, 93 Hope Street, Glasgow G2 6LD",
-  "area": "Glasgow City Centre",
-  "postcode": "G2 6LD",
-  "phone": "0141 673 6630",
-  "email": "relax@serendipitymassage.co.uk",
-  "booking_url": "https://serendipitymassage.co.uk/book-now/",
-  "website": "https://serendipitymassage.co.uk",
-  "services": [
-    "Thai massage",
-    "Thai Oil Massage",
-    "Swedish massage",
-    "sports massage",
-    "hot stone massage",
-    "aromatherapy massage"
-  ],
-  "keyword_prefix": "thai massage",
-  "schema": {
-    "price_range": "\u00a3\u00a3",
-    "logo_url": "https://serendipitymassage.co.uk/wp-content/uploads/serendipity-logo.png"
-  },
-  "wordpress": {
-    "url": "https://staging2.serendipitymassage.co.uk",
-    "username": "kmm-T5r",
-    "app_password": "XbE0 csyh k5kO RlqK m3WY 1VpP",
-    "content_type_map": {
-      "service": "seo_service",
-      "location": "seo_location",
-      "pillar": "seo_pillar",
-      "topical": "seo_topical",
-      "blog": "post",
-      "comp-alt": "seo_comp_alt",
-      "problem": "seo_problem"
-    },
-    "default_post_type": "seo_blog",
-    "default_status": "draft",
-    "elementor_template_id": 663
-  },
-  "wordpress_local": {
-    "url": "https://sdy.local",
-    "username": "kmm-T5r",
-    "app_password": "XbE0 csyh k5kO RlqK m3WY 1VpP",
-    "elementor_template_id": 663
-  },
-  "wordpress_live": {
-    "url": "https://serendipitymassage.co.uk",
-    "username": "kmm-T5r",
-    "app_password": "G8lp 3awQ nhtU C3V1 he5O V5aB",
-    "elementor_template_id": 564
-  },
-  "niche": "massage-therapy",
-  "elevenlabs": {
-    "voice_id": "WthqhsWsvA7SP06eQe9F"
-  },
-  "ghl": {
-    "location_id": "RXcT7rTaqfcrcUWtpdyO",
-    "accounts": {
-      "youtube": "",
-      "facebook": "",
-      "instagram": "",
-      "linkedin": "",
-      "x": "",
-      "tiktok": "",
-      "pinterest": "",
-      "gbp": ""
-    }
-  },
-  "ai_visibility": {
-    "canonical_description": "Serendipity Massage Therapy & Wellness is a holistic massage and wellness studio offering therapeutic massage, relaxation treatments, and wellbeing services.",
-    "brand_associations": [
-      "massage therapy",
-      "holistic wellness",
-      "relaxation massage",
-      "therapeutic massage"
+    "name": "Serendipity Massage Therapy & Wellness",
+    "abbreviation": "SDY",
+    "address": "Floor 1, Suite 50, Central Chambers, 93 Hope Street, Glasgow G2 6LD",
+    "area": "Glasgow City Centre",
+    "postcode": "G2 6LD",
+    "phone": "0141 673 6630",
+    "email": "relax@serendipitymassage.co.uk",
+    "booking_url": "https://serendipitymassage.co.uk/book-now/",
+    "website": "https://serendipitymassage.co.uk",
+    "services": [
+        "Thai massage",
+        "Thai Oil Massage",
+        "Swedish massage",
+        "sports massage",
+        "hot stone massage",
+        "aromatherapy massage"
     ],
-    "positioning_note": "Emphasise: holistic wellbeing, therapeutic benefit, personal care. Tone is warm and nurturing \u2014 not clinical, not luxury spa."
-  }
+    "keyword_prefix": "thai massage",
+    "schema": {
+        "price_range": "££",
+        "logo_url": "https://serendipitymassage.co.uk/wp-content/uploads/serendipity-logo.png"
+    },
+    "wordpress": {
+        "url": "https://staging2.serendipitymassage.co.uk",
+        "username": "kmm-T5r",
+        "app_password": "XbE0 csyh k5kO RlqK m3WY 1VpP",
+        "content_type_map": {
+            "service": "seo_service",
+            "location": "seo_location",
+            "pillar": "seo_pillar",
+            "topical": "seo_topical",
+            "blog": "post",
+            "comp-alt": "seo_comp_alt",
+            "problem": "seo_problem"
+        },
+        "default_post_type": "seo_blog",
+        "default_status": "draft",
+        "elementor_template_id": 663
+    },
+    "wordpress_local": {
+        "url": "https://sdy.local",
+        "username": "kmm-T5r",
+        "app_password": "XbE0 csyh k5kO RlqK m3WY 1VpP",
+        "elementor_template_id": 663
+    },
+    "wordpress_live": {
+        "url": "https://serendipitymassage.co.uk",
+        "username": "kmm-T5r",
+        "app_password": "G8lp 3awQ nhtU C3V1 he5O V5aB",
+        "elementor_template_id": 564
+    },
+    "niche": "massage-therapy",
+    "elevenlabs": {
+        "voice_id": "WthqhsWsvA7SP06eQe9F"
+    },
+    "ghl": {
+        "location_id": "RXcT7rTaqfcrcUWtpdyO",
+        "accounts": {
+            "youtube": "",
+            "facebook": "",
+            "instagram": "",
+            "linkedin": "",
+            "x": "",
+            "tiktok": "",
+            "pinterest": "",
+            "gbp": ""
+        }
+    },
+    "ai_visibility": {
+        "canonical_description": "Serendipity Massage Therapy & Wellness is a holistic massage and wellness studio offering therapeutic massage, relaxation treatments, and wellbeing services.",
+        "brand_associations": [
+            "massage therapy",
+            "holistic wellness",
+            "relaxation massage",
+            "therapeutic massage"
+        ],
+        "positioning_note": "Emphasise: holistic wellbeing, therapeutic benefit, personal care. Tone is warm and nurturing — not clinical, not luxury spa."
+    },
+    "ssh": {
+        "user": "u2732-2mxetksmslhk",
+        "host": "gukm1055.siteground.biz",
+        "port": 18765,
+        "key": "~/.ssh/seomachine_deploy"
+    }
 }
