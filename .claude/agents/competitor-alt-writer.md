@@ -87,6 +87,7 @@ After Section 2, output a `<!-- SCHEMA -->` block:
 - `inLanguage` — `en-GB`
 - `datePublished` — `[DATE]`
 - `dateModified` — `[DATE]`
+- `speakable` — `{"@type": "SpeakableSpecification", "cssSelector": ["h2", "article > p:first-of-type", "details > summary", "details > p"]}`
 
 **FAQPage** — one `Question` per `<details>` block from Section 2.
 

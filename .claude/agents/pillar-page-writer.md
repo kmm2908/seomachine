@@ -123,6 +123,7 @@ After Section 2, output a `<!-- SCHEMA -->` block containing a single `<script t
 - `description` — opening paragraph trimmed to ~160 characters, HTML stripped
 - `url` — `business.website`
 - `publisher` — `{"@type": "Organization", "name": "[business.name]", "url": "[BUSINESS_URL]"}`
+- `speakable` — `{"@type": "SpeakableSpecification", "cssSelector": ["h2", "article > p:first-of-type", "details > summary", "details > p"]}`
 
 **FAQPage** — one `Question` per `<details>` block from Section 2:
 - `name` — `<summary>` text (the question)
@@ -182,7 +183,8 @@ Output three clearly labelled HTML blocks. No frontmatter. No markdown. Total wo
       "name": "[Opening H2 text]",
       "description": "[Opening paragraph, ~160 chars, HTML stripped]",
       "url": "[business.website]",
-      "publisher": {"@type": "Organization", "name": "[business.name]", "url": "[BUSINESS_URL]"}
+      "publisher": {"@type": "Organization", "name": "[business.name]", "url": "[BUSINESS_URL]"},
+      "speakable": {"@type": "SpeakableSpecification", "cssSelector": ["h2", "article > p:first-of-type", "details > summary", "details > p"]}
     },
     {
       "@type": "FAQPage",

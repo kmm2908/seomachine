@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-04-09 (session 33 — audit SSH tunnel + end-to-end test)
+Last updated: 2026-04-09 (session 34 — speakable schema + gpt-image-1 migration)
 
 ---
 
@@ -46,6 +46,7 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] **Inline booking CTAs** — all 7 agents include 2-3 inline booking links to `booking_url` (session 22)
 - [x] **Short anchor text** — all 7 agents: 3-6 words per anchor, never wrap full sentences (session 22)
 - [x] **Short paragraphs** — all 7 agents: maximum 3 sentences per paragraph (session 22)
+- [x] **Speakable Schema** (session 34) — all 7 agents output `speakable: {"@type": "SpeakableSpecification", "cssSelector": [...]}` on primary schema node; targets `h2`, first paragraph, FAQ `summary`/`p`; service-page-writer adds a `WebPage` node (speakable not valid on `Service` type)
 
 ### SEO guidelines
 - [x] Entity optimisation section added to `clients/gtm/seo-guidelines.md`
@@ -176,6 +177,7 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] Image placement with alignment classes (banner: aligncenter, section: alignright, FAQ: alignleft)
 - [x] Pillow centre-crop: banner to 1200×500, sections to 400×300
 - [x] Image cost added to per-row cost in Google Sheet
+- [x] **gpt-image-1 migration (session 33)** — DALL-E 3 fallback replaced with `gpt-image-1`; always returns base64 (no `response_format=url`); banner size `1536x1024` (was `1792x1024`); quality `medium` (was `standard`); `tests/test_image_generation.py` updated to match
 
 ### Output structure
 - [x] `content/[abbr]/[type]/[slug]-[date]/[slug]-[date].html` — per-article folder

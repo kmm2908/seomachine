@@ -88,6 +88,7 @@ After Section 2, output a `<!-- SCHEMA -->` block containing a single `<script t
 - `image` — literal string `[BANNER_IMAGE_URL]`
 - `datePublished` — literal string `[DATE]`
 - `author` and `publisher` — `{"@type": "Organization", "name": "[business.name]", "url": "[BUSINESS_URL]"}`
+- `speakable` — `{"@type": "SpeakableSpecification", "cssSelector": ["h2", "article > p:first-of-type", "details > summary", "details > p"]}`
 
 **FAQPage** — one `Question` per `<details>` block from Section 2:
 - `name` — `<summary>` text (the question)
@@ -145,7 +146,8 @@ Output three clearly labelled HTML blocks. No frontmatter. No markdown.
       "image": "[BANNER_IMAGE_URL]",
       "datePublished": "[DATE]",
       "author": {"@type": "Organization", "name": "[business.name]", "url": "[BUSINESS_URL]"},
-      "publisher": {"@type": "Organization", "name": "[business.name]", "url": "[BUSINESS_URL]"}
+      "publisher": {"@type": "Organization", "name": "[business.name]", "url": "[BUSINESS_URL]"},
+      "speakable": {"@type": "SpeakableSpecification", "cssSelector": ["h2", "article > p:first-of-type", "details > summary", "details > p"]}
     },
     {
       "@type": "FAQPage",

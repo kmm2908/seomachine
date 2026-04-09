@@ -79,7 +79,12 @@ Use these fields from the Business Context block injected into your system promp
 
 ## Schema Output
 
-After Section 2, output a `<!-- SCHEMA -->` block containing a single `<script type="application/ld+json">` with `@graph`. Include three objects:
+After Section 2, output a `<!-- SCHEMA -->` block containing a single `<script type="application/ld+json">` with `@graph`. Include four objects:
+
+**WebPage** (add for Speakable support — `speakable` is not valid on `Service`):
+- `name` — the service name from the `<h2>` text
+- `url` — `[BUSINESS_URL]`
+- `speakable` — `{"@type": "SpeakableSpecification", "cssSelector": ["h2", "article > p:first-of-type", "details > summary", "details > p"]}`
 
 **Service:**
 - `name` — the service name from the `<h2>` text
@@ -138,6 +143,12 @@ Output three clearly labelled HTML blocks. No frontmatter. No markdown.
 {
   "@context": "https://schema.org",
   "@graph": [
+    {
+      "@type": "WebPage",
+      "name": "[Service name from H2]",
+      "url": "[BUSINESS_URL]",
+      "speakable": {"@type": "SpeakableSpecification", "cssSelector": ["h2", "article > p:first-of-type", "details > summary", "details > p"]}
+    },
     {
       "@type": "Service",
       "name": "[Service name from H2]",

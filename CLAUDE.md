@@ -180,9 +180,9 @@ Cron example (2hr after blog publish):
 
 **Future:** HeyGen AI avatar swap-in (clean TTS interface), per-client schedule config in config.json.
 
-Set `IMAGE_API_PROVIDER=gemini` in `.env` to generate images automatically. Requires `GOOGLE_AI_API_KEY` and `OPENAI_API_KEY`. Leave blank to skip image generation (content-only mode). Cost: ~$0.27/post (Gemini) or ~$0.16/post (DALL-E 3 fallback).
+Set `IMAGE_API_PROVIDER=gemini` in `.env` to generate images automatically. Requires `GOOGLE_AI_API_KEY` and `OPENAI_API_KEY`. Leave blank to skip image generation (content-only mode). Cost: ~$0.27/post (Gemini) or ~$0.16/post (gpt-image-1 fallback).
 
-**Image failure handling:** if image generation fails after 3 Gemini retries (30s/60s/120s backoff), the runner automatically falls back to DALL-E 3. If both fail and `--publish` is set, the row is marked `Images o/s` and the file path written to Column F — content is saved locally but not published. Next batch run retries images only (no content regeneration) and publishes on success.
+**Image failure handling:** if image generation fails after 3 Gemini retries (30s/60s/120s backoff), the runner automatically falls back to `gpt-image-1` (OpenAI). If both fail and `--publish` is set, the row is marked `Images o/s` and the file path written to Column F — content is saved locally but not published. Next batch run retries images only (no content regeneration) and publishes on success.
 
 **Nano Banana images** — for standalone/on-demand image generation (not batch runner), use the `nano-banana-images` skill (Kie.ai API, ~$0.04–0.09/image). Say "make me a nano banana image of..." to generate hyper-realistic images via Gemini 3.1 Flash. API key: `KIE_AI_API_KEY` in `.env`.
 
@@ -236,7 +236,7 @@ Located in `.claude/agents/`. Content writers:
 All 7 content writers include 2-3 inline booking CTAs (short anchor text, 3-6 words), maximum 3 sentences per paragraph, and output **three HTML blocks**:
 1. `<!-- SECTION 1 -->` — main body
 2. `<!-- SECTION 2 FAQ -->` — collapsible accordion using `<details>`/`<summary>` (no JS/CSS)
-3. `<!-- SCHEMA -->` — JSON-LD with `@graph` containing the primary type (`Article`/`BlogPosting`/`Service`/`WebPage`), `FAQPage`, and `LocalBusiness` on every page
+3. `<!-- SCHEMA -->` — JSON-LD with `@graph` containing the primary type (`Article`/`BlogPosting`/`Service`/`WebPage`), `FAQPage`, and `LocalBusiness` on every page; primary type includes `speakable: {"@type": "SpeakableSpecification", "cssSelector": [...]}` targeting headings, first paragraph, and FAQ elements; service pages also include a `WebPage` node (speakable not valid on `Service` type)
 
 SEO/optimisation agents (auto-run after `/write`):
 - `seo-optimizer.md`, `meta-creator.md`, `internal-linker.md`, `keyword-mapper.md`
