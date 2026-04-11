@@ -163,6 +163,7 @@ def publish_topic(topic_dict: dict, abbr: str, dry_run: bool = False) -> dict:
     client = anthropic.Anthropic(api_key=api_key)
     business_config = load_business_config(abbr)
     wp_config = business_config.get('wordpress')
+    ssh_config = business_config.get('ssh')
 
     if not wp_config:
         raise ValueError(f"No wordpress config in clients/{abbr}/config.json")
@@ -224,7 +225,7 @@ def publish_topic(topic_dict: dict, abbr: str, dry_run: bool = False) -> dict:
             _ensure_template_fresh(abbr.lower(), wp_config)
 
             from wordpress_publisher import WordPressPublisher
-            publisher = WordPressPublisher.from_config(wp_config)
+            publisher = WordPressPublisher.from_config(wp_config, ssh_config=ssh_config)
             post_type = wp_config.get('content_type_map', {}).get(
                 content_type, wp_config.get('default_post_type', 'post')
             )
@@ -274,7 +275,7 @@ def publish_topic(topic_dict: dict, abbr: str, dry_run: bool = False) -> dict:
     _ensure_template_fresh(abbr.lower(), wp_config)
 
     from wordpress_publisher import WordPressPublisher
-    publisher = WordPressPublisher.from_config(wp_config)
+    publisher = WordPressPublisher.from_config(wp_config, ssh_config=ssh_config)
     post_type = wp_config.get('content_type_map', {}).get(
         content_type, wp_config.get('default_post_type', 'post')
     )

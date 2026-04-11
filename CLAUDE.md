@@ -292,7 +292,9 @@ Use this when posts need to be re-created in WordPress (e.g. after enabling Elem
 
 **GTM config:** `clients/gtm/config.json` — `wordpress.elementor_template_id: 16508`, `wordpress.content_type_map` maps all 5 types to CPT slugs
 
-**SDY config:** `clients/sdy/config.json` — `wordpress` block currently points to staging (`staging2.serendipitymassage.co.uk`); `wordpress_local` preserves local credentials; `wordpress_live` block preserves live credentials for Phase 2 switch-back. SSL verification skipped for staging (self-signed cert — same as `.local`).
+**SDY config:** `clients/sdy/config.json` — `wordpress` block points to live (`serendipitymassage.co.uk`); `wordpress_local` preserves local credentials; `wordpress_live` is a legacy block (same as `wordpress` now). `ssh` block includes `wp_path` — triggers WP-CLI publish path automatically.
+
+**WP-CLI SSH publish path** — `WordPressPublisher` detects `ssh_config.wp_path` and routes all publishing through WP-CLI commands over SSH instead of the REST API. Required for SiteGround-hosted sites: SiteGround's CDN returns 202 bot-challenge pages for unauthenticated REST requests from non-browser IPs, and also disables SSH port forwarding (`AllowTcpForwarding no`), making direct API tunneling impossible. The WP-CLI path: creates the WP draft via `wp post create`, transfers images via SCP + `wp media import`, applies Elementor JSON via `wp eval file_get_contents()`. Add `"wp_path": "/home/[user]/www/[domain]/public_html"` to the `ssh` block in `config.json` to activate. `from_config(wp_config, ssh_config=ssh_config)` is the call signature — `ssh_config` is propagated from `business_config.get('ssh')` in both `publish_scheduled.py` and `geo_batch_runner.py`.
 
 **Elementor CPT auto-enable** — `seomachine.php` filters `option_elementor_cpt_support` and `default_option_elementor_cpt_support` to auto-enable all 5 CPTs in Elementor without manual checkbox step. No Elementor → Settings action required on new installs.
 

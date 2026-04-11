@@ -22,9 +22,9 @@
         "logo_url": "https://serendipitymassage.co.uk/wp-content/uploads/serendipity-logo.png"
     },
     "wordpress": {
-        "url": "https://staging2.serendipitymassage.co.uk",
+        "url": "https://serendipitymassage.co.uk",
         "username": "kmm-T5r",
-        "app_password": "XbE0 csyh k5kO RlqK m3WY 1VpP",
+        "app_password": "G8lp 3awQ nhtU C3V1 he5O V5aB",
         "content_type_map": {
             "service": "seo_service",
             "location": "seo_location",
@@ -36,7 +36,7 @@
         },
         "default_post_type": "seo_blog",
         "default_status": "draft",
-        "elementor_template_id": 663
+        "elementor_template_id": 564
     },
     "wordpress_local": {
         "url": "https://sdy.local",
@@ -81,6 +81,7 @@
         "user": "u2732-2mxetksmslhk",
         "host": "gukm1055.siteground.biz",
         "port": 18765,
-        "key": "~/.ssh/seomachine_deploy"
+        "key": "~/.ssh/seomachine_deploy",
+        "wp_path": "/home/u2732-2mxetksmslhk/www/serendipitymassage.co.uk/public_html"
     }
 }

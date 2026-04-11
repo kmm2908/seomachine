@@ -613,7 +613,7 @@ def run_batch(sheet_range: Optional[str] = None, publish: bool = False) -> None:
                                     _ensure_directions_snippet(abbreviation.lower())
                                     _ensure_template_fresh(abbreviation.lower(), wp_config)
                                     from wordpress_publisher import WordPressPublisher
-                                    publisher = WordPressPublisher.from_config(wp_config)
+                                    publisher = WordPressPublisher.from_config(wp_config, ssh_config=business_config.get('ssh'))
                                     post_type = wp_config.get('content_type_map', {}).get(
                                         content_type, wp_config.get('default_post_type', 'post')
                                     )
@@ -667,7 +667,7 @@ def run_batch(sheet_range: Optional[str] = None, publish: bool = False) -> None:
                     _ensure_directions_snippet(abbreviation.lower())
                     _ensure_template_fresh(abbreviation.lower(), wp_config)
                     from wordpress_publisher import WordPressPublisher
-                    publisher = WordPressPublisher.from_config(wp_config)
+                    publisher = WordPressPublisher.from_config(wp_config, ssh_config=business_config.get('ssh'))
                     post_type = wp_config.get('content_type_map', {}).get(
                         content_type, wp_config.get('default_post_type', 'post')
                     )
@@ -803,7 +803,7 @@ def run_batch(sheet_range: Optional[str] = None, publish: bool = False) -> None:
                             _ensure_directions_snippet(abbreviation.lower())
                             _ensure_template_fresh(abbreviation.lower(), wp_config)
                             from wordpress_publisher import WordPressPublisher
-                            publisher = WordPressPublisher.from_config(wp_config)
+                            publisher = WordPressPublisher.from_config(wp_config, ssh_config=business_config.get('ssh'))
                             content_type_map = wp_config.get('content_type_map', {})
                             post_type = content_type_map.get(content_type, wp_config.get('default_post_type', 'post'))
                             slug = slugify(address)
@@ -857,7 +857,7 @@ def run_batch(sheet_range: Optional[str] = None, publish: bool = False) -> None:
                         _ensure_directions_snippet(abbreviation.lower())
                         _ensure_template_fresh(abbreviation.lower(), wp_config)
                         from wordpress_publisher import WordPressPublisher
-                        publisher = WordPressPublisher.from_config(wp_config)
+                        publisher = WordPressPublisher.from_config(wp_config, ssh_config=business_config.get('ssh'))
                         content_type_map = wp_config.get('content_type_map', {})
                         post_type = content_type_map.get(content_type, wp_config.get('default_post_type', 'post'))
                         slug = slugify(address)

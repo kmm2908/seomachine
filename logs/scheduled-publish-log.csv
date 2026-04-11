@@ -149,3 +149,8 @@ date,abbr,topic,content_type,status,post_id,cost,notes
 2026-04-06,sdy,,,queue_empty,,,No pending topics
 2026-04-06,sdy,Head and Hair Oiling,service,published,1709,$0.6512,https://staging2.serendipitymassage.co.uk/wp-admin/post.php?post=1709&action=edit
 2026-04-07,gtb,Benefits of Deep Tissue Massage,blog,published,22658,$0.6708,https://blog.glasgowthaimassage.co.uk/wp-admin/post.php?post=22658&action=edit
+2026-04-08,gtb,,,queue_empty,,,No pending topics
+2026-04-09,gtb,Types of Thai Massage,blog,failed,,,"{'type': 'error', 'error': {'details': None, 'type': 'overloaded_error', 'message': 'Overloaded'}, 'request_id': 'req_011CZsqwhjYQvrMLCuHozuN7'}"
+2026-04-10,gtb,Thai Yoga Massage Stretching Techniques,blog,failed,,,Expecting value: line 1 column 1 (char 0)
+2026-04-11,sdy,Thai Deep Tissue Oil Massage,service,published,745,$0.6438,https://serendipitymassage.co.uk/wp-admin/post.php?post=745&action=edit
+2026-04-11,sdy,Aromatherapy Deep Tissue Oil Massage,service,published_review,749,$0.6663,Quality gate: readability | https://serendipitymassage.co.uk/wp-admin/post.php?post=749&action=edit

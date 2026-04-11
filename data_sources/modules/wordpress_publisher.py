@@ -7,9 +7,35 @@ Supports Yoast SEO meta fields (title, description, focus keyphrase).
 
 import os
 import re
+import socket
+import ssl
+import subprocess
+import time
+import urllib3
 import requests
+from requests.adapters import HTTPAdapter
 from typing import Dict, Optional, List, Tuple
 from pathlib import Path
+
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+
+class _SSHTunnelAdapter(HTTPAdapter):
+    """HTTPAdapter that uses the real domain for SSL SNI while connecting to an SSH tunnel IP."""
+
+    def __init__(self, real_hostname: str, *args, **kwargs):
+        self._real_hostname = real_hostname
+        super().__init__(*args, **kwargs)
+
+    def init_poolmanager(self, num_pools, maxsize, block=False):
+        self.poolmanager = urllib3.PoolManager(
+            num_pools=num_pools,
+            maxsize=maxsize,
+            block=block,
+            server_hostname=self._real_hostname,
+            cert_reqs=ssl.CERT_NONE,
+            assert_hostname=False,
+        )
 
 
 class WordPressPublisher:
@@ -19,7 +45,8 @@ class WordPressPublisher:
         self,
         url: Optional[str] = None,
         username: Optional[str] = None,
-        app_password: Optional[str] = None
+        app_password: Optional[str] = None,
+        ssh_config: Optional[dict] = None,
     ):
         """
         Initialize WordPress publisher
@@ -28,17 +55,23 @@ class WordPressPublisher:
             url: WordPress site URL (defaults to env var WORDPRESS_URL)
             username: WordPress username (defaults to env var WORDPRESS_USERNAME)
             app_password: Application password (defaults to env var WORDPRESS_APP_PASSWORD)
+            ssh_config: Optional SSH config dict with keys: user, host, port, key, wp_path.
+                        When present with wp_path, publish_html_content() routes through
+                        WP-CLI over SSH, bypassing SiteGround CDN/WAF bot protection.
         """
-        self.url = (url or os.getenv('WORDPRESS_URL', '')).rstrip('/')
+        real_url = (url or os.getenv('WORDPRESS_URL', '')).rstrip('/')
         self.username = username or os.getenv('WORDPRESS_USERNAME')
         self.app_password = app_password or os.getenv('WORDPRESS_APP_PASSWORD')
 
-        if not self.url:
+        if not real_url:
             raise ValueError("WORDPRESS_URL must be set")
         if not self.username or not self.app_password:
             raise ValueError("WORDPRESS_USERNAME and WORDPRESS_APP_PASSWORD must be set")
 
-        self.api_base = f"{self.url}/wp-json/wp/v2"
+        self._display_url = real_url  # used for edit URLs shown to the user
+        self._ssh_config = ssh_config or {}
+
+        self.url = real_url
         self.session = requests.Session()
         self.session.auth = (self.username, self.app_password)
         self.session.headers.update({
@@ -48,18 +81,204 @@ class WordPressPublisher:
         if '.local' in self.url or 'staging' in self.url:
             self.session.verify = False
 
+        self.api_base = f"{self.url}/wp-json/wp/v2"
+
         # Cache for categories and tags
         self._categories_cache: Optional[Dict[str, int]] = None
         self._tags_cache: Optional[Dict[str, int]] = None
 
     @classmethod
-    def from_config(cls, wp_config: dict) -> 'WordPressPublisher':
-        """Create a publisher instance from a client config dict."""
+    def from_config(cls, wp_config: dict, ssh_config: Optional[dict] = None) -> 'WordPressPublisher':
+        """Create a publisher instance from a client config dict.
+
+        Pass ssh_config to route all requests via SSH tunnel (bypasses SiteGround CDN/WAF).
+        """
         return cls(
             url=wp_config.get('url'),
             username=wp_config.get('username'),
             app_password=wp_config.get('app_password'),
+            ssh_config=ssh_config,
         )
+
+    # ------------------------------------------------------------------ #
+    # WP-CLI / SSH publish path                                           #
+    # Used when direct HTTP is blocked (e.g. SiteGround CDN bot filter)  #
+    # ------------------------------------------------------------------ #
+
+    def _ssh_run(self, cmd: str, timeout: int = 30) -> tuple:
+        """Run a shell command on the remote server. Returns (stdout, returncode)."""
+        cfg = self._ssh_config
+        key = str(Path(cfg['key'].replace('~', str(Path.home()))).resolve())
+        result = subprocess.run(
+            ['ssh', '-i', key, '-p', str(cfg.get('port', 22)),
+             '-o', 'StrictHostKeyChecking=no', '-o', 'BatchMode=yes',
+             f"{cfg['user']}@{cfg['host']}", cmd],
+            capture_output=True, text=True, timeout=timeout,
+        )
+        return result.stdout.strip(), result.returncode
+
+    def _scp_put(self, local_path: str, remote_path: str, timeout: int = 60):
+        """Copy a local file to the remote server via SCP."""
+        cfg = self._ssh_config
+        key = str(Path(cfg['key'].replace('~', str(Path.home()))).resolve())
+        subprocess.run(
+            ['scp', '-i', key, '-P', str(cfg.get('port', 22)),
+             '-o', 'StrictHostKeyChecking=no',
+             local_path, f"{cfg['user']}@{cfg['host']}:{remote_path}"],
+            check=True, capture_output=True, timeout=timeout,
+        )
+
+    def _publish_via_wpcli(
+        self,
+        title: str,
+        slug: str,
+        post_type: str,
+        excerpt: str,
+        html_content: str,
+        elementor_template_path: Optional[str] = None,
+        featured_image_path: Optional[str] = None,
+        category: Optional[str] = None,
+    ) -> dict:
+        """Publish a post via WP-CLI over SSH.
+
+        Workflow:
+          1. Create bare WP draft post via wp post create
+          2. Upload images via SCP + wp media import; rewrite src URLs in content
+          3. Inject into Elementor template (local); transfer JSON via SCP
+          4. Apply Elementor data + meta via wp eval / wp post meta update
+          5. Clean up temp files
+        """
+        import json as _json
+        import tempfile
+
+        wp_path = self._ssh_config.get('wp_path', '')
+        if not wp_path:
+            raise ValueError("ssh_config must include 'wp_path' for WP-CLI publishing")
+        wp = f"wp --path={wp_path} --allow-root"
+        ts = int(time.time())
+        remote_dir = f'/tmp/seomachine_{ts}'
+
+        self._ssh_run(f'mkdir -p {remote_dir}')
+
+        # 1. Create the bare draft post
+        title_safe = title.replace("'", "'\\''")
+        excerpt_safe = excerpt.replace("'", "'\\''")
+        create_cmd = (
+            f"{wp} post create "
+            f"--post_type='{post_type}' "
+            f"--post_status=draft "
+            f"--post_title='{title_safe}' "
+            f"--post_slug='{slug}' "
+            f"--post_content='' "
+            f"--post_excerpt='{excerpt_safe}' "
+            f"--porcelain"
+        )
+        post_id_str, rc = self._ssh_run(create_cmd, timeout=30)
+        if rc != 0 or not post_id_str.strip().isdigit():
+            raise RuntimeError(f"wp post create failed (rc={rc}): {post_id_str}")
+        post_id = int(post_id_str.strip())
+        print(f"    → WP-CLI created draft post {post_id}")
+
+        # 2. Upload images; rewrite src URLs in content
+        featured_media_id = None
+        if featured_image_path and Path(featured_image_path).exists():
+            article_dir = Path(featured_image_path).parent
+            local_imgs = re.findall(r'<img[^>]+src="([^"]+)"', html_content)
+            for src in local_imgs:
+                if src.startswith('http'):
+                    continue
+                local_path = article_dir / src
+                if not local_path.exists():
+                    continue
+                remote_img = f'{remote_dir}/{local_path.name}'
+                try:
+                    self._scp_put(str(local_path), remote_img)
+                    img_title = local_path.stem
+                    flag = '--featured_image' if local_path.name == Path(featured_image_path).name else ''
+                    out, rc = self._ssh_run(
+                        f"{wp} media import '{remote_img}' --post_id={post_id} "
+                        f"--title='{img_title}' {flag} --porcelain",
+                        timeout=30,
+                    )
+                    if rc == 0 and out.strip().isdigit():
+                        media_id = int(out.strip())
+                        if flag:
+                            featured_media_id = media_id
+                        # Resolve absolute URL for src replacement
+                        url_out, _ = self._ssh_run(
+                            f"{wp} post get {media_id} --field=guid"
+                        )
+                        if url_out:
+                            html_content = html_content.replace(f'src="{src}"', f'src="{url_out.strip()}"')
+                            # Replace schema token with banner URL
+                            if flag:
+                                html_content = html_content.replace('[BANNER_IMAGE_URL]', url_out.strip())
+                        print(f"    → WP-CLI imported {local_path.name} → media {media_id}")
+                except Exception as e:
+                    print(f"    Warning: image upload failed ({local_path.name}) — {e}")
+        html_content = html_content.replace('[BANNER_IMAGE_URL]', '')
+
+        # 3. Resolve / create category
+        if category:
+            cat_check, rc = self._ssh_run(
+                f"{wp} term get category '{category.replace(chr(39), chr(39)+chr(92)+chr(39)+chr(39))}' "
+                f"--field=term_id 2>/dev/null"
+            )
+            if rc != 0 or not cat_check.strip().isdigit():
+                cat_check, _ = self._ssh_run(
+                    f"{wp} term create category '{category.replace(chr(39), chr(39)+chr(92)+chr(39)+chr(39))}' --porcelain"
+                )
+            if cat_check.strip().isdigit():
+                cat_id = int(cat_check.strip())
+                self._ssh_run(f"{wp} post term set {post_id} category {cat_id}")
+
+        # 4. Inject into Elementor template and apply via wp eval
+        if elementor_template_path and Path(elementor_template_path).exists():
+            template_dict = self._inject_elementor(html_content, elementor_template_path)
+            elementor_json = _json.dumps(template_dict, ensure_ascii=False)
+            with tempfile.NamedTemporaryFile(suffix='.json', delete=False, mode='w', encoding='utf-8') as f:
+                f.write(elementor_json)
+                local_json = f.name
+            remote_json = f'{remote_dir}/elementor.json'
+            try:
+                self._scp_put(local_json, remote_json)
+                self._ssh_run(
+                    f"{wp} eval \"update_post_meta({post_id}, '_elementor_data', "
+                    f"file_get_contents('{remote_json}'));\""
+                )
+                self._ssh_run(
+                    f"{wp} post meta update {post_id} _elementor_edit_mode 'builder'"
+                )
+                print(f"    → WP-CLI applied Elementor data")
+            finally:
+                Path(local_json).unlink(missing_ok=True)
+        else:
+            # Non-Elementor: update post content directly
+            with tempfile.NamedTemporaryFile(suffix='.html', delete=False, mode='w', encoding='utf-8') as f:
+                f.write(html_content)
+                local_html = f.name
+            remote_html = f'{remote_dir}/content.html'
+            try:
+                self._scp_put(local_html, remote_html)
+                self._ssh_run(
+                    f"{wp} eval \"wp_update_post(['ID'=>{post_id},"
+                    f"'post_content'=>file_get_contents('{remote_html}')]);\" "
+                )
+            finally:
+                Path(local_html).unlink(missing_ok=True)
+
+        # 5. Clean up temp files
+        self._ssh_run(f'rm -rf {remote_dir}')
+
+        edit_url = f"{self._display_url}/wp-admin/post.php?post={post_id}&action=edit"
+        return {
+            'post_id': post_id,
+            'post_type': post_type,
+            'edit_url': edit_url,
+            'view_url': '',
+            'title': title,
+            'slug': slug,
+        }
 
     def _parse_frontmatter(self, content: str) -> dict:
         """Extract YAML-style frontmatter fields (--- key: value --- block)."""
@@ -652,6 +871,19 @@ class WordPressPublisher:
                 html_content, flags=re.IGNORECASE | re.DOTALL
             )
 
+        # WP-CLI path: route through SSH when direct HTTP is blocked (e.g. SiteGround CDN)
+        if self._ssh_config.get('wp_path'):
+            return self._publish_via_wpcli(
+                title=title,
+                slug=slug,
+                post_type=post_type,
+                excerpt=excerpt or meta_description or '',
+                html_content=html_content,
+                elementor_template_path=elementor_template_path,
+                featured_image_path=featured_image_path,
+                category=category,
+            )
+
         # Upload all local images and rewrite their src to absolute WordPress URLs
         # before creating the draft, so the post content has working image URLs.
         featured_media_id = None
@@ -712,7 +944,7 @@ class WordPressPublisher:
             except Exception as e:
                 print(f"    Warning: could not set featured image — {e}")
 
-        edit_url = f"{self.url}/wp-admin/post.php?post={post_id}&action=edit"
+        edit_url = f"{self._display_url}/wp-admin/post.php?post={post_id}&action=edit"
         return {
             'post_id': post_id,
             'post_type': post_type,
@@ -801,7 +1033,7 @@ class WordPressPublisher:
                 print(f"    Warning: image upload failed — {e}")
 
         # Build edit URL
-        edit_url = f"{self.url}/wp-admin/post.php?post={post_id}&action=edit"
+        edit_url = f"{self._display_url}/wp-admin/post.php?post={post_id}&action=edit"
 
         return {
             'post_id': post_id,

@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-04-09 (session 34 — speakable schema + gpt-image-1 migration)
+Last updated: 2026-04-11 (session 35 — SDY service page gaps + WP-CLI SSH publish path)
 
 ---
 
@@ -114,8 +114,8 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] `src/publishing/update_post_classes.py` — backfill script; fetches posts via REST API, injects classes into Elementor HTML widget content, updates in place; supports `--abbr`, `--type`, `--dry-run`
 - [x] SDY — all published content (30 posts: 12 location, 3 comp-alt, 15 problem) backfilled with heading/text classes; 11 service posts already up to date
 
-### SDY staging environment (session 28)
-- [x] `clients/sdy/config.json` — `wordpress` block now points to `staging2.serendipitymassage.co.uk`; local credentials moved to `wordpress_local`; live credentials remain in `wordpress_live`
+### SDY staging environment (session 28, resolved session 35)
+- [x] `clients/sdy/config.json` — `wordpress` block now points to live (`serendipitymassage.co.uk`); staging credentials remain in `wordpress_local` for reference; `wordpress_live` block retained but now matches `wordpress`
 - [x] `fetch_elementor_template.py` — SSL skip extended to cover `staging` subdomains (was `.local` only)
 - [x] `wordpress_publisher.py` — SSL skip extended to cover `staging` subdomains
 - [x] SDY staging Elementor template fetched — S1/S2 markers confirmed present
@@ -129,6 +129,17 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] Head and Hair Oiling — post 1709 (staging)
 - [x] `brief` field added to queue entry format — passes client-supplied description to `build_service_prompt()` as source material; supported in `build_user_prompt()`, `generate_content()`, and `publish_scheduled.py`
 - [x] SDY duplicate problem posts deleted — IDs 1075, 1101, 1088 trashed; kept newer versions 1083, 1154, 1096
+
+### SDY service pages gap fill + WP-CLI publisher (session 35)
+- [x] GBP service/category audit — identified 2 missing service pages vs GBP listing
+- [x] Traditional Thai Massage — HTML existed locally (not published); published to live as post 741 via WP-CLI
+- [x] `clients/sdy/config.json` — `wordpress` block switched back to live (`serendipitymassage.co.uk`); elementor_template_id updated to 564
+- [x] **WP-CLI SSH publish path** — `_publish_via_wpcli()` added to `WordPressPublisher`; used automatically when `ssh_config.wp_path` is set; bypasses SiteGround CDN/WAF which blocks direct REST API calls (202 bot challenge); SiteGround also blocks SSH port forwarding (`AllowTcpForwarding no`) so pure tunnel approach not viable
+- [x] `ssh_config` propagated to `WordPressPublisher.from_config()` in both `publish_scheduled.py` and `geo_batch_runner.py` (all 4 call sites)
+- [x] `clients/sdy/config.json` — `ssh.wp_path` added: `/home/u2732-2mxetksmslhk/www/serendipitymassage.co.uk/public_html`
+- [x] `research/sdy/service-queue.json` — 2 new pending entries added: Thai Deep Tissue Oil Massage, Aromatherapy Deep Tissue Oil Massage
+- [x] Thai Deep Tissue Oil Massage — published clean, post 745, $0.64 (2 rewrites to pass)
+- [x] Aromatherapy Deep Tissue Oil Massage — published_review post 749, $0.67 (Flesch 51, below 55 threshold; needs manual edit in wp-admin to lighten language)
 
 ### GTB verification (session 28)
 - [x] All 7 CPTs confirmed in wp-admin on `blog.glasgowthaimassage.co.uk`
