@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-04-11 (session 35 — SDY service page gaps + WP-CLI SSH publish path)
+Last updated: 2026-04-11 (session 36 — wp_slash fix + SDY content completion batch)
 
 ---
 
@@ -114,11 +114,12 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] `src/publishing/update_post_classes.py` — backfill script; fetches posts via REST API, injects classes into Elementor HTML widget content, updates in place; supports `--abbr`, `--type`, `--dry-run`
 - [x] SDY — all published content (30 posts: 12 location, 3 comp-alt, 15 problem) backfilled with heading/text classes; 11 service posts already up to date
 
-### SDY staging environment (session 28, resolved session 35)
-- [x] `clients/sdy/config.json` — `wordpress` block now points to live (`serendipitymassage.co.uk`); staging credentials remain in `wordpress_local` for reference; `wordpress_live` block retained but now matches `wordpress`
+### SDY staging environment (session 28, resolved session 35, corrected session 36)
 - [x] `fetch_elementor_template.py` — SSL skip extended to cover `staging` subdomains (was `.local` only)
 - [x] `wordpress_publisher.py` — SSL skip extended to cover `staging` subdomains
 - [x] SDY staging Elementor template fetched — S1/S2 markers confirmed present
+- [x] **Session 36 config correction** — `wordpress` block now correctly points to `staging2.serendipitymassage.co.uk` (was incorrectly pointing to live domain since session 28); `wordpress_live` block holds live credentials for go-live swap only; `wordpress_local` block removed (sdy.local retired); `ssh.wp_path` updated to staging2 path
+- [x] **Rule: all SDY publishing targets staging2 until explicit go-live confirmation**
 
 ### SDY service pages batch (session 28)
 - [x] Couples Thai Massage — post 1611 (staging)
@@ -132,14 +133,39 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 
 ### SDY service pages gap fill + WP-CLI publisher (session 35)
 - [x] GBP service/category audit — identified 2 missing service pages vs GBP listing
-- [x] Traditional Thai Massage — HTML existed locally (not published); published to live as post 741 via WP-CLI
-- [x] `clients/sdy/config.json` — `wordpress` block switched back to live (`serendipitymassage.co.uk`); elementor_template_id updated to 564
 - [x] **WP-CLI SSH publish path** — `_publish_via_wpcli()` added to `WordPressPublisher`; used automatically when `ssh_config.wp_path` is set; bypasses SiteGround CDN/WAF which blocks direct REST API calls (202 bot challenge); SiteGround also blocks SSH port forwarding (`AllowTcpForwarding no`) so pure tunnel approach not viable
 - [x] `ssh_config` propagated to `WordPressPublisher.from_config()` in both `publish_scheduled.py` and `geo_batch_runner.py` (all 4 call sites)
-- [x] `clients/sdy/config.json` — `ssh.wp_path` added: `/home/u2732-2mxetksmslhk/www/serendipitymassage.co.uk/public_html`
 - [x] `research/sdy/service-queue.json` — 2 new pending entries added: Thai Deep Tissue Oil Massage, Aromatherapy Deep Tissue Oil Massage
-- [x] Thai Deep Tissue Oil Massage — published clean, post 745, $0.64 (2 rewrites to pass)
-- [x] Aromatherapy Deep Tissue Oil Massage — published_review post 749, $0.67 (Flesch 51, below 55 threshold; needs manual edit in wp-admin to lighten language)
+- [x] Thai Deep Tissue Oil Massage and Aromatherapy Deep Tissue Oil Massage — generated and published (went to live domain in error; corrected in session 36)
+
+### SDY staging2 sync + deduplication (session 36)
+- [x] Audit confirmed staging2 had 14/17 services, 12/11 locations (1 dup), 15/13 problems (2 dups), 3/3 comp-alt
+- [x] 3 duplicate posts deleted from staging2: post 1136 (duplicate Hillhead), 1106 (older Diabetic Neuropathy), 1070 (duplicate Stress)
+- [x] **wp_unslash bug fixed** — `_publish_via_wpcli()` now wraps `file_get_contents()` with `wp_slash()` before `update_post_meta()`; WordPress internally calls `wp_unslash()` which was stripping backslashes and corrupting Elementor JSON
+- [x] elementor-template.json replaced with staging2 template 663 (was live template 564 — caused empty Elementor editor)
+- [x] Broken posts 1989, 1993, 1997 deleted; 2001, 2005, 2009 deleted (two broken attempts)
+- [x] 3 service pages republished correctly to staging2: Hair Oiling Treatment (2013), Thai Deep Tissue Oil Massage (2017), Aromatherapy Deep Tissue Oil Massage (2021)
+- [x] Elementor JSON verified on post 2013 — JSON valid, HTML content intact with correct section markers
+- [x] Sports Massage (post 1000) intentionally left as draft — service not yet confirmed by client
+
+### SDY content completion batch (session 36)
+- [x] `clients/sdy/internal-links-map.md` — updated with all 16 confirmed staging2 service URLs (staging2.serendipitymassage.co.uk/seo-service/[slug]/)
+- [x] Pillar page published: Thai Massage Therapist Glasgow — post 2025
+- [x] 8 new location pages published via location-queue-2.json: Anderston (2032), Tradeston (2045), St George's Cross (2057), Kelvinbridge (2073), Shawlands (2081★), Dennistoun (2085★), Hyndland (2089★), Govanhill (2093)
+- [x] 4 new comp-alt pages published: Jasmine Thai Massage (2027), Orchid Wellbeing Glasgow (2041★), Leelawadee Thai Wellness Centre Glasgow (2053), Serenity Thai Massage (2065★)
+- [x] 5 topical articles published: What to Expect at First Thai Massage (2037), Thai Massage vs Swedish Massage (2049★), How Thai Massage Helps Glasgow Office Workers (2061), How Often Should You Get a Massage (2069), Is Thai Massage Good for Sports Recovery (2077★)
+- [x] Final staging2 counts verified: seo_service 17, seo_location 19, seo_problem 13, seo_comp_alt 7, seo_pillar 1, seo_topical 5
+- [ ] **Manual review required** — 7 posts flagged ★★★★★ in staging2 wp-admin (fix readability/CTAs, remove star notice, publish):
+  - 2041 — Orchid Wellbeing Glasgow (readability Flesch 47)
+  - 2049 — Thai Massage vs Swedish Massage (CTA count)
+  - 2065 — Serenity Thai Massage (readability Flesch 47)
+  - 2077 — Is Thai Massage Good for Sports Recovery (readability + paragraphs)
+  - 2081 — Shawlands (paragraphs)
+  - 2085 — Dennistoun (readability Flesch 50)
+  - 2089 — Hyndland (paragraphs)
+  - Plus pre-existing: 1164 (Cowcaddens), 1149 (Injury Rehab), 1154 (Injury Prevention), 1159 (Diabetic Neuropathy), 2021 (Aromatherapy Deep Tissue — readability)
+- [ ] GBP optimisation (Task 6) — manual step in Google Business Profile Manager; see plan for full checklist
+- [ ] Pre-launch audit (Task 7) — run after manual reviews complete
 
 ### GTB verification (session 28)
 - [x] All 7 CPTs confirmed in wp-admin on `blog.glasgowthaimassage.co.uk`
@@ -593,7 +619,7 @@ Reason: caching on the live front-end doesn't affect the REST API. Running conte
 #### Phase 3 — Content (after Phase 2)
 - [x] Add `SDY` to Column D dropdown in Google Sheet
 - [x] Add Column E (Content Type) dropdown if not already present
-- [ ] Populate `clients/sdy/internal-links-map.md` with confirmed service page URLs
+- [x] Populate `clients/sdy/internal-links-map.md` with confirmed service page URLs — done session 36
 - [x] Add writing examples to `clients/sdy/writing-examples.md` — using GTM examples as style reference
 - [x] Test batch: location + service posts published successfully with images (IDs 596, 606)
 - [x] Verify content lands in correct CPT with Elementor template — confirmed two-section injection working
