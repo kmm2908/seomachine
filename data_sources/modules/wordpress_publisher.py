@@ -244,7 +244,7 @@ class WordPressPublisher:
                 self._scp_put(local_json, remote_json)
                 self._ssh_run(
                     f"{wp} eval \"update_post_meta({post_id}, '_elementor_data', "
-                    f"file_get_contents('{remote_json}'));\""
+                    f"wp_slash(file_get_contents('{remote_json}')));\""
                 )
                 self._ssh_run(
                     f"{wp} post meta update {post_id} _elementor_edit_mode 'builder'"
