@@ -133,11 +133,23 @@ CLAUDE_PROMPT_SYSTEM = (
 
 class ImageGenerator:
 
-    def __init__(self, room_description: str = ""):
+    def __init__(self, room_description: str = "", room_reference_image_path: str = ""):
         self.api_key = os.getenv("GOOGLE_AI_API_KEY")
         self.openai_api_key = os.getenv("OPENAI_API_KEY")
         self.anthropic_api_key = os.getenv("ANTHROPIC_API_KEY")
         self.room_description = room_description.strip().rstrip('.')
+        # Load reference image as base64 if path provided and file exists
+        self.room_reference_image_b64: str = ""
+        self.room_reference_image_mime: str = "image/jpeg"
+        if room_reference_image_path:
+            ref_path = Path(room_reference_image_path)
+            if ref_path.exists():
+                self.room_reference_image_b64 = base64.b64encode(ref_path.read_bytes()).decode()
+                self.room_reference_image_mime = (
+                    "image/png" if ref_path.suffix.lower() == ".png" else "image/jpeg"
+                )
+            else:
+                print(f"    ⚠ Room reference image not found: {room_reference_image_path}")
         if not self.api_key:
             raise EnvironmentError("GOOGLE_AI_API_KEY not set in environment")
 
@@ -362,8 +374,22 @@ class ImageGenerator:
             image_size = "1K"
             crop_target = (400, 300)
 
+        # Build parts — reference image first if available, then text prompt
+        if self.room_reference_image_b64:
+            parts = [
+                {
+                    "inline_data": {
+                        "mime_type": self.room_reference_image_mime,
+                        "data": self.room_reference_image_b64,
+                    }
+                },
+                {"text": f"Using the treatment room in the reference image as the setting: {prompt}"},
+            ]
+        else:
+            parts = [{"text": prompt}]
+
         payload = {
-            "contents": [{"parts": [{"text": prompt}]}],
+            "contents": [{"parts": parts}],
             "generationConfig": {
                 "responseModalities": ["IMAGE"],
                 "imageConfig": {

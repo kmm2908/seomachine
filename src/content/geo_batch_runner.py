@@ -597,8 +597,10 @@ def run_batch(sheet_range: Optional[str] = None, publish: bool = False) -> None:
                         sys.path.insert(0, str(ROOT / 'data_sources' / 'modules'))
                         from image_generator import ImageGenerator
                         _img_cfg = load_business_config(abbreviation)
-                        _room_desc = _img_cfg.get('image_settings', {}).get('room_description', '')
-                        img_cost = ImageGenerator(room_description=_room_desc).generate_for_post(
+                        _img_settings = _img_cfg.get('image_settings', {})
+                        _room_desc = _img_settings.get('room_description', '')
+                        _room_ref = _img_settings.get('room_reference_image', '')
+                        img_cost = ImageGenerator(room_description=_room_desc, room_reference_image_path=_room_ref).generate_for_post(
                             html_content, address, filepath, content_type
                         )
                         total_cost_usd += img_cost
@@ -741,8 +743,10 @@ def run_batch(sheet_range: Optional[str] = None, publish: bool = False) -> None:
             if os.getenv('IMAGE_API_PROVIDER') == 'gemini':
                 try:
                     from image_generator import ImageGenerator
-                    _room_desc = business_config.get('image_settings', {}).get('room_description', '')
-                    img_cost = ImageGenerator(room_description=_room_desc).generate_for_post(content, address, filepath, content_type)
+                    _img_settings = business_config.get('image_settings', {})
+                    _room_desc = _img_settings.get('room_description', '')
+                    _room_ref = _img_settings.get('room_reference_image', '')
+                    img_cost = ImageGenerator(room_description=_room_desc, room_reference_image_path=_room_ref).generate_for_post(content, address, filepath, content_type)
                     cost_usd += img_cost
                     content = filepath.read_text(encoding='utf-8')  # reload with injected img tags
                     print(f"    → Images: 3 generated (+${img_cost:.2f})")

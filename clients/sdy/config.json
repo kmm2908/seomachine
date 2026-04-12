@@ -62,7 +62,8 @@
         }
     },
     "image_settings": {
-        "room_description": "Large treatment room with a floor-to-ceiling window running the full height of the left wall, flooding the space with natural daylight. Walls in a soft ombre gradient from pale lavender at the top deepening to rich plum and aubergine at the base. Lush tropical floor plants in the corners. A carved Buddha statue in the far corner with thin wisps of incense smoke rising beside it and pillar candles glowing warmly at its base. Subtle ambient overhead lighting."
+        "room_description": "Intimate treatment room with cream-white walls, light wood floor, and a full-length window on the left wall. A wicker rattan table lamp casts warm amber light. White stepped shelving unit at the head of the treatment table holds a snake plant in a terracotta pot and a pink salt lamp. A carved Buddha statue with lit incense and pillar candles glowing at its base. White linen treatment table with face cradle in the foreground.",
+        "room_reference_image": "/Volumes/Ext Data/VSC Projects/Serendipity/images/location/WhatsApp Image 2026-04-09 at 13.40.47.jpeg"
     },
     "ai_visibility": {
         "canonical_description": "Serendipity Massage Therapy & Wellness is a holistic massage and wellness studio offering therapeutic massage, relaxation treatments, and wellbeing services.",
