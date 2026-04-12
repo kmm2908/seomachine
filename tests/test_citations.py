@@ -55,3 +55,48 @@ def test_all_sites_have_required_fields():
         assert site.name, f"Site {site.id} missing name"
         assert site.tier in (1, 2, 3, 4), f"Site {site.id} invalid tier"
         assert 1 <= site.priority <= 10, f"Site {site.id} invalid priority"
+
+from citation_state import CitationState
+
+def _make_state(tmp_path):
+    (tmp_path / 'clients' / 'test' / 'citations').mkdir(parents=True, exist_ok=True)
+    return CitationState('test', tmp_path)
+
+def test_new_site_is_due(tmp_path):
+    state = _make_state(tmp_path)
+    assert state.is_due('yell') is True
+
+def test_site_not_due_after_recent_check(tmp_path):
+    state = _make_state(tmp_path)
+    result = CitationCheckResult(site=SITE_BY_ID['yell'], status='found')
+    state.update(result)
+    state.save()
+    # Reload and check
+    state2 = CitationState('test', tmp_path)
+    assert state2.is_due('yell') is False
+
+def test_get_due_sites_respects_cadence(tmp_path):
+    state = _make_state(tmp_path)
+    result = CitationCheckResult(site=SITE_BY_ID['yell'], status='found')
+    state.update(result)
+    state.save()
+    state2 = CitationState('test', tmp_path)
+    due = state2.get_due_sites([SITE_BY_ID['yell'], SITE_BY_ID['trustpilot']])
+    ids = [s.id for s in due]
+    assert 'yell' not in ids        # just checked
+    assert 'trustpilot' in ids      # never checked
+
+def test_get_due_sites_force_returns_all(tmp_path):
+    state = _make_state(tmp_path)
+    result = CitationCheckResult(site=SITE_BY_ID['yell'], status='found')
+    state.update(result)
+    state.save()
+    state2 = CitationState('test', tmp_path)
+    due = state2.get_due_sites([SITE_BY_ID['yell']], force=True)
+    assert len(due) == 1
+
+def test_get_not_found(tmp_path):
+    state = _make_state(tmp_path)
+    r = CitationCheckResult(site=SITE_BY_ID['yell'], status='not_found')
+    state.update(r)
+    assert 'yell' in state.get_not_found()
