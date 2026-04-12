@@ -2,7 +2,7 @@
 /**
  * Plugin Name: SEO Machine
  * Description: Registers SEO content post types and exposes SEO meta fields via REST API. No Yoast dependency.
- * Version: 3.0.0
+ * Version: 3.1.0
  * Author: SEO Machine
  *
  * Installation:
@@ -186,7 +186,7 @@ add_action('rest_api_init', function() {
 // TODO: add brand styling before public/commercial release (plain WP metabox for now)
 
 add_action('add_meta_boxes', function() {
-    $types = array_merge(['post'], array_keys(SEO_MACHINE_POST_TYPES));
+    $types = array_merge(['post', 'page'], array_keys(SEO_MACHINE_POST_TYPES));
     foreach ($types as $type) {
         add_meta_box(
             'seo_machine_panel',
@@ -201,7 +201,9 @@ add_action('add_meta_boxes', function() {
 
 function seo_machine_panel_render(WP_Post $post): void {
     wp_nonce_field('seo_machine_panel_save', 'seo_machine_panel_nonce');
-    $keyword = get_post_meta($post->ID, '_seo_machine_focus_keyword', true);
+    $keyword  = get_post_meta($post->ID, '_seo_machine_focus_keyword', true);
+    $title    = get_post_meta($post->ID, '_yoast_wpseo_title', true);
+    $metadesc = get_post_meta($post->ID, '_yoast_wpseo_metadesc', true);
     ?>
     <p>
         <label for="seo_machine_focus_keyword"><strong>Target Keyword</strong></label><br>
@@ -213,6 +215,43 @@ function seo_machine_panel_render(WP_Post $post): void {
             style="width:100%;margin-top:4px;"
         >
     </p>
+    <p>
+        <label for="seo_machine_meta_title"><strong>SEO Title</strong></label><br>
+        <input
+            type="text"
+            id="seo_machine_meta_title"
+            name="seo_machine_meta_title"
+            value="<?php echo esc_attr($title); ?>"
+            style="width:100%;margin-top:4px;"
+            placeholder="Leave blank to use post title"
+        >
+    </p>
+    <p>
+        <label for="seo_machine_metadesc"><strong>Meta Description</strong></label><br>
+        <textarea
+            id="seo_machine_metadesc"
+            name="seo_machine_metadesc"
+            rows="3"
+            style="width:100%;margin-top:4px;resize:vertical;"
+            placeholder="120–160 characters"
+        ><?php echo esc_textarea($metadesc); ?></textarea>
+        <span id="seo_machine_metadesc_count" style="font-size:11px;color:#646970;">
+            <?php echo strlen($metadesc); ?> chars
+        </span>
+    </p>
+    <script>
+    (function() {
+        var ta = document.getElementById('seo_machine_metadesc');
+        var ct = document.getElementById('seo_machine_metadesc_count');
+        if (ta && ct) {
+            ta.addEventListener('input', function() {
+                var n = ta.value.length;
+                ct.textContent = n + ' chars';
+                ct.style.color = (n >= 120 && n <= 160) ? '#00a32a' : (n > 160 ? '#d63638' : '#646970');
+            });
+        }
+    })();
+    </script>
     <?php
 }
 
@@ -233,6 +272,79 @@ add_action('save_post', function(int $post_id): void {
             sanitize_text_field($_POST['seo_machine_focus_keyword'])
         );
     }
+    if (isset($_POST['seo_machine_meta_title'])) {
+        update_post_meta(
+            $post_id,
+            '_yoast_wpseo_title',
+            sanitize_text_field($_POST['seo_machine_meta_title'])
+        );
+    }
+    if (isset($_POST['seo_machine_metadesc'])) {
+        update_post_meta(
+            $post_id,
+            '_yoast_wpseo_metadesc',
+            sanitize_textarea_field($_POST['seo_machine_metadesc'])
+        );
+    }
+});
+
+// ── SEO head output ──────────────────────────────────────────────────────────
+// Outputs <meta name="description">, Open Graph, and Twitter Card tags from
+// SEO Machine meta fields on all singular pages (CPTs, pages, posts).
+// Also overrides <title> when a custom SEO title is set.
+
+add_action('wp_head', function(): void {
+    if (!is_singular()) {
+        return;
+    }
+
+    $post_id    = get_queried_object_id();
+    $meta_desc  = get_post_meta($post_id, '_yoast_wpseo_metadesc', true);
+    $meta_title = get_post_meta($post_id, '_yoast_wpseo_title', true);
+    $thumb_url  = get_the_post_thumbnail_url($post_id, 'large') ?: '';
+    $post_url   = get_permalink($post_id);
+    $site_name  = get_bloginfo('name');
+    $post_type  = get_post_type($post_id);
+    $title_tag  = $meta_title ?: get_the_title($post_id);
+
+    if ($meta_desc) {
+        echo '<meta name="description" content="' . esc_attr($meta_desc) . '">' . "\n";
+    }
+
+    $og_type = in_array($post_type, ['post', 'seo_blog', 'seo_topical'], true) ? 'article' : 'website';
+    echo '<meta property="og:type" content="' . esc_attr($og_type) . '">' . "\n";
+    echo '<meta property="og:title" content="' . esc_attr($title_tag) . '">' . "\n";
+    echo '<meta property="og:url" content="' . esc_url($post_url) . '">' . "\n";
+    echo '<meta property="og:site_name" content="' . esc_attr($site_name) . '">' . "\n";
+    if ($meta_desc) {
+        echo '<meta property="og:description" content="' . esc_attr($meta_desc) . '">' . "\n";
+    }
+    if ($thumb_url) {
+        echo '<meta property="og:image" content="' . esc_url($thumb_url) . '">' . "\n";
+    }
+
+    $card = $thumb_url ? 'summary_large_image' : 'summary';
+    echo '<meta name="twitter:card" content="' . esc_attr($card) . '">' . "\n";
+    echo '<meta name="twitter:title" content="' . esc_attr($title_tag) . '">' . "\n";
+    if ($meta_desc) {
+        echo '<meta name="twitter:description" content="' . esc_attr($meta_desc) . '">' . "\n";
+    }
+    if ($thumb_url) {
+        echo '<meta name="twitter:image" content="' . esc_url($thumb_url) . '">' . "\n";
+    }
+}, 1);
+
+// Override <title> when a custom SEO title is stored.
+add_filter('document_title_parts', function(array $title): array {
+    if (!is_singular()) {
+        return $title;
+    }
+    $custom = get_post_meta(get_queried_object_id(), '_yoast_wpseo_title', true);
+    if ($custom) {
+        $title['title'] = $custom;
+        unset($title['site'], $title['tagline']);
+    }
+    return $title;
 });
 
 // ── Hub page shortcode ───────────────────────────────────────────────────────
