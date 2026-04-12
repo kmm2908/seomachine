@@ -61,6 +61,9 @@
             "gbp": ""
         }
     },
+    "image_settings": {
+        "room_description": "Large treatment room with a floor-to-ceiling window running the full height of the left wall, flooding the space with natural daylight. Walls in a soft ombre gradient from pale lavender at the top deepening to rich plum and aubergine at the base. Lush tropical floor plants in the corners. A carved Buddha statue in the far corner with thin wisps of incense smoke rising beside it and pillar candles glowing warmly at its base. Subtle ambient overhead lighting."
+    },
     "ai_visibility": {
         "canonical_description": "Serendipity Massage Therapy & Wellness is a holistic massage and wellness studio offering therapeutic massage, relaxation treatments, and wellbeing services.",
         "brand_associations": [

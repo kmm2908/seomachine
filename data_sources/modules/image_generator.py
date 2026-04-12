@@ -40,72 +40,72 @@ DALLE_COST_SECTION = 0.042   # gpt-image-1, 1024x1024, medium quality
 GEMINI_RETRY_DELAYS = [30, 60, 120]  # seconds between retries on 503
 
 # ── Topic → scene description map ────────────────────────────────────────────
-# Keywords are matched against the topic/H2 text (lowercase).
-# "section": therapist + client interaction scene for the section image
+# "banner": foreground subject / props only — room backdrop injected separately
+#           when room_description is set on ImageGenerator; otherwise self-contained
+# "section": therapist + client interaction (room visible in background)
 
 TOPIC_CONTEXT_MAP = {
     "couples": {
-        "banner": "two side-by-side massage tables with white linen, rose petals, candlelit luxury spa room, no people",
-        "section": "spa therapist giving a back massage to a woman on a treatment table, second treatment table visible in background, luxury spa room, warm light",
+        "banner": "two white-linen treatment tables side by side, rose petals scattered between them, no people",
+        "section": "spa therapist giving a back massage to a woman on a treatment table, second treatment table visible in background",
     },
     "deep tissue": {
-        "banner": "professional massage studio with white treatment table, therapeutic spa setting, no people",
-        "section": "massage therapist performing deep tissue back massage on a client lying on a treatment table, professional studio lighting",
+        "banner": "white treatment table with folded warm towels and massage oil bottles arranged neatly, no people",
+        "section": "massage therapist performing deep tissue back massage on a client lying on a treatment table",
     },
     "sports": {
-        "banner": "sports therapy studio, white treatment table, clean professional setting, no people",
-        "section": "sports massage therapist working on client's calf muscles, treatment table, professional studio",
+        "banner": "white treatment table with a foam roller, resistance band, and massage oil on a small side table, no people",
+        "section": "sports massage therapist working on a client's calf muscles on a treatment table",
     },
     "aromatherapy": {
-        "banner": "aromatherapy spa studio, essential oil bottles, candles, white treatment table, orchids, no people",
-        "section": "spa therapist applying aromatherapy oil massage to a client's back, warm candlelit room",
+        "banner": "glass bottles of essential oils, lit candles, and white folded towels arranged on a small table, no people",
+        "section": "spa therapist applying aromatherapy oil massage to a client's back",
     },
     "hot stone": {
-        "banner": "luxury spa treatment room with basalt stones on white treatment table, candles, no people",
-        "section": "spa therapist placing hot basalt stones on client's back, professional spa setting",
+        "banner": "smooth dark basalt stones arranged in a row on a white treatment table, pillar candles glowing beside them, no people",
+        "section": "spa therapist placing hot basalt stones along a client's spine",
     },
     "foot": {
-        "banner": "Thai spa room with foot bath bowl, flower petals, pebbles, candles, no people",
-        "section": "spa therapist performing foot massage on a client, close view of hands and feet, treatment room",
+        "banner": "ceramic foot bath bowl with flower petals and smooth pebbles, warm towels folded beside it, no people",
+        "section": "spa therapist performing foot massage on a client, close view of hands and feet",
     },
     "facial": {
-        "banner": "facial spa treatment room, white table, botanical skincare products, orchids, no people",
-        "section": "spa therapist performing facial massage on a woman lying on treatment table, soft lighting",
+        "banner": "skincare products, jade roller, white towels, and a single orchid arranged on a tray, no people",
+        "section": "spa therapist performing facial massage on a woman lying on a treatment table, soft lighting",
     },
     "hair": {
-        "banner": "spa station with glass dropper bottles of nourishing hair oil, white orchids, warm towels, teak wood background, no people",
-        "section": "spa therapist massaging warm nourishing oil into a seated female client's scalp and hair, warm amber lighting",
+        "banner": "glass dropper bottles of nourishing hair oil and a warm towel arranged beside a treatment chair, no people",
+        "section": "spa therapist massaging warm nourishing oil into a seated female client's scalp and hair",
     },
     "oiling": {
-        "banner": "hair oiling spa station with Ayurvedic oil bottles, white orchids, warm towels, teak wood background, no people",
-        "section": "therapist applying warm oil to client's scalp and hair with careful hands, professional spa setting",
+        "banner": "Ayurvedic oil bottles, a warm towel and a wooden comb on a small side table, no people",
+        "section": "therapist applying warm oil to a client's scalp and hair with careful hands",
     },
     "scalp": {
-        "banner": "Thai massage studio interior, warm amber lighting, Thai silk decor, no people",
-        "section": "therapist performing Indian head and scalp massage on a seated client, professional spa setting",
+        "banner": "a treatment chair with a warm towel draped over it and a small oil bottle on the side table, no people",
+        "section": "therapist performing Indian head and scalp massage on a seated client",
     },
     "reflexology": {
-        "banner": "Thai spa room with foot bath bowl, flower petals, smooth pebbles, candles, no people",
-        "section": "spa therapist applying reflexology pressure to the sole of a client's foot, close view of hands and foot, treatment room",
+        "banner": "foot bath bowl with flower petals, smooth pebbles, and warm towels folded beside it, no people",
+        "section": "spa therapist applying reflexology pressure to the sole of a client's foot, close view of hands and foot",
     },
     "swedish": {
-        "banner": "serene massage studio with white treatment table, folded towels, orchids, soft natural lighting, no people",
-        "section": "spa therapist performing gentle Swedish massage on a client's back, smooth flowing strokes, professional studio",
+        "banner": "white treatment table with folded towels, a single orchid bloom, and massage oil on a side table, no people",
+        "section": "spa therapist performing gentle Swedish massage on a client's back, smooth flowing strokes",
     },
     "head": {
-        "banner": "Thai massage studio interior, warm amber lighting, Thai silk decor, no people",
-        "section": "therapist performing head and scalp massage on a seated client, professional spa setting",
+        "banner": "a treatment chair with warm towels and a small oil bottle on the side table, no people",
+        "section": "therapist performing head and scalp massage on a seated client",
     },
     "thai": {
-        "banner": "Thai massage studio interior, warm amber lighting, Thai silk cushions, wooden accents, orchid decorations, no people",
-        "section": "Thai massage therapist performing traditional Thai massage on a client lying on a floor mat, professional studio",
+        "banner": "traditional Thai massage mat on the floor with folded white linen and a small bolster pillow, no people",
+        "section": "Thai massage therapist performing traditional Thai massage on a client lying on a floor mat",
     },
 }
 
-FAQ_SECTION_PROMPT = (
+FAQ_SECTION_PROMPT_DEFAULT = (
     "A relaxed female client in a white spa robe seated in a Thai spa waiting area. "
-    "Orchids on a carved wooden stand, teak wood walls, warm amber pendant lighting, "
-    "folded white towels on a shelf. "
+    "Orchids on a carved wooden stand, warm ambient lighting, folded white towels on a shelf. "
     "Shot on Leica M11, 50mm f/2 Summicron, Kodak Portra 400 film grain, "
     "natural window light from the side. Real photograph, no CGI, no illustration."
 )
@@ -124,18 +124,20 @@ SECTION_PHOTO_SUFFIX = (
 
 CLAUDE_PROMPT_SYSTEM = (
     "You write image prompts for a photorealistic AI image generator. "
-    "Prompts must describe a single spa or wellness treatment scene that is specific to the treatment named. "
+    "Prompts must describe a single spa or wellness treatment scene specific to the treatment named — "
+    "foreground subject and props only, no room or background details. "
     "Do NOT default to a generic back massage. "
-    "Keep the response to 2-3 sentences, no preamble, no explanation."
+    "Keep the response to 1-2 sentences, no preamble, no explanation."
 )
 
 
 class ImageGenerator:
 
-    def __init__(self):
+    def __init__(self, room_description: str = ""):
         self.api_key = os.getenv("GOOGLE_AI_API_KEY")
         self.openai_api_key = os.getenv("OPENAI_API_KEY")
         self.anthropic_api_key = os.getenv("ANTHROPIC_API_KEY")
+        self.room_description = room_description.strip().rstrip('.')
         if not self.api_key:
             raise EnvironmentError("GOOGLE_AI_API_KEY not set in environment")
 
@@ -208,9 +210,21 @@ class ImageGenerator:
         topic_lower = topic.lower()
         for keyword, contexts in TOPIC_CONTEXT_MAP.items():
             if keyword in topic_lower:
-                return f"{contexts['banner']}. {BANNER_PHOTO_SUFFIX}"
+                foreground = contexts['banner']
+                return self._assemble_banner(foreground)
         print(f"    → Image prompt: Claude fallback (no map match for \"{topic}\")")
         return self._build_prompt_with_claude(topic, "banner")
+
+    def _assemble_banner(self, foreground: str) -> str:
+        """Combine foreground subject with room backdrop (if set) and photo suffix."""
+        if self.room_description:
+            return (
+                f"Editorial spa photograph. {foreground}. "
+                f"{self.room_description}. "
+                f"Camera positioned at the front-left corner of the room near the entrance, "
+                f"looking diagonally across the space. {BANNER_PHOTO_SUFFIX}"
+            )
+        return f"Editorial spa photograph. {foreground}. {BANNER_PHOTO_SUFFIX}"
 
     def _build_location_banner_prompt(self, topic: str) -> str:
         """Build a wide street/area scene prompt for the banner on location content."""
@@ -235,11 +249,24 @@ class ImageGenerator:
     def _build_section_prompt(self, h2_heading: str, section_num: int) -> str:
         """Build a topic-specific section image prompt, or Claude if no match."""
         if section_num >= 2 or "faq" in h2_heading.lower() or "frequently" in h2_heading.lower():
-            return FAQ_SECTION_PROMPT
+            if self.room_description:
+                return (
+                    f"A relaxed female client in a white spa robe seated in the treatment room. "
+                    f"{self.room_description}. "
+                    f"Shot on Leica M11, 50mm f/2 Summicron, Kodak Portra 400 film grain, "
+                    f"natural window light from the side. Real photograph, no CGI, no illustration."
+                )
+            return FAQ_SECTION_PROMPT_DEFAULT
         heading_lower = h2_heading.lower()
         for keyword, contexts in TOPIC_CONTEXT_MAP.items():
             if keyword in heading_lower:
-                return f"{contexts['section']}. {SECTION_PHOTO_SUFFIX}"
+                scene = contexts['section']
+                if self.room_description:
+                    return (
+                        f"{scene}. Background: {self.room_description}. "
+                        f"{SECTION_PHOTO_SUFFIX}"
+                    )
+                return f"{scene}. {SECTION_PHOTO_SUFFIX}"
         print(f"    → Image prompt: Claude fallback (no map match for \"{h2_heading}\")")
         return self._build_prompt_with_claude(h2_heading, "section")
 
@@ -250,20 +277,20 @@ class ImageGenerator:
         Cost: ~$0.001 per call.
         """
         if not self.anthropic_api_key:
-            # Anthropic key not set — use generic fallback rather than crashing
-            return BANNER_FALLBACK_SCENE if image_type == "banner" else SECTION_FALLBACK_SCENE
+            suffix = BANNER_PHOTO_SUFFIX if image_type == "banner" else SECTION_PHOTO_SUFFIX
+            return f"Professional spa treatment room, white treatment table, warm natural lighting. {suffix}"
 
         if image_type == "banner":
             user_msg = (
-                f"Write a 2-sentence image prompt for the banner of a spa page about '{topic}'. "
-                "Describe the treatment room or props — no people. "
-                "Be specific to this treatment, not a generic spa room."
+                f"Write 1-2 sentences describing the foreground props/setup for a banner image "
+                f"on a spa page about '{topic}'. Foreground only — no room or background details. "
+                "No people. Be specific to this treatment."
             )
         else:
             user_msg = (
-                f"Write a 2-sentence image prompt for a section image on a spa page about '{topic}'. "
-                "Describe a therapist performing this specific treatment on a client. "
-                "Be specific — do not default to a back massage unless that is literally what this treatment is."
+                f"Write 1-2 sentences describing a therapist performing '{topic}' on a client. "
+                "Foreground action only — no room or background details. "
+                "Be specific — do not default to a back massage unless this treatment literally is one."
             )
 
         try:
@@ -276,20 +303,27 @@ class ImageGenerator:
                 },
                 json={
                     "model": "claude-haiku-4-5-20251001",
-                    "max_tokens": 150,
+                    "max_tokens": 120,
                     "system": CLAUDE_PROMPT_SYSTEM,
                     "messages": [{"role": "user", "content": user_msg}],
                 },
                 timeout=20,
             )
             if r.status_code == 200:
-                scene = r.json()["content"][0]["text"].strip()
-                suffix = BANNER_PHOTO_SUFFIX if image_type == "banner" else SECTION_PHOTO_SUFFIX
-                return f"{scene} {suffix}"
+                foreground = r.json()["content"][0]["text"].strip()
+                if image_type == "banner":
+                    return self._assemble_banner(foreground)
+                # Section: append room if available
+                if self.room_description:
+                    return (
+                        f"{foreground}. {self.room_description} visible in the background. "
+                        f"{SECTION_PHOTO_SUFFIX}"
+                    )
+                return f"{foreground}. {SECTION_PHOTO_SUFFIX}"
         except Exception:
             pass
 
-        # Last resort: generic spa scene with correct suffix
+        # Last resort
         suffix = BANNER_PHOTO_SUFFIX if image_type == "banner" else SECTION_PHOTO_SUFFIX
         return f"Professional spa treatment room, white treatment table, warm natural lighting. {suffix}"
 

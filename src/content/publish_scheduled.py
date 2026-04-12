@@ -196,7 +196,8 @@ def publish_topic(topic_dict: dict, abbr: str, dry_run: bool = False) -> dict:
     if os.getenv('IMAGE_API_PROVIDER') == 'gemini':
         try:
             from image_generator import ImageGenerator
-            img_cost = ImageGenerator().generate_for_post(content, topic, filepath, content_type)
+            _room_desc = business_config.get('image_settings', {}).get('room_description', '')
+            img_cost = ImageGenerator(room_description=_room_desc).generate_for_post(content, topic, filepath, content_type)
             cost_usd += img_cost
             content = filepath.read_text(encoding='utf-8')
             print(f"    → Images: generated (+${img_cost:.2f})")
