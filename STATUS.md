@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-04-12 (session 37 — image generation refactor: topic-specific prompts + room reference photos)
+Last updated: 2026-04-12 (session 38 — SDY specialist service image regeneration)
 
 ---
 
@@ -147,6 +147,18 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] 3 service pages republished correctly to staging2: Hair Oiling Treatment (2013), Thai Deep Tissue Oil Massage (2017), Aromatherapy Deep Tissue Oil Massage (2021)
 - [x] Elementor JSON verified on post 2013 — JSON valid, HTML content intact with correct section markers
 - [x] Sports Massage (post 1000) intentionally left as draft — service not yet confirmed by client
+
+### SDY specialist service image regeneration (session 38)
+- [x] `src/content/regen_images.py` — new utility script; strips old injected img tags, deletes old image files, re-runs `ImageGenerator.generate_for_post()` with current topic-specific prompts + room/treatment references; accepts `--abbr`, `--folders` (comma-separated), `--type`
+- [x] 6 specialist service pages regenerated with correct treatment-specific images (previously had generic back-massage banners from old BANNER_TEMPLATE):
+  - Hair Oiling Treatment → post 2132 (was 2013, deleted)
+  - Head and Hair Oiling → post 2136 (was 1709, deleted)
+  - Thai Facial Massage → post 2140 (was 1025, deleted)
+  - Thai Head Massage → post 2144 (was 1020, deleted)
+  - Thai Foot Massage → post 2148 (was 1030, deleted)
+  - Thai Reflexology → post 2152 (was 1693, deleted)
+- [x] Old duplicate posts deleted from staging2 via WP-CLI SSH (1709, 1693, 1020, 1025, 1030; 2013 was already gone)
+- [x] staging2 seo_service count remains 17; all 6 pages are drafts pending manual review
 
 ### SDY content completion batch (session 36)
 - [x] `clients/sdy/internal-links-map.md` — updated with all 16 confirmed staging2 service URLs (staging2.serendipitymassage.co.uk/seo-service/[slug]/)

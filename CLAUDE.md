@@ -284,6 +284,7 @@ python3 src/publishing/update_post_classes.py --abbr sdy --type all --dry-run
 python3 src/content/republish_existing.py                # republish all gtm location files
 python3 src/content/republish_existing.py --type service # service pages
 python3 src/content/republish_existing.py --abbr gtm --type blog
+python3 src/content/regen_images.py --abbr sdy --folders "hair-oiling-treatment-2026-04-06,thai-facial-massage-2026-03-28" --type service  # regenerate images for specific pages
 ```
 Use this when posts need to be re-created in WordPress (e.g. after enabling Elementor CPT support).
 
@@ -321,7 +322,7 @@ All Python executables live in `src/` under module subfolders. Test scripts live
 
 ```
 src/
-  content/      ← geo_batch_runner.py, republish_existing.py, publish_scheduled.py
+  content/      ← geo_batch_runner.py, republish_existing.py, publish_scheduled.py, regen_images.py
   research/     ← research_competitors.py, research_quick_wins.py, research_serp_analysis.py, etc.
   publishing/   ← fetch_elementor_template.py, update_post_classes.py
   snippets/     ← generate_directions_snippet.py
