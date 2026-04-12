@@ -102,7 +102,7 @@ def test_get_not_found(tmp_path):
     assert 'yell' in state.get_not_found()
 
 from unittest.mock import patch, MagicMock
-from citation_checker import _check_yelp, _check_foursquare, _match_api_results, check_site, _is_captcha_html
+from citation_checker import _check_yelp, _check_foursquare, _match_api_results, check_site, _is_captcha_html, _check_dataforseo
 
 _GTM_CONFIG = {
     'name': 'Glasgow Thai Massage',
@@ -139,3 +139,37 @@ def test_yelp_returns_unknown_without_api_key():
         r = _check_yelp(SITE_BY_ID['yelp'], _GTM_CONFIG)
     assert r.status == 'unknown'
     assert 'YELP_API_KEY' in r.error
+
+def test_dataforseo_found():
+    mock_client = MagicMock()
+    mock_client._post.return_value = {
+        'tasks': [{
+            'status_code': 20000,
+            'result': [{'items': [
+                {'title': 'Glasgow Thai Massage', 'phone': '0141 552 1234',
+                 'address': '142 West Nile Street, Glasgow', 'url': 'https://trustpilot.com/review/gtm'}
+            ]}]
+        }]
+    }
+    with patch('dataforseo.DataForSEO', return_value=mock_client):
+        r = _check_dataforseo(SITE_BY_ID['trustpilot'], _GTM_CONFIG)
+    assert r.status == 'found'
+    assert r.nap_match is True
+
+def test_dataforseo_not_found():
+    mock_client = MagicMock()
+    mock_client._post.return_value = {
+        'tasks': [{'status_code': 20000, 'result': [{'items': []}]}]
+    }
+    with patch('dataforseo.DataForSEO', return_value=mock_client):
+        r = _check_dataforseo(SITE_BY_ID['trustpilot'], _GTM_CONFIG)
+    assert r.status == 'not_found'
+
+def test_check_site_routes_tier4_to_unknown():
+    r = check_site(SITE_BY_ID['apple_maps'], _GTM_CONFIG)
+    assert r.status == 'unknown'
+    assert 'Tier 4' in r.error
+
+def test_is_captcha_html_detects_cloudflare():
+    assert _is_captcha_html('<html><body class="cf-challenge">prove you are human</body></html>') is True
+    assert _is_captcha_html('<html><body><h1>Results for Glasgow</h1></body></html>') is False
