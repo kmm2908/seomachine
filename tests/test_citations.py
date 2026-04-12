@@ -250,3 +250,28 @@ def test_submit_no_form_selectors_returns_manual():
     # 192com has empty form_selectors
     r = submit_site(SITE_BY_ID['192com'], _GTM_CONFIG)
     assert r.submit_status == 'manual_required'
+
+import sys as _sys2
+_sys2.path.insert(0, str(ROOT / 'data_sources' / 'modules'))
+from citation_manager import CitationManager
+
+def test_run_audit_returns_citation_result(tmp_path):
+    config = {
+        'name': 'Glasgow Thai Massage',
+        'address': '142 West Nile Street, Glasgow, G1 2RQ',
+        'phone': '0141 552 1234',
+        'city': 'Glasgow',
+        'postcode': 'G1 2RQ',
+        'website': 'https://glasgowthaimassage.co.uk',
+    }
+    manager = CitationManager('gtm', config, tmp_path)
+
+    # Mock all site checks to return 'not_found'
+    mock_results = [CitationCheckResult(site=s, status='not_found') for s in CITATION_SITES]
+
+    with patch('citation_manager.check_site', side_effect=mock_results):
+        result = manager.run_audit(force=True, dry_run=True)
+
+    assert isinstance(result, CitationResult)
+    assert result.found_count == 0
+    assert result.total_sites == len(CITATION_SITES)
