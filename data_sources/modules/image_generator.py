@@ -90,7 +90,7 @@ TOPIC_CONTEXT_MAP = {
     },
     "foot": {
         "banner": "spa therapist performing Thai foot massage on a female client who is lying on a treatment table, medium shot from the side showing therapist working on the client's feet",
-        "section": "close-up of spa therapist's thumbs applying pressure to the sole of a client's foot during Thai foot massage",
+        "section": "spa therapist performing Thai foot massage on a female client, client lying on a treatment table with her lower legs and feet visible resting on the therapist's lap, therapist's hands clearly holding and working the foot, close shot showing hands and feet",
     },
     "facial": {
         "banner": "spa therapist performing facial massage on a female client lying face-up on a treatment table, medium shot showing therapist's hands on the client's face and décolletage",
@@ -110,7 +110,7 @@ TOPIC_CONTEXT_MAP = {
     },
     "reflexology": {
         "banner": "spa therapist performing reflexology on a female client's feet, client lying on a treatment table with feet elevated, medium shot showing the full scene",
-        "section": "close-up of spa therapist's thumbs walking along the reflexology zones on the sole of a client's foot",
+        "section": "spa therapist applying reflexology to a female client's foot, client lying on treatment table with her leg extended and foot resting in the therapist's hands, therapist's thumbs pressing into the sole, client's leg and lower body visible to anchor the foot",
     },
     "swedish": {
         "banner": "spa therapist performing Swedish massage on a female client lying face-down on a treatment table, wide shot showing long flowing effleurage strokes",
@@ -140,6 +140,8 @@ BANNER_PHOTO_SUFFIX = (
 )
 
 SECTION_PHOTO_SUFFIX = (
+    "Anatomically grounded — any visible body part must be clearly attached to a person in the scene, "
+    "never floating or disembodied. "
     "Warm soft natural window light, professional spa environment, "
     "shot on Leica M11, 50mm f/2 Summicron, Kodak Portra 400 film grain, "
     "authentic location feel. Real photograph, no CGI, no illustration."
