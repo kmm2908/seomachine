@@ -213,13 +213,14 @@ class ImageGenerator:
             print(f"    → Treatment reference: matched for \"{topic}\"")
 
         # Generate banner — filename includes article keywords
+        # Location banners (street scenes) skip validation; treatment banners are validated.
         banner_path = article_dir / f"{base_slug}-banner.jpg"
         if is_location_type:
             banner_prompt = self._build_location_banner_prompt(topic)
             total_cost = self._generate(banner_prompt, banner_path, "banner")
         else:
             banner_prompt = self._build_banner_prompt(topic)
-            total_cost = self._generate(banner_prompt, banner_path, "banner", treat_b64, treat_mime)
+            total_cost = self._generate_validated(banner_prompt, banner_path, "banner", treat_b64, treat_mime)
         print(f"    → {banner_path.name}")
 
         section_paths = []
@@ -232,11 +233,14 @@ class ImageGenerator:
                 heading_slug = _slugify(heading) or f"{base_slug}-section-{i}"
             section_path = article_dir / f"{heading_slug}.jpg"
             section_prompt = self._build_section_prompt(heading, i)
-            # FAQ image: room reference only (client in robe — no treatment action)
-            # Section image: room reference + treatment reference
+            # FAQ image: room reference only (client in robe — no anatomy risk, skip validation)
+            # Section image: room reference + treatment reference, validated
             t_b64 = "" if is_faq else treat_b64
             t_mime = "" if is_faq else treat_mime
-            total_cost += self._generate(section_prompt, section_path, "section", t_b64, t_mime)
+            if is_faq:
+                total_cost += self._generate(section_prompt, section_path, "section", t_b64, t_mime)
+            else:
+                total_cost += self._generate_validated(section_prompt, section_path, "section", t_b64, t_mime)
             section_paths.append(section_path)
             print(f"    → {section_path.name}")
             if i < len(section_headings):
@@ -528,6 +532,78 @@ class ImageGenerator:
         output_path.write_bytes(img_bytes)
         self._crop_image(output_path, crop_target)
         return output_path
+
+    def _validate_image(self, image_path: Path, image_type: str) -> tuple[bool, str]:
+        """Check a generated image for anatomical issues using Claude Haiku vision.
+
+        Returns (is_valid, reason). On any API error returns (True, '') so a
+        validation failure never blocks publishing.
+        """
+        if not self.anthropic_api_key:
+            return True, ""
+        try:
+            img_b64 = base64.b64encode(image_path.read_bytes()).decode()
+            mime = "image/png" if image_path.suffix.lower() == ".png" else "image/jpeg"
+            if image_type == "banner":
+                question = (
+                    "Does this spa treatment image show a therapist performing a treatment on a client? "
+                    "Are there any anatomically incorrect or disembodied body parts "
+                    "(e.g. a hand or foot with no visible body attached)? "
+                    "Reply VALID if it looks correct, or ISSUE: [brief reason] if not."
+                )
+            else:
+                question = (
+                    "Are all visible body parts in this spa treatment image anatomically grounded — "
+                    "clearly attached to a person, not floating or disembodied? "
+                    "Reply VALID if correct, or ISSUE: [brief reason] if there are floating limbs."
+                )
+            r = requests.post(
+                "https://api.anthropic.com/v1/messages",
+                headers={
+                    "x-api-key": self.anthropic_api_key,
+                    "anthropic-version": "2023-06-01",
+                    "content-type": "application/json",
+                },
+                json={
+                    "model": "claude-haiku-4-5-20251001",
+                    "max_tokens": 80,
+                    "messages": [{
+                        "role": "user",
+                        "content": [
+                            {"type": "image", "source": {"type": "base64", "media_type": mime, "data": img_b64}},
+                            {"type": "text", "text": question},
+                        ],
+                    }],
+                },
+                timeout=20,
+            )
+            if r.status_code == 200:
+                reply = r.json()["content"][0]["text"].strip()
+                if reply.upper().startswith("ISSUE"):
+                    return False, reply
+        except Exception:
+            pass
+        return True, ""
+
+    def _generate_validated(self, prompt: str, output_path: Path, image_type: str,
+                            treatment_ref_b64: str = "", treatment_ref_mime: str = "") -> float:
+        """Generate an image and validate it for anatomical correctness.
+
+        On validation failure: regenerates once. If the retry also fails,
+        logs a warning and returns the image anyway — never blocks publishing.
+        Returns total cost in USD.
+        """
+        cost = self._generate(prompt, output_path, image_type, treatment_ref_b64, treatment_ref_mime)
+        valid, reason = self._validate_image(output_path, image_type)
+        if not valid:
+            print(f"    ⚠ Validation: {reason} — regenerating...")
+            cost += self._generate(prompt, output_path, image_type, treatment_ref_b64, treatment_ref_mime)
+            valid2, reason2 = self._validate_image(output_path, image_type)
+            if not valid2:
+                print(f"    ⚠ Retry also flagged ({reason2}) — using image anyway")
+            else:
+                print(f"    ✓ Retry passed validation")
+        return cost
 
     def _crop_image(self, path: Path, target: tuple) -> None:
         """Centre-crop image to target (width, height) using Pillow."""
