@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-04-12 (session 38/39 — banner image fix + SDY specialist service image regeneration)
+Last updated: 2026-04-12 (session 40 — citation generator & listing audit built, 32 tests passing)
 
 ---
 
@@ -797,42 +797,49 @@ Global skills installed at `~/.claude/skills/`. Available across all projects.
 
 ---
 
-## Citation Generator & Listing Audit (session 39 — design complete, not yet built)
+## Citation Generator & Listing Audit (session 39 designed, session 40 built)
 
-In-house replacement for BrightLocal Citation Builder. Tiered automation (API → DataForSEO → Playwright → manual pack) covering ~35 UK citation sites. Integrates into `/audit` as NAP & Citations scored section.
+In-house replacement for BrightLocal Citation Builder. Tiered automation (API → DataForSEO → Playwright → manual pack) covering 23 UK citation sites. Integrates into `/audit` as NAP & Citations scored section.
 
 **Design docs:**
 - Spec: `docs/superpowers/specs/2026-04-12-citation-generator-audit-design.md`
 - Plan: `docs/superpowers/plans/2026-04-12-citation-generator-audit.md`
 
-**Planned file structure (not yet created):**
-- `data_sources/modules/citation_sites.py` — master site list (~35 UK sites, 4 tiers)
-- `data_sources/modules/citation_checker.py` — per-site presence check
-- `data_sources/modules/citation_submitter.py` — per-site creation (Playwright + API)
-- `data_sources/modules/citation_state.py` — state.json load/save/staleness
-- `data_sources/modules/citation_manager.py` — orchestrator
-- `data_sources/modules/nap_utils.py` — shared NAP normalisation (extracted from collectors.py)
-- `src/citations/run_citations.py` — CLI entry point
-- `clients/[abbr]/citations/state.json` — per-client citation state (last check, listing URLs)
-- `clients/[abbr]/citations/manual-pack.html` — pre-filled submission kit for Tier 4 sites
+- [x] `data_sources/modules/nap_utils.py` — shared NAP normalisation extracted from collectors.py; 7 tests
+- [x] `data_sources/modules/citation_sites.py` — master site list (23 UK sites, 4 tiers) + dataclasses
+- [x] `data_sources/modules/citation_state.py` — state.json load/save/staleness (30-day cadence)
+- [x] `data_sources/modules/citation_checker.py` — all 4 tiers + route dispatcher; 7 tests
+- [x] `data_sources/modules/citation_submitter.py` — Playwright form fill + manual fallback; 3 tests
+- [x] `data_sources/modules/citation_manager.py` — orchestrator (audit/create/full/print_status)
+- [x] `data_sources/modules/citation_manual_pack.py` — pre-filled HTML submission kit; 2 tests
+- [x] `src/citations/run_citations.py` — CLI entry point; `src/citations/__init__.py`
+- [x] `src/audit/scoring.py` — `CitationResult` dataclass added (replaces NAPResult as nap field); 3 tests
+- [x] `src/audit/collectors.py` — `collect_citations()` added; falls back gracefully if no abbreviation
+- [x] `src/audit/run_audit.py` — citation wired in; `NAP+Cit` label in console output; NAPResult fallback for prospect audits
+- [x] `src/audit/report.py` — citation per-site breakdown section in markdown output
+- [x] All 5 client configs — `"abbreviation"` field confirmed present (uppercased, lowercased by manager)
+- [x] 32 tests passing in `tests/test_citations.py`
 
-**CLI (once built):**
+**CLI:**
 ```bash
 python3 src/citations/run_citations.py --abbr gtm                  # full: audit + create missing
 python3 src/citations/run_citations.py --abbr gtm --mode audit     # check only
 python3 src/citations/run_citations.py --abbr gtm --status         # status table
 python3 src/citations/run_citations.py --abbr gtm --dry-run        # no submissions
+python3 src/citations/run_citations.py --abbr gtm --force          # re-check all regardless of cadence
 ```
 
-**Scoring:** NAP section in audit expands from schema-only to NAP & Citations (15 pts): coverage 6pts + consistency 5pts + no duplicates 2pts + no critical sites missing 2pts.
+**Scoring:** NAP+Cit section (15 pts): coverage 6pts + consistency 5pts + no duplicates 2pts + no critical sites missing 2pts. Falls back to schema-only NAP scoring (max 9pts) when no citation run available.
 
 **Tier breakdown:**
 - Tier 1 (API): GBP (existing module), Yelp Fusion, Foursquare
 - Tier 2 (DataForSEO): TrustPilot, TripAdvisor
 - Tier 3 (Playwright check + form fill): Yell, Thomson Local, Scoot, 192.com, Cylex, FreeIndex, Brownbook, Misterwhat, Hotfrog
-- Tier 4 (manual pack): Apple Business Connect, Bing Places, Facebook, Treatwell, Fresha, Bark, Nextdoor, Checkatrade
+- Tier 4 (manual pack): Apple Business Connect, Bing Places, Facebook, Treatwell, Fresha, Bark, Nextdoor, Checkatrade, Yelp (create)
 
-- [ ] Implementation not started — awaiting execution decision (subagent-driven vs inline)
+- [ ] **Needs testing:** Run `--abbr gtm --mode audit --dry-run --force` and verify status table + manual pack generated
+- [ ] **Needs testing:** Run full `/audit --abbr gtm` and confirm NAP+Cit score appears in report
+- [ ] **Selector tuning:** Tier 3 Playwright CSS selectors need verifying against live sites (run dry-run first, adjust selectors in citation_sites.py as needed)
 
 ---
 
