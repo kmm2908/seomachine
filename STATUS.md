@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-04-12 (session 38 — SDY specialist service image regeneration)
+Last updated: 2026-04-12 (session 39 — citation generator design + SDY manual review checklist)
 
 ---
 
@@ -790,6 +790,69 @@ Global skills installed at `~/.claude/skills/`. Available across all projects.
 - [x] `ghl-crm` — GoHighLevel CRM API v2 integration (agentskill.sh)
 - [x] `ghl-ai-agents` — GHL Voice AI + Conversation AI setup guide (skillsmp.com)
 - [x] `ghl-email-sms-marketing` — GHL email/SMS/WhatsApp campaign guide (skillsmp.com)
+
+---
+
+## Citation Generator & Listing Audit (session 39 — design complete, not yet built)
+
+In-house replacement for BrightLocal Citation Builder. Tiered automation (API → DataForSEO → Playwright → manual pack) covering ~35 UK citation sites. Integrates into `/audit` as NAP & Citations scored section.
+
+**Design docs:**
+- Spec: `docs/superpowers/specs/2026-04-12-citation-generator-audit-design.md`
+- Plan: `docs/superpowers/plans/2026-04-12-citation-generator-audit.md`
+
+**Planned file structure (not yet created):**
+- `data_sources/modules/citation_sites.py` — master site list (~35 UK sites, 4 tiers)
+- `data_sources/modules/citation_checker.py` — per-site presence check
+- `data_sources/modules/citation_submitter.py` — per-site creation (Playwright + API)
+- `data_sources/modules/citation_state.py` — state.json load/save/staleness
+- `data_sources/modules/citation_manager.py` — orchestrator
+- `data_sources/modules/nap_utils.py` — shared NAP normalisation (extracted from collectors.py)
+- `src/citations/run_citations.py` — CLI entry point
+- `clients/[abbr]/citations/state.json` — per-client citation state (last check, listing URLs)
+- `clients/[abbr]/citations/manual-pack.html` — pre-filled submission kit for Tier 4 sites
+
+**CLI (once built):**
+```bash
+python3 src/citations/run_citations.py --abbr gtm                  # full: audit + create missing
+python3 src/citations/run_citations.py --abbr gtm --mode audit     # check only
+python3 src/citations/run_citations.py --abbr gtm --status         # status table
+python3 src/citations/run_citations.py --abbr gtm --dry-run        # no submissions
+```
+
+**Scoring:** NAP section in audit expands from schema-only to NAP & Citations (15 pts): coverage 6pts + consistency 5pts + no duplicates 2pts + no critical sites missing 2pts.
+
+**Tier breakdown:**
+- Tier 1 (API): GBP (existing module), Yelp Fusion, Foursquare
+- Tier 2 (DataForSEO): TrustPilot, TripAdvisor
+- Tier 3 (Playwright check + form fill): Yell, Thomson Local, Scoot, 192.com, Cylex, FreeIndex, Brownbook, Misterwhat, Hotfrog
+- Tier 4 (manual pack): Apple Business Connect, Bing Places, Facebook, Treatwell, Fresha, Bark, Nextdoor, Checkatrade
+
+- [ ] Implementation not started — awaiting execution decision (subagent-driven vs inline)
+
+---
+
+## SDY Manual Review Checklist (session 39)
+
+Checklist prepared for 12 starred posts in staging2 wp-admin (7 from session 36 batch + 5 pre-existing). See conversation for full per-post fix instructions.
+
+**Session 36 batch (★★★★★ in title):**
+- [ ] Post 2041 — Orchid Wellbeing Glasgow: split opening paragraph after "comes up early in results"
+- [ ] Post 2049 — Thai Massage vs Swedish Massage: break 91-word opening para; move first CTA earlier
+- [ ] Post 2065 — Serenity Thai Massage: split line 7 after "no online booking"
+- [ ] Post 2077 — Sports Recovery: break 4 long paras; explain "VO2max" and "sen energy lines" inline
+- [ ] Post 2081 — Shawlands: split line 7 into two sentences; break line 30 multi-reason block
+- [ ] Post 2085 — Dennistoun: break opening para into two; split resident-mix para
+- [ ] Post 2089 — Hyndland: split 3 long paras (lines 6, 8, 11)
+
+**Pre-existing (★★★★★ in title):**
+- [ ] Post 2021 — Aromatherapy Deep Tissue: readability Flesch 47 — shorten sentences, simplify vocabulary
+- [ ] Post 1164 — Cowcaddens: paragraphs — split any with 4+ sentences
+- [ ] Post 1149 — Injury Rehab: simplify medical jargon, add plain-language explanations
+- [ ] Post 1154 — Injury Prevention: same as above
+- [ ] Post 1159 — Diabetic Neuropathy: explain clinical terms inline
+
+**After fixing each post:** remove ★★★★★ from title + star notice paragraph, then publish.
 
 ---
 

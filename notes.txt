@@ -21,7 +21,9 @@ Send both to prospects
 *****************************
 Add GBP audit process
 *****************************
+Add citation generator/listing audit
 
+*****************************
 UI:
 ---
 Process:
