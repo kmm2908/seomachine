@@ -39,29 +39,6 @@ DALLE_COST_SECTION = 0.042   # gpt-image-1, 1024x1024, medium quality
 
 GEMINI_RETRY_DELAYS = [30, 60, 120]  # seconds between retries on 503
 
-# ── Banner action phrases ─────────────────────────────────────────────────────
-# Short action phrases for use inside BANNER_TEMPLATE's {scene} slot.
-# Must be grammatically compatible with "...performs {scene} on a female client..."
-
-BANNER_ACTION_MAP = {
-    "couples":      "a couples Thai back massage",
-    "deep tissue":  "a deep tissue back massage",
-    "sports":       "a sports massage on a client's leg",
-    "aromatherapy": "an aromatherapy oil back massage",
-    "hot stone":    "a hot stone back massage",
-    "foot":         "a Thai foot massage",
-    "facial":       "a facial massage",
-    "hair":         "a warm hair oiling scalp treatment, massaging nourishing oil into a client's hair",
-    "oiling":       "a warm hair oiling scalp treatment, massaging nourishing oil into a client's hair",
-    "scalp":        "an Indian head and scalp massage",
-    "reflexology":  "a Thai foot reflexology massage on a client's feet",
-    "swedish":      "a gentle Swedish relaxation back massage",
-    "head":         "an Indian head massage",
-    "thai":         "a traditional Thai back massage",
-}
-
-BANNER_FALLBACK_ACTION = "a traditional Thai back massage"
-
 # ── Topic → scene description map ────────────────────────────────────────────
 # Keywords are matched against the topic/H2 text (lowercase).
 # "section": therapist + client interaction scene for the section image
@@ -133,39 +110,16 @@ FAQ_SECTION_PROMPT = (
     "natural window light from the side. Real photograph, no CGI, no illustration."
 )
 
-BANNER_TEMPLATE = (
-    "Editorial spa photograph. "
-    "A Thai female massage therapist in a white uniform performs {scene} "
-    "on a female client lying face-down on a white-linen treatment table. "
-    "No other people visible. "
-    "Room: dark teak wood walls, warm amber pendant lighting, white orchids on a carved wooden stand, "
-    "folded white towels on a shelf. "
+BANNER_PHOTO_SUFFIX = (
     "Shot on Leica M11, 28mm f/2 Summicron, Kodak Portra 400 film grain, "
-    "natural skylight from above, no studio flash, authentic location feel. "
+    "natural skylight from above, authentic location feel. "
     "Real photograph, no CGI, no illustration, no digital art."
 )
 
-SECTION_TEMPLATE = (
-    "{scene}, "
-    "warm soft natural window light, professional spa environment, "
+SECTION_PHOTO_SUFFIX = (
+    "Warm soft natural window light, professional spa environment, "
     "shot on Leica M11, 50mm f/2 Summicron, Kodak Portra 400 film grain, "
-    "authentic location feel, real photograph, no CGI, no illustration."
-)
-
-BANNER_FALLBACK_SCENE = (
-    "a traditional Thai back massage"
-)
-
-SECTION_FALLBACK_SCENE = (
-    "spa therapist performing a back massage on a client lying on a white-linen treatment table, "
-    "professional Thai spa setting"
-)
-
-
-PHOTO_SUFFIX = (
-    "Shot on Leica M11, 50mm f/2 Summicron, Kodak Portra 400 film grain, "
-    "warm natural light, authentic location feel. "
-    "Real photograph, no CGI, no illustration, no digital art."
+    "authentic location feel. Real photograph, no CGI, no illustration."
 )
 
 CLAUDE_PROMPT_SYSTEM = (
@@ -250,12 +204,11 @@ class ImageGenerator:
         return headings if headings else ["Thai massage treatment", "Frequently Asked Questions"]
 
     def _build_banner_prompt(self, topic: str) -> str:
-        """Build a photorealistic banner prompt from the topic."""
+        """Build a topic-specific banner prompt from TOPIC_CONTEXT_MAP, or Claude if no match."""
         topic_lower = topic.lower()
-        for keyword, action in BANNER_ACTION_MAP.items():
+        for keyword, contexts in TOPIC_CONTEXT_MAP.items():
             if keyword in topic_lower:
-                return BANNER_TEMPLATE.format(scene=action)
-        # No map match — ask Claude for a topic-specific prompt
+                return f"{contexts['banner']}. {BANNER_PHOTO_SUFFIX}"
         print(f"    → Image prompt: Claude fallback (no map match for \"{topic}\")")
         return self._build_prompt_with_claude(topic, "banner")
 
@@ -280,25 +233,15 @@ class ImageGenerator:
         )
 
     def _build_section_prompt(self, h2_heading: str, section_num: int) -> str:
-        """Build a photorealistic section image prompt from the H2 heading."""
-        # FAQ section always gets the waiting-area scene
+        """Build a topic-specific section image prompt, or Claude if no match."""
         if section_num >= 2 or "faq" in h2_heading.lower() or "frequently" in h2_heading.lower():
             return FAQ_SECTION_PROMPT
-
-        scene = self._lookup_scene(h2_heading, "section")
-        if scene is None:
-            # No map match — ask Claude for a topic-specific prompt
-            print(f"    → Image prompt: Claude fallback (no map match for \"{h2_heading}\")")
-            return self._build_prompt_with_claude(h2_heading, "section")
-        return SECTION_TEMPLATE.format(scene=scene)
-
-    def _lookup_scene(self, text: str, image_type: str) -> str:
-        """Match text against TOPIC_CONTEXT_MAP keywords, return scene description."""
-        text_lower = text.lower()
+        heading_lower = h2_heading.lower()
         for keyword, contexts in TOPIC_CONTEXT_MAP.items():
-            if keyword in text_lower:
-                return contexts.get(image_type, contexts["section"])
-        return None  # signals caller to use Claude fallback
+            if keyword in heading_lower:
+                return f"{contexts['section']}. {SECTION_PHOTO_SUFFIX}"
+        print(f"    → Image prompt: Claude fallback (no map match for \"{h2_heading}\")")
+        return self._build_prompt_with_claude(h2_heading, "section")
 
     def _build_prompt_with_claude(self, topic: str, image_type: str) -> str:
         """Ask Claude Haiku to generate a topic-specific image prompt.
@@ -341,12 +284,14 @@ class ImageGenerator:
             )
             if r.status_code == 200:
                 scene = r.json()["content"][0]["text"].strip()
-                return f"{scene} {PHOTO_SUFFIX}"
+                suffix = BANNER_PHOTO_SUFFIX if image_type == "banner" else SECTION_PHOTO_SUFFIX
+                return f"{scene} {suffix}"
         except Exception:
             pass
 
-        # Last resort fallback
-        return BANNER_FALLBACK_SCENE if image_type == "banner" else SECTION_FALLBACK_SCENE
+        # Last resort: generic spa scene with correct suffix
+        suffix = BANNER_PHOTO_SUFFIX if image_type == "banner" else SECTION_PHOTO_SUFFIX
+        return f"Professional spa treatment room, white treatment table, warm natural lighting. {suffix}"
 
     def _generate(self, prompt: str, output_path: Path, image_type: str) -> float:
         """Try Gemini with retries on 503, fall back to gpt-image-1. Returns image cost."""
