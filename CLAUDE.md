@@ -198,6 +198,17 @@ Set `IMAGE_API_PROVIDER=gemini` in `.env` to generate images automatically. Requ
 - `location`: banner shows the local area/street scene; section image shows spa treatment
 - All other types: banner shows spa/treatment scene
 
+**Image prompt architecture (session 37):**
+- No template wrapper — each treatment type gets its own topic-specific scene description from `TOPIC_CONTEXT_MAP` in `data_sources/modules/image_generator.py`
+- Banner entries describe foreground props only (no room details); section entries describe therapist + client action
+- Unmatched topics fall back to Claude Haiku which generates a treatment-specific prompt (~$0.001/call); console logs `→ Image prompt: Claude fallback (no map match for "X")`
+
+**Room reference images (per-client):** `image_settings.room_reference_image` in `clients/[abbr]/config.json` — path to a photo of the actual treatment room. Passed to Gemini as a visual reference so generated images match the real space. `image_settings.room_description` provides the text fallback for gpt-image-1 (which doesn't support image input). Currently configured for SDY only; add to other clients when room photos are available.
+
+**Treatment reference pool (shared):** `assets/image-references/treatments/` — common photos used as style references for section images across all clients. Maps to keywords via `TREATMENT_REFERENCE_MAP` in `image_generator.py`. Current pool: aromatherapy, couples-massage, foot-massage, hair-oiling, oil-massage, swedish-massage, thai-massage. Add new files and map entries here as more treatment photos become available.
+
+**Gemini payload structure for section images:** room reference image (1st) + treatment reference image (2nd) + text prompt. FAQ images use room reference only. Banners use room reference + text only (no treatment reference — props scene, no people). gpt-image-1 fallback uses text description only.
+
 ## Commands (Slash)
 
 All commands are in `.claude/commands/`. Key commands:

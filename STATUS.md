@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-04-11 (session 36 — wp_slash fix + SDY content completion batch)
+Last updated: 2026-04-12 (session 37 — image generation refactor: topic-specific prompts + room reference photos)
 
 ---
 
@@ -215,6 +215,21 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] Pillow centre-crop: banner to 1200×500, sections to 400×300
 - [x] Image cost added to per-row cost in Google Sheet
 - [x] **gpt-image-1 migration (session 33)** — DALL-E 3 fallback replaced with `gpt-image-1`; always returns base64 (no `response_format=url`); banner size `1536x1024` (was `1792x1024`); quality `medium` (was `standard`); `tests/test_image_generation.py` updated to match
+
+### Image generation refactor — topic-specific prompts + room reference photos (session 37)
+- [x] **Removed BANNER_TEMPLATE** — template was homogenising all images into the same scene regardless of topic; now each treatment generates a unique foreground/action description
+- [x] **`TOPIC_CONTEXT_MAP`** — keyword → `{banner, section}` descriptions; banner = foreground/props only (no room, no camera); section = treatment action in context; 11 entries covering all main treatments
+- [x] **`BANNER_PHOTO_SUFFIX` / `SECTION_PHOTO_SUFFIX`** — lens/film style suffix only (Leica M11, 50mm, Kodak Portra 400); no subject content (was mixed into the old PHOTO_SUFFIX)
+- [x] **`_assemble_banner(foreground)`** — combines foreground + room description + "overhead front-corner" camera angle + suffix; room slot is empty string when no room config set
+- [x] **`_build_banner_prompt(topic)` / `_build_section_prompt(h2, section_num)`** — keyword lookup in TOPIC_CONTEXT_MAP; Claude Haiku fallback if no match; FAQ prompt is room-aware (room props, no people)
+- [x] **`_build_prompt_with_claude(topic, image_type)`** — calls `claude-haiku-4-5-20251001`; generates foreground-only description; appends correct suffix; wraps through `_assemble_banner` for banner type; prints `→ Image prompt: Claude fallback (no map match for "...")` in console; cost ~$0.001/call
+- [x] **Room reference photos** — `ImageGenerator(room_description='', room_reference_image_path='')` accepts per-client room photo; loads as base64 on init; passed to Gemini as first `inline_data` part (no room reference = text-only prompt, same as before)
+- [x] **Treatment reference pool** — `assets/image-references/treatments/` shared folder with 7 reference photos: `aromatherapy.png`, `couples-massage.png`, `foot-massage.png`, `hair-oiling.png`, `oil-massage.jpg`, `swedish-massage.png`, `thai-massage.png`
+- [x] **`TREATMENT_REFERENCE_MAP`** — keyword → filename; `_get_treatment_reference(text)` keyword lookup returns `(b64, mime)` tuple; passed to Gemini as second `inline_data` part for section images (not banners, not FAQ)
+- [x] **Gemini payload structure** — parts: `[room_ref_image, treatment_ref_image, text_prompt]`; room ref always present if configured; treatment ref for section images only; adaptive prefix changes based on which references are provided
+- [x] **`clients/sdy/config.json`** — `image_settings` block added: `room_description` (cream-white walls, light wood floor, full-length window, wicker lamp, Buddha with incense, snake plant) + `room_reference_image` (path to WhatsApp photo of actual room)
+- [x] **`geo_batch_runner.py` + `publish_scheduled.py`** — both updated: read `image_settings` from business config, pass `room_description` and `room_reference_image_path` to `ImageGenerator()`
+- [x] **`republish_existing.py` improvements** (session 36 backlog completed this session) — `--file` flag for single-file republish; SSH config propagated to `WordPressPublisher`; content type inferred from path structure when `--file` used
 
 ### Output structure
 - [x] `content/[abbr]/[type]/[slug]-[date]/[slug]-[date].html` — per-article folder
@@ -768,6 +783,9 @@ Global skills installed at `~/.claude/skills/`. Available across all projects.
 
 ## Deferred / Future
 
+- Resize large treatment reference images — `foot-massage.png` (1.7MB), `oil-massage.jpg` — resize to ~800px for leaner Gemini API payloads
+- Add `image_settings` block to GTM, GTB, TMG configs — room reference photos pending (user to provide room photos within ~24 hours)
+- Post 2013 banner regeneration (Hair Oiling Treatment) — new image pipeline in place; regenerate post 2013 banner once room reference photos are updated in SDY config
 - Multi-client Sheet support — currently one Sheet per project; future: Sheet per client or client column filtering
 - FAQ accordion styling — `<details>`/`<summary>` uses browser-default arrow; can be styled with custom CSS in WordPress
 - `/write` command entity-awareness — interactive write command doesn't yet follow entity-first research flow
