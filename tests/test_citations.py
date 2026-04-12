@@ -234,3 +234,19 @@ def test_manual_pack_includes_tier4_sites_not_in_results(tmp_path):
     html = path.read_text()
     assert 'Apple Business Connect' in html
     assert 'Bing Places' in html
+
+from citation_submitter import submit_site
+
+def test_submit_tier4_returns_manual_required():
+    r = submit_site(SITE_BY_ID['apple_maps'], _GTM_CONFIG)
+    assert r.submit_status == 'manual_required'
+
+def test_submit_dry_run_skips_playwright():
+    r = submit_site(SITE_BY_ID['yell'], _GTM_CONFIG, dry_run=True)
+    assert r.submit_status == 'manual_required'
+    assert 'dry-run' in r.error
+
+def test_submit_no_form_selectors_returns_manual():
+    # 192com has empty form_selectors
+    r = submit_site(SITE_BY_ID['192com'], _GTM_CONFIG)
+    assert r.submit_status == 'manual_required'
