@@ -209,3 +209,28 @@ def test_citation_score_falls_back_to_schema_nap():
     )
     r.compute_score()
     assert r.score == 9  # 3+3+3
+
+from citation_manual_pack import generate_manual_pack
+
+def test_generate_manual_pack_creates_file(tmp_path):
+    config = {
+        'name': 'Glasgow Thai Massage',
+        'address': '142 West Nile Street, Glasgow',
+        'phone': '0141 552 1234',
+        'website': 'https://glasgowthaimassage.co.uk',
+        'city': 'Glasgow',
+    }
+    r = CitationCheckResult(site=SITE_BY_ID['apple_maps'], status='not_found')
+    path = generate_manual_pack('gtm', config, [r], tmp_path)
+    assert path.exists()
+    html = path.read_text()
+    assert 'Glasgow Thai Massage' in html
+    assert 'Apple Business Connect' in html
+    assert '0141 552 1234' in html
+
+def test_manual_pack_includes_tier4_sites_not_in_results(tmp_path):
+    config = {'name': 'Test', 'address': 'Test St', 'phone': '123', 'website': '', 'city': 'Glasgow'}
+    path = generate_manual_pack('test', config, [], tmp_path)
+    html = path.read_text()
+    assert 'Apple Business Connect' in html
+    assert 'Bing Places' in html
