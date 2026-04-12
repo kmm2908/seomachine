@@ -90,7 +90,7 @@ TOPIC_CONTEXT_MAP = {
     },
     "foot": {
         "banner": "spa therapist performing Thai foot massage on a female client who is lying on a treatment table, medium shot from the side showing therapist working on the client's feet",
-        "section": "spa therapist performing Thai foot massage on a female client, client lying on a treatment table with her lower legs and feet visible resting on the therapist's lap, therapist's hands clearly holding and working the foot, close shot showing hands and feet",
+        "section": "wide shot of a spa treatment room, female client lying fully on a treatment table covered in white sheets, client's bare feet and lower legs extending off the foot of the table, spa therapist seated at the foot of the table with both hands working on the client's feet, both the client and therapist fully visible in frame with the client's body clearly on the table",
     },
     "facial": {
         "banner": "spa therapist performing facial massage on a female client lying face-up on a treatment table, medium shot showing therapist's hands on the client's face and décolletage",
@@ -126,12 +126,32 @@ TOPIC_CONTEXT_MAP = {
     },
 }
 
-FAQ_SECTION_PROMPT_DEFAULT = (
-    "A relaxed female client in a white spa robe seated in a Thai spa waiting area. "
-    "Orchids on a carved wooden stand, warm ambient lighting, folded white towels on a shelf. "
-    "Shot on Leica M11, 50mm f/2 Summicron, Kodak Portra 400 film grain, "
-    "natural window light from the side. Real photograph, no CGI, no illustration."
-)
+FAQ_SCENE_POOL = [
+    (
+        "A relaxed female client in a white spa robe seated with both feet resting in a warm floral foot bath, "
+        "rose petals floating on the water, a lit candle glowing beside her, eyes closed in contentment."
+    ),
+    (
+        "A relaxed female client in a white spa robe seated in a spa chair, cradling a glass cup of herbal tea "
+        "with both hands, soft natural light from a window beside her, serene expression."
+    ),
+    (
+        "A relaxed female client lying on a treatment table covered in white sheets, eyes closed, arms resting "
+        "at her sides, a single white orchid on the side table, warm candlelight."
+    ),
+    (
+        "A relaxed female client in a white spa robe reclining in a cushioned chair, fresh white towel wrapped "
+        "around her hair, a lit candle and small vase of flowers on the shelf behind her."
+    ),
+    (
+        "A relaxed female client in a white spa robe seated beside a low table with floating candles in a bowl "
+        "of water and a green plant, looking peacefully toward a window."
+    ),
+    (
+        "A relaxed female client in a white spa robe with eyes closed, hands resting open in her lap, warm "
+        "amber lighting, a small salt lamp and orchid on a shelf in the background."
+    ),
+]
 
 BANNER_PHOTO_SUFFIX = (
     "Shot on Leica M11, 28mm f/2 Summicron, Kodak Portra 400 film grain, "
@@ -176,6 +196,7 @@ class ImageGenerator:
                 print(f"    ⚠ Room reference image not found: {room_reference_image_path}")
         if not self.api_key:
             raise EnvironmentError("GOOGLE_AI_API_KEY not set in environment")
+        self._faq_seed = 0  # set per-post in generate_for_post for deterministic scene selection
 
     def _get_treatment_reference(self, text: str) -> tuple[str, str]:
         """Return (base64, mime_type) for the best matching treatment reference image.
@@ -204,6 +225,7 @@ class ImageGenerator:
         # Strip date suffix to get a clean keyword slug, e.g. "glasgow-central-station"
         base_slug = re.sub(r'-\d{4}-\d{2}-\d{2}$', '', filepath.stem)
 
+        self._faq_seed = sum(ord(c) for c in base_slug)
         section_headings = self._extract_section_headings(html_content)
         is_location_type = content_type == "location"
 
@@ -314,14 +336,19 @@ class ImageGenerator:
     def _build_section_prompt(self, h2_heading: str, section_num: int) -> str:
         """Build a topic-specific section image prompt, or Claude if no match."""
         if section_num >= 2 or "faq" in h2_heading.lower() or "frequently" in h2_heading.lower():
+            scene = FAQ_SCENE_POOL[self._faq_seed % len(FAQ_SCENE_POOL)]
             if self.room_description:
                 return (
-                    f"A relaxed female client in a white spa robe seated in the treatment room. "
+                    f"{scene} "
                     f"{self.room_description}. "
                     f"Shot on Leica M11, 50mm f/2 Summicron, Kodak Portra 400 film grain, "
                     f"natural window light from the side. Real photograph, no CGI, no illustration."
                 )
-            return FAQ_SECTION_PROMPT_DEFAULT
+            return (
+                f"{scene} "
+                "Shot on Leica M11, 50mm f/2 Summicron, Kodak Portra 400 film grain, "
+                "natural window light from the side. Real photograph, no CGI, no illustration."
+            )
         heading_lower = h2_heading.lower()
         for keyword, contexts in TOPIC_CONTEXT_MAP.items():
             if keyword in heading_lower:
