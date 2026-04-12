@@ -198,17 +198,20 @@ Set `IMAGE_API_PROVIDER=gemini` in `.env` to generate images automatically. Requ
 - `location`: banner shows the local area/street scene; section image shows spa treatment
 - All other types: banner shows spa/treatment scene
 
-**Image prompt architecture (session 37, corrected session 38):**
+**Image prompt architecture (session 37, corrected sessions 38–41):**
 - No template wrapper — each treatment type gets its own topic-specific scene description from `TOPIC_CONTEXT_MAP` in `data_sources/modules/image_generator.py`
 - Banner entries show therapist + client performing the treatment (medium/wide shot); section entries show close-up of the specific technique — both always have people
 - Unmatched topics fall back to Claude Haiku which generates a treatment-specific prompt (~$0.001/call); console logs `→ Image prompt: Claude fallback (no map match for "X")`
 - Treatment reference photo passed to Gemini for both banner and section images (not section only)
+- **`SECTION_PHOTO_SUFFIX`** includes universal anatomical grounding rule — all visible body parts must be clearly attached to a person in the scene, never floating or disembodied
+- **Image validation layer** — `_validate_image(path, image_type)` sends generated image to Claude Haiku vision API; checks banner for therapist+client visibility and no disembodied parts; checks section for anatomical grounding; returns `(True, '')` or `(False, "ISSUE: reason")`; never raises (returns True on API error). `_generate_validated()` wraps `_generate()` with validation + 1 auto-retry before saving; logs warning if retry also flagged
+- **FAQ image variety** — `FAQ_SCENE_POOL` in `image_generator.py` is a list of 6 distinct "client at rest" scenes (foot bath, herbal tea, lying on table, reclining in chair, floating candles, salt lamp); scene selected deterministically by `sum(ord(c) for c in base_slug) % 6` so same page always regenerates to same scene but different pages get different images
 
 **Room reference images (per-client):** `image_settings.room_reference_image` in `clients/[abbr]/config.json` — path to a photo of the actual treatment room. Passed to Gemini as a visual reference so generated images match the real space. `image_settings.room_description` provides the text fallback for gpt-image-1 (which doesn't support image input). Currently configured for SDY only; add to other clients when room photos are available.
 
 **Treatment reference pool (shared):** `assets/image-references/treatments/` — common photos used as style references for banner and section images across all clients. Maps to keywords via `TREATMENT_REFERENCE_MAP` in `image_generator.py`. Current pool: aromatherapy, couples-massage, foot-massage, hair-oiling, oil-massage, swedish-massage, thai-massage. Add new files and map entries here as more treatment photos become available.
 
-**Gemini payload structure for section images:** room reference image (1st) + treatment reference image (2nd) + text prompt. FAQ images use room reference only. Banners use room reference + text only (no treatment reference — props scene, no people). gpt-image-1 fallback uses text description only.
+**Gemini payload structure:** banners: room reference image (1st) + treatment reference image (2nd) + text prompt. Section images: same. FAQ images: room reference only (no treatment reference — client-at-rest scene, no anatomy risk). gpt-image-1 fallback uses text description only.
 
 ## Commands (Slash)
 

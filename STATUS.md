@@ -1,6 +1,16 @@
 # Project Status
 
-Last updated: 2026-04-12 (session 40 — citation generator & listing audit built, 32 tests passing)
+Last updated: 2026-04-12 (session 41 — SDY image audit + anatomy validation + FAQ variety + duplicate content resolved)
+
+---
+
+## Action Required — Serendipity (SDY) SEO Audit
+
+A full site audit was run on staging2.serendipitymassage.co.uk on 2026-04-12. A brief covering all outstanding SEO issues has been dropped into `clients/sdy/SEO-Issues-Brief.md` — please review and work through it.
+
+**Already fixed (do not re-do):** JSON-LD telephone field HTML anchor corruption on all 39 CPT pages.
+
+**Needs action in this project:** SEO plugin setup, meta descriptions, schema on standard pages, H1 on Services page, Open Graph tags, Article schema type on location pages.
 
 ---
 
@@ -155,14 +165,20 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
   - Treatment reference photo now passed to Gemini for banner generation too (was section images only)
   - `_assemble_banner()`: removed empty-room camera angle instruction; room description used as background only
   - Claude Haiku fallback + system prompt: "no people" removed from banner prompts
-- [x] 6 specialist service pages regenerated and republished to staging2 with corrected images:
-  - Hair Oiling Treatment → post 2162
-  - Head and Hair Oiling → post 2166
-  - Thai Facial Massage → post 2170
-  - Thai Head Massage → post 2174
-  - Thai Foot Massage → post 2178
-  - Thai Reflexology → post 2182
-- [x] All intermediate duplicates cleaned up via WP-CLI SSH; staging2 seo_service count remains 17
+
+### SDY image anatomy validation + FAQ variety + duplicate content audit (session 41)
+- [x] **Anatomy validation layer** — `_validate_image(path, image_type)` sends generated image to Claude Haiku vision; checks for disembodied body parts and missing therapist/client; `_generate_validated()` wraps generation with validation + 1 auto-retry before saving
+- [x] **`SECTION_PHOTO_SUFFIX`** — universal anatomical grounding rule added: all visible body parts must be clearly attached to a person in the scene
+- [x] **Foot massage section prompt** — updated from close-up-hands-only to wide shot showing both client on table and therapist in frame; fixes floating feet issue
+- [x] **FAQ image variety** — `FAQ_SCENE_POOL` of 6 distinct client-at-rest scenes replaces single fixed prompt; scene chosen deterministically by page slug (same page always regenerates to same scene)
+- [x] 6 specialist service pages visually audited — all 18 images confirmed anatomically correct
+- [x] 6 specialist service pages republished to staging2 (final IDs: Head and Hair Oiling 2213, Thai Facial Massage 2217, Thai Head Massage 2221, Thai Reflexology 2229, Thai Foot Massage 2248)
+- [x] **Duplicate content audit** — staging2 seo_service reviewed; 3 overlapping pairs identified and resolved:
+  - Hair Oiling Treatment (2209) deleted — Head and Hair Oiling (2213) kept as the canonical page
+  - Thai Oil Massage (985) rewritten to own relaxation/skin/mood lane; deep tissue language removed; republished as 2255
+  - Thai Aromatherapy (990) rewritten to own mental/emotional/sleep lane; oils changed to ylang-ylang, frankincense, rose geranium; republished as 2259
+  - Thai Deep Tissue Oil Massage (2017) and Aromatherapy Deep Tissue (2021) untouched — own the therapeutic/physical-recovery lane
+- [x] Staging2 seo_service final count: 16 posts, no duplicates
 
 ### SDY content completion batch (session 36)
 - [x] `clients/sdy/internal-links-map.md` — updated with all 16 confirmed staging2 service URLs (staging2.serendipitymassage.co.uk/seo-service/[slug]/)
@@ -833,13 +849,13 @@ python3 src/citations/run_citations.py --abbr gtm --force          # re-check al
 
 **Tier breakdown:**
 - Tier 1 (API): GBP (existing module), Yelp Fusion, Foursquare
-- Tier 2 (DataForSEO): TrustPilot, TripAdvisor
-- Tier 3 (Playwright check + form fill): Yell, Thomson Local, Scoot, 192.com, Cylex, FreeIndex, Brownbook, Misterwhat, Hotfrog
-- Tier 4 (manual pack): Apple Business Connect, Bing Places, Facebook, Treatwell, Fresha, Bark, Nextdoor, Checkatrade, Yelp (create)
+- Tier 2 (DataForSEO): TrustPilot, TripAdvisor — uses Google SERP `site:domain` search (business_data search endpoints don't exist for these platforms)
+- Tier 3 (Playwright check + form fill): Yell, Thomson Local, Scoot, 192.com, FreeIndex, Brownbook, Misterwhat, Hotfrog
+- Tier 4 (manual pack): Apple Business Connect, Bing Places, Facebook, Treatwell, Fresha, Bark, Nextdoor, Checkatrade, Yelp (create), Cylex (CAPTCHA blocks Playwright — moved from Tier 3)
 
-- [ ] **Needs testing:** Run `--abbr gtm --mode audit --dry-run --force` and verify status table + manual pack generated
-- [ ] **Needs testing:** Run full `/audit --abbr gtm` and confirm NAP+Cit score appears in report
-- [ ] **Selector tuning:** Tier 3 Playwright CSS selectors need verifying against live sites (run dry-run first, adjust selectors in citation_sites.py as needed)
+- [x] **Tested (session 41):** Run `--abbr gtm --mode audit --dry-run --force` — status table ✓, state.json ✓, manual-pack.html ✓; fixed: load_dotenv missing in run_citations.py, manual pack now generated in run_audit (not just run_creation)
+- [x] **Tested (session 41):** Run full `/audit --abbr gtm` — NAP+Cit label appears in console output ✓; fixed: queue_gen.py config_address AttributeError, CitationResult fallback to state snapshot when no sites are due
+- [x] **Selector tuning (session 41):** Tier 3 Playwright ran without errors (most sites `not_found` — accurate for new business); Cylex moved to Tier 4 (CAPTCHA); Tier 2 DataForSEO fixed to use Google SERP `site:` search instead of non-existent business_data endpoints; 32 tests passing
 
 ---
 
