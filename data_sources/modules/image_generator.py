@@ -59,7 +59,7 @@ TREATMENT_REFERENCE_MAP = {
     "deep tissue":  "thai-massage.png",
     "sports":       "thai-massage.png",
     "hot stone":    "thai-massage.png",
-    "oil":          "oil-massage.png",
+    "oil":          "oil-massage.jpg",
 }
 
 # ── Topic → scene description map ────────────────────────────────────────────
