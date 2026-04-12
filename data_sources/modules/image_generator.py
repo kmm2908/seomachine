@@ -51,6 +51,11 @@ BANNER_ACTION_MAP = {
     "hot stone":    "a hot stone back massage",
     "foot":         "a Thai foot massage",
     "facial":       "a facial massage",
+    "hair":         "a warm hair oiling scalp treatment, massaging nourishing oil into a client's hair",
+    "oiling":       "a warm hair oiling scalp treatment, massaging nourishing oil into a client's hair",
+    "scalp":        "an Indian head and scalp massage",
+    "reflexology":  "a Thai foot reflexology massage on a client's feet",
+    "swedish":      "a gentle Swedish relaxation back massage",
     "head":         "an Indian head massage",
     "thai":         "a traditional Thai back massage",
 }
@@ -89,6 +94,26 @@ TOPIC_CONTEXT_MAP = {
     "facial": {
         "banner": "facial spa treatment room, white table, botanical skincare products, orchids, no people",
         "section": "spa therapist performing facial massage on a woman lying on treatment table, soft lighting",
+    },
+    "hair": {
+        "banner": "spa station with glass dropper bottles of nourishing hair oil, white orchids, warm towels, teak wood background, no people",
+        "section": "spa therapist massaging warm nourishing oil into a seated female client's scalp and hair, warm amber lighting",
+    },
+    "oiling": {
+        "banner": "hair oiling spa station with Ayurvedic oil bottles, white orchids, warm towels, teak wood background, no people",
+        "section": "therapist applying warm oil to client's scalp and hair with careful hands, professional spa setting",
+    },
+    "scalp": {
+        "banner": "Thai massage studio interior, warm amber lighting, Thai silk decor, no people",
+        "section": "therapist performing Indian head and scalp massage on a seated client, professional spa setting",
+    },
+    "reflexology": {
+        "banner": "Thai spa room with foot bath bowl, flower petals, smooth pebbles, candles, no people",
+        "section": "spa therapist applying reflexology pressure to the sole of a client's foot, close view of hands and foot, treatment room",
+    },
+    "swedish": {
+        "banner": "serene massage studio with white treatment table, folded towels, orchids, soft natural lighting, no people",
+        "section": "spa therapist performing gentle Swedish massage on a client's back, smooth flowing strokes, professional studio",
     },
     "head": {
         "banner": "Thai massage studio interior, warm amber lighting, Thai silk decor, no people",
@@ -137,11 +162,26 @@ SECTION_FALLBACK_SCENE = (
 )
 
 
+PHOTO_SUFFIX = (
+    "Shot on Leica M11, 50mm f/2 Summicron, Kodak Portra 400 film grain, "
+    "warm natural light, authentic location feel. "
+    "Real photograph, no CGI, no illustration, no digital art."
+)
+
+CLAUDE_PROMPT_SYSTEM = (
+    "You write image prompts for a photorealistic AI image generator. "
+    "Prompts must describe a single spa or wellness treatment scene that is specific to the treatment named. "
+    "Do NOT default to a generic back massage. "
+    "Keep the response to 2-3 sentences, no preamble, no explanation."
+)
+
+
 class ImageGenerator:
 
     def __init__(self):
         self.api_key = os.getenv("GOOGLE_AI_API_KEY")
         self.openai_api_key = os.getenv("OPENAI_API_KEY")
+        self.anthropic_api_key = os.getenv("ANTHROPIC_API_KEY")
         if not self.api_key:
             raise EnvironmentError("GOOGLE_AI_API_KEY not set in environment")
 
@@ -212,12 +252,12 @@ class ImageGenerator:
     def _build_banner_prompt(self, topic: str) -> str:
         """Build a photorealistic banner prompt from the topic."""
         topic_lower = topic.lower()
-        scene = BANNER_FALLBACK_ACTION
         for keyword, action in BANNER_ACTION_MAP.items():
             if keyword in topic_lower:
-                scene = action
-                break
-        return BANNER_TEMPLATE.format(scene=scene)
+                return BANNER_TEMPLATE.format(scene=action)
+        # No map match — ask Claude for a topic-specific prompt
+        print(f"    → Image prompt: Claude fallback (no map match for \"{topic}\")")
+        return self._build_prompt_with_claude(topic, "banner")
 
     def _build_location_banner_prompt(self, topic: str) -> str:
         """Build a wide street/area scene prompt for the banner on location content."""
@@ -246,6 +286,10 @@ class ImageGenerator:
             return FAQ_SECTION_PROMPT
 
         scene = self._lookup_scene(h2_heading, "section")
+        if scene is None:
+            # No map match — ask Claude for a topic-specific prompt
+            print(f"    → Image prompt: Claude fallback (no map match for \"{h2_heading}\")")
+            return self._build_prompt_with_claude(h2_heading, "section")
         return SECTION_TEMPLATE.format(scene=scene)
 
     def _lookup_scene(self, text: str, image_type: str) -> str:
@@ -254,6 +298,54 @@ class ImageGenerator:
         for keyword, contexts in TOPIC_CONTEXT_MAP.items():
             if keyword in text_lower:
                 return contexts.get(image_type, contexts["section"])
+        return None  # signals caller to use Claude fallback
+
+    def _build_prompt_with_claude(self, topic: str, image_type: str) -> str:
+        """Ask Claude Haiku to generate a topic-specific image prompt.
+
+        Called only when no keyword in BANNER_ACTION_MAP / TOPIC_CONTEXT_MAP matches.
+        Cost: ~$0.001 per call.
+        """
+        if not self.anthropic_api_key:
+            # Anthropic key not set — use generic fallback rather than crashing
+            return BANNER_FALLBACK_SCENE if image_type == "banner" else SECTION_FALLBACK_SCENE
+
+        if image_type == "banner":
+            user_msg = (
+                f"Write a 2-sentence image prompt for the banner of a spa page about '{topic}'. "
+                "Describe the treatment room or props — no people. "
+                "Be specific to this treatment, not a generic spa room."
+            )
+        else:
+            user_msg = (
+                f"Write a 2-sentence image prompt for a section image on a spa page about '{topic}'. "
+                "Describe a therapist performing this specific treatment on a client. "
+                "Be specific — do not default to a back massage unless that is literally what this treatment is."
+            )
+
+        try:
+            r = requests.post(
+                "https://api.anthropic.com/v1/messages",
+                headers={
+                    "x-api-key": self.anthropic_api_key,
+                    "anthropic-version": "2023-06-01",
+                    "content-type": "application/json",
+                },
+                json={
+                    "model": "claude-haiku-4-5-20251001",
+                    "max_tokens": 150,
+                    "system": CLAUDE_PROMPT_SYSTEM,
+                    "messages": [{"role": "user", "content": user_msg}],
+                },
+                timeout=20,
+            )
+            if r.status_code == 200:
+                scene = r.json()["content"][0]["text"].strip()
+                return f"{scene} {PHOTO_SUFFIX}"
+        except Exception:
+            pass
+
+        # Last resort fallback
         return BANNER_FALLBACK_SCENE if image_type == "banner" else SECTION_FALLBACK_SCENE
 
     def _generate(self, prompt: str, output_path: Path, image_type: str) -> float:
