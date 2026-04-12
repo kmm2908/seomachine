@@ -751,6 +751,34 @@ def collect_nap(config: Dict, schema: SchemaResult, site_url: str,
     return result
 
 
+# ── Citation Collector ────────────────────────────────────────────────────────
+
+def collect_citations(config: dict, root: Path) -> 'CitationResult':
+    """Run citation audit and return scored CitationResult.
+    Falls back gracefully if citation modules unavailable."""
+    try:
+        sys.path.insert(0, str(root / 'data_sources' / 'modules'))
+        sys.path.insert(0, str(root / 'src' / 'audit'))
+        from citation_manager import CitationManager
+        from scoring import CitationResult
+        abbr = config.get('abbreviation', '').lower()
+        if not abbr:
+            raise ValueError('No abbreviation in config')
+        manager = CitationManager(abbr, config, root)
+        return manager.run_audit(force=False, dry_run=False)
+    except Exception as exc:
+        logger.warning('Citation audit failed: %s', exc)
+        try:
+            from scoring import CitationResult
+        except Exception:
+            sys.path.insert(0, str(root / 'src' / 'audit'))
+            from scoring import CitationResult
+        r = CitationResult()
+        r.findings.append(f'Citation audit unavailable: {exc}')
+        r.compute_score()
+        return r
+
+
 # ── Technical Collector ───────────────────────────────────────────────────────
 
 def collect_technical(site_url: str, wp_config: Optional[Dict] = None) -> TechnicalResult:

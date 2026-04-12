@@ -9,7 +9,23 @@ Produces two outputs from an AuditResult:
 from __future__ import annotations
 
 from typing import List
-from scoring import AuditResult
+from scoring import AuditResult, NAPResult, CitationResult
+
+
+# ── Helpers ───────────────────────────────────────────────────────────────────
+
+def _citation_section_md(nap) -> str:
+    """Generate citation detail block for markdown report."""
+    if not isinstance(nap, CitationResult) or not nap.site_results:
+        return ''
+    lines = [
+        f'\n### Citations ({nap.found_count}/{nap.total_sites} found, score {nap.score}/15)\n'
+    ]
+    for r in sorted(nap.site_results, key=lambda x: x.site.priority, reverse=True)[:15]:
+        icon = {'found': '✓', 'not_found': '✗', 'unknown': '·', 'duplicate': '⚠'}.get(r.status, '·')
+        nap_note = ' — NAP issues: ' + ', '.join(r.issues) if r.issues else ''
+        lines.append(f'- {icon} **{r.site.name}** ({r.status}){nap_note}')
+    return '\n'.join(lines)
 
 
 # ── Internal Markdown ─────────────────────────────────────────────────────────
@@ -39,7 +55,7 @@ def build_markdown(result: AuditResult) -> str:
     lines.append(f'| Content | {r.content.score} | 20 |')
     lines.append(f'| GBP | {r.gbp.score} | 20 |')
     lines.append(f'| Reviews | {r.reviews.score} | 15 |')
-    lines.append(f'| NAP Consistency | {r.nap.score} | 15 |')
+    lines.append(f'| NAP + Citations | {r.nap.score} | 15 |')
     lines.append(f'| Technical | {r.technical.score} | 10 |')
     lines.append(f'| **Total** | **{r.total_score}** | **100** |')
 
@@ -85,16 +101,29 @@ def build_markdown(result: AuditResult) -> str:
         lines.append(f'- Response rate: {int(r.reviews.response_rate * 100)}%')
     finding_block(r.reviews.findings)
 
-    # ── NAP ───────────────────────────────────────────────────────────────────
-    h(2, f'NAP Consistency — {r.nap.score}/15')
+    # ── NAP / Citations ───────────────────────────────────────────────────────
+    h(2, f'NAP + Citations — {r.nap.score}/15')
     _icons = {'match': '✓', 'mismatch': '✗', 'unknown': '?'}
-    lines.append(f'- Name: {_icons[r.nap.name_match]}  '
-                 f'Config="{r.nap.config_name}"  |  Schema="{r.nap.schema_name}"')
-    lines.append(f'- Address: {_icons[r.nap.address_match]}  '
-                 f'Config="{r.nap.config_address}"  |  Schema="{r.nap.schema_address}"')
-    lines.append(f'- Phone: {_icons[r.nap.phone_match]}  '
-                 f'Config="{r.nap.config_phone}"  |  Schema="{r.nap.schema_phone}"')
+    if isinstance(r.nap, CitationResult):
+        lines.append(f'- Schema name: {_icons.get(r.nap.schema_name_match, "?")}')
+        lines.append(f'- Schema address: {_icons.get(r.nap.schema_address_match, "?")}')
+        lines.append(f'- Schema phone: {_icons.get(r.nap.schema_phone_match, "?")}')
+        lines.append(f'- Citations found: {r.nap.found_count}/{r.nap.total_sites}')
+        if r.nap.nap_issue_count:
+            lines.append(f'- NAP issues across citations: {r.nap.nap_issue_count}')
+        if r.nap.duplicate_count:
+            lines.append(f'- Duplicate listings: {r.nap.duplicate_count}')
+        if r.nap.critical_missing:
+            lines.append(f'- Critical sites missing: {", ".join(r.nap.critical_missing)}')
+    else:
+        lines.append(f'- Name: {_icons[r.nap.name_match]}  '
+                     f'Config="{r.nap.config_name}"  |  Schema="{r.nap.schema_name}"')
+        lines.append(f'- Address: {_icons[r.nap.address_match]}  '
+                     f'Config="{r.nap.config_address}"  |  Schema="{r.nap.schema_address}"')
+        lines.append(f'- Phone: {_icons[r.nap.phone_match]}  '
+                     f'Config="{r.nap.config_phone}"  |  Schema="{r.nap.schema_phone}"')
     finding_block(r.nap.findings)
+    lines.append(_citation_section_md(r.nap))
 
     # ── Technical ─────────────────────────────────────────────────────────────
     h(2, f'Technical — {r.technical.score}/10')
@@ -136,7 +165,7 @@ _CATEGORY_LABELS = {
     'content':   ('Website Content',      'Service pages, blog posts, and local landing pages'),
     'gbp':       ('Google Business Profile', 'Your profile in Google Maps and local search'),
     'reviews':   ('Reviews & Reputation', 'Review count, rating, and response rate'),
-    'nap':       ('NAP Consistency',      'Name, address, and phone matching across the web'),
+    'nap':       ('NAP + Citations',       'Name/address/phone consistency and directory presence'),
     'technical': ('Technical Health',     'SSL, page speed, meta tags, and sitemaps'),
 }
 

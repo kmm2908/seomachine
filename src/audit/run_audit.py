@@ -45,7 +45,7 @@ from scoring import (
 )
 from collectors import (
     collect_schema, collect_content, collect_gbp, collect_reviews,
-    collect_nap, collect_technical, collect_competitor,
+    collect_nap, collect_citations, collect_technical, collect_competitor,
     _get_with_fallback as _prime_fallback_cache,
 )
 from report import build_markdown, build_prospect_html
@@ -87,7 +87,7 @@ def _print_summary(result: AuditResult) -> None:
         ('Content',   result.content.score,   20),
         ('GBP',       result.gbp.score,       20),
         ('Reviews',   result.reviews.score,   15),
-        ('NAP',       result.nap.score,       15),
+        ('NAP+Cit',   result.nap.score,       15),
         ('Technical', result.technical.score, 10),
     ]
     for label, sc, mx in cats:
@@ -165,7 +165,20 @@ def run_audit(
     reviews = collect_reviews(config)
 
     logger.info('Collecting NAP data...')
-    nap = collect_nap(config, schema, site_url, wp_config=wp_config)
+    nap_schema = collect_nap(config, schema, site_url, wp_config=wp_config)
+
+    # Run citation audit if client abbreviation is available
+    if config.get('abbreviation'):
+        logger.info('Collecting citation data...')
+        nap = collect_citations(config, ROOT)
+        # Carry schema NAP findings into CitationResult
+        nap.schema_name_match = getattr(nap_schema, 'name_match', 'unknown')
+        nap.schema_address_match = getattr(nap_schema, 'address_match', 'unknown')
+        nap.schema_phone_match = getattr(nap_schema, 'phone_match', 'unknown')
+        nap.findings = nap_schema.findings + nap.findings
+        nap.compute_score()
+    else:
+        nap = nap_schema
 
     logger.info('Collecting technical data...')
     technical = collect_technical(site_url, wp_config=wp_config)
