@@ -100,3 +100,42 @@ def test_get_not_found(tmp_path):
     r = CitationCheckResult(site=SITE_BY_ID['yell'], status='not_found')
     state.update(r)
     assert 'yell' in state.get_not_found()
+
+from unittest.mock import patch, MagicMock
+from citation_checker import _check_yelp, _check_foursquare, _match_api_results, check_site, _is_captcha_html
+
+_GTM_CONFIG = {
+    'name': 'Glasgow Thai Massage',
+    'address': '142 West Nile Street, Glasgow, G1 2RQ',
+    'phone': '0141 552 1234',
+    'city': 'Glasgow',
+    'postcode': 'G1 2RQ',
+}
+
+def test_yelp_found_with_nap_match():
+    mock_resp = MagicMock()
+    mock_resp.json.return_value = {'businesses': [
+        {'name': 'Glasgow Thai Massage', 'phone': '01415521234',
+         'url': 'https://yelp.co.uk/biz/gtm', 'id': 'abc'}
+    ]}
+    mock_resp.raise_for_status = MagicMock()
+    with patch('citation_checker.requests.get', return_value=mock_resp):
+        with patch.dict('os.environ', {'YELP_API_KEY': 'test-key'}):
+            r = _check_yelp(SITE_BY_ID['yelp'], _GTM_CONFIG)
+    assert r.status == 'found'
+    assert r.nap_match is True
+
+def test_yelp_not_found():
+    mock_resp = MagicMock()
+    mock_resp.json.return_value = {'businesses': []}
+    mock_resp.raise_for_status = MagicMock()
+    with patch('citation_checker.requests.get', return_value=mock_resp):
+        with patch.dict('os.environ', {'YELP_API_KEY': 'test-key'}):
+            r = _check_yelp(SITE_BY_ID['yelp'], _GTM_CONFIG)
+    assert r.status == 'not_found'
+
+def test_yelp_returns_unknown_without_api_key():
+    with patch.dict('os.environ', {}, clear=True):
+        r = _check_yelp(SITE_BY_ID['yelp'], _GTM_CONFIG)
+    assert r.status == 'unknown'
+    assert 'YELP_API_KEY' in r.error
