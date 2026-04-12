@@ -29,6 +29,7 @@ from scoring import (
     SchemaResult, ContentResult, GBPResult,
     ReviewResult, NAPResult, TechnicalResult, CompetitorResult,
 )
+from nap_utils import normalise_phone as _normalise_phone, normalise_address as _normalise_address
 
 logger = logging.getLogger(__name__)
 
@@ -343,16 +344,6 @@ def _extract_jsonld(soup: BeautifulSoup) -> List[Dict]:
 
 def _type_of(block: Dict) -> str:
     return block.get('@type', '')
-
-
-def _normalise_phone(phone: str) -> str:
-    """Strip non-digit characters for comparison."""
-    return re.sub(r'\D', '', phone)
-
-
-def _normalise_address(addr: str) -> str:
-    """Lowercase + collapse whitespace for loose comparison."""
-    return re.sub(r'\s+', ' ', addr.lower().strip())
 
 
 # ── Schema Collector ──────────────────────────────────────────────────────────
