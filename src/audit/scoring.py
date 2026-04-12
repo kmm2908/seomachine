@@ -183,6 +183,63 @@ class NAPResult:
 
 
 @dataclass
+class CitationResult:
+    """Citation presence and NAP consistency across directories (max 15 pts).
+    Replaces the schema-only NAPResult as the 'nap' scoring category.
+    """
+    # Schema NAP (carried over from original NAPResult checks)
+    schema_name_match: str = 'unknown'
+    schema_address_match: str = 'unknown'
+    schema_phone_match: str = 'unknown'
+    # Citation coverage
+    total_sites: int = 0
+    found_count: int = 0
+    nap_issue_count: int = 0
+    duplicate_count: int = 0
+    critical_missing: list = field(default_factory=list)  # GBP/Bing/Yelp
+    # Per-site results (CitationCheckResult objects)
+    site_results: list = field(default_factory=list)
+    score: int = 0
+    findings: List[str] = field(default_factory=list)
+
+    def compute_score(self) -> int:
+        pts = 0
+
+        # Schema NAP (kept for backward compat when citation check not run)
+        if not self.site_results:
+            if self.schema_name_match == 'match':    pts += 3
+            if self.schema_address_match == 'match': pts += 3
+            if self.schema_phone_match == 'match':   pts += 3
+            self.score = min(pts, 15)
+            return self.score
+
+        # Citation coverage: 80%+ of priority sites = 6 pts
+        if self.total_sites > 0:
+            pct = self.found_count / self.total_sites
+            if pct >= 0.8:
+                pts += 6
+            elif pct >= 0.6:
+                pts += 4
+            elif pct >= 0.4:
+                pts += 2
+
+        # NAP consistency: 5 pts (deduct 1 per issue, min 0)
+        nap_pts = max(0, 5 - self.nap_issue_count)
+        pts += nap_pts
+
+        # No duplicates: 2 pts
+        if self.duplicate_count == 0:
+            pts += 2
+
+        # No critical sites missing: 2 pts
+        if not self.critical_missing:
+            pts += 2
+
+        self.score = min(pts, 15)
+        return self.score
+
+
+@dataclass
 class TechnicalResult:
     """Basic technical health (max 10 pts)."""
     has_ssl: bool = False
@@ -227,7 +284,7 @@ class AuditResult:
     content: ContentResult
     gbp: GBPResult
     reviews: ReviewResult
-    nap: NAPResult
+    nap: 'NAPResult | CitationResult'
     technical: TechnicalResult
     competitor: CompetitorResult
     total_score: int = 0

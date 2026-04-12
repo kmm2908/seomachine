@@ -173,3 +173,39 @@ def test_check_site_routes_tier4_to_unknown():
 def test_is_captcha_html_detects_cloudflare():
     assert _is_captcha_html('<html><body class="cf-challenge">prove you are human</body></html>') is True
     assert _is_captcha_html('<html><body><h1>Results for Glasgow</h1></body></html>') is False
+
+import sys as _sys
+_sys.path.insert(0, str(ROOT / 'src' / 'audit'))
+from scoring import CitationResult
+
+def test_citation_score_full_coverage():
+    r = CitationResult(
+        total_sites=10, found_count=9,   # 90% = 6 pts
+        nap_issue_count=0,               # 5 pts
+        duplicate_count=0,               # 2 pts
+        critical_missing=[],             # 2 pts
+        site_results=['mock'],           # trigger citation path
+    )
+    r.compute_score()
+    assert r.score == 15
+
+def test_citation_score_partial_coverage():
+    r = CitationResult(
+        total_sites=10, found_count=6,   # 60% = 4 pts
+        nap_issue_count=2,               # 3 pts
+        duplicate_count=1,               # 0 pts
+        critical_missing=['bing_places'], # 0 pts
+        site_results=['mock'],
+    )
+    r.compute_score()
+    assert r.score == 7
+
+def test_citation_score_falls_back_to_schema_nap():
+    r = CitationResult(
+        schema_name_match='match',
+        schema_address_match='match',
+        schema_phone_match='match',
+        site_results=[],  # no citation run
+    )
+    r.compute_score()
+    assert r.score == 9  # 3+3+3
