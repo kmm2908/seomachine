@@ -329,6 +329,7 @@ src/
   snippets/     ← generate_directions_snippet.py
   social/       ← repurpose_content.py, video_producer.py, social_post_generator.py
   audit/        ← run_audit.py, collectors.py, scoring.py, report.py, pdf_gen.py, queue_gen.py
+  citations/    ← run_citations.py (CLI entry point)
   competitors/  ← competitor alternative page generators (future)
 tests/          ← test scripts (delete before production)
 data_sources/   ← importable modules (google_sheets, wordpress_publisher, elevenlabs_tts, ghl_publisher, etc.)
@@ -366,7 +367,15 @@ python3 src/reporting/daily_digest.py --dry-run          # print without sending
 python3 src/audit/run_audit.py --abbr gtm                # full SEO audit (existing client)
 python3 src/audit/run_audit.py --abbr gtm --no-pdf       # audit, skip PDF generation
 python3 src/audit/run_audit.py --url https://... --name "Business" --no-email  # prospect audit
+python3 src/citations/run_citations.py --abbr gtm                  # full: audit + create missing
+python3 src/citations/run_citations.py --abbr gtm --mode audit     # check only, no submissions
+python3 src/citations/run_citations.py --abbr gtm --mode create    # create missing only
+python3 src/citations/run_citations.py --abbr gtm --status         # citation status table
+python3 src/citations/run_citations.py --abbr gtm --dry-run        # audit without submitting
+python3 src/citations/run_citations.py --abbr gtm --force          # re-check all sites
 ```
+
+**`run_citations.py`** — tiered citation audit and creation across 23 UK directory sites. Four tiers: Tier 1 (direct API: Yelp, Foursquare, GBP), Tier 2 (DataForSEO: TrustPilot, TripAdvisor, Facebook, etc.), Tier 3 (Playwright scrape + form fill: Yell, Thomson Local, Scoot, etc.), Tier 4 (manual HTML pack). State stored at `clients/[abbr]/citations/state.json` with 30-day staleness cadence. Manual pack at `clients/[abbr]/citations/manual-pack.html` for Tier 4 + Tier 3 fallbacks. Citation score (0–15 pts) replaces the old NAP-only section in `/audit` output — full audit runs `collect_citations()` automatically when `abbreviation` is in config.json. Modules: `citation_sites.py` (master site list), `citation_checker.py` (presence checks), `citation_submitter.py` (form fills), `citation_manual_pack.py` (HTML pack generator), `citation_manager.py` (orchestrator), `citation_state.py` (state load/save), `nap_utils.py` (shared NAP normalisation).
 
 **`run_audit.py`** — full SEO audit script. Runs 6 scored checks (schema 20pts, content 20pts, GBP 20pts, reviews 15pts, NAP 15pts, technical 10pts) + competitor benchmark. Outputs: `audits/[abbr]/[date]/audit-internal.md` (raw data), `audit-prospect.html/pdf` (OMG-branded PAS report), `pending-queue.json` (content gaps as pending queue items). PDF emailed to `kmmsubs@gmail.com` on completion. **Note:** SiteGround's bot protection blocks unauthenticated web scraping — schema/technical collectors use WP app password auth to bypass this. Requires `playwright` + `playwright install chromium` for PDF generation (gracefully skips to HTML if not installed).
 
