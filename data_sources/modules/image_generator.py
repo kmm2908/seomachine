@@ -39,6 +39,29 @@ DALLE_COST_SECTION = 0.042   # gpt-image-1, 1024x1024, medium quality
 
 GEMINI_RETRY_DELAYS = [30, 60, 120]  # seconds between retries on 503
 
+# ── Shared treatment reference images ────────────────────────────────────────
+# Keyword → filename in assets/image-references/treatments/
+# Used as style reference for section images (therapist + client scenes).
+# Add new entries here as more reference photos are added to the folder.
+
+TREATMENT_REFERENCES_DIR = Path(__file__).parent.parent.parent / 'assets' / 'image-references' / 'treatments'
+
+TREATMENT_REFERENCE_MAP = {
+    "hair":         "hair-oiling.png",
+    "oiling":       "hair-oiling.png",
+    "scalp":        "hair-oiling.png",
+    "foot":         "foot-massage.png",
+    "reflexology":  "foot-massage.png",
+    "couples":      "couples-massage.png",
+    "aromatherapy": "aromatherapy.png",
+    "swedish":      "swedish-massage.png",
+    "thai":         "thai-massage.png",
+    "deep tissue":  "thai-massage.png",
+    "sports":       "thai-massage.png",
+    "hot stone":    "thai-massage.png",
+    "oil":          "oil-massage.png",
+}
+
 # ── Topic → scene description map ────────────────────────────────────────────
 # "banner": foreground subject / props only — room backdrop injected separately
 #           when room_description is set on ImageGenerator; otherwise self-contained
@@ -153,6 +176,22 @@ class ImageGenerator:
         if not self.api_key:
             raise EnvironmentError("GOOGLE_AI_API_KEY not set in environment")
 
+    def _get_treatment_reference(self, text: str) -> tuple[str, str]:
+        """Return (base64, mime_type) for the best matching treatment reference image.
+
+        Matches text against TREATMENT_REFERENCE_MAP keywords.
+        Returns ('', '') if no match or file missing.
+        """
+        text_lower = text.lower()
+        for keyword, filename in TREATMENT_REFERENCE_MAP.items():
+            if keyword in text_lower:
+                path = TREATMENT_REFERENCES_DIR / filename
+                if path.exists():
+                    mime = "image/png" if path.suffix.lower() == ".png" else "image/jpeg"
+                    return base64.b64encode(path.read_bytes()).decode(), mime
+                break
+        return "", ""
+
     def generate_for_post(self, html_content: str, topic: str, filepath: Path,
                           content_type: str = "blog") -> float:
         """Generate banner + section images for a post.
@@ -177,16 +216,26 @@ class ImageGenerator:
         print(f"    → {banner_path.name}")
 
         # Generate one section image per section — filename is the slugified heading
+        # Treatment reference looked up once from topic, used for all section images
+        treat_b64, treat_mime = self._get_treatment_reference(topic)
+        if treat_b64:
+            print(f"    → Treatment reference: matched for \"{topic}\"")
+
         section_paths = []
         for i, heading in enumerate(section_headings, 1):
             heading_lower = heading.lower()
-            if "faq" in heading_lower or "frequently" in heading_lower or not heading.strip():
+            is_faq = "faq" in heading_lower or "frequently" in heading_lower or not heading.strip()
+            if is_faq:
                 heading_slug = f"{base_slug}-faq"
             else:
                 heading_slug = _slugify(heading) or f"{base_slug}-section-{i}"
             section_path = article_dir / f"{heading_slug}.jpg"
             section_prompt = self._build_section_prompt(heading, i)
-            total_cost += self._generate(section_prompt, section_path, "section")
+            # FAQ image: room reference only (client in robe — no treatment action)
+            # Section image: room reference + treatment reference
+            t_b64 = "" if is_faq else treat_b64
+            t_mime = "" if is_faq else treat_mime
+            total_cost += self._generate(section_prompt, section_path, "section", t_b64, t_mime)
             section_paths.append(section_path)
             print(f"    → {section_path.name}")
             if i < len(section_headings):
@@ -339,12 +388,14 @@ class ImageGenerator:
         suffix = BANNER_PHOTO_SUFFIX if image_type == "banner" else SECTION_PHOTO_SUFFIX
         return f"Professional spa treatment room, white treatment table, warm natural lighting. {suffix}"
 
-    def _generate(self, prompt: str, output_path: Path, image_type: str) -> float:
+    def _generate(self, prompt: str, output_path: Path, image_type: str,
+                  treatment_ref_b64: str = "", treatment_ref_mime: str = "") -> float:
         """Try Gemini with retries on 503, fall back to gpt-image-1. Returns image cost."""
         last_err = None
         for attempt, delay in enumerate(GEMINI_RETRY_DELAYS):
             try:
-                self._generate_gemini(prompt, output_path, image_type)
+                self._generate_gemini(prompt, output_path, image_type,
+                                      treatment_ref_b64, treatment_ref_mime)
                 return COST_PER_IMAGE
             except RuntimeError as e:
                 if '503' in str(e):
@@ -363,7 +414,8 @@ class ImageGenerator:
         self._generate_dalle(prompt, output_path, image_type)
         return DALLE_COST_BANNER if image_type == "banner" else DALLE_COST_SECTION
 
-    def _generate_gemini(self, prompt: str, output_path: Path, image_type: str) -> Path:
+    def _generate_gemini(self, prompt: str, output_path: Path, image_type: str,
+                         treatment_ref_b64: str = "", treatment_ref_mime: str = "") -> Path:
         """Call Gemini API, decode base64 response, save and crop the image."""
         if image_type == "banner":
             aspect_ratio = "21:9"
@@ -374,19 +426,38 @@ class ImageGenerator:
             image_size = "1K"
             crop_target = (400, 300)
 
-        # Build parts — reference image first if available, then text prompt
+        # Build parts list:
+        #   1. Room reference image (if set) — establishes the location
+        #   2. Treatment reference image (if set) — shows the correct treatment style
+        #   3. Text prompt — describes the specific foreground subject
+        parts = []
+        text_prefix = ""
+
         if self.room_reference_image_b64:
-            parts = [
-                {
-                    "inline_data": {
-                        "mime_type": self.room_reference_image_mime,
-                        "data": self.room_reference_image_b64,
-                    }
-                },
-                {"text": f"Using the treatment room in the reference image as the setting: {prompt}"},
-            ]
+            parts.append({
+                "inline_data": {
+                    "mime_type": self.room_reference_image_mime,
+                    "data": self.room_reference_image_b64,
+                }
+            })
+            text_prefix = "Using the room in the first reference image as the setting"
+
+        if treatment_ref_b64:
+            parts.append({
+                "inline_data": {
+                    "mime_type": treatment_ref_mime,
+                    "data": treatment_ref_b64,
+                }
+            })
+            if text_prefix:
+                text_prefix += ", and the treatment style in the second reference image as inspiration"
+            else:
+                text_prefix = "Using the treatment style in the reference image as inspiration"
+
+        if text_prefix:
+            parts.append({"text": f"{text_prefix}: {prompt}"})
         else:
-            parts = [{"text": prompt}]
+            parts.append({"text": prompt})
 
         payload = {
             "contents": [{"parts": parts}],
