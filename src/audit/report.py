@@ -77,6 +77,8 @@ def build_markdown(result: AuditResult) -> str:
     lines.append(f'- Static pages: {r.content.page_count}')
     lines.append(f'- Sitemap: {"✓" if r.content.has_sitemap else "✗"} '
                  f'({r.content.sitemap_url_count} URLs)')
+    dup_count = len(r.content.duplicate_pairs)
+    lines.append(f'- Duplicate content pairs: {dup_count} {"⚠" if dup_count else "✓"}')
     finding_block(r.content.findings)
 
     # ── GBP ───────────────────────────────────────────────────────────────────

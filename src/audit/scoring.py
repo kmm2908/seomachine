@@ -75,6 +75,8 @@ class ContentResult:
     page_count: int = 0
     has_sitemap: bool = False
     sitemap_url_count: int = 0
+    # Duplicate content: list of (id1, title1, id2, title2, reason) tuples
+    duplicate_pairs: list = field(default_factory=list)
     score: int = 0
     findings: List[str] = field(default_factory=list)
 
@@ -93,6 +95,8 @@ class ContentResult:
         elif self.location_count >= 1: pts += 2
         # Sitemap (bonus for discoverability)
         if self.has_sitemap: pts += 3
+        # Deduct for duplicate content (2 pts per pair, min 0)
+        pts = max(0, pts - len(self.duplicate_pairs) * 2)
         self.score = min(pts, 20)
         return self.score
 

@@ -346,6 +346,79 @@ def _type_of(block: Dict) -> str:
     return block.get('@type', '')
 
 
+# ── Duplicate Content Helper ──────────────────────────────────────────────────
+
+def _check_duplicate_content(site_url: str, wp_config: Optional[Dict] = None) -> list:
+    """Fetch published seo_service posts and flag near-duplicate pairs.
+
+    Uses word-level Jaccard similarity on:
+    - Title tokens (whole words, 4+ chars, stop words stripped)
+    - Content tokens (first 400 words of rendered text)
+
+    Thresholds:
+    - content_sim >= 0.70 → flagged regardless of title
+    - title_sim >= 0.55 AND content_sim >= 0.45 → flagged as likely topic overlap
+
+    Returns list of (id1, title1, id2, title2, reason) tuples.
+    """
+    from itertools import combinations
+
+    STOP = {'this', 'that', 'with', 'from', 'your', 'will', 'have', 'been',
+            'they', 'their', 'when', 'what', 'which', 'about', 'into', 'also',
+            'more', 'each', 'than', 'then', 'some', 'such', 'both', 'very'}
+
+    def _tokens(text: str) -> set:
+        words = re.findall(r'\b[a-z]{4,}\b', text.lower())
+        return {w for w in words if w not in STOP}
+
+    def _jaccard(a: set, b: set) -> float:
+        if not a or not b:
+            return 0.0
+        return len(a & b) / len(a | b)
+
+    api_base = site_url.rstrip('/') + '/wp-json/wp/v2'
+    r = _get(
+        f'{api_base}/seo_service?per_page=100&status=publish&_fields=id,title,content',
+        wp_config=wp_config,
+    )
+    if not r or r.status_code != 200:
+        return []
+
+    try:
+        posts_raw = r.json()
+    except Exception:
+        return []
+
+    posts = []
+    for p in posts_raw:
+        title = p.get('title', {}).get('rendered', '')
+        rendered = p.get('content', {}).get('rendered', '')
+        text = re.sub(r'<[^>]+>', ' ', rendered)
+        text = re.sub(r'\s+', ' ', text).strip()
+        # Take first 400 words for comparison
+        words_400 = ' '.join(text.split()[:400])
+        posts.append({
+            'id': p['id'],
+            'title': title,
+            'title_tokens': _tokens(title),
+            'content_tokens': _tokens(words_400),
+        })
+
+    duplicates = []
+    for p1, p2 in combinations(posts, 2):
+        title_sim = _jaccard(p1['title_tokens'], p2['title_tokens'])
+        content_sim = _jaccard(p1['content_tokens'], p2['content_tokens'])
+
+        if content_sim >= 0.70:
+            reason = f'{content_sim:.0%} content overlap'
+            duplicates.append((p1['id'], p1['title'], p2['id'], p2['title'], reason))
+        elif title_sim >= 0.55 and content_sim >= 0.45:
+            reason = f'similar titles ({title_sim:.0%}) + {content_sim:.0%} content overlap'
+            duplicates.append((p1['id'], p1['title'], p2['id'], p2['title'], reason))
+
+    return duplicates
+
+
 # ── Schema Collector ──────────────────────────────────────────────────────────
 
 def collect_schema(site_url: str, wp_config: Optional[Dict] = None) -> SchemaResult:
@@ -529,6 +602,12 @@ def collect_content(site_url: str, wp_config: Optional[Dict] = None) -> ContentR
             result.sitemap_url_count = sm_html.count('<loc>')
             break
 
+    # Duplicate content check
+    try:
+        result.duplicate_pairs = _check_duplicate_content(site_url, wp_config)
+    except Exception as _e:
+        logger.debug(f'Duplicate content check failed: {_e}')
+
     # Build findings
     if result.service_count < 2:
         result.findings.append(
@@ -547,6 +626,11 @@ def collect_content(site_url: str, wp_config: Optional[Dict] = None) -> ContentR
         )
     if not result.has_sitemap:
         result.findings.append('No XML sitemap found — search engines may miss content.')
+    for (id1, t1, id2, t2, reason) in result.duplicate_pairs[:5]:
+        result.findings.append(
+            f'Possible duplicate content: "{t1}" (ID {id1}) vs "{t2}" (ID {id2}) — {reason}. '
+            'Review and differentiate or consolidate.'
+        )
 
     return result
 
