@@ -16,7 +16,20 @@ Embed videos
 Write own scripts from curated videos and create our own YouTube posts
 *****************************
 Add site audit process
-
+Add wlakthrough of report voice over video
+Send both to prospects
 *****************************
 Add GBP audit process
 *****************************
+
+UI:
+---
+Process:
+User inputs site url
+Audit site
+Create report (see serpslinger)
+List work to do
+Submit work to do
+    Pubkish new content to site as draft
+    Preview schema with option to then deply
+    Preview propose changes to existing consent with option to deploy

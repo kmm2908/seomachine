@@ -10,6 +10,7 @@ Usage:
     python3 republish_existing.py --abbr gtm         # specific client
     python3 republish_existing.py --type location    # specific content type
     python3 republish_existing.py --type service     # service pages
+    python3 republish_existing.py --abbr sdy --file content/sdy/service/foo/foo.html
 
 The script discovers HTML files under content/[abbr]/[type]/ and publishes
 each one using the same Elementor template injection as the batch runner.
@@ -34,27 +35,44 @@ def load_client_config(abbr: str) -> dict:
         return json.load(f)
 
 
-def republish(abbr: str = 'gtm', content_type: str = 'location'):
+def republish(abbr: str = 'gtm', content_type: str = 'location', file_path: str = None):
     config = load_client_config(abbr)
     wp_config = config.get('wordpress')
+    ssh_config = config.get('ssh')
     if not wp_config:
         print(f"No wordpress config found for {abbr}")
+        return
+
+    elementor_template = CLIENTS_DIR / abbr / 'elementor-template.json'
+    elementor_template_path = str(elementor_template) if elementor_template.exists() else None
+
+    if file_path:
+        # Single-file mode: derive content_type from path structure
+        html_path = ROOT / file_path if not Path(file_path).is_absolute() else Path(file_path)
+        if not html_path.exists():
+            print(f"File not found: {html_path}")
+            return
+        # Infer content_type from path: content/[abbr]/[type]/...
+        parts = html_path.parts
+        try:
+            content_idx = list(parts).index('content')
+            content_type = parts[content_idx + 2]
+        except (ValueError, IndexError):
+            pass
+        html_files = [html_path]
+    else:
+        html_files = sorted((CONTENT_DIR / abbr / content_type).glob('**/*.html'))
+
+    if not html_files:
+        print(f"No HTML files found.")
         return
 
     content_type_map = wp_config.get('content_type_map', {})
     post_type = content_type_map.get(content_type, wp_config.get('default_post_type', 'post'))
 
-    elementor_template = CLIENTS_DIR / abbr / 'elementor-template.json'
-    elementor_template_path = str(elementor_template) if elementor_template.exists() else None
-
-    html_files = sorted((CONTENT_DIR / abbr / content_type).glob('**/*.html'))
-    if not html_files:
-        print(f"No HTML files found in content/{abbr}/{content_type}/")
-        return
-
     print(f"Found {len(html_files)} file(s) to publish as {post_type}:\n")
 
-    publisher = WordPressPublisher.from_config(wp_config)
+    publisher = WordPressPublisher.from_config(wp_config, ssh_config=ssh_config)
 
     for i, html_path in enumerate(html_files, 1):
         slug = html_path.stem.rsplit('-', 3)[0]  # strip -YYYY-MM-DD suffix
@@ -87,5 +105,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--abbr', default='gtm')
     parser.add_argument('--type', dest='content_type', default='location')
+    parser.add_argument('--file', dest='file_path', default=None,
+                        help='Path to a single HTML file to republish (relative to project root)')
     args = parser.parse_args()
-    republish(args.abbr, args.content_type)
+    republish(args.abbr, args.content_type, args.file_path)
