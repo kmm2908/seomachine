@@ -69,60 +69,60 @@ TREATMENT_REFERENCE_MAP = {
 
 TOPIC_CONTEXT_MAP = {
     "couples": {
-        "banner": "two white-linen treatment tables side by side, rose petals scattered between them, no people",
-        "section": "spa therapist giving a back massage to a woman on a treatment table, second treatment table visible in background",
+        "banner": "two Thai female massage therapists simultaneously performing back massage on two female clients lying side by side on treatment tables, wide shot showing both therapists and clients",
+        "section": "spa therapist giving a back massage to a woman on a treatment table, second treatment table with another client visible in the background",
     },
     "deep tissue": {
-        "banner": "white treatment table with folded warm towels and massage oil bottles arranged neatly, no people",
-        "section": "massage therapist performing deep tissue back massage on a client lying on a treatment table",
+        "banner": "massage therapist performing deep tissue back massage on a female client lying face-down on a treatment table, medium shot from the side showing firm pressure technique",
+        "section": "close-up of massage therapist's hands applying deep tissue pressure to a client's upper back and shoulders",
     },
     "sports": {
-        "banner": "white treatment table with a foam roller, resistance band, and massage oil on a small side table, no people",
-        "section": "sports massage therapist working on a client's calf muscles on a treatment table",
+        "banner": "sports massage therapist working on a female client's back and shoulders on a treatment table, medium shot showing the therapist using focused pressure",
+        "section": "close-up of sports massage therapist's hands working on a client's calf muscles on a treatment table",
     },
     "aromatherapy": {
-        "banner": "glass bottles of essential oils, lit candles, and white folded towels arranged on a small table, no people",
-        "section": "spa therapist applying aromatherapy oil massage to a client's back",
+        "banner": "spa therapist performing aromatherapy oil back massage on a female client lying face-down on a treatment table, wide shot showing the full treatment",
+        "section": "close-up of spa therapist's oiled hands applying long gliding strokes to a client's back during aromatherapy massage",
     },
     "hot stone": {
-        "banner": "smooth dark basalt stones arranged in a row on a white treatment table, pillar candles glowing beside them, no people",
-        "section": "spa therapist placing hot basalt stones along a client's spine",
+        "banner": "spa therapist carefully placing warm basalt stones along a female client's spine as she lies face-down on a treatment table, medium shot",
+        "section": "close-up of dark basalt stones resting on a client's back, spa therapist's hands visible guiding a stone along the spine",
     },
     "foot": {
-        "banner": "ceramic foot bath bowl with flower petals and smooth pebbles, warm towels folded beside it, no people",
-        "section": "spa therapist performing foot massage on a client, close view of hands and feet",
+        "banner": "spa therapist performing Thai foot massage on a female client who is lying on a treatment table, medium shot from the side showing therapist working on the client's feet",
+        "section": "close-up of spa therapist's thumbs applying pressure to the sole of a client's foot during Thai foot massage",
     },
     "facial": {
-        "banner": "skincare products, jade roller, white towels, and a single orchid arranged on a tray, no people",
-        "section": "spa therapist performing facial massage on a woman lying on a treatment table, soft lighting",
+        "banner": "spa therapist performing facial massage on a female client lying face-up on a treatment table, medium shot showing therapist's hands on the client's face and décolletage",
+        "section": "close-up of spa therapist's fingertips performing gentle facial massage strokes on a client's cheekbones and temples",
     },
     "hair": {
-        "banner": "glass dropper bottles of nourishing hair oil and a warm towel arranged beside a treatment chair, no people",
-        "section": "spa therapist massaging warm nourishing oil into a seated female client's scalp and hair",
+        "banner": "spa therapist massaging warm nourishing oil into a seated female client's scalp and long hair, medium shot from behind showing both therapist and client",
+        "section": "close-up of spa therapist's hands working nourishing oil through a client's hair, scalp massage technique visible",
     },
     "oiling": {
-        "banner": "Ayurvedic oil bottles, a warm towel and a wooden comb on a small side table, no people",
-        "section": "therapist applying warm oil to a client's scalp and hair with careful hands",
+        "banner": "therapist applying warm Ayurvedic oil to a seated female client's scalp, medium shot from the side showing the treatment in progress",
+        "section": "close-up of therapist's oiled hands parting a client's hair and massaging warm oil into the scalp",
     },
     "scalp": {
-        "banner": "a treatment chair with a warm towel draped over it and a small oil bottle on the side table, no people",
-        "section": "therapist performing Indian head and scalp massage on a seated client",
+        "banner": "therapist performing Indian head massage on a seated female client, medium shot showing the therapist's hands working through the client's hair",
+        "section": "close-up of therapist performing circular scalp massage on a client's head, fingertips visible pressing into the scalp",
     },
     "reflexology": {
-        "banner": "foot bath bowl with flower petals, smooth pebbles, and warm towels folded beside it, no people",
-        "section": "spa therapist applying reflexology pressure to the sole of a client's foot, close view of hands and foot",
+        "banner": "spa therapist performing reflexology on a female client's feet, client lying on a treatment table with feet elevated, medium shot showing the full scene",
+        "section": "close-up of spa therapist's thumbs walking along the reflexology zones on the sole of a client's foot",
     },
     "swedish": {
-        "banner": "white treatment table with folded towels, a single orchid bloom, and massage oil on a side table, no people",
-        "section": "spa therapist performing gentle Swedish massage on a client's back, smooth flowing strokes",
+        "banner": "spa therapist performing Swedish massage on a female client lying face-down on a treatment table, wide shot showing long flowing effleurage strokes",
+        "section": "close-up of spa therapist's hands performing smooth petrissage strokes on a client's upper back and shoulders",
     },
     "head": {
-        "banner": "a treatment chair with warm towels and a small oil bottle on the side table, no people",
-        "section": "therapist performing head and scalp massage on a seated client",
+        "banner": "therapist performing Indian head massage on a seated female client, medium shot from the side showing relaxed client and therapist's hands on head",
+        "section": "close-up of therapist's hands performing acupressure and kneading on a client's scalp and temples",
     },
     "thai": {
-        "banner": "traditional Thai massage mat on the floor with folded white linen and a small bolster pillow, no people",
-        "section": "Thai massage therapist performing traditional Thai massage on a client lying on a floor mat",
+        "banner": "Thai massage therapist performing traditional Thai massage on a female client lying on a floor mat, wide shot showing a full-body stretch technique",
+        "section": "close-up of Thai massage therapist applying a deep assisted stretch to a client's legs on the floor mat",
     },
 }
 
@@ -147,9 +147,8 @@ SECTION_PHOTO_SUFFIX = (
 
 CLAUDE_PROMPT_SYSTEM = (
     "You write image prompts for a photorealistic AI image generator. "
-    "Prompts must describe a single spa or wellness treatment scene specific to the treatment named — "
-    "foreground subject and props only, no room or background details. "
-    "Do NOT default to a generic back massage. "
+    "Prompts must describe a spa or wellness treatment scene with a therapist performing the named treatment on a client. "
+    "Do NOT default to a generic back massage unless the treatment literally is one. "
     "Keep the response to 1-2 sentences, no preamble, no explanation."
 )
 
@@ -206,20 +205,20 @@ class ImageGenerator:
         section_headings = self._extract_section_headings(html_content)
         is_location_type = content_type == "location"
 
+        # Look up treatment reference once — used for both banner and section images
+        treat_b64, treat_mime = self._get_treatment_reference(topic)
+        if treat_b64:
+            print(f"    → Treatment reference: matched for \"{topic}\"")
+
         # Generate banner — filename includes article keywords
         banner_path = article_dir / f"{base_slug}-banner.jpg"
         if is_location_type:
             banner_prompt = self._build_location_banner_prompt(topic)
+            total_cost = self._generate(banner_prompt, banner_path, "banner")
         else:
             banner_prompt = self._build_banner_prompt(topic)
-        total_cost = self._generate(banner_prompt, banner_path, "banner")
+            total_cost = self._generate(banner_prompt, banner_path, "banner", treat_b64, treat_mime)
         print(f"    → {banner_path.name}")
-
-        # Generate one section image per section — filename is the slugified heading
-        # Treatment reference looked up once from topic, used for all section images
-        treat_b64, treat_mime = self._get_treatment_reference(topic)
-        if treat_b64:
-            print(f"    → Treatment reference: matched for \"{topic}\"")
 
         section_paths = []
         for i, heading in enumerate(section_headings, 1):
@@ -277,13 +276,12 @@ class ImageGenerator:
         return self._build_prompt_with_claude(topic, "banner")
 
     def _assemble_banner(self, foreground: str) -> str:
-        """Combine foreground subject with room backdrop (if set) and photo suffix."""
+        """Combine treatment scene with room backdrop (if set) and photo suffix."""
         if self.room_description:
             return (
                 f"Editorial spa photograph. {foreground}. "
-                f"{self.room_description}. "
-                f"Camera positioned at the front-left corner of the room near the entrance, "
-                f"looking diagonally across the space. {BANNER_PHOTO_SUFFIX}"
+                f"Background: {self.room_description}. "
+                f"{BANNER_PHOTO_SUFFIX}"
             )
         return f"Editorial spa photograph. {foreground}. {BANNER_PHOTO_SUFFIX}"
 
@@ -343,9 +341,9 @@ class ImageGenerator:
 
         if image_type == "banner":
             user_msg = (
-                f"Write 1-2 sentences describing the foreground props/setup for a banner image "
-                f"on a spa page about '{topic}'. Foreground only — no room or background details. "
-                "No people. Be specific to this treatment."
+                f"Write 1-2 sentences describing a therapist performing '{topic}' on a client "
+                f"for a wide banner image on a spa page. Medium or wide shot. "
+                "Be specific to this treatment — do not default to a back massage."
             )
         else:
             user_msg = (
