@@ -28,3 +28,30 @@ def test_compare_name_case_insensitive():
 
 def test_compare_name_mismatch():
     assert compare_name('Glasgow Thai Massage', 'Thai House Glasgow') == 'mismatch'
+
+from citation_sites import CITATION_SITES, SITE_BY_ID, CitationSite, CitationCheckResult
+
+def test_site_list_has_expected_sites():
+    ids = {s.id for s in CITATION_SITES}
+    assert 'google_business_profile' in ids
+    assert 'yell' in ids
+    assert 'trustpilot' in ids
+    assert 'apple_maps' in ids
+
+def test_site_by_id_lookup():
+    assert SITE_BY_ID['yell'].tier == 3
+    assert SITE_BY_ID['google_business_profile'].tier == 1
+    assert SITE_BY_ID['trustpilot'].priority == 8
+
+def test_citation_check_result_defaults():
+    site = SITE_BY_ID['yell']
+    r = CitationCheckResult(site=site)
+    assert r.status == 'unknown'
+    assert r.issues == []
+
+def test_all_sites_have_required_fields():
+    for site in CITATION_SITES:
+        assert site.id, f"Site missing id: {site}"
+        assert site.name, f"Site {site.id} missing name"
+        assert site.tier in (1, 2, 3, 4), f"Site {site.id} invalid tier"
+        assert 1 <= site.priority <= 10, f"Site {site.id} invalid priority"
