@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-04-12 (session 42 — SEO head output in plugin + 45 SDY CPT meta descriptions)
+Last updated: 2026-04-13 (session 43 — hdr-* CSS specificity fix, citation pipeline fixes committed)
 
 ---
 
@@ -14,6 +14,10 @@ A full site audit was run on staging2.serendipitymassage.co.uk on 2026-04-12. A 
 - `seomachine.php` v3.1.0 now outputs `<meta name="description">`, Open Graph tags, and Twitter Card to `<head>` from stored `_yoast_wpseo_metadesc` on all singular pages (CPTs + pages + posts) — no Yoast/Rank Math needed
 - SEO Machine metabox extended to `page` post type; Meta Title + Meta Description fields added with char counter
 - 45 SDY CPT meta descriptions generated (120–160 chars) and pushed to staging2 via WP-CLI
+
+**Fixed in session 43:**
+- `seomachine.php` v3.1.2 — `wp_add_inline_style` at priority 999 outputs `font-size: !important` for all hdr-* classes; fixes Elementor per-widget CSS (0,4,0 specificity) overriding hdr-* utility classes (0,2,0); deployed to all sites via GitHub Actions
+- `seomachine.php` v3.1.1 — Elementor h1 heading widget `css_classes` injection (publisher-side, complements plugin-side filter)
 
 **Still needs human action in WP admin:**
 - Fix site title: Settings → General → change "Staging SDY" → "Serendipity Massage Therapy & Wellness" (Issue 1.2)
@@ -480,6 +484,8 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] `.claude/commands/audit.md` — `/audit [abbr or URL]` slash command
 - [x] `wordpress/seomachine.php` v3.0.0 — `GET /wp-json/seomachine/v1/audit` endpoint (auth required; returns all post counts in one call)
 - [x] `wordpress/seomachine.php` v3.1.0 (session 42) — SEO head output: `wp_head` hook outputs `<meta name="description">`, OG tags, Twitter Card from stored meta; `document_title_parts` filter overrides `<title>` when custom SEO title set; SEO Machine metabox extended to `page` type with Meta Title + Meta Description fields + char counter; no third-party SEO plugin needed
+- [x] `wordpress/seomachine.php` v3.1.1 (session 42) — Elementor h1 heading widget: `elementor/widget/render_content` filter injects `hdr-xl` directly on the inner `<h1>` tag; publisher-side `_add_h1_class()` also sets `css_classes` in Elementor JSON before publish
+- [x] `wordpress/seomachine.php` v3.1.2 (session 43) — hdr-* CSS specificity fix: `wp_add_inline_style('elementor-frontend', ...)` at priority 999 outputs `font-size: !important` for all hdr-* classes; Elementor per-widget CSS (0,4,0 specificity) was beating `.elementor .hdr-xl` (0,2,0); covers hdr-xl/l/m/s/xs
 - [x] `send_email.py` — `--attachment` flag added for PDF delivery
 - [x] `data_sources/requirements.txt` — `playwright>=1.40.0` added
 - [x] **Bug fix (session 33):** `_is_captcha()` — now detects HTTP 200 SiteGround challenge pages (was only checking 202/503); SiteGround can return 200 with captcha HTML
