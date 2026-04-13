@@ -2,7 +2,7 @@
 /**
  * Plugin Name: SEO Machine
  * Description: Registers SEO content post types and exposes SEO meta fields via REST API. No Yoast dependency.
- * Version: 3.1.1
+ * Version: 3.1.2
  * Author: SEO Machine
  *
  * Installation:
@@ -731,6 +731,26 @@ add_action('admin_footer-edit.php', function(): void {
     </script>
     <?php
 });
+
+// ── hdr-* class specificity fix ──────────────────────────────────────────────
+// Elementor's heading widget generates per-post, per-element CSS with 4-class
+// specificity (0,4,0) that overrides our hdr-* utility classes (0,2,0). The
+// compiled global-frontend-desktop.css loads after per-post CSS but loses on
+// specificity. Fix: output inline CSS after all Elementor styles at priority 999
+// with !important on font-size only — the one property Elementor always sets per widget.
+
+add_action('wp_enqueue_scripts', function(): void {
+    if (!wp_style_is('elementor-frontend', 'enqueued')) {
+        return;
+    }
+    wp_add_inline_style('elementor-frontend', '
+        .elementor .hdr-xl { font-size: clamp(2rem, 1rem + 5vw, 3.5rem) !important; }
+        .elementor .hdr-l  { font-size: clamp(1.75rem, 0.75rem + 4vw, 2.75rem) !important; }
+        .elementor .hdr-m  { font-size: clamp(1.5rem, 0.5rem + 3vw, 2.25rem) !important; }
+        .elementor .hdr-s  { font-size: clamp(1.25rem, 0.5rem + 2.5vw, 1.875rem) !important; }
+        .elementor .hdr-xs { font-size: clamp(1.1rem, 0.25rem + 2vw, 1.5rem) !important; }
+    ');
+}, 999);
 
 // ── Elementor h1 heading class injection ─────────────────────────────────────
 // Elementor's heading widget always renders <h1 class="elementor-heading-title ...">
