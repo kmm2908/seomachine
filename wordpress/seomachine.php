@@ -2,7 +2,7 @@
 /**
  * Plugin Name: SEO Machine
  * Description: Registers SEO content post types and exposes SEO meta fields via REST API. No Yoast dependency.
- * Version: 3.1.2
+ * Version: 3.1.3
  * Author: SEO Machine
  *
  * Installation:
@@ -739,18 +739,35 @@ add_action('admin_footer-edit.php', function(): void {
 // specificity. Fix: output inline CSS after all Elementor styles at priority 999
 // with !important on font-size only — the one property Elementor always sets per widget.
 
-add_action('wp_enqueue_scripts', function(): void {
+$_seo_machine_hdr_css = '
+    .elementor .hdr-xl { font-size: clamp(2rem, 1rem + 5vw, 3.5rem) !important; }
+    .elementor .hdr-l  { font-size: clamp(1.75rem, 0.75rem + 4vw, 2.75rem) !important; }
+    .elementor .hdr-m  { font-size: clamp(1.5rem, 0.5rem + 3vw, 2.25rem) !important; }
+    .elementor .hdr-s  { font-size: clamp(1.25rem, 0.5rem + 2.5vw, 1.875rem) !important; }
+    .elementor .hdr-xs { font-size: clamp(1.1rem, 0.25rem + 2vw, 1.5rem) !important; }
+';
+
+// Frontend
+add_action('wp_enqueue_scripts', function() use ($_seo_machine_hdr_css): void {
     if (!wp_style_is('elementor-frontend', 'enqueued')) {
         return;
     }
-    wp_add_inline_style('elementor-frontend', '
-        .elementor .hdr-xl { font-size: clamp(2rem, 1rem + 5vw, 3.5rem) !important; }
-        .elementor .hdr-l  { font-size: clamp(1.75rem, 0.75rem + 4vw, 2.75rem) !important; }
-        .elementor .hdr-m  { font-size: clamp(1.5rem, 0.5rem + 3vw, 2.25rem) !important; }
-        .elementor .hdr-s  { font-size: clamp(1.25rem, 0.5rem + 2.5vw, 1.875rem) !important; }
-        .elementor .hdr-xs { font-size: clamp(1.1rem, 0.25rem + 2vw, 1.5rem) !important; }
-    ');
+    wp_add_inline_style('elementor-frontend', $_seo_machine_hdr_css);
 }, 999);
+
+// Elementor editor preview iframe
+add_action('elementor/preview/enqueue_styles', function() use ($_seo_machine_hdr_css): void {
+    wp_register_style('seo-machine-hdr', false);
+    wp_enqueue_style('seo-machine-hdr');
+    wp_add_inline_style('seo-machine-hdr', $_seo_machine_hdr_css);
+});
+
+// Elementor editor panel (for live-preview in the panel itself)
+add_action('elementor/editor/after_enqueue_styles', function() use ($_seo_machine_hdr_css): void {
+    wp_register_style('seo-machine-hdr-editor', false);
+    wp_enqueue_style('seo-machine-hdr-editor');
+    wp_add_inline_style('seo-machine-hdr-editor', $_seo_machine_hdr_css);
+});
 
 // ── Elementor h1 heading class injection ─────────────────────────────────────
 // Elementor's heading widget always renders <h1 class="elementor-heading-title ...">
