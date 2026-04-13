@@ -2,7 +2,7 @@
 /**
  * Plugin Name: SEO Machine
  * Description: Registers SEO content post types and exposes SEO meta fields via REST API. No Yoast dependency.
- * Version: 3.1.0
+ * Version: 3.1.1
  * Author: SEO Machine
  *
  * Installation:
@@ -731,6 +731,29 @@ add_action('admin_footer-edit.php', function(): void {
     </script>
     <?php
 });
+
+// ── Elementor h1 heading class injection ─────────────────────────────────────
+// Elementor's heading widget always renders <h1 class="elementor-heading-title ...">
+// with its own fixed classes. The widget's css_classes setting goes on the outer
+// wrapper <div>, not the <h1> itself. This filter adds hdr-xl directly to the
+// inner <h1> tag so it picks up the same typography styles as our injected content.
+
+add_filter('elementor/widget/render_content', function(string $content, $widget): string {
+    if ($widget->get_name() !== 'heading') {
+        return $content;
+    }
+    $settings = $widget->get_settings_for_display();
+    if (($settings['header_size'] ?? '') !== 'h1') {
+        return $content;
+    }
+    // Add hdr-xl to the inner <h1> rendered by Elementor's heading widget
+    return preg_replace(
+        '/<h1\s+class="(elementor-heading-title[^"]*)"/',
+        '<h1 class="$1 hdr-xl"',
+        $content,
+        1
+    );
+}, 10, 2);
 
 // ── Elementor support for custom post types ──────────────────────────────────
 //
