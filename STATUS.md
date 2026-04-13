@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-04-13 (session 43 — hdr-* CSS specificity fix, citation pipeline fixes committed)
+Last updated: 2026-04-13 (session 44 — SDY font/Elementor fixes, hdr-* scale recalibrated, post 2049 republished)
 
 ---
 
@@ -18,6 +18,13 @@ A full site audit was run on staging2.serendipitymassage.co.uk on 2026-04-12. A 
 **Fixed in session 43:**
 - `seomachine.php` v3.1.2 — `wp_add_inline_style` at priority 999 outputs `font-size: !important` for all hdr-* classes; fixes Elementor per-widget CSS (0,4,0 specificity) overriding hdr-* utility classes (0,2,0); deployed to all sites via GitHub Actions
 - `seomachine.php` v3.1.1 — Elementor h1 heading widget `css_classes` injection (publisher-side, complements plugin-side filter)
+
+**Fixed in session 44:**
+- `seomachine.php` v3.1.3 — hdr-* CSS now also injected into Elementor editor preview iframe (`elementor/preview/enqueue_styles`) and editor panel (`elementor/editor/after_enqueue_styles`) so editor display matches frontend
+- `seomachine.php` v3.1.5 — hdr-* scale recalibrated proportionately from hdr-xl 2.5rem: xl 2.5rem → l 2rem → m 1.6rem → s 1.3rem → xs 1.1rem; previous hdr-l (2.75rem) was incorrectly larger than hdr-xl
+- SDY staging2 — Elementor Pro updated 4.0.1 → 4.0.2 (version mismatch with core was causing editor API 401/403 errors)
+- SDY staging2 — `sdy.local` URLs purged: database search-replace (401 rows), stale google-fonts folder deleted, Elementor font registry cleared; fonts will regenerate on next page load
+- Post 2049 (Thai Massage vs Swedish Massage) — was in trash; republished from saved HTML as post 2294; title/slug fixed via WP-CLI; still has CTA issue (see manual review checklist)
 
 **Still needs human action in WP admin:**
 - Fix site title: Settings → General → change "Staging SDY" → "Serendipity Massage Therapy & Wellness" (Issue 1.2)
@@ -486,6 +493,8 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] `wordpress/seomachine.php` v3.1.0 (session 42) — SEO head output: `wp_head` hook outputs `<meta name="description">`, OG tags, Twitter Card from stored meta; `document_title_parts` filter overrides `<title>` when custom SEO title set; SEO Machine metabox extended to `page` type with Meta Title + Meta Description fields + char counter; no third-party SEO plugin needed
 - [x] `wordpress/seomachine.php` v3.1.1 (session 42) — Elementor h1 heading widget: `elementor/widget/render_content` filter injects `hdr-xl` directly on the inner `<h1>` tag; publisher-side `_add_h1_class()` also sets `css_classes` in Elementor JSON before publish
 - [x] `wordpress/seomachine.php` v3.1.2 (session 43) — hdr-* CSS specificity fix: `wp_add_inline_style('elementor-frontend', ...)` at priority 999 outputs `font-size: !important` for all hdr-* classes; Elementor per-widget CSS (0,4,0 specificity) was beating `.elementor .hdr-xl` (0,2,0); covers hdr-xl/l/m/s/xs
+- [x] `wordpress/seomachine.php` v3.1.3 (session 44) — hdr-* CSS also injected in Elementor editor preview iframe and editor panel so editor display matches frontend; CSS extracted to shared `$_seo_machine_hdr_css` variable used by all three hooks
+- [x] `wordpress/seomachine.php` v3.1.5 (session 44) — hdr-* scale recalibrated: xl 2.5rem / l 2rem / m 1.6rem / s 1.3rem / xs 1.1rem (~20% steps); previous hdr-l max (2.75rem) was larger than hdr-xl (3.5rem) — now correctly ordered
 - [x] `send_email.py` — `--attachment` flag added for PDF delivery
 - [x] `data_sources/requirements.txt` — `playwright>=1.40.0` added
 - [x] **Bug fix (session 33):** `_is_captcha()` — now detects HTTP 200 SiteGround challenge pages (was only checking 202/503); SiteGround can return 200 with captcha HTML
@@ -884,7 +893,7 @@ Checklist prepared for 12 starred posts in staging2 wp-admin (7 from session 36 
 
 **Session 36 batch (★★★★★ in title):**
 - [ ] Post 2041 — Orchid Wellbeing Glasgow: split opening paragraph after "comes up early in results"
-- [ ] Post 2049 — Thai Massage vs Swedish Massage: break 91-word opening para; move first CTA earlier
+- [ ] Post 2294 — Thai Massage vs Swedish Massage: break 91-word opening para; move first CTA earlier (post 2049 was in trash — republished as 2294 in session 44)
 - [ ] Post 2065 — Serenity Thai Massage: split line 7 after "no online booking"
 - [ ] Post 2077 — Sports Recovery: break 4 long paras; explain "VO2max" and "sen energy lines" inline
 - [ ] Post 2081 — Shawlands: split line 7 into two sentences; break line 30 multi-reason block
