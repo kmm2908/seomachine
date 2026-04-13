@@ -731,6 +731,19 @@ class WordPressPublisher:
         article_html = re.sub(r'<h2[^>]*>.*?</h2>\s*', '', article_html, count=1,
                                flags=re.DOTALL | re.IGNORECASE)
 
+        # Ensure the h1 title widget in the template carries the hdr-xl class.
+        # Walk the template and add css_classes to any heading widget with header_size 'h1'.
+        def _add_h1_class(nodes: list) -> None:
+            for node in nodes:
+                if node.get('widgetType') == 'heading':
+                    s = node.setdefault('settings', {})
+                    if s.get('header_size') == 'h1':
+                        existing = s.get('css_classes', '')
+                        if 'hdr-xl' not in existing:
+                            s['css_classes'] = ('hdr-xl ' + existing).strip()
+                _add_h1_class(node.get('elements', []))
+        _add_h1_class(template if isinstance(template, list) else [template])
+
         def fix_list_spacing(html: str) -> str:
             html = html.replace('<ul>', '<ul style="line-height: 1.8; margin: 0.5em 0 1em;">')
             html = html.replace('<li>', '<li style="margin-bottom: 0.4em;">')

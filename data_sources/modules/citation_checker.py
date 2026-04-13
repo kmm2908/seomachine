@@ -180,41 +180,53 @@ def _check_gbp(site: CitationSite, config: dict) -> CitationCheckResult:
     return result
 
 
-# ── Tier 2: DataForSEO ────────────────────────────────────────────────────────
+# ── Tier 2: DataForSEO (Google SERP site: search) ────────────────────────────
 
 def _check_dataforseo(site: CitationSite, config: dict) -> CitationCheckResult:
+    """Use Google SERP with site: operator to detect business presence on Tier 2 directories.
+
+    The DataForSEO business_data search endpoints don't cover TrustPilot/TripAdvisor
+    discovery by keyword. Instead we search Google for '"Business Name" site:domain'
+    and check if any organic result URL belongs to the target directory site.
+    """
     result = CitationCheckResult(site=site)
     try:
         from dataforseo import DataForSEO
+        from urllib.parse import urlparse
         client = DataForSEO()
+
+        # Extract domain from site URL for the site: operator
+        site_domain = urlparse(site.url).netloc  # e.g. 'uk.trustpilot.com'
+        biz_name = config.get('name', '')
+        keyword = f'"{biz_name}" site:{site_domain}'
+
         payload = [{
-            'keyword': config.get('name', ''),
-            'location_code': 2826,
+            'keyword': keyword,
+            'location_code': 2826,  # UK
             'language_code': 'en',
+            'device': 'desktop',
+            'os': 'windows',
+            'depth': 10,
         }]
-        data = client._post(site.dataforseo_endpoint, payload)
+        data = client._post('/v3/serp/google/organic/live/regular', payload)
         tasks = data.get('tasks', [])
         if not tasks or tasks[0].get('status_code') != 20000:
             result.status = 'unknown'
             return result
 
         items = (tasks[0].get('result') or [{}])[0].get('items') or []
-        biz_name = config.get('name', '').lower()
+        biz_name = config.get('name', '').lower().strip()
         for item in items:
-            candidate = item.get('title', '') or item.get('name', '')
-            if compare_name(biz_name, candidate) == 'match':
+            item_url = item.get('url', '')
+            item_title = item.get('title', '').lower()
+            # Must be on the target directory AND contain the business name in the title
+            if site_domain not in item_url:
+                continue
+            if biz_name in item_title:
                 result.status = 'found'
-                result.found_name = candidate
-                result.found_phone = item.get('phone', '')
-                result.found_address = item.get('address', '')
-                result.listing_url = item.get('url', '') or item.get('profile_url', '')
-                issues = []
-                if result.found_phone and compare_phone(config.get('phone', ''), result.found_phone) == 'mismatch':
-                    issues.append('phone_mismatch')
-                if result.found_address and compare_address(config.get('address', ''), result.found_address) == 'mismatch':
-                    issues.append('address_mismatch')
-                result.issues = issues
-                result.nap_match = len(issues) == 0
+                result.found_name = item_title
+                result.listing_url = item_url
+                result.nap_match = None  # NAP data not available from SERP results
                 return result
 
         result.status = 'not_found'

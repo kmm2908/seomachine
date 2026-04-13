@@ -23,6 +23,9 @@ ROOT = Path(__file__).parent.parent.parent.resolve()
 sys.path.insert(0, str(ROOT / 'data_sources' / 'modules'))
 sys.path.insert(0, str(ROOT / 'src' / 'audit'))
 
+from dotenv import load_dotenv
+load_dotenv(ROOT / '.env')
+
 from citation_manager import CitationManager
 
 logging.basicConfig(level=logging.INFO, format='%(levelname)s  %(message)s')

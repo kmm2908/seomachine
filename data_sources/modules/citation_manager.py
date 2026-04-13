@@ -47,7 +47,13 @@ class CitationManager:
             results.append(r)
 
         self.state.save()
-        return self._build_scored_result(results)
+        # Always generate manual pack so users know what needs manual submission
+        all_results = self._all_results_from_state()
+        pack_path = generate_manual_pack(self.abbr, self.config, all_results, self.root)
+        logger.info('Manual pack saved to %s', pack_path)
+        # If no sites were due this run, score from the full state snapshot
+        score_source = results if results else all_results
+        return self._build_scored_result(score_source)
 
     def run_creation(self, dry_run: bool = False) -> list[CitationCheckResult]:
         """Attempt creation for all not_found sites. Returns submission results."""

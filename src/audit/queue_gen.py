@@ -23,7 +23,7 @@ def build_pending_queue(result: AuditResult) -> List[Dict]:
     entries: List[Dict] = []
     r = result
     name = r.site_name
-    city = _extract_city(r.site_url, r.nap.config_address)
+    city = _extract_city(r.site_url, getattr(r.nap, 'config_address', ''))
 
     # ── Service pages ─────────────────────────────────────────────────────────
     if r.content.service_count < 3:

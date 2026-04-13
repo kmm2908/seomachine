@@ -141,20 +141,22 @@ def test_yelp_returns_unknown_without_api_key():
     assert 'YELP_API_KEY' in r.error
 
 def test_dataforseo_found():
+    # SERP-based approach: organic items with url on site domain + business name in title
     mock_client = MagicMock()
     mock_client._post.return_value = {
         'tasks': [{
             'status_code': 20000,
             'result': [{'items': [
-                {'title': 'Glasgow Thai Massage', 'phone': '0141 552 1234',
-                 'address': '142 West Nile Street, Glasgow', 'url': 'https://trustpilot.com/review/gtm'}
+                {'title': 'Glasgow Thai Massage Reviews | Trustpilot',
+                 'url': 'https://uk.trustpilot.com/review/glasgowthaimassage.co.uk'},
             ]}]
         }]
     }
     with patch('dataforseo.DataForSEO', return_value=mock_client):
         r = _check_dataforseo(SITE_BY_ID['trustpilot'], _GTM_CONFIG)
     assert r.status == 'found'
-    assert r.nap_match is True
+    assert r.listing_url == 'https://uk.trustpilot.com/review/glasgowthaimassage.co.uk'
+    assert r.nap_match is None  # NAP not available from SERP
 
 def test_dataforseo_not_found():
     mock_client = MagicMock()

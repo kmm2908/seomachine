@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-04-12 (session 41 — SDY image audit + anatomy validation + FAQ variety + duplicate content resolved)
+Last updated: 2026-04-12 (session 42 — SEO head output in plugin + 45 SDY CPT meta descriptions)
 
 ---
 
@@ -10,7 +10,19 @@ A full site audit was run on staging2.serendipitymassage.co.uk on 2026-04-12. A 
 
 **Already fixed (do not re-do):** JSON-LD telephone field HTML anchor corruption on all 39 CPT pages.
 
-**Needs action in this project:** SEO plugin setup, meta descriptions, schema on standard pages, H1 on Services page, Open Graph tags, Article schema type on location pages.
+**Fixed in session 42 (no plugin needed):**
+- `seomachine.php` v3.1.0 now outputs `<meta name="description">`, Open Graph tags, and Twitter Card to `<head>` from stored `_yoast_wpseo_metadesc` on all singular pages (CPTs + pages + posts) — no Yoast/Rank Math needed
+- SEO Machine metabox extended to `page` post type; Meta Title + Meta Description fields added with char counter
+- 45 SDY CPT meta descriptions generated (120–160 chars) and pushed to staging2 via WP-CLI
+
+**Still needs human action in WP admin:**
+- Fix site title: Settings → General → change "Staging SDY" → "Serendipity Massage Therapy & Wellness" (Issue 1.2)
+- Add meta descriptions to the 5 standard pages (Home, Services, About, Contact, Find Us) via the new SEO Machine metabox (Issue 2.1)
+- Add H1 to Services page (Issue 2.4)
+- Standard page schema (LocalBusiness on Home/Contact, ItemList on Services etc.) — TBD approach
+
+**Deferred (post go-live):**
+- Canonical URLs will auto-resolve once site title and domain are correct (Issue 3.3)
 
 ---
 
@@ -467,6 +479,7 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] `src/audit/run_audit.py` — CLI: `--abbr` (existing client) or `--url` (prospect); `--no-pdf`, `--no-email` flags
 - [x] `.claude/commands/audit.md` — `/audit [abbr or URL]` slash command
 - [x] `wordpress/seomachine.php` v3.0.0 — `GET /wp-json/seomachine/v1/audit` endpoint (auth required; returns all post counts in one call)
+- [x] `wordpress/seomachine.php` v3.1.0 (session 42) — SEO head output: `wp_head` hook outputs `<meta name="description">`, OG tags, Twitter Card from stored meta; `document_title_parts` filter overrides `<title>` when custom SEO title set; SEO Machine metabox extended to `page` type with Meta Title + Meta Description fields + char counter; no third-party SEO plugin needed
 - [x] `send_email.py` — `--attachment` flag added for PDF delivery
 - [x] `data_sources/requirements.txt` — `playwright>=1.40.0` added
 - [x] **Bug fix (session 33):** `_is_captcha()` — now detects HTTP 200 SiteGround challenge pages (was only checking 202/503); SiteGround can return 200 with captcha HTML

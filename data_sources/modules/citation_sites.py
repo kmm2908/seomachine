@@ -171,14 +171,8 @@ CITATION_SITES: list[CitationSite] = [
         id='cylex',
         name='Cylex UK',
         url='https://www.cylex-uk.co.uk',
-        tier=3, priority=5,
+        tier=4, priority=5,  # Tier 4: CAPTCHA blocks Playwright — manual pack only
         submission_url='https://www.cylex-uk.co.uk/my-company.html',
-        search_url_template='https://www.cylex-uk.co.uk/companies/{name}-{postcode}.html',
-        name_selector='h2.company-name',
-        phone_selector='div.phone',
-        address_selector='div.address',
-        form_url_template='https://www.cylex-uk.co.uk/my-company.html',
-        form_selectors={},
     ),
     CitationSite(
         id='freeindex',
