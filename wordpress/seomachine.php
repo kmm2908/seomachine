@@ -2,7 +2,7 @@
 /**
  * Plugin Name: SEO Machine
  * Description: Registers SEO content post types and exposes SEO meta fields via REST API. No Yoast dependency.
- * Version: 3.3.4
+ * Version: 3.3.5
  * Author: SEO Machine
  *
  * Installation:
@@ -467,7 +467,7 @@ add_shortcode('seo_hub', function($atts) {
     }
 
     $items = array_map(function($p) {
-        $text = wp_trim_words($p->post_excerpt ?: $p->post_title, 7, '');
+        $text = wp_trim_words($p->post_title, 7, '');
         return '<li><a href="' . esc_url(get_permalink($p)) . '">' . esc_html($text) . '</a></li>';
     }, $posts);
 
@@ -528,10 +528,9 @@ function seo_hub_remote_fetch(string $source, string $type, string $rest_base): 
     }
 
     $items = array_map(function($item) {
-        $link    = esc_url($item['link'] ?? '');
-        $excerpt = trim(wp_strip_all_tags($item['excerpt']['rendered'] ?? ''));
-        $title   = wp_strip_all_tags($item['title']['rendered'] ?? '');
-        $text    = esc_html(wp_trim_words($excerpt ?: $title, 7, ''));
+        $link  = esc_url($item['link'] ?? '');
+        $title = wp_strip_all_tags($item['title']['rendered'] ?? '');
+        $text  = esc_html(wp_trim_words($title, 7, ''));
         return "<li><a href=\"{$link}\">{$text}</a></li>";
     }, $all_posts);
 
@@ -832,7 +831,7 @@ add_action('wp_enqueue_scripts', function(): void {
         'seo-machine-hub',
         content_url('mu-plugins/seomachine-hub.css'),
         [],
-        '3.3.4'
+        '3.3.5'
     );
 });
 
