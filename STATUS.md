@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-04-14 (session 48 — problem grid line-height tightened to 1.0)
+Last updated: 2026-04-14 (session 49 — problem grid refactored to single column, plugin v3.3.2)
 
 ---
 
@@ -133,11 +133,11 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] Must use Elementor **Shortcode widget** (not HTML widget) — HTML widget does not process shortcodes
 - [x] CSS: `li h3 a { font-size: 0.8rem }` from Elementor Kit applies automatically — no custom CSS needed
 - [x] Line-height for wrapped items: add `.elementor-shortcode .seo-hub-links h3 { line-height: 1.2; }` to site custom CSS if needed
-- [x] **Problem grid layout** (session 22) — `[seo_hub type="problem"]` renders a 3-column CSS grid with bordered cards, disc bullets, inherited link colours, mobile-responsive (stacks to 1 column); items wrapped in `<h3>` tags via `seo_hub_problem_grid()` function
-- [x] **Problem grid mobile fix** (session 30) — on mobile: `gap:0`, `overflow:hidden`, border moved to container (single outer border + `border-radius:8px`), individual `<ul>` borders replaced with `border-top` dividers, explicit `margin:0` on `ul` to override theme styles, `margin:0 1rem` outer spacing so border never touches screen edge
+- [x] **Problem grid layout** (session 22, refactored session 49) — `[seo_hub type="problem"]` renders a single-column list; all items in one `<ul>`, `<h3>` tags per item via `seo_hub_problem_grid()`; previously split into 3 `<ul>` chunks for a 3-column grid — removed as it created layout issues
+- [x] **Problem grid CSS** (session 49) — `seomachine-hub.css` simplified to `grid-template-columns: 1fr`; mobile `@media` block removed (redundant — single column everywhere); `line-height: 1.0` on `li`
 - [x] **Service box mobile fix** (session 30) — user applied via WordPress Customizer Additional CSS on SDY staging: `width:calc(100% - 2rem); margin:0 1rem 1rem` — keeps Elementor layout intact by pairing margin with matching width reduction
 - [x] **Hub CSS extracted to external file** (session 47) — `wordpress/seomachine-hub.css` replaces the inline `<style>` block that was dumped by `seo_hub_problem_grid()` on every render; enqueued via `wp_enqueue_scripts` using `content_url('mu-plugins/seomachine-hub.css')`; per-client overrides go in Elementor → Site Settings → Custom CSS
-- [x] **Problem grid equal-height columns fix** (session 47) — `align-items: start` on `.seo-hub-problem-grid` so each card is only as tall as its content; previously cards stretched to tallest column leaving blank space in shorter ones; mobile stacking unaffected
+- [x] **Plugin version sync** (session 49) — plugin header version and CSS enqueue cache-bust string now kept in sync; currently `3.3.2`; `/wrap` command updated to report plugin version in confirmation output so deployed version can be cross-checked against wp-admin
 - [x] **Problem grid line-height** (session 47–48) — `line-height: 1.0` on `.seo-hub-problem-grid li`; tightened from 1.4 to keep wrapped items as close as comfortably readable; defined in `wordpress/seomachine-hub.css`
 
 ### SiteGround cache auto-purge after publish (session 46)
