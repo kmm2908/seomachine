@@ -3,6 +3,11 @@
    Override per-client via Elementor: Site Settings → Custom CSS
 */
 
+/* Standard hub list: tighten line-height on wrapped items */
+.seo-hub-links h3 {
+    line-height: 1.2;
+}
+
 /* Problem grid: single-column layout */
 .seo-hub-problem-grid {
     display: grid;
