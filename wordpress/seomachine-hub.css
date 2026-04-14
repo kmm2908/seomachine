@@ -3,10 +3,10 @@
    Override per-client via Elementor: Site Settings → Custom CSS
 */
 
-/* Problem grid: 3-column card layout */
+/* Problem grid: single-column layout */
 .seo-hub-problem-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: 1fr;
     gap: 1rem;
     align-items: start;
 }
@@ -41,24 +41,3 @@
     text-decoration: underline;
 }
 
-@media (max-width: 767px) {
-    .seo-hub-problem-grid {
-        grid-template-columns: 1fr;
-        gap: 0;
-        margin: 0 1rem;
-        border: 1px solid currentColor;
-        border-radius: 8px;
-        overflow: hidden;
-    }
-
-    .seo-hub-problem-grid ul {
-        border: none;
-        border-top: 1px solid currentColor;
-        border-radius: 0;
-        margin: 0;
-    }
-
-    .seo-hub-problem-grid ul:first-child {
-        border-top: none;
-    }
-}
