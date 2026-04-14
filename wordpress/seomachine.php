@@ -2,7 +2,7 @@
 /**
  * Plugin Name: SEO Machine
  * Description: Registers SEO content post types and exposes SEO meta fields via REST API. No Yoast dependency.
- * Version: 3.3.1
+ * Version: 3.3.2
  * Author: SEO Machine
  *
  * Installation:
@@ -503,18 +503,7 @@ function seo_hub_problem_grid(array $items): string {
     // Wrap each item's link in h3
     $items = array_map(fn($li) => str_replace(['<li>', '</li>'], ['<li><h3>', '</h3></li>'], $li), $items);
 
-    $cols   = 3;
-    $total  = count($items);
-    $per_col = (int) ceil($total / $cols);
-    $chunks  = array_chunk($items, max($per_col, 1));
-
-    $html = '<div class="seo-hub-problem-grid">';
-    foreach ($chunks as $chunk) {
-        $html .= '<ul>' . implode('', $chunk) . '</ul>';
-    }
-    $html .= '</div>';
-
-    return $html;
+    return '<div class="seo-hub-problem-grid"><ul>' . implode('', $items) . '</ul></div>';
 }
 
 // ── Hub Source setting (Settings → General) ──────────────────────────────────
@@ -766,7 +755,7 @@ add_action('wp_enqueue_scripts', function(): void {
         'seo-machine-hub',
         content_url('mu-plugins/seomachine-hub.css'),
         [],
-        '3.3.1'
+        '3.3.2'
     );
 });
 
