@@ -80,6 +80,46 @@ Global context files (not client-specific) stay in `context/`:
 
 ---
 
+## Secondary Blog Sites
+
+Some clients have a secondary blog site alongside their main site — either as a subdomain (`blog.example.com`) or a completely separate domain (`exampleblog.com`). The SEO Machine plugin handles these differently to prevent accidental content duplication.
+
+### How it works
+
+Setting the `seo_hub_source` WordPress option on the secondary blog site activates **lite mode**:
+
+```bash
+wp option update seo_hub_source "https://main-site-url.com"
+```
+
+In lite mode, the plugin:
+- **Suppresses** all CPT registration (`seo_service`, `seo_location`, `seo_pillar`, `seo_comp_alt`, `seo_problem`, `seo_blog`) — these post types will not appear in wp-admin
+- **Keeps** the `[seo_hub]` shortcode, SEO meta output, Open Graph tags, JSON-LD schema, and the SEO Machine metabox on standard `post` type
+
+### Available content types
+
+Secondary blog sites support `blog` content type only (standard WordPress `post` type). The batch runner and scheduled publisher will generate and publish blog posts as normal.
+
+Service, location, pillar, comp-alt, and problem pages are **not published to the secondary blog site**. They live on the main site and surface on the blog via the `[seo_hub]` shortcode.
+
+### Hub shortcode
+
+Place `[seo_hub type="location"]` in an Elementor Shortcode widget to display a live list of location pages from the main site. Works for all types: `location`, `service`, `pillar`, `topical`, `comp_alt`, `problem`. Results are cached for 12 hours.
+
+Cache bust if needed:
+```bash
+wp transient delete seo_hub_cache_location
+```
+
+### Existing secondary blog clients
+
+| Client | Abbr | Main site | seo_hub_source set? |
+|--------|------|-----------|---------------------|
+| Glasgow Thai Massage Blog | GTB | glasgowthaimassage.co.uk | ✓ (set in session 14) |
+| Thai Massage Greenock Blog | TMB | thaimassagegreenock.co.uk | pending onboarding |
+
+---
+
 ## Adding a New Client
 
 Run `/new-client` — it asks questions and creates the full folder structure automatically.
