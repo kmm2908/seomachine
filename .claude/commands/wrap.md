@@ -26,7 +26,7 @@ Update project documentation to reflect everything completed or changed in this 
 
 4. **Commit and push to GitHub** — stage all changes, create a commit with a short message summarising the session (e.g. `Session 6: hub shortcode + image pipeline`), and push to `origin main`
 
-5. **Confirm** — output a brief summary of what was updated and the commit hash so the user can verify before closing
+5. **Confirm** — output a brief summary of what was updated and the commit hash so the user can verify before closing. If `wordpress/seomachine.php` was committed in this session (or any earlier commit this session), also read the `Version:` line from that file and include it in the confirmation — e.g. **Plugin version: 3.3.1** — so the user can cross-check against wp-admin → Must-Use Plugins
 
 ## Multi-window / parallel agent policy
 
