@@ -549,9 +549,14 @@ add_action('admin_init', function() {
             echo '<input type="url" name="seo_hub_source" id="seo_hub_source" '
                . 'value="' . esc_attr($value) . '" class="regular-text" '
                . 'placeholder="https://main-site.com" />';
-            echo '<p class="description">For blog subdomains: enter the main site URL so the '
+            echo '<p class="description">For secondary blog sites: enter the main site URL so the '
                . '<code>[seo_hub]</code> shortcode can pull location/service links from it. '
-               . 'Leave blank on main sites.</p>';
+               . 'Leave blank on main sites. Works for subdomains and separate domains.</p>';
+            if (!empty($value)) {
+                echo '<p class="description" style="color:#2271b1;font-weight:600;">'
+                   . '&#9432; SEO Machine lite mode is active — service, location, and other CPTs '
+                   . 'are suppressed on this site. Blog posts and SEO meta functions remain available.</p>';
+            }
         },
         'general',
         'default',
