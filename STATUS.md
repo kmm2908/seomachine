@@ -137,6 +137,16 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] **Problem grid mobile fix** (session 30) — on mobile: `gap:0`, `overflow:hidden`, border moved to container (single outer border + `border-radius:8px`), individual `<ul>` borders replaced with `border-top` dividers, explicit `margin:0` on `ul` to override theme styles, `margin:0 1rem` outer spacing so border never touches screen edge
 - [x] **Service box mobile fix** (session 30) — user applied via WordPress Customizer Additional CSS on SDY staging: `width:calc(100% - 2rem); margin:0 1rem 1rem` — keeps Elementor layout intact by pairing margin with matching width reduction
 
+### Secondary blog site lite mode (session 45)
+- [x] `seo_machine_is_secondary_blog()` — detects secondary blog via `seo_hub_source` option being non-empty
+- [x] All 6 CPTs + "SEO Content" admin menu suppressed in lite mode — no accidental content creation on blog sites
+- [x] `seo_blog` taxonomy registration also suppressed (seo_blog CPT doesn't exist in lite mode)
+- [x] Lite mode notice in Settings → General — visible in blue when `seo_hub_source` is set
+- [x] `/new-client` Q16 — asks if secondary blog; documents WP-CLI step to set `seo_hub_source`
+- [x] `clients/README.md` — "Secondary blog sites" section added with setup instructions and client table
+- [x] Deployed to all 5 sites via GitHub Actions — all 3 jobs green; GTB lite mode active (seo_hub_source already set)
+- [x] Applies equally to subdomains and separate domains — URL structure irrelevant to detection
+
 ### CSS class injection (session 28)
 - [x] `wordpress_publisher.py` — heading/text class injection in `publish_html_content()` before HTML is sent to WP
 - [x] Class map: `h1→hdr-xl`, `h2→hdr-l`, `h3→hdr-m`, `h4→hdr-s`, `h5→hdr-xs`, `p→txt-m`, `small→txt-s`
