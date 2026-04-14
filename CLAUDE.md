@@ -281,6 +281,10 @@ Publishing uses the WordPress REST API. Credentials are stored in `clients/[abbr
 python3 src/publishing/update_post_classes.py --abbr sdy --type service
 python3 src/publishing/update_post_classes.py --abbr gtm --type all
 python3 src/publishing/update_post_classes.py --abbr sdy --type all --dry-run
+python3 src/publishing/inject_elementor_template.py --template-id 22698          # inject into all GTB posts (default)
+python3 src/publishing/inject_elementor_template.py --template-id 22698 --dry-run
+python3 src/publishing/inject_elementor_template.py --template-id 22698 --post-id 12345  # single post test
+python3 src/publishing/inject_elementor_template.py --template-id 22698 --abbr gtm       # different client
 ```
 
 **Re-publishing existing HTML files** (without regenerating content):
@@ -330,7 +334,7 @@ All Python executables live in `src/` under module subfolders. Test scripts live
 src/
   content/      ← geo_batch_runner.py, republish_existing.py, publish_scheduled.py, regen_images.py
   research/     ← research_competitors.py, research_quick_wins.py, research_serp_analysis.py, etc.
-  publishing/   ← fetch_elementor_template.py, update_post_classes.py
+  publishing/   ← fetch_elementor_template.py, update_post_classes.py, inject_elementor_template.py
   snippets/     ← generate_directions_snippet.py
   social/       ← repurpose_content.py, video_producer.py, social_post_generator.py
   audit/        ← run_audit.py, collectors.py, scoring.py, report.py, pdf_gen.py, queue_gen.py

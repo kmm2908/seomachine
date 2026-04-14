@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-04-14 (session 50 — hub cache auto-bust, hub title fix, hub line-height, plugin v3.3.5)
+Last updated: 2026-04-15 (session 51 — GTB Elementor template injection, inject_elementor_template.py)
 
 ---
 
@@ -255,6 +255,15 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
   - Plus pre-existing: 1164 (Cowcaddens), 1149 (Injury Rehab), 1154 (Injury Prevention), 1159 (Diabetic Neuropathy), 2021 (Aromatherapy Deep Tissue — readability)
 - [ ] GBP optimisation (Task 6) — manual step in Google Business Profile Manager; see plan for full checklist
 - [ ] Pre-launch audit (Task 7) — run after manual reviews complete
+
+### GTB Elementor template injection (session 51)
+- [x] `src/publishing/inject_elementor_template.py` — new script; prepends a dynamic Elementor template reference to existing posts without regenerating content
+- [x] **Elementor posts** — inserts a container + shortcode widget (`[elementor-template id="N"]`) at index 0 of `_elementor_data`; dynamic reference means edits to the template propagate automatically
+- [x] **Non-Elementor posts** — prepends `[elementor-template id="N"]` shortcode to raw `content` field
+- [x] **Duplicate guard** — checks parsed elements (not raw JSON string) so JSON-escaped quotes don't fool the check; deduplication pass removes extra containers if script is run twice
+- [x] CLI flags: `--template-id` (required), `--abbr` (default `gtb`), `--post-id` (single post test), `--dry-run`
+- [x] Template 22698 injected into all 330 GTB posts — 21 Elementor, 309 content, 0 errors
+- [x] Firefox ETP causes nonce failure on Elementor Forms in non-Elementor page context; Chrome unaffected — known browser issue, not caused by injection
 
 ### GTB verification (session 28)
 - [x] All 7 CPTs confirmed in wp-admin on `blog.glasgowthaimassage.co.uk`
@@ -622,7 +631,7 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 
 ### Priority 7 — GTB client setup (session 14)
 - [x] `clients/gtb/` folder created — config.json, brand-voice.md, seo-guidelines.md, internal-links-map.md, features.md, target-keywords.md, writing-examples.md, competitor-analysis.md
-- [x] `clients/gtb/config.json` — WP URL `blog.glasgowthaimassage.co.uk`, app password, template ID 22538
+- [x] `clients/gtb/config.json` — WP URL `blog.glasgowthaimassage.co.uk`, app password, template ID 22545
 - [x] `clients/gtb/elementor-template.json` — re-fetched after user added S1/S2 markers in Elementor; two-section mode confirmed (S1 depth 2, S2 depth 3)
 - [x] Confirm CPTs appear in wp-admin on `blog.glasgowthaimassage.co.uk` — all 7 CPTs confirmed (session 28)
 - [x] Add `GTB` to Column D dropdown in Google Sheet — done (session 28)
