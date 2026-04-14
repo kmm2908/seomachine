@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-04-13 (session 44 — SDY font/Elementor fixes, hdr-* scale recalibrated, post 2049 republished)
+Last updated: 2026-04-14 (session 45 — secondary blog site lite mode v3.2.0, GTB verified)
 
 ---
 
