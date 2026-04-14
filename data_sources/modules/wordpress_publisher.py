@@ -117,6 +117,24 @@ class WordPressPublisher:
         )
         return result.stdout.strip(), result.returncode
 
+    def _purge_sg_cache(self) -> None:
+        """Purge SiteGround page cache after publish. Silent no-op if ssh not configured."""
+        if not self._ssh_config or not self._ssh_config.get('wp_path'):
+            return
+        wp_path = self._ssh_config['wp_path']
+        cmd = (
+            f"wp --path={wp_path} eval "
+            f"'if(function_exists(\"sg_cachepress_purge_everything\")) "
+            f"{{ sg_cachepress_purge_everything(); echo \"purged\"; }} "
+            f"else {{ echo \"skipped\"; }}' 2>/dev/null"
+        )
+        try:
+            stdout, _ = self._ssh_run(cmd, timeout=20)
+            result = stdout.strip() if stdout.strip() else 'done'
+            print(f'  → Cache: {result}')
+        except Exception as e:
+            print(f'  → Cache: purge failed ({e})')
+
     def _scp_put(self, local_path: str, remote_path: str, timeout: int = 60):
         """Copy a local file to the remote server via SCP."""
         cfg = self._ssh_config
@@ -958,7 +976,7 @@ class WordPressPublisher:
                 print(f"    Warning: could not set featured image — {e}")
 
         edit_url = f"{self._display_url}/wp-admin/post.php?post={post_id}&action=edit"
-        return {
+        result = {
             'post_id': post_id,
             'post_type': post_type,
             'edit_url': edit_url,
@@ -966,6 +984,8 @@ class WordPressPublisher:
             'title': title,
             'slug': slug,
         }
+        self._purge_sg_cache()
+        return result
 
     def publish_draft(self, file_path: str, post_type: str = 'post') -> Dict:
         """

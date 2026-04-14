@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-04-14 (session 45 — secondary blog site lite mode v3.2.0, GTB verified)
+Last updated: 2026-04-14 (session 46 — project overview doc, GTM problem pages published, SG cache auto-purge)
 
 ---
 
@@ -136,6 +136,24 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] **Problem grid layout** (session 22) — `[seo_hub type="problem"]` renders a 3-column CSS grid with bordered cards, disc bullets, inherited link colours, mobile-responsive (stacks to 1 column); items wrapped in `<h3>` tags via `seo_hub_problem_grid()` function
 - [x] **Problem grid mobile fix** (session 30) — on mobile: `gap:0`, `overflow:hidden`, border moved to container (single outer border + `border-radius:8px`), individual `<ul>` borders replaced with `border-top` dividers, explicit `margin:0` on `ul` to override theme styles, `margin:0 1rem` outer spacing so border never touches screen edge
 - [x] **Service box mobile fix** (session 30) — user applied via WordPress Customizer Additional CSS on SDY staging: `width:calc(100% - 2rem); margin:0 1rem 1rem` — keeps Elementor layout intact by pairing margin with matching width reduction
+
+### SiteGround cache auto-purge after publish (session 46)
+- [x] `_purge_sg_cache()` added to `WordPressPublisher` — runs `sg_cachepress_purge_everything()` via WP-CLI SSH after every successful publish; silent no-op if no `ssh_config` or no `wp_path`
+- [x] Called at end of `publish_html_content()` — covers both REST API and WP-CLI publish paths
+- [x] `clients/gtm/config.json` — `wp_path` added to `ssh` block (`/home/u2168-sqqieazmgeuw/www/glasgowthaimassage.co.uk/public_html`)
+- [x] `clients/tmg/config.json` — `wp_path` added to `ssh` block (`/home/u3520-kztrwuly6pid/www/thaimassagegreenock.co.uk/public_html`)
+- [x] SDY already has `wp_path` — purge active there too; GTB/TMB are secondary blogs with no publishing, no-op
+- [x] Console output: `→ Cache: purged` / `→ Cache: skipped` / `→ Cache: purge failed (err)` — never blocks publish
+- [x] **Root cause this fixed:** GTM problem pages were all drafts; SiteGround cached the empty REST response; GTB's `[seo_hub type="problem"]` showed nothing
+
+### GTM problem pages published (session 46)
+- [x] All 12 GTM `seo_problem` posts (IDs 16713–16767) were WordPress drafts — published via REST API
+- [x] SiteGround cache purged on GTM (`sg_cachepress_purge_everything`) + GTB transient cleared
+- [x] `[seo_hub type="problem"]` on GTB now renders the 3-column grid correctly
+- [ ] Posts 16733 (Injury Rehab) and 16762 (Diabetic Neuropathy) have ★★★★★ quality flag — fix and re-publish in GTM wp-admin
+
+### Project overview document (session 46)
+- [x] `docs/project-overview.md` — full breakdown of all 8 product areas (Content Pipeline, WordPress Integration, Client Management, Research, Audit & Reporting, Citations, Social & Video, RankFactory) with status, component tables, and strategic questions
 
 ### Secondary blog site lite mode (session 45)
 - [x] `seo_machine_is_secondary_blog()` — detects secondary blog via `seo_hub_source` option being non-empty

@@ -68,6 +68,7 @@
         "user": "u2168-sqqieazmgeuw",
         "host": "ukm1.siteground.biz",
         "port": 18765,
-        "key": "~/.ssh/seomachine_deploy"
+        "key": "~/.ssh/seomachine_deploy",
+        "wp_path": "/home/u2168-sqqieazmgeuw/www/glasgowthaimassage.co.uk/public_html"
     }
 }

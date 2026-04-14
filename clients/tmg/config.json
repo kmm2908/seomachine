@@ -70,6 +70,7 @@
         "user": "u3520-kztrwuly6pid",
         "host": "uk1001.siteground.eu",
         "port": 18765,
-        "key": "~/.ssh/seomachine_deploy"
+        "key": "~/.ssh/seomachine_deploy",
+        "wp_path": "/home/u3520-kztrwuly6pid/www/thaimassagegreenock.co.uk/public_html"
     }
 }
