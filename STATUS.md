@@ -141,7 +141,7 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] **Hub standard list line-height** (session 50) — `.seo-hub-links h3 { line-height: 1.2 }` added to `seomachine-hub.css`; tightens wrapped multi-line items in the standard service/location hub lists
 - [x] **Hub display text switched to title** (session 50) — both local `get_posts()` path and remote `seo_hub_remote_fetch()` path now use `post_title` exclusively; excerpt was causing garbled display text (WordPress auto-generated excerpts from article body included CTA link text like "Book Now Sources: Thai Massage")
 - [x] **Hub cache auto-bust** (session 50) — `POST /wp-json/seomachine/v1/bust-hub-cache` REST endpoint on consumer sites (GTB/TMB); validates `source_url` param against `seo_hub_source` option; deletes `seo_hub_cache_{type}` transient; source sites fire non-blocking POST to all URLs in new `seo_hub_consumers` option via `transition_post_status` hook when any CPT post changes status; Settings → General shows "SEO Hub Consumers" textarea on source/main sites only
-- [ ] **Hub cache auto-bust setup** — add `https://blog.glasgowthaimassage.co.uk` to GTM Settings → General → SEO Hub Consumers (one-time manual step after plugin v3.3.3+ deploys)
+- [x] **Hub cache auto-bust setup** — `https://blog.glasgowthaimassage.co.uk` added to GTM Settings → General → SEO Hub Consumers
 
 ### SiteGround cache auto-purge after publish (session 46)
 - [x] `_purge_sg_cache()` added to `WordPressPublisher` — runs `sg_cachepress_purge_everything()` via WP-CLI SSH after every successful publish; silent no-op if no `ssh_config` or no `wp_path`
