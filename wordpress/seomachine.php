@@ -2,7 +2,7 @@
 /**
  * Plugin Name: SEO Machine
  * Description: Registers SEO content post types and exposes SEO meta fields via REST API. No Yoast dependency.
- * Version: 3.1.5
+ * Version: 3.2.0
  * Author: SEO Machine
  *
  * Installation:
@@ -12,6 +12,16 @@
 
 if (!defined('ABSPATH')) {
     exit;
+}
+
+/**
+ * Returns true if this WordPress install is a secondary blog site
+ * (subdomain or separate domain) that pulls CPT content from a main site.
+ * Detection: seo_hub_source option is non-empty.
+ * In lite mode: CPTs are suppressed; shortcode, meta output, and metabox remain active.
+ */
+function seo_machine_is_secondary_blog(): bool {
+    return !empty(get_option('seo_hub_source', ''));
 }
 
 define('SEO_MACHINE_POST_TYPES', [
@@ -51,38 +61,46 @@ function seo_machine_register_post_types() {
 
 // ── Custom Post Types ────────────────────────────────────────────────────────
 // Register on init if it hasn't fired yet, otherwise register immediately.
+// Skipped entirely on secondary blog sites (seo_hub_source is set).
 
-if (did_action('init')) {
-    seo_machine_register_post_types();
-} else {
-    add_action('init', 'seo_machine_register_post_types', 1);
+if (!seo_machine_is_secondary_blog()) {
+    if (did_action('init')) {
+        seo_machine_register_post_types();
+    } else {
+        add_action('init', 'seo_machine_register_post_types', 1);
+    }
+
+    register_activation_hook(__FILE__, function () {
+        seo_machine_register_post_types();
+        flush_rewrite_rules();
+    });
 }
-
-// Flush rewrite rules on activation so CPT permalinks work immediately.
-register_activation_hook(__FILE__, function () {
-    seo_machine_register_post_types();
-    flush_rewrite_rules();
-});
 
 // Register built-in category taxonomy for seo_blog so blog posts can be
 // assigned to WordPress categories (Thai Massage, Stay Healthy, etc.)
-add_action('init', function() {
-    register_taxonomy_for_object_type('category', 'seo_blog');
-}, 5);
+// Not needed on secondary blog sites — seo_blog CPT is suppressed there.
+if (!seo_machine_is_secondary_blog()) {
+    add_action('init', function() {
+        register_taxonomy_for_object_type('category', 'seo_blog');
+    }, 5);
+}
 
 
-// Parent admin menu — redirects to Services list
-add_action('admin_menu', function() {
-    add_menu_page(
-        'SEO Content',
-        'SEO Content',
-        'edit_posts',
-        'seo-content',
-        fn() => wp_redirect(admin_url('edit.php?post_type=seo_service')),
-        'dashicons-text-page',
-        20
-    );
-});
+// Parent admin menu — redirects to Services list.
+// Hidden on secondary blog sites where no CPTs are registered.
+if (!seo_machine_is_secondary_blog()) {
+    add_action('admin_menu', function() {
+        add_menu_page(
+            'SEO Content',
+            'SEO Content',
+            'edit_posts',
+            'seo-content',
+            fn() => wp_redirect(admin_url('edit.php?post_type=seo_service')),
+            'dashicons-text-page',
+            20
+        );
+    });
+}
 
 // ── SEO Meta Fields (no Yoast dependency) ───────────────────────────────────
 
