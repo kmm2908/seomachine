@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-04-14 (session 46 — project overview doc, GTM problem pages published, SG cache auto-purge)
+Last updated: 2026-04-14 (session 47 — hub CSS extracted to external file, align-items fix, deploy workflow updated)
 
 ---
 
@@ -136,6 +136,9 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] **Problem grid layout** (session 22) — `[seo_hub type="problem"]` renders a 3-column CSS grid with bordered cards, disc bullets, inherited link colours, mobile-responsive (stacks to 1 column); items wrapped in `<h3>` tags via `seo_hub_problem_grid()` function
 - [x] **Problem grid mobile fix** (session 30) — on mobile: `gap:0`, `overflow:hidden`, border moved to container (single outer border + `border-radius:8px`), individual `<ul>` borders replaced with `border-top` dividers, explicit `margin:0` on `ul` to override theme styles, `margin:0 1rem` outer spacing so border never touches screen edge
 - [x] **Service box mobile fix** (session 30) — user applied via WordPress Customizer Additional CSS on SDY staging: `width:calc(100% - 2rem); margin:0 1rem 1rem` — keeps Elementor layout intact by pairing margin with matching width reduction
+- [x] **Hub CSS extracted to external file** (session 47) — `wordpress/seomachine-hub.css` replaces the inline `<style>` block that was dumped by `seo_hub_problem_grid()` on every render; enqueued via `wp_enqueue_scripts` using `content_url('mu-plugins/seomachine-hub.css')`; per-client overrides go in Elementor → Site Settings → Custom CSS
+- [x] **Problem grid equal-height columns fix** (session 47) — `align-items: start` on `.seo-hub-problem-grid` so each card is only as tall as its content; previously cards stretched to tallest column leaving blank space in shorter ones; mobile stacking unaffected
+- [x] **Problem grid line-height** (session 47) — `line-height: 1.4` added to `.seo-hub-problem-grid li`; multi-line items no longer have cramped line spacing
 
 ### SiteGround cache auto-purge after publish (session 46)
 - [x] `_purge_sg_cache()` added to `WordPressPublisher` — runs `sg_cachepress_purge_everything()` via WP-CLI SSH after every successful publish; silent no-op if no `ssh_config` or no `wp_path`
@@ -393,7 +396,7 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] `clients/sdy/elementor-template-meta.json` — created; baseline `modified` date stored
 
 ### Auto-deploy pipeline (session 17, expanded session 21)
-- [x] `.github/workflows/deploy-plugin.yml` — GitHub Actions workflow; deploys `wordpress/seomachine.php` to all 5 sites via SFTP on every push to main that touches the file
+- [x] `.github/workflows/deploy-plugin.yml` — GitHub Actions workflow; deploys `wordpress/seomachine.php` and `wordpress/seomachine-hub.css` to all 5 sites via SFTP on every push to main that touches either file
 - [x] SSH key pair generated (`~/.ssh/seomachine_deploy`); public key added to SiteGround SSH Manager on all 3 accounts; private key stored as `SITEGROUND_SSH_KEY` GitHub Actions secret
 - [x] Three parallel jobs: GTM/GTB (`u2168-sqqieazmgeuw@ukm1.siteground.biz`), SDY (`u2732-2mxetksmslhk@gukm1055.siteground.biz`), TMG/TMB (`u3520-kztrwuly6pid@uk1001.siteground.eu`)
 - [x] All 3 jobs tested and confirmed working (session 21)

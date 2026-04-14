@@ -2,7 +2,7 @@
 /**
  * Plugin Name: SEO Machine
  * Description: Registers SEO content post types and exposes SEO meta fields via REST API. No Yoast dependency.
- * Version: 3.2.0
+ * Version: 3.3.0
  * Author: SEO Machine
  *
  * Installation:
@@ -508,17 +508,7 @@ function seo_hub_problem_grid(array $items): string {
     $per_col = (int) ceil($total / $cols);
     $chunks  = array_chunk($items, max($per_col, 1));
 
-    $html = '<style>.seo-hub-problem-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}'
-          . '.seo-hub-problem-grid ul{border:1px solid currentColor;border-radius:8px;padding:1.2rem 1.5rem;margin:0;list-style:disc inside;opacity:.7}'
-          . '.seo-hub-problem-grid li{padding:.4rem 0}'
-          . '.seo-hub-problem-grid h3{display:inline;font-size:inherit;font-weight:inherit;margin:0}'
-          . '.seo-hub-problem-grid a{color:inherit;text-decoration:none}'
-          . '.seo-hub-problem-grid a:hover{text-decoration:underline}'
-          . '@media(max-width:767px){.seo-hub-problem-grid{grid-template-columns:1fr;gap:0;margin:0 1rem;border:1px solid currentColor;border-radius:8px;overflow:hidden}'
-          . '.seo-hub-problem-grid ul{border:none;border-top:1px solid currentColor;border-radius:0;margin:0}'
-          . '.seo-hub-problem-grid ul:first-child{border-top:none}}</style>';
-
-    $html .= '<div class="seo-hub-problem-grid">';
+    $html = '<div class="seo-hub-problem-grid">';
     foreach ($chunks as $chunk) {
         $html .= '<ul>' . implode('', $chunk) . '</ul>';
     }
@@ -769,6 +759,16 @@ $_seo_machine_hdr_css = '
     .elementor .hdr-s  { font-size: clamp(1.1rem, 0.4rem + 2vw,  1.3rem) !important; }
     .elementor .hdr-xs { font-size: clamp(1rem,   0.25rem + 1.5vw, 1.1rem) !important; }
 ';
+
+// Hub shortcode stylesheet (problem grid etc.)
+add_action('wp_enqueue_scripts', function(): void {
+    wp_enqueue_style(
+        'seo-machine-hub',
+        content_url('mu-plugins/seomachine-hub.css'),
+        [],
+        '3.3.1'
+    );
+});
 
 // Frontend
 add_action('wp_enqueue_scripts', function() use ($_seo_machine_hdr_css): void {

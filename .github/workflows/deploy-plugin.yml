@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - 'wordpress/seomachine.php'
+      - 'wordpress/seomachine-hub.css'
 
 jobs:
   deploy-gtm-gtb:
@@ -18,7 +19,9 @@ jobs:
           chmod 600 /tmp/deploy_key
           sftp -i /tmp/deploy_key -P 18765 -o StrictHostKeyChecking=no u2168-sqqieazmgeuw@ukm1.siteground.biz << 'SFTP'
           put wordpress/seomachine.php www/glasgowthaimassage.co.uk/public_html/wp-content/mu-plugins/seomachine.php
+          put wordpress/seomachine-hub.css www/glasgowthaimassage.co.uk/public_html/wp-content/mu-plugins/seomachine-hub.css
           put wordpress/seomachine.php www/blog.glasgowthaimassage.co.uk/public_html/wp-content/mu-plugins/seomachine.php
+          put wordpress/seomachine-hub.css www/blog.glasgowthaimassage.co.uk/public_html/wp-content/mu-plugins/seomachine-hub.css
           SFTP
           rm /tmp/deploy_key
 
@@ -33,7 +36,9 @@ jobs:
           chmod 600 /tmp/deploy_key
           sftp -i /tmp/deploy_key -P 18765 -o StrictHostKeyChecking=no u2732-2mxetksmslhk@gukm1055.siteground.biz << 'SFTP'
           put wordpress/seomachine.php www/serendipitymassage.co.uk/public_html/wp-content/mu-plugins/seomachine.php
+          put wordpress/seomachine-hub.css www/serendipitymassage.co.uk/public_html/wp-content/mu-plugins/seomachine-hub.css
           put wordpress/seomachine.php www/staging2.serendipitymassage.co.uk/public_html/wp-content/mu-plugins/seomachine.php
+          put wordpress/seomachine-hub.css www/staging2.serendipitymassage.co.uk/public_html/wp-content/mu-plugins/seomachine-hub.css
           SFTP
           rm /tmp/deploy_key
 
@@ -48,6 +53,8 @@ jobs:
           chmod 600 /tmp/deploy_key
           sftp -i /tmp/deploy_key -P 18765 -o StrictHostKeyChecking=no u3520-kztrwuly6pid@uk1001.siteground.eu << 'SFTP'
           put wordpress/seomachine.php www/thaimassagegreenock.co.uk/public_html/wp-content/mu-plugins/seomachine.php
+          put wordpress/seomachine-hub.css www/thaimassagegreenock.co.uk/public_html/wp-content/mu-plugins/seomachine-hub.css
           put wordpress/seomachine.php www/blog.thaimassagegreenock.co.uk/public_html/wp-content/mu-plugins/seomachine.php
+          put wordpress/seomachine-hub.css www/blog.thaimassagegreenock.co.uk/public_html/wp-content/mu-plugins/seomachine-hub.css
           SFTP
           rm /tmp/deploy_key

@@ -270,7 +270,7 @@ Publishing uses the WordPress REST API. Credentials are stored in `clients/[abbr
 
 **SiteGround hosting note:** deploy to `wp-content/mu-plugins/` (plural). SiteGround also has a `mu-plugin/` (singular) folder which is display-only — WordPress does not auto-load PHP files from it.
 
-**Auto-deploy:** `.github/workflows/deploy-plugin.yml` deploys `wordpress/seomachine.php` to all 5 sites automatically on every push to `main` that touches that file. Three parallel jobs: GTM/GTB (`u2168-sqqieazmgeuw@ukm1.siteground.biz`), SDY + staging2 (`u2732-2mxetksmslhk@gukm1055.siteground.biz`), and TMG/TMB (`u3520-kztrwuly6pid@uk1001.siteground.eu`). The SDY job deploys to both `serendipitymassage.co.uk` and `staging2.serendipitymassage.co.uk`. Uses `SITEGROUND_SSH_KEY` GitHub Actions secret (private key at `~/.ssh/seomachine_deploy`).
+**Auto-deploy:** `.github/workflows/deploy-plugin.yml` deploys `wordpress/seomachine.php` and `wordpress/seomachine-hub.css` to all 5 sites automatically on every push to `main` that touches either file. Three parallel jobs: GTM/GTB (`u2168-sqqieazmgeuw@ukm1.siteground.biz`), SDY + staging2 (`u2732-2mxetksmslhk@gukm1055.siteground.biz`), and TMG/TMB (`u3520-kztrwuly6pid@uk1001.siteground.eu`). The SDY job deploys to both `serendipitymassage.co.uk` and `staging2.serendipitymassage.co.uk`. Uses `SITEGROUND_SSH_KEY` GitHub Actions secret (private key at `~/.ssh/seomachine_deploy`).
 
 `WordPressPublisher.from_config(wp_config)` accepts credentials directly from the client JSON.
 
