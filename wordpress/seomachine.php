@@ -2,7 +2,7 @@
 /**
  * Plugin Name: SEO Machine
  * Description: Registers SEO content post types and exposes SEO meta fields via REST API. No Yoast dependency.
- * Version: 3.3.2
+ * Version: 3.3.3
  * Author: SEO Machine
  *
  * Installation:
@@ -199,6 +199,58 @@ add_action('rest_api_init', function() {
         },
     ]);
 });
+
+// ── Hub cache-bust REST endpoint ─────────────────────────────────────────────
+//
+// Consumer sites (e.g. GTB) expose this endpoint so source sites (e.g. GTM)
+// can clear the seo_hub transient cache immediately after a CPT post changes.
+// Caller must supply source_url matching this site's seo_hub_source option.
+
+add_action('rest_api_init', function() {
+    register_rest_route('seomachine/v1', '/bust-hub-cache', [
+        'methods'             => 'POST',
+        'permission_callback' => '__return_true',
+        'callback'            => function(WP_REST_Request $request) {
+            $source   = get_option('seo_hub_source', '');
+            $provided = $request->get_param('source_url') ?? '';
+            if (empty($source) || untrailingslashit($provided) !== untrailingslashit($source)) {
+                return new WP_Error('forbidden', 'Forbidden', ['status' => 403]);
+            }
+            $type = sanitize_text_field($request->get_param('type') ?? '');
+            $all  = ['location', 'service', 'pillar', 'topical', 'comp-alt', 'problem'];
+            foreach ($type ? [$type] : $all as $t) {
+                delete_transient('seo_hub_cache_' . $t);
+            }
+            return ['busted' => true, 'type' => $type ?: 'all'];
+        },
+    ]);
+});
+
+// ── Notify hub consumers on CPT post status change ───────────────────────────
+//
+// Source sites (e.g. GTM) ping each URL listed in seo_hub_consumers whenever
+// a CPT post is published, unpublished, trashed, or restored. Non-blocking.
+
+add_action('transition_post_status', function($new_status, $old_status, WP_Post $post) {
+    if ($new_status === $old_status) return;
+    $cpt_map = [
+        'seo_location' => 'location', 'seo_service'  => 'service',
+        'seo_pillar'   => 'pillar',   'seo_topical'  => 'topical',
+        'seo_comp_alt' => 'comp-alt', 'seo_problem'  => 'problem',
+    ];
+    if (!isset($cpt_map[$post->post_type])) return;
+    $raw       = get_option('seo_hub_consumers', '');
+    $consumers = array_filter(array_map('trim', explode("\n", $raw)));
+    if (empty($consumers)) return;
+    $type = $cpt_map[$post->post_type];
+    foreach ($consumers as $url) {
+        wp_remote_post(trailingslashit($url) . 'wp-json/seomachine/v1/bust-hub-cache', [
+            'body'     => ['type' => $type, 'source_url' => home_url()],
+            'blocking' => false,
+            'timeout'  => 5,
+        ]);
+    }
+}, 10, 3);
 
 // ── SEO Machine Admin Panel ──────────────────────────────────────────────────
 // TODO: add brand styling before public/commercial release (plain WP metabox for now)
@@ -541,6 +593,31 @@ add_action('admin_init', function() {
         'default',
         ['label_for' => 'seo_hub_source']
     );
+
+    register_setting('general', 'seo_hub_consumers', [
+        'type'    => 'string',
+        'default' => '',
+    ]);
+
+    // Only show on source/main sites (where seo_hub_source is blank)
+    if (empty(get_option('seo_hub_source', ''))) {
+        add_settings_field(
+            'seo_hub_consumers',
+            'SEO Hub Consumers',
+            function() {
+                $value = get_option('seo_hub_consumers', '');
+                echo '<textarea name="seo_hub_consumers" id="seo_hub_consumers" '
+                   . 'class="large-text" rows="3" placeholder="https://blog.example.com">'
+                   . esc_textarea($value) . '</textarea>';
+                echo '<p class="description">One URL per line. When a CPT post is published or changed, '
+                   . 'these sites will have their hub cache cleared automatically. '
+                   . 'Leave blank if no blog subdomains consume from this site.</p>';
+            },
+            'general',
+            'default',
+            ['label_for' => 'seo_hub_consumers']
+        );
+    }
 });
 
 // ── Convert Post Type metabox ────────────────────────────────────────────────
@@ -755,7 +832,7 @@ add_action('wp_enqueue_scripts', function(): void {
         'seo-machine-hub',
         content_url('mu-plugins/seomachine-hub.css'),
         [],
-        '3.3.2'
+        '3.3.3'
     );
 });
 
