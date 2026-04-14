@@ -43,6 +43,9 @@ Ask the following questions one at a time. Wait for an answer before moving to t
 13. **WordPress site URL** — the WP install URL (e.g. "https://glasgowthaimassage.co.uk") — enter "skip" to set up WordPress later
 14. **WordPress username** — WP application password username — enter "skip" if skipping WordPress
 15. **WordPress application password** — (e.g. "Wtg0 jK0T 3bak 7XRg Mg1P o7io") — enter "skip" if skipping WordPress
+16. **Secondary blog site?** — Is this a secondary blog site that should pull service/location pages from a main site? This applies whether the blog is on a subdomain (e.g. `blog.example.com`) or a completely separate domain (e.g. `exampleblog.com`). Answer yes/no.
+    - If **yes**: ask "What is the main site URL?" then note it — `seo_hub_source` will be set in Step 3b.
+    - If **no**: standard full setup, all CPTs registered.
 
 ### Step 2: Confirm Before Creating
 
@@ -79,11 +82,28 @@ Write: `clients/[abbr_lowercase]/config.json`
     "app_password": "[answer to Q15, or null]",
     "default_post_type": "post",
     "default_status": "draft"
-  }
+  },
+  "site_type": "[\"secondary_blog\" if Q16=yes, else \"main\"]",
+  "seo_hub_source": "[main site URL if Q16=yes, else omit this key]"
 }
 ```
 
 If WordPress was skipped, set `"wordpress": null`.
+
+### Step 3b: Configure secondary blog site (if Q16 = yes)
+
+If the client answered yes to Q16, run via WP-CLI (adjust SSH host as needed):
+
+```bash
+wp option update seo_hub_source "https://[main-site-url]"
+```
+
+This activates lite mode automatically — no CPTs will be registered on this WordPress install. Verify by checking Settings → General in wp-admin for the blue lite mode notice.
+
+**What this means for this client:**
+- Only the `blog` content type is available in the batch runner
+- No `elementor-template.json` needed for service/location types (those page types don't exist here)
+- The `[seo_hub]` shortcode fetches location/service links from the main site automatically
 
 ### Step 4: Create Stub Context Files
 
@@ -497,6 +517,8 @@ Next steps:
   2. Add [ABBREVIATION] rows to the Google Sheet to start generating content
   3. Run /research [topic] to start building keyword strategy
   4. Run python3 src/geo_batch_runner.py to generate content when ready
+  [If secondary blog] Note: only "blog" content type is available. Service/location pages
+  are served from [main site URL] via [seo_hub] shortcode — do not publish them here.
 
 Output will be saved to: content/[abbr]/
 ```
