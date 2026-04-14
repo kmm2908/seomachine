@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-04-14 (session 47 — hub CSS extracted to external file, align-items fix, deploy workflow updated)
+Last updated: 2026-04-14 (session 48 — problem grid line-height tightened to 1.0)
 
 ---
 
@@ -138,7 +138,7 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] **Service box mobile fix** (session 30) — user applied via WordPress Customizer Additional CSS on SDY staging: `width:calc(100% - 2rem); margin:0 1rem 1rem` — keeps Elementor layout intact by pairing margin with matching width reduction
 - [x] **Hub CSS extracted to external file** (session 47) — `wordpress/seomachine-hub.css` replaces the inline `<style>` block that was dumped by `seo_hub_problem_grid()` on every render; enqueued via `wp_enqueue_scripts` using `content_url('mu-plugins/seomachine-hub.css')`; per-client overrides go in Elementor → Site Settings → Custom CSS
 - [x] **Problem grid equal-height columns fix** (session 47) — `align-items: start` on `.seo-hub-problem-grid` so each card is only as tall as its content; previously cards stretched to tallest column leaving blank space in shorter ones; mobile stacking unaffected
-- [x] **Problem grid line-height** (session 47) — `line-height: 1.4` added to `.seo-hub-problem-grid li`; multi-line items no longer have cramped line spacing
+- [x] **Problem grid line-height** (session 47–48) — `line-height: 1.0` on `.seo-hub-problem-grid li`; tightened from 1.4 to keep wrapped items as close as comfortably readable; defined in `wordpress/seomachine-hub.css`
 
 ### SiteGround cache auto-purge after publish (session 46)
 - [x] `_purge_sg_cache()` added to `WordPressPublisher` — runs `sg_cachepress_purge_everything()` via WP-CLI SSH after every successful publish; silent no-op if no `ssh_config` or no `wp_path`
