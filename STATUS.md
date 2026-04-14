@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-04-14 (session 49 — problem grid refactored to single column, plugin v3.3.2)
+Last updated: 2026-04-14 (session 50 — hub cache auto-bust, hub title fix, hub line-height, plugin v3.3.5)
 
 ---
 
@@ -127,18 +127,21 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 
 ### Hub page shortcode (new session 5, updated session 22)
 - [x] `[seo_hub type="location"]` shortcode in `seomachine.php` — renders published posts as `<ul class="seo-hub-links">` with `<li><h3><a>` structure
-- [x] Display text = post excerpt if set, otherwise post title (fallback)
+- [x] Display text = post title (session 50 change — see below)
 - [x] Supports all 7 types: location, service, pillar, topical, blog, comp_alt, problem
 - [x] Sorted A–Z by title; auto-updates on publish/unpublish (WP_Query, status=publish only)
 - [x] Must use Elementor **Shortcode widget** (not HTML widget) — HTML widget does not process shortcodes
 - [x] CSS: `li h3 a { font-size: 0.8rem }` from Elementor Kit applies automatically — no custom CSS needed
-- [x] Line-height for wrapped items: add `.elementor-shortcode .seo-hub-links h3 { line-height: 1.2; }` to site custom CSS if needed
 - [x] **Problem grid layout** (session 22, refactored session 49) — `[seo_hub type="problem"]` renders a single-column list; all items in one `<ul>`, `<h3>` tags per item via `seo_hub_problem_grid()`; previously split into 3 `<ul>` chunks for a 3-column grid — removed as it created layout issues
 - [x] **Problem grid CSS** (session 49) — `seomachine-hub.css` simplified to `grid-template-columns: 1fr`; mobile `@media` block removed (redundant — single column everywhere); `line-height: 1.0` on `li`
 - [x] **Service box mobile fix** (session 30) — user applied via WordPress Customizer Additional CSS on SDY staging: `width:calc(100% - 2rem); margin:0 1rem 1rem` — keeps Elementor layout intact by pairing margin with matching width reduction
 - [x] **Hub CSS extracted to external file** (session 47) — `wordpress/seomachine-hub.css` replaces the inline `<style>` block that was dumped by `seo_hub_problem_grid()` on every render; enqueued via `wp_enqueue_scripts` using `content_url('mu-plugins/seomachine-hub.css')`; per-client overrides go in Elementor → Site Settings → Custom CSS
-- [x] **Plugin version sync** (session 49) — plugin header version and CSS enqueue cache-bust string now kept in sync; currently `3.3.2`; `/wrap` command updated to report plugin version in confirmation output so deployed version can be cross-checked against wp-admin
+- [x] **Plugin version sync** (session 49) — plugin header version and CSS enqueue cache-bust string now kept in sync; currently `3.3.5`; `/wrap` command updated to report plugin version in confirmation output so deployed version can be cross-checked against wp-admin
 - [x] **Problem grid line-height** (session 47–48) — `line-height: 1.0` on `.seo-hub-problem-grid li`; tightened from 1.4 to keep wrapped items as close as comfortably readable; defined in `wordpress/seomachine-hub.css`
+- [x] **Hub standard list line-height** (session 50) — `.seo-hub-links h3 { line-height: 1.2 }` added to `seomachine-hub.css`; tightens wrapped multi-line items in the standard service/location hub lists
+- [x] **Hub display text switched to title** (session 50) — both local `get_posts()` path and remote `seo_hub_remote_fetch()` path now use `post_title` exclusively; excerpt was causing garbled display text (WordPress auto-generated excerpts from article body included CTA link text like "Book Now Sources: Thai Massage")
+- [x] **Hub cache auto-bust** (session 50) — `POST /wp-json/seomachine/v1/bust-hub-cache` REST endpoint on consumer sites (GTB/TMB); validates `source_url` param against `seo_hub_source` option; deletes `seo_hub_cache_{type}` transient; source sites fire non-blocking POST to all URLs in new `seo_hub_consumers` option via `transition_post_status` hook when any CPT post changes status; Settings → General shows "SEO Hub Consumers" textarea on source/main sites only
+- [ ] **Hub cache auto-bust setup** — add `https://blog.glasgowthaimassage.co.uk` to GTM Settings → General → SEO Hub Consumers (one-time manual step after plugin v3.3.3+ deploys)
 
 ### SiteGround cache auto-purge after publish (session 46)
 - [x] `_purge_sg_cache()` added to `WordPressPublisher` — runs `sg_cachepress_purge_everything()` via WP-CLI SSH after every successful publish; silent no-op if no `ssh_config` or no `wp_path`
@@ -767,6 +770,7 @@ Reason: caching on the live front-end doesn't affect the REST API. Running conte
 - Duplicate Finnieston post (ID 16642) — old bad batch run artefact, can be deleted from wp-admin.
 - Media library accumulating duplicate images from repeated republish runs — consider cleaning up old uploads.
 - GTM local site removed (2026-03-21) — GTM now live-only. No local environment for GTM.
+- **Elementor H1 heading vs WP post title** — the Elementor heading widget has hardcoded text set at publish time and is NOT dynamically linked to the WP post title. Changing the title in Elementor page settings panel updates WP metadata only; the visible H1 on the page must be edited directly on the Elementor canvas. Future fix: use dynamic tag `{{post:title}}` in the heading widget at publish time.
 
 ---
 
