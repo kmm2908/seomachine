@@ -2,7 +2,7 @@
 /**
  * Plugin Name: SEO Machine
  * Description: Registers SEO content post types and exposes SEO meta fields via REST API. No Yoast dependency.
- * Version: 3.3.5
+ * Version: 3.4.0
  * Author: SEO Machine
  *
  * Installation:
@@ -403,6 +403,70 @@ add_action('wp_head', function(): void {
         echo '<meta name="twitter:image" content="' . esc_url($thumb_url) . '">' . "\n";
     }
 }, 1);
+
+// ── Sitewide LocalBusiness JSON-LD ───────────────────────────────────────────
+// Outputs a LocalBusiness schema block on the front page and all singular pages.
+// Populated from WP options set per-site via WP-CLI (see below).
+// Only outputs if seo_machine_biz_name is set — opt-in per install.
+//
+// Set options via WP-CLI:
+//   wp option update seo_machine_biz_name      "Business Name"
+//   wp option update seo_machine_biz_phone     "0141 000 0000"
+//   wp option update seo_machine_biz_street    "Floor 1, 93 Hope Street"
+//   wp option update seo_machine_biz_locality  "Glasgow"
+//   wp option update seo_machine_biz_postcode  "G2 6LD"
+//   wp option update seo_machine_biz_country   "GB"
+//   wp option update seo_machine_biz_schema_type "MassageTherapist"
+//   wp option update seo_machine_opening_hours '[{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],"opens":"10:00","closes":"20:00"}]'
+
+add_action('wp_head', function(): void {
+    if (!is_front_page() && !is_singular()) {
+        return;
+    }
+
+    $name = get_option('seo_machine_biz_name', '');
+    if (!$name) {
+        return;
+    }
+
+    $schema = [
+        '@context' => 'https://schema.org',
+        '@type'    => get_option('seo_machine_biz_schema_type', 'LocalBusiness'),
+        'name'     => $name,
+        'url'      => home_url('/'),
+    ];
+
+    $phone = get_option('seo_machine_biz_phone', '');
+    if ($phone) {
+        $schema['telephone'] = $phone;
+    }
+
+    $street   = get_option('seo_machine_biz_street', '');
+    $locality = get_option('seo_machine_biz_locality', '');
+    $postcode = get_option('seo_machine_biz_postcode', '');
+    $country  = get_option('seo_machine_biz_country', 'GB');
+    if ($street || $locality || $postcode) {
+        $schema['address'] = array_filter([
+            '@type'           => 'PostalAddress',
+            'streetAddress'   => $street,
+            'addressLocality' => $locality,
+            'postalCode'      => $postcode,
+            'addressCountry'  => $country,
+        ]);
+    }
+
+    $hours_json = get_option('seo_machine_opening_hours', '');
+    if ($hours_json) {
+        $hours = json_decode($hours_json, true);
+        if (is_array($hours)) {
+            $schema['openingHoursSpecification'] = $hours;
+        }
+    }
+
+    echo '<script type="application/ld+json">' . "\n"
+        . wp_json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT)
+        . "\n</script>\n";
+}, 5);
 
 // Override <title> when a custom SEO title is stored.
 add_filter('document_title_parts', function(array $title): array {
@@ -831,7 +895,7 @@ add_action('wp_enqueue_scripts', function(): void {
         'seo-machine-hub',
         content_url('mu-plugins/seomachine-hub.css'),
         [],
-        '3.3.5'
+        '3.4.0'
     );
 });
 
@@ -912,5 +976,26 @@ add_filter('option_elementor_cpt_support', function($value) {
 
 add_filter('default_option_elementor_cpt_support', function() {
     return array_keys(SEO_MACHINE_POST_TYPES);
+});
+
+// ── Sitemap ───────────────────────────────────────────────────────────────────
+// WordPress core (5.5+) generates /wp-sitemap.xml including all public CPTs.
+// Redirect legacy /sitemap.xml requests there so Google and audit tools see
+// the full site index, not whatever 8-URL stub a theme/plugin left behind.
+// Also declare the correct sitemap URL in robots.txt.
+
+add_action('template_redirect', function() {
+    if (!is_admin() && isset($_SERVER['REQUEST_URI'])
+        && preg_match('#^/sitemap\.xml#', $_SERVER['REQUEST_URI'])) {
+        wp_redirect(home_url('/wp-sitemap.xml'), 301);
+        exit;
+    }
+});
+
+add_filter('robots_txt', function(string $output): string {
+    if (strpos($output, 'wp-sitemap.xml') === false) {
+        $output .= "\nSitemap: " . home_url('/wp-sitemap.xml') . "\n";
+    }
+    return $output;
 });
 
