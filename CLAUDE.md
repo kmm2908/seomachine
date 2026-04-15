@@ -326,6 +326,10 @@ Use this when posts need to be re-created in WordPress (e.g. after enabling Elem
 
 **Schema handling (non-Elementor)**: `_wrap_schema_block()` moves the `<!-- SCHEMA --><script>` block into a Gutenberg `<!-- wp:html -->` block. The `[DATE]` placeholder is replaced with today's ISO date by the batch runner before saving.
 
+**Sitewide LocalBusiness JSON-LD** (v3.4.0) — `seomachine.php` outputs a `LocalBusiness` schema block in `<head>` on the front page and all singular pages, populated from WP options. Opt-in per install: only outputs if `seo_machine_biz_name` option is set. Set via WP-CLI: `seo_machine_biz_name`, `seo_machine_biz_phone`, `seo_machine_biz_street`, `seo_machine_biz_locality`, `seo_machine_biz_postcode`, `seo_machine_biz_country`, `seo_machine_biz_schema_type`, `seo_machine_opening_hours` (JSON array of `OpeningHoursSpecification` objects). Currently configured on SDY staging2.
+
+**Sitemap redirect** (v3.4.0) — `seomachine.php` 301-redirects `/sitemap.xml` → `/wp-sitemap.xml` (WordPress core's full sitemap including all public CPTs) and adds a `Sitemap:` directive to `robots.txt`. Ensures Google discovers all CPT pages without requiring Yoast/Rank Math.
+
 ## Project Structure
 
 All Python executables live in `src/` under module subfolders. Test scripts live in `tests/`. Modules (imported by scripts) stay in `data_sources/modules/`. GCP service account keys go in `config/`.

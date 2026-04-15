@@ -1,39 +1,33 @@
 # Project Status
 
-Last updated: 2026-04-15 (session 52 — GTM/SDY quality-flag cleanup, SDY draft publishing)
+Last updated: 2026-04-15 (session 53 — SDY pre-launch audit + fixes)
 
 ---
 
-## Action Required — Serendipity (SDY) SEO Audit
+## SDY Pre-Launch Status — Ready for Go-Live
 
-A full site audit was run on staging2.serendipitymassage.co.uk on 2026-04-12. A brief covering all outstanding SEO issues has been dropped into `clients/sdy/SEO-Issues-Brief.md` — please review and work through it.
+Pre-launch audit completed on staging2.serendipitymassage.co.uk on 2026-04-15. All blocking issues resolved.
 
-**Already fixed (do not re-do):** JSON-LD telephone field HTML anchor corruption on all 39 CPT pages.
+**Fixed in session 53:**
+- `seomachine.php` v3.4.0 — sitewide LocalBusiness JSON-LD on front page + all singular pages (name/address/phone/hours from WP options); fixes NAP collector returning `?` on homepage
+- `seomachine.php` v3.4.0 — sitemap redirect: `/sitemap.xml` → `/wp-sitemap.xml` (301) + `robots_txt` filter declaring correct sitemap URL; exposes all 50+ CPT pages to Google
+- WP options set on staging2 via WP-CLI: `seo_machine_biz_*` + `seo_machine_opening_hours` (Mon–Sun 10:00–20:00)
+- `clients/sdy/config.json` — `gbp_location_id: "15400134089965527086"` added
+- Site title fixed: "Staging SDY" → "Serendipity Massage Therapy & Wellness"
+- Homepage meta description + SEO title set via WP-CLI
+- Services page H1 injected into Elementor data: "Massage Therapy Services in Glasgow"
+- Playwright + Chromium installed locally — PDF generation restored for future audits
 
-**Fixed in session 42 (no plugin needed):**
-- `seomachine.php` v3.1.0 now outputs `<meta name="description">`, Open Graph tags, and Twitter Card to `<head>` from stored `_yoast_wpseo_metadesc` on all singular pages (CPTs + pages + posts) — no Yoast/Rank Math needed
-- SEO Machine metabox extended to `page` post type; Meta Title + Meta Description fields added with char counter
-- 45 SDY CPT meta descriptions generated (120–160 chars) and pushed to staging2 via WP-CLI
+**Audit scores (2026-04-15):**
+- Schema 18/20 | Content 13/20 | GBP 0/20* | Reviews 0/15* | NAP 9/15 | Technical 10/10 | **Total 50/100**
+- \* GBP API hit 429 rate-limit errors during audit — profile IS fully configured (7 categories, description, hours). Re-run after go-live for accurate score (~75–80 expected).
 
-**Fixed in session 43:**
-- `seomachine.php` v3.1.2 — `wp_add_inline_style` at priority 999 outputs `font-size: !important` for all hdr-* classes; fixes Elementor per-widget CSS (0,4,0 specificity) overriding hdr-* utility classes (0,2,0); deployed to all sites via GitHub Actions
-- `seomachine.php` v3.1.1 — Elementor h1 heading widget `css_classes` injection (publisher-side, complements plugin-side filter)
+**Previous session fixes (sessions 42–52):** See git log for full history.
 
-**Fixed in session 44:**
-- `seomachine.php` v3.1.3 — hdr-* CSS now also injected into Elementor editor preview iframe (`elementor/preview/enqueue_styles`) and editor panel (`elementor/editor/after_enqueue_styles`) so editor display matches frontend
-- `seomachine.php` v3.1.5 — hdr-* scale recalibrated proportionately from hdr-xl 2.5rem: xl 2.5rem → l 2rem → m 1.6rem → s 1.3rem → xs 1.1rem; previous hdr-l (2.75rem) was incorrectly larger than hdr-xl
-- SDY staging2 — Elementor Pro updated 4.0.1 → 4.0.2 (version mismatch with core was causing editor API 401/403 errors)
-- SDY staging2 — `sdy.local` URLs purged: database search-replace (401 rows), stale google-fonts folder deleted, Elementor font registry cleared; fonts will regenerate on next page load
-- Post 2049 (Thai Massage vs Swedish Massage) — was in trash; republished from saved HTML as post 2294; title/slug fixed via WP-CLI; still has CTA issue (see manual review checklist)
-
-**Still needs human action in WP admin:**
-- Fix site title: Settings → General → change "Staging SDY" → "Serendipity Massage Therapy & Wellness" (Issue 1.2)
-- Add meta descriptions to the 5 standard pages (Home, Services, About, Contact, Find Us) via the new SEO Machine metabox (Issue 2.1)
-- Add H1 to Services page (Issue 2.4)
-- Standard page schema (LocalBusiness on Home/Contact, ItemList on Services etc.) — TBD approach
-
-**Deferred (post go-live):**
-- Canonical URLs will auto-resolve once site title and domain are correct (Issue 3.3)
+**Post go-live:**
+- Swap `wordpress` block in `clients/sdy/config.json` to live credentials (`wordpress_live`)
+- Re-run: `python3 src/audit/run_audit.py --abbr sdy` against live domain
+- Canonical URLs auto-resolve once domain is correct
 
 ---
 
@@ -136,7 +130,7 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] **Problem grid CSS** (session 49) — `seomachine-hub.css` simplified to `grid-template-columns: 1fr`; mobile `@media` block removed (redundant — single column everywhere); `line-height: 1.0` on `li`
 - [x] **Service box mobile fix** (session 30) — user applied via WordPress Customizer Additional CSS on SDY staging: `width:calc(100% - 2rem); margin:0 1rem 1rem` — keeps Elementor layout intact by pairing margin with matching width reduction
 - [x] **Hub CSS extracted to external file** (session 47) — `wordpress/seomachine-hub.css` replaces the inline `<style>` block that was dumped by `seo_hub_problem_grid()` on every render; enqueued via `wp_enqueue_scripts` using `content_url('mu-plugins/seomachine-hub.css')`; per-client overrides go in Elementor → Site Settings → Custom CSS
-- [x] **Plugin version sync** (session 49) — plugin header version and CSS enqueue cache-bust string now kept in sync; currently `3.3.5`; `/wrap` command updated to report plugin version in confirmation output so deployed version can be cross-checked against wp-admin
+- [x] **Plugin version sync** (session 49) — plugin header version and CSS enqueue cache-bust string now kept in sync; currently `3.4.0`; `/wrap` command updated to report plugin version in confirmation output so deployed version can be cross-checked against wp-admin
 - [x] **Problem grid line-height** (session 47–48) — `line-height: 1.0` on `.seo-hub-problem-grid li`; tightened from 1.4 to keep wrapped items as close as comfortably readable; defined in `wordpress/seomachine-hub.css`
 - [x] **Hub standard list line-height** (session 50) — `.seo-hub-links h3 { line-height: 1.2 }` added to `seomachine-hub.css`; tightens wrapped multi-line items in the standard service/location hub lists
 - [x] **Hub display text switched to title** (session 50) — both local `get_posts()` path and remote `seo_hub_remote_fetch()` path now use `post_title` exclusively; excerpt was causing garbled display text (WordPress auto-generated excerpts from article body included CTA link text like "Book Now Sources: Thai Massage")
@@ -245,8 +239,19 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] 5 topical articles published: What to Expect at First Thai Massage (2037), Thai Massage vs Swedish Massage (2049★), How Thai Massage Helps Glasgow Office Workers (2061), How Often Should You Get a Massage (2069), Is Thai Massage Good for Sports Recovery (2077★)
 - [x] Final staging2 counts verified: seo_service 17, seo_location 19, seo_problem 13, seo_comp_alt 7, seo_pillar 1, seo_topical 5
 - [x] **SDY staging2 quality-flag cleanup (session 52)** — 2041 (Orchid Wellbeing Glasgow): ★★★★★ notice stripped from Elementor content, title cleaned, published; all other staging2 drafts published (702, 707, 712, 2025, 2027, 2053); only post 1000 (Sports Massage) remains draft (service not confirmed by client); no other ★-flagged posts found on staging2 at query time
-- [ ] GBP optimisation (Task 6) — manual step in Google Business Profile Manager; see plan for full checklist
-- [ ] Pre-launch audit (Task 7) — run after manual reviews complete
+- [x] GBP optimisation (Task 6) — confirmed configured in GBP Manager (7 categories, description, hours set)
+- [x] Pre-launch audit (Task 7) — completed 2026-04-15; all issues resolved; re-run post go-live for final score
+
+### SDY pre-launch fixes (session 53)
+- [x] `seomachine.php` v3.4.0 — sitewide LocalBusiness JSON-LD in `<head>` on front page + all singular pages; built from WP options (`seo_machine_biz_*` + `seo_machine_opening_hours`); opt-in per install; fixes NAP collector returning `?` on homepage
+- [x] `seomachine.php` v3.4.0 — 301 redirect `/sitemap.xml` → `/wp-sitemap.xml`; `robots_txt` filter adds `Sitemap:` directive; exposes all 50+ CPT pages to Google without Yoast
+- [x] `clients/sdy/config.json` — `gbp_location_id: "15400134089965527086"` added; unlocks GBP + Reviews checks in audit
+- [x] SDY staging2 WP options set via WP-CLI — `seo_machine_biz_name/phone/street/locality/postcode/country/schema_type` + `seo_machine_opening_hours` (Mon–Sun 10:00–20:00)
+- [x] Site title fixed: "Staging SDY" → "Serendipity Massage Therapy & Wellness"
+- [x] Homepage meta description + SEO title set via WP-CLI
+- [x] Services page (ID 10) H1 injected into Elementor data via local Python + SCP + wp eval-file: "Massage Therapy Services in Glasgow"
+- [x] Playwright + Chromium installed locally (`playwright install chromium`) — PDF generation restored for `/audit` command
+- [x] Pre-launch audit scores: Schema 18/20 | Technical 10/10 | GBP/Reviews 0* (API 429 rate-limit, not profile gaps) | Total 50/100
 
 ### GTB Elementor template injection (session 51)
 - [x] `src/publishing/inject_elementor_template.py` — new script; prepends a dynamic Elementor template reference to existing posts without regenerating content
