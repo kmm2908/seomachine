@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-04-15 (session 51 — GTB Elementor template injection, inject_elementor_template.py)
+Last updated: 2026-04-15 (session 52 — GTM/SDY quality-flag cleanup, SDY draft publishing)
 
 ---
 
@@ -156,7 +156,7 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] All 12 GTM `seo_problem` posts (IDs 16713–16767) were WordPress drafts — published via REST API
 - [x] SiteGround cache purged on GTM (`sg_cachepress_purge_everything`) + GTB transient cleared
 - [x] `[seo_hub type="problem"]` on GTB now renders the 3-column grid correctly
-- [ ] Posts 16733 (Injury Rehab) and 16762 (Diabetic Neuropathy) have ★★★★★ quality flag — fix and re-publish in GTM wp-admin
+- [x] Posts 16733 (Injury Rehab) and 16762 (Diabetic Neuropathy) — stars + notice paragraph removed via WP-CLI, cache purged (session 52)
 
 ### Project overview document (session 46)
 - [x] `docs/project-overview.md` — full breakdown of all 8 product areas (Content Pipeline, WordPress Integration, Client Management, Research, Audit & Reporting, Citations, Social & Video, RankFactory) with status, component tables, and strategic questions
@@ -244,15 +244,7 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] 4 new comp-alt pages published: Jasmine Thai Massage (2027), Orchid Wellbeing Glasgow (2041★), Leelawadee Thai Wellness Centre Glasgow (2053), Serenity Thai Massage (2065★)
 - [x] 5 topical articles published: What to Expect at First Thai Massage (2037), Thai Massage vs Swedish Massage (2049★), How Thai Massage Helps Glasgow Office Workers (2061), How Often Should You Get a Massage (2069), Is Thai Massage Good for Sports Recovery (2077★)
 - [x] Final staging2 counts verified: seo_service 17, seo_location 19, seo_problem 13, seo_comp_alt 7, seo_pillar 1, seo_topical 5
-- [ ] **Manual review required** — 7 posts flagged ★★★★★ in staging2 wp-admin (fix readability/CTAs, remove star notice, publish):
-  - 2041 — Orchid Wellbeing Glasgow (readability Flesch 47)
-  - 2049 — Thai Massage vs Swedish Massage (CTA count)
-  - 2065 — Serenity Thai Massage (readability Flesch 47)
-  - 2077 — Is Thai Massage Good for Sports Recovery (readability + paragraphs)
-  - 2081 — Shawlands (paragraphs)
-  - 2085 — Dennistoun (readability Flesch 50)
-  - 2089 — Hyndland (paragraphs)
-  - Plus pre-existing: 1164 (Cowcaddens), 1149 (Injury Rehab), 1154 (Injury Prevention), 1159 (Diabetic Neuropathy), 2021 (Aromatherapy Deep Tissue — readability)
+- [x] **SDY staging2 quality-flag cleanup (session 52)** — 2041 (Orchid Wellbeing Glasgow): ★★★★★ notice stripped from Elementor content, title cleaned, published; all other staging2 drafts published (702, 707, 712, 2025, 2027, 2053); only post 1000 (Sports Massage) remains draft (service not confirmed by client); no other ★-flagged posts found on staging2 at query time
 - [ ] GBP optimisation (Task 6) — manual step in Google Business Profile Manager; see plan for full checklist
 - [ ] Pre-launch audit (Task 7) — run after manual reviews complete
 
