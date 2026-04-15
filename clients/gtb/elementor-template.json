@@ -22,6 +22,15 @@
         },
         "elements": [
           {
+            "id": "ade111a",
+            "elType": "widget",
+            "settings": {
+              "template_id": "22698"
+            },
+            "elements": [],
+            "widgetType": "template"
+          },
+          {
             "id": "15b33494",
             "elType": "widget",
             "settings": {
@@ -29,6 +38,39 @@
             },
             "elements": [],
             "widgetType": "html"
+          },
+          {
+            "id": "5abcbe1",
+            "elType": "widget",
+            "settings": {
+              "text": "Book Now",
+              "link": {
+                "url": "https://glasgowthaimassage.co.uk/booking-form/",
+                "is_external": "",
+                "nofollow": "",
+                "custom_attributes": ""
+              },
+              "hover_animation": "grow",
+              "_margin": {
+                "unit": "px",
+                "top": "0",
+                "right": "0",
+                "bottom": "0",
+                "left": "0",
+                "isLinked": true
+              },
+              "_padding": {
+                "unit": "px",
+                "top": "0",
+                "right": "0",
+                "bottom": "0",
+                "left": "0",
+                "isLinked": true
+              },
+              "align": "center"
+            },
+            "elements": [],
+            "widgetType": "button"
           }
         ],
         "isInner": true
@@ -136,170 +178,98 @@
                   "content_width": "full",
                   "width": {
                     "unit": "%",
-                    "size": "50"
-                  }
+                    "size": ""
+                  },
+                  "padding": {
+                    "unit": "rem",
+                    "top": "0",
+                    "right": "0",
+                    "bottom": "1",
+                    "left": "0",
+                    "isLinked": false
+                  },
+                  "padding_tablet": {
+                    "unit": "rem",
+                    "top": "",
+                    "right": "",
+                    "bottom": "",
+                    "left": "",
+                    "isLinked": true
+                  },
+                  "padding_mobile": {
+                    "unit": "rem",
+                    "top": "",
+                    "right": "",
+                    "bottom": "",
+                    "left": "",
+                    "isLinked": true
+                  },
+                  "custom_css": "selector ul li{\n     padding: .2rem 0;\n}\nselector h3{\n    margin-left: -.75rem;\n}\n\n"
                 },
                 "elements": [
                   {
-                    "id": "41a77f3a",
+                    "id": "c2639a1",
                     "elType": "widget",
                     "settings": {
-                      "icon_list": [
-                        {
-                          "text": "Backache",
-                          "selected_icon": {
-                            "value": "fas fa-star-of-life",
-                            "library": "fa-solid"
-                          },
-                          "_id": "9179467"
-                        },
-                        {
-                          "text": "<a class=\"wpil_keyword_link\" href=\"https://glasgowthaimassage.co.uk/lower-back-pain-causes-treatment\"   title=\"Sciatica\" data-wpil-keyword-link=\"linked\">Sciatica</a>",
-                          "selected_icon": {
-                            "value": "fas fa-star-of-life",
-                            "library": "fa-solid"
-                          },
-                          "_id": "74956ef"
-                        },
-                        {
-                          "_id": "17c5442",
-                          "text": "Stiff Neck or Shoulders",
-                          "selected_icon": {
-                            "value": "fas fa-star-of-life",
-                            "library": "fa-solid"
-                          }
-                        },
-                        {
-                          "_id": "6d00324",
-                          "text": "Refresh Sore Muscles",
-                          "selected_icon": {
-                            "value": "fas fa-star-of-life",
-                            "library": "fa-solid"
-                          }
-                        },
-                        {
-                          "_id": "efd8864",
-                          "text": "Relieve Stress and Tension",
-                          "selected_icon": {
-                            "value": "fas fa-star-of-life",
-                            "library": "fa-solid"
-                          }
-                        },
-                        {
-                          "text": "Injury Rehabilitation",
-                          "selected_icon": {
-                            "value": "fas fa-star-of-life",
-                            "library": "fa-solid"
-                          },
-                          "_id": "aeb52a8"
-                        },
-                        {
-                          "_id": "110b79c",
-                          "text": "Headaches and Migraines",
-                          "selected_icon": {
-                            "value": "fas fa-star-of-life",
-                            "library": "fa-solid"
-                          }
-                        },
-                        {
-                          "text": "Inproved Flexibility",
-                          "selected_icon": {
-                            "value": "fas fa-star-of-life",
-                            "library": "fa-solid"
-                          },
-                          "_id": "e19386a"
-                        },
-                        {
-                          "_id": "9a65a45",
-                          "text": "Renew Tired Aching Feet",
-                          "selected_icon": {
-                            "value": "fas fa-star-of-life",
-                            "library": "fa-solid"
-                          }
-                        },
-                        {
-                          "_id": "0e219df",
-                          "text": "Remove Knots and Relax Tight Muscles",
-                          "selected_icon": {
-                            "value": "fas fa-star-of-life",
-                            "library": "fa-solid"
-                          }
-                        },
-                        {
-                          "text": "Injury Prevention",
-                          "selected_icon": {
-                            "value": "fas fa-star-of-life",
-                            "library": "fa-solid"
-                          },
-                          "_id": "17bba38"
-                        },
-                        {
-                          "text": "Diabetic Neuropathy - Nerve Pain",
-                          "selected_icon": {
-                            "value": "fas fa-star-of-life",
-                            "library": "fa-solid"
-                          },
-                          "_id": "90dc9f6"
-                        },
-                        {
-                          "_id": "8212058",
-                          "text": "Melt Away The Blues When Feeling Low",
-                          "selected_icon": {
-                            "value": "fas fa-star-of-life",
-                            "library": "fa-solid"
-                          }
-                        }
-                      ],
-                      "icon_color": "#FFD700",
-                      "icon_size": {
-                        "unit": "px",
-                        "size": 12,
-                        "sizes": []
-                      },
-                      "space_between": {
-                        "unit": "px",
-                        "size": 12,
-                        "sizes": []
-                      },
-                      "_margin": {
-                        "unit": "px",
-                        "top": "-10",
-                        "right": "0",
-                        "bottom": "20",
-                        "left": "0",
-                        "isLinked": false
-                      },
-                      "_attributes": "onclick|window.location.href='https://glasgowthaimassage.co.uk'",
-                      "custom_css": "selector {\n    cursor: pointer;\n}"
+                      "shortcode": "[seo_hub type=\"problem\"]\n",
+                      "custom_css": "selector ul li{\n    margin: -.75rem;\n     padding: .4rem 0; line-height: 1.4\n}\nselector h3{\n    margin-left: -.75rem;\n}\nselector h3 a{\n    line-height: -1rem;\n}\n"
                     },
                     "elements": [],
-                    "widgetType": "icon-list"
+                    "widgetType": "shortcode"
                   }
                 ],
                 "isInner": true
               },
               {
-                "id": "3f45b4bf",
+                "id": "294b4a1",
                 "elType": "container",
                 "settings": {
                   "flex_direction": "column",
                   "content_width": "full",
                   "width": {
                     "unit": "%",
-                    "size": "50"
+                    "size": ""
                   },
-                  "flex_justify_content": "center"
+                  "padding": {
+                    "unit": "rem",
+                    "top": "0",
+                    "right": "0",
+                    "bottom": "1",
+                    "left": "0",
+                    "isLinked": false
+                  },
+                  "padding_tablet": {
+                    "unit": "rem",
+                    "top": "",
+                    "right": "",
+                    "bottom": "",
+                    "left": "",
+                    "isLinked": true
+                  },
+                  "padding_mobile": {
+                    "unit": "rem",
+                    "top": "",
+                    "right": "",
+                    "bottom": "",
+                    "left": "",
+                    "isLinked": true
+                  },
+                  "custom_css": "selector ul li{\n     padding: .4rem 0;\n}\nselector h3{\n    margin-left: -.75rem;\n}\n\n",
+                  "flex_justify_content": "center",
+                  "flex_align_items": "center"
                 },
                 "elements": [
                   {
-                    "id": "acb33fa",
+                    "id": "3f810ff",
                     "elType": "widget",
                     "settings": {
                       "image": {
-                        "id": "22529",
-                        "url": "https://blog.glasgowthaimassage.co.uk/wp-content/uploads/2026/03/cropped-GTN-tsp-lolgo-USE.png"
-                      },
-                      "image_size": "medium"
+                        "url": "https://blog.glasgowthaimassage.co.uk/wp-content/uploads/2026/03/cropped-GTN-tsp-lolgo-USE.png",
+                        "id": 22529,
+                        "size": "",
+                        "alt": "Thai Massage in Glasgow for relaxation and wellness.",
+                        "source": "library"
+                      }
                     },
                     "elements": [],
                     "widgetType": "image"
@@ -753,7 +723,8 @@
             "isLinked": true
           },
           "flex_justify_content": "space-around",
-          "_title": "Services+Locations"
+          "_title": "Services+Locations",
+          "custom_css": ".elementor-shortcode .seo-hub-links h3 {\n    line-height: 1; \n}\n"
         },
         "elements": [
           {
@@ -830,6 +801,29 @@
           }
         ],
         "isInner": true
+      }
+    ],
+    "isInner": false
+  },
+  {
+    "id": "f21bc3a",
+    "elType": "container",
+    "settings": [],
+    "elements": [
+      {
+        "id": "4dd11b3",
+        "elType": "widget",
+        "settings": {
+          "image": {
+            "url": "https://blog.glasgowthaimassage.co.uk/wp-content/uploads/2026/03/cropped-GTN-tsp-lolgo-USE.png",
+            "id": 22529,
+            "size": "",
+            "alt": "Thai Massage in Glasgow for relaxation and wellness.",
+            "source": "library"
+          }
+        },
+        "elements": [],
+        "widgetType": "image"
       }
     ],
     "isInner": false
