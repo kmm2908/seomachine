@@ -1,36 +1,34 @@
 # Serendipity Massage Therapy & Wellness — Internal Links Map
 
-This document catalogs key pages on staging2.serendipitymassage.co.uk for strategic internal linking. Reference this when writing content to select appropriate anchor text and destination URLs.
+This document catalogs key pages on serendipitymassage.co.uk for strategic internal linking. Reference this when writing content to select appropriate anchor text and destination URLs.
 
 ---
 
 ## Key Pages
 
-- Homepage: https://staging2.serendipitymassage.co.uk/
+- Homepage: https://serendipitymassage.co.uk/
 - Book Now: https://serendipitymassage.co.uk/book-now/
-
-Note: booking_url uses the live domain — the booking system is live even during staging.
 
 ---
 
 ## Service Pages
 
-- Traditional Thai Massage: https://staging2.serendipitymassage.co.uk/seo-service/traditional-thai-massage/
-- Thai Oil Massage: https://staging2.serendipitymassage.co.uk/seo-service/thai-oil-massage/
-- Thai Aromatherapy Massage: https://staging2.serendipitymassage.co.uk/seo-service/thai-aromatherapy-massage/
-- Hot Stone Massage: https://staging2.serendipitymassage.co.uk/seo-service/hot-stone-massage/
-- Thai Head Massage: https://staging2.serendipitymassage.co.uk/seo-service/thai-head-massage/
-- Thai Facial Massage: https://staging2.serendipitymassage.co.uk/seo-service/thai-facial-massage/
-- Thai Foot Massage: https://staging2.serendipitymassage.co.uk/seo-service/thai-foot-massage/
-- Swedish Massage: https://staging2.serendipitymassage.co.uk/seo-service/swedish-massage/
-- Couples Thai Massage: https://staging2.serendipitymassage.co.uk/seo-service/couples-traditional-thai-massage/
-- Couples Thai Oil Massage: https://staging2.serendipitymassage.co.uk/seo-service/couples-thai-oil-massage/
-- Thai Reflexology: https://staging2.serendipitymassage.co.uk/seo-service/thai-reflexology/
-- Tailored Facial Treatment: https://staging2.serendipitymassage.co.uk/seo-service/tailored-facial-treatment/
-- Head and Hair Oiling: https://staging2.serendipitymassage.co.uk/seo-service/head-and-hair-oiling/
-- Hair Oiling Treatment: https://staging2.serendipitymassage.co.uk/seo-service/hair-oiling-treatment/
-- Thai Deep Tissue Oil Massage: https://staging2.serendipitymassage.co.uk/seo-service/thai-deep-tissue-oil-massage/
-- Aromatherapy Deep Tissue Oil Massage: https://staging2.serendipitymassage.co.uk/seo-service/aromatherapy-deep-tissue-oil-massage/
+- Traditional Thai Massage: https://serendipitymassage.co.uk/seo-service/traditional-thai-massage/
+- Thai Oil Massage: https://serendipitymassage.co.uk/seo-service/thai-oil-massage/
+- Thai Aromatherapy Massage: https://serendipitymassage.co.uk/seo-service/thai-aromatherapy-massage/
+- Hot Stone Massage: https://serendipitymassage.co.uk/seo-service/hot-stone-massage/
+- Thai Head Massage: https://serendipitymassage.co.uk/seo-service/thai-head-massage/
+- Thai Facial Massage: https://serendipitymassage.co.uk/seo-service/thai-facial-massage/
+- Thai Foot Massage: https://serendipitymassage.co.uk/seo-service/thai-foot-massage/
+- Swedish Massage: https://serendipitymassage.co.uk/seo-service/swedish-massage/
+- Couples Thai Massage: https://serendipitymassage.co.uk/seo-service/couples-traditional-thai-massage/
+- Couples Thai Oil Massage: https://serendipitymassage.co.uk/seo-service/couples-thai-oil-massage/
+- Thai Reflexology: https://serendipitymassage.co.uk/seo-service/thai-reflexology/
+- Tailored Facial Treatment: https://serendipitymassage.co.uk/seo-service/tailored-facial-treatment/
+- Head and Hair Oiling: https://serendipitymassage.co.uk/seo-service/head-and-hair-oiling/
+- Hair Oiling Treatment: https://serendipitymassage.co.uk/seo-service/hair-oiling-treatment/
+- Thai Deep Tissue Oil Massage: https://serendipitymassage.co.uk/seo-service/thai-deep-tissue-oil-massage/
+- Aromatherapy Deep Tissue Oil Massage: https://serendipitymassage.co.uk/seo-service/aromatherapy-deep-tissue-oil-massage/
 
 Note: Sports Massage URL omitted intentionally — service not yet confirmed by client.
 

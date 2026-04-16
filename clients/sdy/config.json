@@ -1,7 +1,8 @@
 {
     "name": "Serendipity Massage Therapy & Wellness",
     "abbreviation": "SDY",
-    "address": "Floor 1, Suite 50, Central Chambers, 93 Hope Street, Glasgow G2 6LD",
+    "address": "93 Hope Street, Central Chambers, Floor 1, Suite 48-50, Glasgow, G2 6LD",
+    "street": "93 Hope Street, Central Chambers, Floor 1, Suite 48-50",
     "area": "Glasgow City Centre",
     "postcode": "G2 6LD",
     "phone": "0141 673 6630",
@@ -22,9 +23,9 @@
         "logo_url": "https://serendipitymassage.co.uk/wp-content/uploads/serendipity-logo.png"
     },
     "wordpress": {
-        "url": "https://staging2.serendipitymassage.co.uk",
+        "url": "https://serendipitymassage.co.uk",
         "username": "kmm-T5r",
-        "app_password": "XbE0 csyh k5kO RlqK m3WY 1VpP",
+        "app_password": "G8lp 3awQ nhtU C3V1 he5O V5aB",
         "content_type_map": {
             "service": "seo_service",
             "location": "seo_location",
@@ -36,12 +37,6 @@
         },
         "default_post_type": "seo_blog",
         "default_status": "draft",
-        "elementor_template_id": 663
-    },
-    "wordpress_live": {
-        "url": "https://serendipitymassage.co.uk",
-        "username": "kmm-T5r",
-        "app_password": "G8lp 3awQ nhtU C3V1 he5O V5aB",
         "elementor_template_id": 564
     },
     "gbp_location_id": "15400134089965527086",
@@ -81,6 +76,6 @@
         "host": "gukm1055.siteground.biz",
         "port": 18765,
         "key": "~/.ssh/seomachine_deploy",
-        "wp_path": "/home/u2732-2mxetksmslhk/www/staging2.serendipitymassage.co.uk/public_html"
+        "wp_path": "/home/u2732-2mxetksmslhk/www/serendipitymassage.co.uk/public_html"
     }
 }

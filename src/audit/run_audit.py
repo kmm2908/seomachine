@@ -156,7 +156,7 @@ def run_audit(
     schema = collect_schema(site_url, wp_config=wp_config)
 
     logger.info('Collecting content data...')
-    content = collect_content(site_url, wp_config)
+    content = collect_content(site_url, wp_config, config=config)
 
     logger.info('Collecting GBP data...')
     gbp = collect_gbp(config)

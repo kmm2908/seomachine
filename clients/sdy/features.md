@@ -79,7 +79,7 @@ Treatments are built around signature techniques developed by head therapist Jar
 Serendipity is committed to training exceptional therapists to uphold a consistent standard. Every therapist delivers the same quality — clients aren't dependent on booking one specific person.
 
 ### City Centre Location
-Central Chambers, 93 Hope Street — in the heart of Glasgow's financial district. Walking distance from Buchanan Street and St Enoch subways, and from the major office corridors along St Vincent Street and Blythswood Square.
+93 Hope Street, Central Chambers, Floor 1, Suite 48-50, Glasgow G2 6LD — in the heart of Glasgow's financial district. Walking distance from Buchanan Street and St Enoch subways, and from the major office corridors along St Vincent Street and Blythswood Square.
 
 ### Broad Treatment Range
 From traditional Thai through to Swedish and hot stone — one of the more complete menus of massage styles in Glasgow city centre. Soft and deep pressure options across most services.

@@ -39,6 +39,7 @@
     "city": "Glasgow",
     "place_id": "ChIJnQImbT5FiEgRon5L9CbTr28",
     "niche": "thai-massage",
+    "blog_subdomain": "blog.glasgowthaimassage.co.uk",
     "elevenlabs": {
         "voice_id": "7LUeVw489ei9hoDpQJOF"
     },

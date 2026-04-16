@@ -97,7 +97,7 @@ After Section 2, output a `<!-- SCHEMA -->` block:
 - `telephone` — `[BUSINESS_PHONE]`
 - `priceRange` — `[BUSINESS_PRICE_RANGE]`
 - `image` — `[BUSINESS_LOGO]`
-- `address` — `PostalAddress` with `streetAddress` from `business.address`, `addressLocality` from `business.city`, `addressCountry: "GB"`
+- `address` — `PostalAddress` with `streetAddress` token `[BUSINESS_STREET]`, `addressLocality: "Glasgow"`, `postalCode` token `[BUSINESS_POSTCODE]`, `addressCountry: "GB"`
 
 ---
 

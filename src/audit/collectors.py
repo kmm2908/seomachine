@@ -527,7 +527,7 @@ def collect_schema(site_url: str, wp_config: Optional[Dict] = None) -> SchemaRes
 
 # ── Content Collector ─────────────────────────────────────────────────────────
 
-def collect_content(site_url: str, wp_config: Optional[Dict] = None) -> ContentResult:
+def collect_content(site_url: str, wp_config: Optional[Dict] = None, config: Optional[Dict] = None) -> ContentResult:
     result = ContentResult()
 
     # ── Try SEO Machine audit endpoint (single auth'd call) ──────────────────────
@@ -593,6 +593,14 @@ def collect_content(site_url: str, wp_config: Optional[Dict] = None) -> ContentR
                     if urlparse(full).netloc == urlparse(site_url).netloc:
                         service_like.add(full)
             result.service_count = min(len(service_like), 20)
+
+    # Blog subdomain: fetch post count from a blog subdomain if configured
+    blog_subdomain = (config or {}).get('blog_subdomain', '')
+    if blog_subdomain:
+        sub_base = f'https://{blog_subdomain.rstrip("/")}/wp-json/wp/v2'
+        r_sub = _get(f'{sub_base}/posts?per_page=1&status=publish')
+        if r_sub is not None and r_sub.status_code == 200:
+            result.blog_count += int(r_sub.headers.get('X-WP-Total', 0))
 
     # Sitemap check
     for sitemap_path in ['/sitemap.xml', '/sitemap_index.xml', '/wp-sitemap.xml']:

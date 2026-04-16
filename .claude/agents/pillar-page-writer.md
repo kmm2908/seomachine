@@ -135,7 +135,7 @@ After Section 2, output a `<!-- SCHEMA -->` block containing a single `<script t
 - `telephone` — literal string `[BUSINESS_PHONE]`
 - `priceRange` — literal string `[BUSINESS_PRICE_RANGE]`
 - `image` — literal string `[BUSINESS_LOGO]`
-- `address` — `PostalAddress` with `streetAddress` from `business.address`, `addressLocality: "Glasgow"`, `addressCountry: "GB"`
+- `address` — `PostalAddress` with `streetAddress` token `[BUSINESS_STREET]`, `addressLocality: "Glasgow"`, `postalCode` token `[BUSINESS_POSTCODE]`, `addressCountry: "GB"`
 
 ---
 
@@ -210,8 +210,9 @@ Output three clearly labelled HTML blocks. No frontmatter. No markdown. Total wo
       "image": "[BUSINESS_LOGO]",
       "address": {
         "@type": "PostalAddress",
-        "streetAddress": "[business.address]",
+        "streetAddress": "[BUSINESS_STREET]",
         "addressLocality": "Glasgow",
+        "postalCode": "[BUSINESS_POSTCODE]",
         "addressCountry": "GB"
       }
     }

@@ -186,6 +186,8 @@ def publish_topic(topic_dict: dict, abbr: str, dry_run: bool = False) -> dict:
     content = content.replace('[DATE]', today_iso)
     content = content.replace('[BUSINESS_PHONE]', business_config.get('phone', ''))
     content = content.replace('[BUSINESS_URL]', business_config.get('website', ''))
+    content = content.replace('[BUSINESS_STREET]', business_config.get('street', ''))
+    content = content.replace('[BUSINESS_POSTCODE]', business_config.get('postcode', ''))
     content = content.replace('[BUSINESS_PRICE_RANGE]', schema_cfg.get('price_range', ''))
     content = content.replace('[BUSINESS_LOGO]', schema_cfg.get('logo_url', ''))
 

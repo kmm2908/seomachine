@@ -1,33 +1,26 @@
 # Project Status
 
-Last updated: 2026-04-15 (session 53 — SDY pre-launch audit + fixes)
+Last updated: 2026-04-16 (session 55 — blog subdomain audit fix + SDY go-live wrap)
 
 ---
 
-## SDY Pre-Launch Status — Ready for Go-Live
+## SDY Status — LIVE
 
-Pre-launch audit completed on staging2.serendipitymassage.co.uk on 2026-04-15. All blocking issues resolved.
+SDY is live at `serendipitymassage.co.uk`. All content migrated from staging2. Config now points to live domain.
 
-**Fixed in session 53:**
-- `seomachine.php` v3.4.0 — sitewide LocalBusiness JSON-LD on front page + all singular pages (name/address/phone/hours from WP options); fixes NAP collector returning `?` on homepage
-- `seomachine.php` v3.4.0 — sitemap redirect: `/sitemap.xml` → `/wp-sitemap.xml` (301) + `robots_txt` filter declaring correct sitemap URL; exposes all 50+ CPT pages to Google
-- WP options set on staging2 via WP-CLI: `seo_machine_biz_*` + `seo_machine_opening_hours` (Mon–Sun 10:00–20:00)
-- `clients/sdy/config.json` — `gbp_location_id: "15400134089965527086"` added
-- Site title fixed: "Staging SDY" → "Serendipity Massage Therapy & Wellness"
-- Homepage meta description + SEO title set via WP-CLI
-- Services page H1 injected into Elementor data: "Massage Therapy Services in Glasgow"
-- Playwright + Chromium installed locally — PDF generation restored for future audits
+**Go-live completed (session 54, 2026-04-16):**
+- `clients/sdy/config.json` — `wordpress` block switched to live (`serendipitymassage.co.uk`, template 564); `wordpress_live` block removed; `ssh.wp_path` updated to live path
+- Elementor template 564 re-fetched from live and saved; S1/S2 markers confirmed
+- NAP corrected sitewide: address order and suite number fixed (`Suite 50` → `Suite 48-50`, correct order `93 Hope Street, Central Chambers, Floor 1, Suite 48-50`)
+- `seo_machine_biz_street` WP option updated on live via WP-CLI
+- 437 replacements applied across live DB (postmeta + post_content) — old address corrected in all published Elementor JSON-LD blocks
+- `[BUSINESS_STREET]` + `[BUSINESS_POSTCODE]` tokens added to both batch runners; `[business.address]` retired
+- `postalCode` field added to LocalBusiness schema in all 7 agent templates
+- Re-run audit: `python3 src/audit/run_audit.py --abbr sdy` (GBP/Reviews scores were 0 due to API rate-limit on staging run; expect ~75–80 on live with correct domain)
 
-**Audit scores (2026-04-15):**
+**Pre-launch audit scores (2026-04-15, staging2):**
 - Schema 18/20 | Content 13/20 | GBP 0/20* | Reviews 0/15* | NAP 9/15 | Technical 10/10 | **Total 50/100**
-- \* GBP API hit 429 rate-limit errors during audit — profile IS fully configured (7 categories, description, hours). Re-run after go-live for accurate score (~75–80 expected).
-
-**Previous session fixes (sessions 42–52):** See git log for full history.
-
-**Post go-live:**
-- Swap `wordpress` block in `clients/sdy/config.json` to live credentials (`wordpress_live`)
-- Re-run: `python3 src/audit/run_audit.py --abbr sdy` against live domain
-- Canonical URLs auto-resolve once domain is correct
+- \* GBP API hit 429 rate-limit — profile is fully configured. Re-run against live for accurate score.
 
 ---
 
@@ -547,6 +540,7 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] **End-to-end audit tested (session 33)** — GTM audit produces real scores: Schema 16/20, Content 13/20, Technical 8/10; GBP hitting real API (429 = quota, not code bug); NAP 0 is a real gap (homepage has no LocalBusiness schema); audit runs in ~8 seconds
   - Real GTM findings: missing phone in schema, no opening hours in schema, no meta description on homepage, 0 blog posts (correct — GTB is the blog site), GBP quota exceeded
 - [x] **Collector fix (session 33):** individual API fallback no longer overwrites service/location counts already populated by the audit endpoint
+- [x] **Blog subdomain support (session 55):** `collect_content()` accepts optional `config` dict; if `blog_subdomain` field is set, fetches post count from that domain's REST API and adds to `blog_count`; `run_audit.py` passes `config=config`; `clients/gtm/config.json` + `clients/tmg/config.json` updated with `"blog_subdomain"` field — fixes GTM/TMG scoring 0 blog posts despite active blog subdomains (GTB/TMB)
 
 ### Batch summary email (session 22 planned, session 25 partial)
 - [x] Per-article emails removed from `publish_scheduled.py` — no more per-post notifications (session 25)
@@ -706,49 +700,25 @@ Four WordPress post categories with separate queue files per category.
 
 ## Client: SDY (Serendipity Massage Therapy & Wellness)
 
-New client added 2026-03-21. Brand-new WordPress site, same stack as GTM (Elementor + Hello theme).
-GBP applied for but not yet verified. Abbreviation: `SDY`.
+Live at `serendipitymassage.co.uk`. All content migrated from staging2. All publishing targets live domain. Abbreviation: `SDY`.
 
-### Deployment Plan
+**Config:** `clients/sdy/config.json` — `wordpress` block = live, template ID 564, ssh.wp_path = live path. No staging blocks remain.
 
-**Rule: local for setup/design, live for all batch runner content.**
-Reason: caching on the live front-end doesn't affect the REST API. Running content against two environments causes DB divergence. Push local → live once, then stay on live for all publishing.
-
-#### Phase 1 — Local setup (done, returned to session 22)
-- [x] Get local site URL and credentials — added to config.json (`wordpress` = local, `wordpress_live` = live)
-- [x] Deploy `wordpress/seomachine.php` to local `wp-content/mu-plugins/`
-- [x] Confirm 5 CPTs appear via REST API (`seo_service`, `seo_location`, `seo_pillar`, `seo_topical`, `seo_blog`)
-- [x] Elementor CPTs auto-enabled via `option_elementor_cpt_support` filter — confirmed all 5 showing in Elementor → Settings
-- [x] Build location page template in Elementor library — S1/S2 HTML widgets with markers
-- [x] Get template ID (635) and run `python3 src/fetch_elementor_template.py sdy`
-- [x] **Returned to local** (session 22) — switched back to `https://sdy.local/` due to server caching issues on live; app password updated; new Elementor template ID 663 (replacing 635); problem grid shortcode deployed to local mu-plugins
-
-#### Phase 2 — Push to live
-- [x] Deploy seomachine.php to live `wp-content/mu-plugins/`
-- [x] Confirm CPTs active and Elementor auto-enabled on live
-- [x] Import Elementor template to live — template ID 564
-- [x] Update `clients/sdy/config.json` — `wordpress` block now points to live; app password set; template ID 564
-- [x] Run `python3 src/fetch_elementor_template.py sdy` against live — S1/S2 markers confirmed
-- **Note:** SDY currently targeting local (`sdy.local`) as of session 22. Will switch back to live once caching issues are resolved.
-
-#### Phase 3 — Content (after Phase 2)
-- [x] Add `SDY` to Column D dropdown in Google Sheet
-- [x] Add Column E (Content Type) dropdown if not already present
-- [x] Populate `clients/sdy/internal-links-map.md` with confirmed service page URLs — done session 36
-- [x] Add writing examples to `clients/sdy/writing-examples.md` — using GTM examples as style reference
-- [x] Test batch: location + service posts published successfully with images (IDs 596, 606)
-- [x] Verify content lands in correct CPT with Elementor template — confirmed two-section injection working
-
-### Still Needs Human Input (SDY)
-- [x] Deploy `wordpress/seomachine.php` v2.5 to SDY live — done (session 14)
-- [x] Local WP URL and credentials — in config.json (`wordpress` block = local, `wordpress_live` = live)
-- [x] Live credentials and app password — set in config.json; `wordpress` block now live
-- [x] Elementor template — built (local ID 635, live ID 564); fetched and stored
-- [ ] `clients/sdy/internal-links-map.md` — confirm service page URLs on live site
+### Setup — Complete
+- [x] All CPTs, Elementor template, and plugin deployed to live
+- [x] Content migrated from staging2: 17 service, 19 location, 13 problem, 7 comp-alt, 1 pillar, 5 topical pages
+- [x] NAP corrected sitewide — address order + suite number (session 54)
+- [x] Schema token pipeline fixed: `[BUSINESS_STREET]`/`[BUSINESS_POSTCODE]` tokens wired up in both batch runners
+- [x] `postalCode` added to LocalBusiness schema in all 7 agent templates
+- [x] `clients/sdy/internal-links-map.md` — populated with staging2 service URLs (session 36); **needs updating to live URLs**
 - [x] `clients/sdy/writing-examples.md` — populated with GTM style examples
-- [x] `clients/sdy/competitor-analysis.md` — auto-populated: 7 organic competitors profiled by research_competitors.py
-- [ ] GBP verification — needed before publishing location pages publicly
-- [x] Add `SDY` to Column D dropdown in Google Sheet
+- [x] `clients/sdy/competitor-analysis.md` — 7 organic competitors profiled
+
+### Still To Do (SDY)
+- [x] `clients/sdy/internal-links-map.md` — updated: all staging2 URLs replaced with live domain (session 54)
+- [x] Re-run audit: `python3 src/audit/run_audit.py --abbr sdy` against live domain — completed session 54; GBP/Reviews still 0 (GBP API quota pending Google approval, case 7-2336000041300)
+- [x] SDY Manual Review posts — all 12 cleared; medical content standard accepted (session 54)
+- [ ] SDY citations — run `python3 src/citations/run_citations.py --abbr sdy` (never run for SDY; manual pack generated but no submissions yet)
 
 ---
 
@@ -928,27 +898,11 @@ python3 src/citations/run_citations.py --abbr gtm --force          # re-check al
 
 ---
 
-## SDY Manual Review Checklist (session 39)
+## SDY Manual Review Checklist — CLEARED (session 54)
 
-Checklist prepared for 12 starred posts in staging2 wp-admin (7 from session 36 batch + 5 pre-existing). See conversation for full per-post fix instructions.
+All 12 posts reviewed and approved by client (2026-04-16). Stars and notice paragraphs already cleaned from live site. No further action needed.
 
-**Session 36 batch (★★★★★ in title):**
-- [ ] Post 2041 — Orchid Wellbeing Glasgow: split opening paragraph after "comes up early in results"
-- [ ] Post 2294 — Thai Massage vs Swedish Massage: break 91-word opening para; move first CTA earlier (post 2049 was in trash — republished as 2294 in session 44)
-- [ ] Post 2065 — Serenity Thai Massage: split line 7 after "no online booking"
-- [ ] Post 2077 — Sports Recovery: break 4 long paras; explain "VO2max" and "sen energy lines" inline
-- [ ] Post 2081 — Shawlands: split line 7 into two sentences; break line 30 multi-reason block
-- [ ] Post 2085 — Dennistoun: break opening para into two; split resident-mix para
-- [ ] Post 2089 — Hyndland: split 3 long paras (lines 6, 8, 11)
-
-**Pre-existing (★★★★★ in title):**
-- [ ] Post 2021 — Aromatherapy Deep Tissue: readability Flesch 47 — shorten sentences, simplify vocabulary
-- [ ] Post 1164 — Cowcaddens: paragraphs — split any with 4+ sentences
-- [ ] Post 1149 — Injury Rehab: simplify medical jargon, add plain-language explanations
-- [ ] Post 1154 — Injury Prevention: same as above
-- [ ] Post 1159 — Diabetic Neuropathy: explain clinical terms inline
-
-**After fixing each post:** remove ★★★★★ from title + star notice paragraph, then publish.
+**Quality standard established:** medical/problem content (injury, neuropathy, condition-based pages) will naturally have longer paragraphs and clinical terminology — this is acceptable and expected for the content type. Quality gate thresholds for `problem` pages (Flesch ≥ 48, no stories criterion) already reflect this.
 
 ---
 
