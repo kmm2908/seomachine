@@ -17,12 +17,9 @@
 }
 
 .seo-hub-problem-grid ul {
-    border: 1px solid currentColor;
-    border-radius: 8px;
     padding: 1.2rem 1.5rem;
     margin: 0;
     list-style: disc inside;
-    opacity: .7;
 }
 
 .seo-hub-problem-grid li {
