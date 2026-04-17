@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-04-17 (session 56 — citation system expansion: niche dirs, competitor gap analysis, shareable pack)
+Last updated: 2026-04-17 (session 57 — problem hub border fix, CSS cache-busting via file rename)
 
 ---
 
@@ -123,7 +123,9 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] **Problem grid CSS** (session 49) — `seomachine-hub.css` simplified to `grid-template-columns: 1fr`; mobile `@media` block removed (redundant — single column everywhere); `line-height: 1.0` on `li`
 - [x] **Service box mobile fix** (session 30) — user applied via WordPress Customizer Additional CSS on SDY staging: `width:calc(100% - 2rem); margin:0 1rem 1rem` — keeps Elementor layout intact by pairing margin with matching width reduction
 - [x] **Hub CSS extracted to external file** (session 47) — `wordpress/seomachine-hub.css` replaces the inline `<style>` block that was dumped by `seo_hub_problem_grid()` on every render; enqueued via `wp_enqueue_scripts` using `content_url('mu-plugins/seomachine-hub.css')`; per-client overrides go in Elementor → Site Settings → Custom CSS
-- [x] **Plugin version sync** (session 49) — plugin header version and CSS enqueue cache-bust string now kept in sync; currently `3.4.0`; `/wrap` command updated to report plugin version in confirmation output so deployed version can be cross-checked against wp-admin
+- [x] **Plugin version sync** (session 49) — plugin header version and CSS enqueue cache-bust string now kept in sync; currently `3.4.1`; `/wrap` command updated to report plugin version in confirmation output so deployed version can be cross-checked against wp-admin
+- [x] **Problem hub border removed** (session 57) — removed `border: 1px solid currentColor`, `border-radius: 8px`, and `opacity: .7` from `.seo-hub-problem-grid ul`; fixes bordered box appearance on SDY dark theme
+- [x] **CSS cache-busting via filename** (session 57) — SG Optimizer strips `?ver=` query strings from static assets, making `wp_enqueue_style` version bumps ineffective; renamed `seomachine-hub.css` → `seomachine-hub-v2.css`; deploy workflow updated to push v2 file to all 5 sites; future CSS changes requiring immediate cache-bust must rename the file
 - [x] **Problem grid line-height** (session 47–48) — `line-height: 1.0` on `.seo-hub-problem-grid li`; tightened from 1.4 to keep wrapped items as close as comfortably readable; defined in `wordpress/seomachine-hub.css`
 - [x] **Hub standard list line-height** (session 50) — `.seo-hub-links h3 { line-height: 1.2 }` added to `seomachine-hub.css`; tightens wrapped multi-line items in the standard service/location hub lists
 - [x] **Hub display text switched to title** (session 50) — both local `get_posts()` path and remote `seo_hub_remote_fetch()` path now use `post_title` exclusively; excerpt was causing garbled display text (WordPress auto-generated excerpts from article body included CTA link text like "Book Now Sources: Thai Massage")
