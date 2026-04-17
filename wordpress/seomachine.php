@@ -893,7 +893,7 @@ $_seo_machine_hdr_css = '
 add_action('wp_enqueue_scripts', function(): void {
     wp_enqueue_style(
         'seo-machine-hub',
-        content_url('mu-plugins/seomachine-hub.css'),
+        content_url('mu-plugins/seomachine-hub-v2.css'),
         [],
         '3.4.1'
     );

@@ -1,0 +1,45 @@
+/* SEO Machine — Hub Shortcode Styles
+   Default styles for [seo_hub] shortcodes.
+   Override per-client via Elementor: Site Settings → Custom CSS
+*/
+
+/* Standard hub list: tighten line-height on wrapped items */
+.seo-hub-links h3 {
+    line-height: 1.2;
+}
+
+/* Problem grid: single-column layout */
+.seo-hub-problem-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    align-items: start;
+}
+
+.seo-hub-problem-grid ul {
+    padding: 1.2rem 1.5rem;
+    margin: 0;
+    list-style: disc inside;
+}
+
+.seo-hub-problem-grid li {
+    padding: .4rem 0;
+    line-height: 1.0;
+}
+
+.seo-hub-problem-grid h3 {
+    display: inline;
+    font-size: inherit;
+    font-weight: inherit;
+    margin: 0;
+}
+
+.seo-hub-problem-grid a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.seo-hub-problem-grid a:hover {
+    text-decoration: underline;
+}
+
