@@ -21,8 +21,12 @@ Send both to prospects
 *****************************
 Add GBP audit process
 *****************************
-Add citation generator/listing audit
-
+Check Tracking in Place
+Google Search Console
+Google Analytics
+Facebook pixel
+*****************************
+(Glasgowthaimassage) Open Graph tags incomplete [New]: 57 URLs
 *****************************
 UI:
 ---

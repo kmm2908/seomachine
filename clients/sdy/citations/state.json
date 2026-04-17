@@ -10,7 +10,7 @@
       "found_address": "",
       "issues": [],
       "submit_status": null,
-      "last_checked": "2026-04-15"
+      "last_checked": "2026-04-16"
     },
     "yelp": {
       "status": "unknown",
@@ -21,7 +21,7 @@
       "found_address": "",
       "issues": [],
       "submit_status": null,
-      "last_checked": "2026-04-15"
+      "last_checked": "2026-04-16"
     },
     "foursquare": {
       "status": "unknown",
@@ -32,7 +32,7 @@
       "found_address": "",
       "issues": [],
       "submit_status": null,
-      "last_checked": "2026-04-15"
+      "last_checked": "2026-04-16"
     },
     "trustpilot": {
       "status": "not_found",
@@ -42,8 +42,8 @@
       "found_phone": "",
       "found_address": "",
       "issues": [],
-      "submit_status": null,
-      "last_checked": "2026-04-15"
+      "submit_status": "manual_required",
+      "last_checked": "2026-04-16"
     },
     "tripadvisor": {
       "status": "not_found",
@@ -53,52 +53,52 @@
       "found_phone": "",
       "found_address": "",
       "issues": [],
-      "submit_status": null,
-      "last_checked": "2026-04-15"
+      "submit_status": "manual_required",
+      "last_checked": "2026-04-16"
     },
     "yell": {
-      "status": "unknown",
+      "status": "not_found",
       "listing_url": null,
       "nap_match": null,
       "found_name": "",
       "found_phone": "",
       "found_address": "",
       "issues": [],
-      "submit_status": null,
-      "last_checked": "2026-04-15"
+      "submit_status": "manual_required",
+      "last_checked": "2026-04-16"
     },
     "thomson_local": {
-      "status": "unknown",
+      "status": "not_found",
       "listing_url": null,
       "nap_match": null,
       "found_name": "",
       "found_phone": "",
       "found_address": "",
       "issues": [],
-      "submit_status": null,
-      "last_checked": "2026-04-15"
+      "submit_status": "pending_verification",
+      "last_checked": "2026-04-16"
     },
     "scoot": {
-      "status": "unknown",
+      "status": "not_found",
       "listing_url": null,
       "nap_match": null,
       "found_name": "",
       "found_phone": "",
       "found_address": "",
       "issues": [],
-      "submit_status": null,
-      "last_checked": "2026-04-15"
+      "submit_status": "pending_verification",
+      "last_checked": "2026-04-16"
     },
     "192com": {
-      "status": "unknown",
+      "status": "not_found",
       "listing_url": null,
       "nap_match": null,
       "found_name": "",
       "found_phone": "",
       "found_address": "",
       "issues": [],
-      "submit_status": null,
-      "last_checked": "2026-04-15"
+      "submit_status": "manual_required",
+      "last_checked": "2026-04-16"
     },
     "cylex": {
       "status": "unknown",
@@ -109,40 +109,40 @@
       "found_address": "",
       "issues": [],
       "submit_status": null,
-      "last_checked": "2026-04-15"
+      "last_checked": "2026-04-16"
     },
     "freeindex": {
-      "status": "unknown",
+      "status": "not_found",
       "listing_url": null,
       "nap_match": null,
       "found_name": "",
       "found_phone": "",
       "found_address": "",
       "issues": [],
-      "submit_status": null,
-      "last_checked": "2026-04-15"
+      "submit_status": "manual_required",
+      "last_checked": "2026-04-16"
     },
     "brownbook": {
-      "status": "unknown",
+      "status": "not_found",
       "listing_url": null,
       "nap_match": null,
       "found_name": "",
       "found_phone": "",
       "found_address": "",
       "issues": [],
-      "submit_status": null,
-      "last_checked": "2026-04-15"
+      "submit_status": "manual_required",
+      "last_checked": "2026-04-16"
     },
     "misterwhat": {
-      "status": "unknown",
+      "status": "not_found",
       "listing_url": null,
       "nap_match": null,
       "found_name": "",
       "found_phone": "",
       "found_address": "",
       "issues": [],
-      "submit_status": null,
-      "last_checked": "2026-04-15"
+      "submit_status": "manual_required",
+      "last_checked": "2026-04-16"
     },
     "hotfrog": {
       "status": "unknown",
@@ -153,7 +153,7 @@
       "found_address": "",
       "issues": [],
       "submit_status": null,
-      "last_checked": "2026-04-15"
+      "last_checked": "2026-04-16"
     },
     "apple_maps": {
       "status": "unknown",
@@ -164,7 +164,7 @@
       "found_address": "",
       "issues": [],
       "submit_status": null,
-      "last_checked": "2026-04-15"
+      "last_checked": "2026-04-16"
     },
     "bing_places": {
       "status": "unknown",
@@ -175,7 +175,7 @@
       "found_address": "",
       "issues": [],
       "submit_status": null,
-      "last_checked": "2026-04-15"
+      "last_checked": "2026-04-16"
     },
     "facebook": {
       "status": "unknown",
@@ -186,7 +186,7 @@
       "found_address": "",
       "issues": [],
       "submit_status": null,
-      "last_checked": "2026-04-15"
+      "last_checked": "2026-04-16"
     },
     "treatwell": {
       "status": "unknown",
@@ -197,7 +197,7 @@
       "found_address": "",
       "issues": [],
       "submit_status": null,
-      "last_checked": "2026-04-15"
+      "last_checked": "2026-04-16"
     },
     "fresha": {
       "status": "unknown",
@@ -208,7 +208,7 @@
       "found_address": "",
       "issues": [],
       "submit_status": null,
-      "last_checked": "2026-04-15"
+      "last_checked": "2026-04-16"
     },
     "bark": {
       "status": "unknown",
@@ -219,7 +219,7 @@
       "found_address": "",
       "issues": [],
       "submit_status": null,
-      "last_checked": "2026-04-15"
+      "last_checked": "2026-04-16"
     },
     "nextdoor": {
       "status": "unknown",
@@ -230,7 +230,7 @@
       "found_address": "",
       "issues": [],
       "submit_status": null,
-      "last_checked": "2026-04-15"
+      "last_checked": "2026-04-16"
     },
     "checkatrade": {
       "status": "unknown",
@@ -241,7 +241,7 @@
       "found_address": "",
       "issues": [],
       "submit_status": null,
-      "last_checked": "2026-04-15"
+      "last_checked": "2026-04-16"
     },
     "yelp_create": {
       "status": "unknown",
@@ -252,7 +252,7 @@
       "found_address": "",
       "issues": [],
       "submit_status": null,
-      "last_checked": "2026-04-15"
+      "last_checked": "2026-04-16"
     }
   }
 }

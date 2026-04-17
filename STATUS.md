@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-04-16 (session 55 — blog subdomain audit fix + SDY go-live wrap)
+Last updated: 2026-04-17 (session 56 — citation system expansion: niche dirs, competitor gap analysis, shareable pack)
 
 ---
 
@@ -718,7 +718,9 @@ Live at `serendipitymassage.co.uk`. All content migrated from staging2. All publ
 - [x] `clients/sdy/internal-links-map.md` — updated: all staging2 URLs replaced with live domain (session 54)
 - [x] Re-run audit: `python3 src/audit/run_audit.py --abbr sdy` against live domain — completed session 54; GBP/Reviews still 0 (GBP API quota pending Google approval, case 7-2336000041300)
 - [x] SDY Manual Review posts — all 12 cleared; medical content standard accepted (session 54)
-- [ ] SDY citations — run `python3 src/citations/run_citations.py --abbr sdy` (never run for SDY; manual pack generated but no submissions yet)
+- [x] SDY citations — first run complete (session 56): Thomson Local + Scoot auto-submitted (pending email verification); 7 sites flagged manual required (Yell, Trustpilot, TripAdvisor, 192.com, FreeIndex, Brownbook, Misterwhat) — open `clients/sdy/citations/manual-pack.html`; 14 sites unknown (Tier 4 or missing API keys); GBP check blocked pending Google API quota approval (case 7-2336000041300)
+- [x] SDY competitor citation gap analysis run (session 56) — 5 GBP competitors identified (Thai House, Nutcha, Daras, Phuket Thai, Tiger Lily); 17 gaps found; results in `clients/sdy/citations/gap-results.json`
+- [x] SDY shareable citation pack generated (session 56) — `clients/sdy/citations/manual-pack-shareable.md` ready to copy-paste into WhatsApp/email; 4 sections (5 general dirs / 4 associations / 6 industry dirs / 17 competitor gaps), NAP block at bottom
 
 ---
 
@@ -896,6 +898,26 @@ python3 src/citations/run_citations.py --abbr gtm --force          # re-check al
 - [x] **Tested (session 41):** Run full `/audit --abbr gtm` — NAP+Cit label appears in console output ✓; fixed: queue_gen.py config_address AttributeError, CitationResult fallback to state snapshot when no sites are due
 - [x] **Selector tuning (session 41):** Tier 3 Playwright ran without errors (most sites `not_found` — accurate for new business); Cylex moved to Tier 4 (CAPTCHA); Tier 2 DataForSEO fixed to use Google SERP `site:` search instead of non-existent business_data endpoints; 32 tests passing
 
+### Citation system expansion (session 56)
+
+- [x] **Niche/industry directories** — `NICHE_CITATION_SITES` dict added to `citation_sites.py`; keyed by `config.json["niche"]`; massage-therapy niche includes 4 associations (SMTO, CNHC, FHT, CThA) + 6 niche directories (Therapy Directory, Heal Scotland, Natural Therapy Pages UK, Healthy Pages, Holistic Pages, Guru Directory); `get_niche_sites(niche)` helper; `thai-massage` key aliases to same list; `citation_manager.py` passes niche to pack generator automatically
+- [x] **Manual pack — niche section** — `citation_manual_pack.py` renders separate "Industry & Association Directories" section when niche is set; associations and niche directories in distinct sub-headings; auto-generated alongside HTML on every run
+- [x] **`clients/sdy/citations/manual-pack.md`** — markdown version of the manual pack (human-readable reference, separate from HTML interactive version)
+- [x] **Competitor citation gap analysis** — `src/research/research_citation_gaps.py`; fetches top N GBP map pack competitors live; checks each against all 23 known citation sites via SERP queries; outputs `research/[abbr]/citation-gaps-[date].md` + `clients/[abbr]/citations/gap-results.json`; `--discover` flag adds DataForSEO backlinks pass for net-new directory discovery; GBP excluded from SERP check (false negatives via this method); cost ~$0.35/run
+- [x] **Competitor gap — auto-run on first audit** — `citation_state.py` tracks `competitor_gaps_run` flag; `citation_manager.py` calls `run_competitor_gap_analysis()` automatically on first ever audit per client; subsequent runs via `run_citations.py --abbr sdy --competitor-gaps`
+- [x] **`dataforseo.py`** — `get_referring_domains(domain, limit)` added using `/v3/backlinks/referring_domains/live` endpoint; used by `--discover` pass
+- [x] **Shareable citation pack** — `generate_shareable_pack()` in `citation_manual_pack.py`; plain-text format for WhatsApp/email paste; 4 sections (general dirs / associations / industry dirs / competitor gaps); Part 1 deduplicates against Part 4 so no site appears twice; each section has plain-English instruction paragraph; NAP block at bottom; returns `(path, content)` tuple for future API use; auto-generated alongside HTML on every run
+- [x] **`run_citations.py`** — `--competitor-gaps` flag (refresh gap analysis on demand) + `--discover` flag added
+- [x] **SDY gap analysis run** — 5 competitors found (Thai House, Nutcha, Daras, Phuket Thai, Tiger Lily); 17 gaps identified; `clients/sdy/citations/gap-results.json` + `clients/sdy/citations/manual-pack-shareable.md` ready
+
+**New CLI:**
+```bash
+python3 src/citations/run_citations.py --abbr sdy --competitor-gaps         # refresh gap analysis
+python3 src/citations/run_citations.py --abbr sdy --competitor-gaps --discover  # + backlinks discovery
+python3 src/research/research_citation_gaps.py --abbr sdy                   # standalone
+python3 src/research/research_citation_gaps.py --abbr sdy --top 10 --dry-run
+```
+
 ---
 
 ## SDY Manual Review Checklist — CLEARED (session 54)
@@ -908,6 +930,7 @@ All 12 posts reviewed and approved by client (2026-04-16). Stars and notice para
 
 ## Deferred / Future
 
+- **Central UI** — defer build until citations + audit pipeline stable (~2–3 sessions); architect for it now: expose clean `run()` functions with structured JSON outputs on every new feature; internal staff tool first, then public product; trigger: when we find ourselves building a third workaround for the same problem (see memory `project_ui_roadmap.md`)
 - Resize large treatment reference images — `foot-massage.png` (1.7MB), `oil-massage.jpg` — resize to ~800px for leaner Gemini API payloads
 - Add `image_settings` block to GTM, GTB, TMG configs — room reference photos pending (user to provide room photos within ~24 hours)
 - Post 2013 banner regeneration (Hair Oiling Treatment) — new image pipeline in place; regenerate post 2013 banner once room reference photos are updated in SDY config

@@ -9,6 +9,8 @@ Usage:
     python3 src/citations/run_citations.py --abbr gtm --status
     python3 src/citations/run_citations.py --abbr gtm --dry-run
     python3 src/citations/run_citations.py --abbr gtm --force
+    python3 src/citations/run_citations.py --abbr gtm --competitor-gaps        # refresh competitor gap analysis
+    python3 src/citations/run_citations.py --abbr gtm --competitor-gaps --discover  # + backlinks discovery
 """
 
 from __future__ import annotations
@@ -51,6 +53,10 @@ def main():
                         help='Re-check all sites regardless of last_checked date')
     parser.add_argument('--status', action='store_true',
                         help='Print citation status table and exit')
+    parser.add_argument('--competitor-gaps', action='store_true',
+                        help='Refresh competitor citation gap analysis (auto-runs on first audit)')
+    parser.add_argument('--discover', action='store_true',
+                        help='Include backlinks discovery when running --competitor-gaps')
     args = parser.parse_args()
 
     config = load_config(args.abbr)
@@ -58,6 +64,13 @@ def main():
 
     if args.status:
         manager.print_status()
+        return
+
+    if args.competitor_gaps:
+        manager.run_competitor_gap_analysis(discover=args.discover)
+        manager.state.save()
+        print(f'→ Gap analysis complete — see clients/{args.abbr}/citations/gap-results.json')
+        print(f'  Manual pack updated: clients/{args.abbr}/citations/manual-pack.html')
         return
 
     if args.mode == 'audit':

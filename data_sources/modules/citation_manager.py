@@ -24,6 +24,8 @@ from citation_state import CitationState
 from citation_manual_pack import generate_manual_pack
 from scoring import CitationResult
 
+sys.path.insert(0, str(ROOT / 'src' / 'research'))
+
 logger = logging.getLogger(__name__)
 
 _CRITICAL_SITE_IDS = {'google_business_profile', 'bing_places', 'yelp'}
@@ -37,7 +39,11 @@ class CitationManager:
         self.state = CitationState(abbr, root)
 
     def run_audit(self, force: bool = False, dry_run: bool = False) -> CitationResult:
-        """Check all due sites and return scored CitationResult."""
+        """Check all due sites and return scored CitationResult.
+
+        On the first ever audit for a client, also runs competitor gap analysis
+        automatically. Subsequent gap refreshes require --competitor-gaps flag.
+        """
         sites = self.state.get_due_sites(CITATION_SITES, force=force)
         results = []
         for site in sites:
@@ -46,14 +52,28 @@ class CitationManager:
             self.state.update(r)
             results.append(r)
 
+        # Auto-run competitor gap analysis on first audit only
+        if not self.state.competitor_gaps_have_run() and not dry_run:
+            self.run_competitor_gap_analysis()
+
         self.state.save()
         # Always generate manual pack so users know what needs manual submission
         all_results = self._all_results_from_state()
-        pack_path = generate_manual_pack(self.abbr, self.config, all_results, self.root)
+        pack_path = generate_manual_pack(self.abbr, self.config, all_results, self.root, niche=self.config.get('niche', ''))
         logger.info('Manual pack saved to %s', pack_path)
         # If no sites were due this run, score from the full state snapshot
         score_source = results if results else all_results
         return self._build_scored_result(score_source)
+
+    def run_competitor_gap_analysis(self, top_n: int = 5, discover: bool = False) -> None:
+        """Run competitor citation gap analysis and persist results for manual pack."""
+        try:
+            import research_citation_gaps as rcg
+            logger.info('Running competitor citation gap analysis (top %d)...', top_n)
+            rcg.run(abbr=self.abbr, top_n=top_n, discover=discover, root=self.root)
+            self.state.mark_competitor_gaps_run()
+        except Exception as e:
+            logger.warning('Competitor gap analysis failed (non-fatal): %s', e)
 
     def run_creation(self, dry_run: bool = False) -> list[CitationCheckResult]:
         """Attempt creation for all not_found sites. Returns submission results."""
@@ -69,7 +89,7 @@ class CitationManager:
 
         # Generate manual pack for anything that needs it
         all_results = self._all_results_from_state()
-        pack_path = generate_manual_pack(self.abbr, self.config, all_results, self.root)
+        pack_path = generate_manual_pack(self.abbr, self.config, all_results, self.root, niche=self.config.get('niche', ''))
         logger.info('Manual pack saved to %s', pack_path)
         self.state.save()
         return submitted

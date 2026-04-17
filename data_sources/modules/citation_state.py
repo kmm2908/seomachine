@@ -22,7 +22,7 @@ class CitationState:
     def _load(self) -> dict:
         if self._path.exists():
             return json.loads(self._path.read_text())
-        return {'last_run': None, 'sites': {}}
+        return {'last_run': None, 'sites': {}, 'competitor_gaps_run': False}
 
     def save(self) -> None:
         self._dir.mkdir(parents=True, exist_ok=True)
@@ -57,6 +57,12 @@ class CitationState:
             'submit_status': result.submit_status,
             'last_checked': date.today().isoformat(),
         }
+
+    def competitor_gaps_have_run(self) -> bool:
+        return bool(self._data.get('competitor_gaps_run', False))
+
+    def mark_competitor_gaps_run(self) -> None:
+        self._data['competitor_gaps_run'] = True
 
     def get_not_found(self) -> list[str]:
         """Return site IDs with status not_found and no pending submission."""

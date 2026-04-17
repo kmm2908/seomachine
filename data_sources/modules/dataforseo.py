@@ -488,6 +488,31 @@ class DataForSEO:
 
         return []
 
+    def get_referring_domains(self, domain: str, limit: int = 100) -> list[str]:
+        """Return a list of unique referring domains linking to `domain`.
+
+        Uses the Backlinks Referring Domains endpoint — cheaper than pulling
+        full backlinks. Useful for discovering which directories link to a
+        competitor.
+        """
+        data = [{
+            'target': domain.lstrip('www.'),
+            'limit': limit,
+            'order_by': ['rank,desc'],
+            'filters': [['backlinks_spam_score', '<', 30]],
+        }]
+        try:
+            response = self._post('/v3/backlinks/referring_domains/live', data)
+        except Exception:
+            return []
+        if response.get('status_code') != 20000:
+            return []
+        task = response.get('tasks', [{}])[0]
+        if task.get('status_code') != 20000:
+            return []
+        items = (task.get('result') or [{}])[0].get('items') or []
+        return [item['domain'] for item in items if item.get('domain')]
+
 
 # Example usage
 if __name__ == "__main__":

@@ -294,3 +294,101 @@ CITATION_SITES: list[CitationSite] = [
 
 # Fast lookup by ID
 SITE_BY_ID: dict[str, CitationSite] = {s.id: s for s in CITATION_SITES}
+
+
+# ── Niche-specific sites ──────────────────────────────────────────────────────
+# Keyed by config.json "niche" value. All are Tier 4 (manual pack only).
+# Associations require qualifications + insurance — flagged in notes.
+# Multiple niche keys can map to the same list (e.g. thai-massage shares massage-therapy).
+
+NICHE_CITATION_SITES: dict[str, list[CitationSite]] = {
+    'massage-therapy': [
+        # ── Associations ──
+        CitationSite(
+            id='smto',
+            name='SMTO — Scottish Massage Therapists Organisation',
+            url='https://www.scotmass.co.uk',
+            tier=4, priority=9,
+            submission_url='https://www.scotmass.co.uk/index.php/membership',
+        ),
+        CitationSite(
+            id='cnhc',
+            name='CNHC — Complementary & Natural Healthcare Council',
+            url='https://www.cnhc.org.uk',
+            tier=4, priority=9,
+            submission_url='https://www.cnhc.org.uk/apply-register',
+        ),
+        CitationSite(
+            id='fht',
+            name='FHT — Federation of Holistic Therapists',
+            url='https://www.fht.org.uk',
+            tier=4, priority=8,
+            submission_url='https://www.fht.org.uk/membership',
+        ),
+        CitationSite(
+            id='ctha',
+            name='CThA — Complementary Therapists Association',
+            url='https://www.ctha.com',
+            tier=4, priority=7,
+            submission_url='https://www.ctha.com/members/qualified-professional/',
+        ),
+        # ── Niche directories ──
+        CitationSite(
+            id='therapy_directory',
+            name='Therapy Directory',
+            url='https://www.therapy-directory.org.uk',
+            tier=4, priority=8,
+            submission_url='https://secure.therapy-directory.org.uk/join.html',
+        ),
+        CitationSite(
+            id='heal_scotland',
+            name='Heal Scotland',
+            url='https://www.healscotland.com',
+            tier=4, priority=7,
+            submission_url='https://www.healscotland.com/find-support',
+        ),
+        CitationSite(
+            id='natural_therapy_pages',
+            name='Natural Therapy Pages UK',
+            url='https://www.naturaltherapypages.co.uk',
+            tier=4, priority=6,
+            submission_url='https://www.naturaltherapypages.co.uk/add_listing',
+        ),
+        CitationSite(
+            id='healthy_pages',
+            name='Healthy Pages',
+            url='https://www.healthypages.co.uk',
+            tier=4, priority=6,
+            submission_url='https://www.healthypages.co.uk/listing/',
+        ),
+        CitationSite(
+            id='holistic_pages',
+            name='Holistic Pages',
+            url='http://www.holisticpages.co.uk',
+            tier=4, priority=5,
+            submission_url='http://www.holisticpages.co.uk',
+        ),
+        CitationSite(
+            id='guru_directory',
+            name='Guru Directory',
+            url='https://gurudirectory.co.uk',
+            tier=4, priority=4,
+            submission_url='https://gurudirectory.co.uk',
+        ),
+    ],
+    'thai-massage': [],  # inherits massage-therapy — see get_niche_sites()
+}
+
+# Sites shared by related niches
+NICHE_CITATION_SITES['thai-massage'] = NICHE_CITATION_SITES['massage-therapy']
+
+NICHE_SITE_BY_ID: dict[str, CitationSite] = {
+    s.id: s
+    for sites in NICHE_CITATION_SITES.values()
+    for s in sites
+}
+
+
+def get_niche_sites(niche: str) -> list[CitationSite]:
+    """Return niche-specific citation sites for a given config niche value."""
+    return NICHE_CITATION_SITES.get(niche, [])

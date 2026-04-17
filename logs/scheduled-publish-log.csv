@@ -183,3 +183,4 @@ date,abbr,topic,content_type,status,post_id,cost,notes
 2026-04-15,gtb,Glasgow City Deal 2026: What Infrastructure Changes Mean for City Centre Workers,news,published,23112,$0.8542,https://blog.glasgowthaimassage.co.uk/wp-admin/post.php?post=23112&action=edit
 2026-04-15,gtb,How Often Deep Tissue Massage,blog,published,23117,$0.6567,https://blog.glasgowthaimassage.co.uk/wp-admin/post.php?post=23117&action=edit
 2026-04-16,gtb,Side Effects of Thai Massage,blog,published,23125,$0.3985,https://blog.glasgowthaimassage.co.uk/wp-admin/post.php?post=23125&action=edit
+2026-04-17,gtb,Thai Yoga Massage Stretching Techniques,blog,failed,,,400 Client Error: Bad Request for url: https://blog.glasgowthaimassage.co.uk/wp-json/wp/v2/categories
