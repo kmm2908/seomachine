@@ -448,7 +448,7 @@ def run(abbr: str, dry_run: bool = False, queue_name: str = 'topic-queue.json') 
 
         queue['topics'][idx]['status'] = 'failed'
         queue['topics'][idx]['error'] = error_msg
-        save_queue(abbr, queue)
+        save_queue(abbr, queue, queue_name)
 
         append_log({
             'date': date.today().isoformat(),

@@ -35,6 +35,8 @@ Choose one structure depending on the topic:
 2. Body sections using `<h3>` subheadings
 3. Takeaway `<p>`
 
+**Hook type**: Before writing, choose one hook type from the Hook Framework in `context/cro-best-practices.md`. Match the psychological principle to the article's angle — Pain Callout or Myth Bust for health/condition content, Story or Analogy for personal/brand posts, List for enumerable topics. The hook type shapes the opening paragraph only; the rest of the article follows the chosen structure above.
+
 ### Section 2 — FAQ
 
 Use `<h2 class="hdr-m">Frequently Asked Questions</h2>` as the section header. Wrap each question and answer in a `<details>` element — the question in `<summary>`, the answer in `<p>` inside the same `<details>` block.

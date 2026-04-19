@@ -309,6 +309,33 @@ Every additional field reduces conversions by ~10%
 
 ---
 
+## Content Hook Framework
+
+A hook is the opening 1-2 sentences that make a reader stop and continue. Choose a hook type intentionally — each works because of a specific psychological principle.
+
+### The 10 Hook Types
+
+| Type | Psychological Principle | Use when |
+|------|------------------------|----------|
+| Stop / Warning | Loss aversion | Reader is making a costly mistake |
+| Secret / Hack Reveal | Information gap | You have insider or non-obvious knowledge |
+| Big Promise / Result Flex | Reward anticipation | The outcome is strong and credible |
+| Authority / Credibility | Authority principle | Experience or track record is the differentiator |
+| Contrarian / Hot Take | Cognitive dissonance | You can genuinely back up an unpopular position |
+| Pain Callout | Emotional resonance | The reader is suffering right now |
+| Mistake / Myth Bust | Social threat response | Common knowledge is wrong |
+| List | Chunking | Topic naturally divides into numbered items |
+| Urgency / FOMO | Scarcity | Real deadline exists — avoid in evergreen content |
+| Analogy / Story | Narrative transportation | Personal or case-study angle fits the piece |
+
+### Rules
+- Match hook type to the article's angle: Pain Callout for condition/health content, Myth Bust for educational pieces, Story/Analogy for brand or personal posts
+- Big Promise is the most versatile (works with any format) but the most overused — only use it when the result is genuinely strong
+- Never use fake urgency in evergreen content
+- Contrarian hooks require a genuine position to back up — don't use them to mislead
+
+---
+
 ## Psychology Principles
 
 ### Scarcity

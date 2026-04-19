@@ -16,7 +16,7 @@ Topical content builds authority and captures informational search intent. Examp
 
 Follow this structure in order:
 
-1. **Introduction** (1-2 paragraphs): Answer the question briefly upfront, then expand. State what the reader will learn. Include the primary keyword in the first 100 words.
+1. **Introduction** (1-2 paragraphs): Answer the question briefly upfront, then expand. State what the reader will learn. Include the primary keyword in the first 100 words. Choose a hook type from the Hook Framework in `context/cro-best-practices.md` — for informational content, Myth Bust, Pain Callout, and Big Promise tend to work best.
 
 2. **Main Sections** (use H2 subheadings): 3-5 sections, each covering a key sub-topic. Draw on research results. Use lists and short paragraphs for scannability. Describe each key entity with attributes on first mention — don't just name it, explain what it is.
 

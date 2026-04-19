@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-04-17 (session 57 — problem hub border fix, CSS cache-busting via file rename)
+Last updated: 2026-04-19 (session 58 — hook framework, GTB WP-CLI fix, save_queue bug fix)
 
 ---
 
@@ -126,6 +126,10 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] **Plugin version sync** (session 49) — plugin header version and CSS enqueue cache-bust string now kept in sync; currently `3.4.1`; `/wrap` command updated to report plugin version in confirmation output so deployed version can be cross-checked against wp-admin
 - [x] **Problem hub border removed** (session 57) — removed `border: 1px solid currentColor`, `border-radius: 8px`, and `opacity: .7` from `.seo-hub-problem-grid ul`; fixes bordered box appearance on SDY dark theme
 - [x] **CSS cache-busting via filename** (session 57) — SG Optimizer strips `?ver=` query strings from static assets, making `wp_enqueue_style` version bumps ineffective; renamed `seomachine-hub.css` → `seomachine-hub-v2.css`; deploy workflow updated to push v2 file to all 5 sites; future CSS changes requiring immediate cache-bust must rename the file
+- [x] **Hook framework added** (session 58) — `context/cro-best-practices.md` now includes a "Content Hook Framework" section: 10 hook types with psychological principles and usage rules; `blog-post-writer.md` and `topical-writer.md` updated to choose a hook type intentionally before writing the opening paragraph
+- [x] **GTB WP-CLI publish path** (session 58) — `clients/gtb/config.json` now has `wp_path` in its `ssh` block; GTB publishes via WP-CLI over SSH instead of REST API, bypassing SiteGround bot protection that was blocking the `/categories` endpoint (root cause of two consecutive Friday failures)
+- [x] **`save_queue` bug fixed** (session 58) — exception handler in `publish_scheduled.py` was calling `save_queue(abbr, queue)` without `queue_name`, silently writing the `failed` status to `topic-queue.json` (the default) instead of the actual queue file; failed topics stayed `pending` and were retried the following week; fixed to pass `queue_name`
+- [x] **GTB yoga queue reset** (session 58) — "Thai Yoga Massage Stretching Techniques" topic reset to `pending` after root-cause fix; will run on next Friday cron
 - [x] **Problem grid line-height** (session 47–48) — `line-height: 1.0` on `.seo-hub-problem-grid li`; tightened from 1.4 to keep wrapped items as close as comfortably readable; defined in `wordpress/seomachine-hub.css`
 - [x] **Hub standard list line-height** (session 50) — `.seo-hub-links h3 { line-height: 1.2 }` added to `seomachine-hub.css`; tightens wrapped multi-line items in the standard service/location hub lists
 - [x] **Hub display text switched to title** (session 50) — both local `get_posts()` path and remote `seo_hub_remote_fetch()` path now use `post_title` exclusively; excerpt was causing garbled display text (WordPress auto-generated excerpts from article body included CTA link text like "Book Now Sources: Thai Massage")
@@ -782,6 +786,7 @@ Fully automated pipeline that takes each published blog article and creates vide
 - [ ] Connect social media accounts in GHL Social Planner (in progress — reconnecting expired accounts)
 - [ ] Auto-populate `ghl.accounts` IDs from API (once social accounts are connected)
 - [ ] End-to-end test with real article
+- [ ] **Once pipeline stable:** add `build_context_block()` utility to inject `context/` files into `social_post_generator.py` prompts — hook framework + style guide don't currently reach video/social content (hardcoded prompts bypass `context/` entirely); video hooks need "spoken" framing addendum
 
 ### API credentials — current state
 - [x] ElevenLabs API key in `.env`
