@@ -164,6 +164,17 @@ Add to `data_sources/requirements.txt`:
 
 `BeautifulSoup4` and `requests` are already present.
 
+## UI Readiness
+
+The crawler is built to be UI-ready from day one, even though the UI is deferred:
+
+- `crawl()` is a pure async function with no CLI coupling — a future API route can call it directly
+- `CrawlResult` serialises cleanly to JSON (all fields are primitives, lists, dicts — no custom objects)
+- `crawl-report.json` is the single source of truth; the UI reads this, never re-crawls to render a page
+- Issue severity groupings (Critical / Warning / Info) map directly to dashboard badge counts
+- `inlinks` per page supports a future "which pages link here" drill-down view
+- Scheduled crawl config (frequency, last-run, history) will live in `clients/[abbr]/config.json` under a `crawler` key — reserved but not implemented yet
+
 ## Deferred
 
 - Scheduled crawls (weekly / twice-weekly / monthly) — UI phase
