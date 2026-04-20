@@ -2,7 +2,7 @@
 /**
  * Plugin Name: SEO Machine
  * Description: Registers SEO content post types and exposes SEO meta fields via REST API. No Yoast dependency.
- * Version: 3.4.4
+ * Version: 3.4.5
  * Author: SEO Machine
  *
  * Installation:
@@ -371,7 +371,8 @@ add_action('wp_head', function(): void {
         return;
     }
 
-    // Hello Elementor theme outputs a description from the post excerpt — we own this output.
+    // We own canonical and description output — remove WordPress core and Hello Elementor fallbacks.
+    remove_action('wp_head', 'rel_canonical', 10);
     remove_action('wp_head', 'hello_elementor_add_description_meta_tag', 10);
 
     $post_id    = get_queried_object_id();
