@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-04-20 (session 59 — design system brainstorm, SiteBuilder spec)
+Last updated: 2026-04-20 (session 60 — seomachine.php v3.4.5, Ahrefs duplicate meta fix)
 
 ---
 
@@ -638,6 +638,15 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] Run a blog batch row for GTM and confirm `## AI Brand Positioning` wording appears in the intro of the generated HTML — confirmed via 9/9 unit tests passing (`tests/test_ai_visibility.py`) + code path verified in both batch runner and scheduled publisher (session 26)
 - [x] Run a location batch row and confirm no positioning language was changed — confirmed: injection only fires for `blog` and `topical` content types (test_ai_visibility_not_injected_for_location passing)
 - [x] Run `publish_scheduled.py --dry-run --abbr gtb` and confirm AI positioning section appears in output — confirmed via shared `build_system_prompt()` import
+
+### seomachine.php — SEO head overhaul (session 60)
+- [x] **v3.4.5** deployed to all 5 sites via GitHub Actions
+- [x] `<link rel="canonical">` — now output by seomachine.php at `wp_head` priority 1; `remove_action('wp_head', 'rel_canonical', 10)` suppresses WordPress core duplicate
+- [x] `max-image-preview:large` — `add_filter('wp_robots', 'wp_robots_max_image_preview_large')` added at plugin level; Google can now display large images in search results on all sites
+- [x] Hello Elementor theme duplicate fix — `remove_action('wp_head', 'hello_elementor_add_description_meta_tag', 10)` prevents theme outputting post excerpt as second `<meta name="description">` (root cause of Ahrefs "Multiple meta description tags" error on GTM)
+- [x] Yoast guard — `add_filter('wpseo_metadesc', '__return_empty_string', 99)` retained as harmless future-proofing in case Yoast is ever installed
+- [x] seomachine.php now fully owns all SEO head output — canonical, meta description, OG, Twitter Card, robots — no external SEO plugin required on any site
+- [x] Confirmed via WP-CLI: `rel_canonical` and `hello_elementor_add_description_meta_tag` both successfully removed before priority 10 fires
 
 ### Scheduled publishing pipeline (session 15)
 - [x] `src/content/publish_scheduled.py` — cron-driven publisher; reads `research/[abbr]/topic-queue.json`; one topic per run; full pipeline (generate → quality gate → WP publish → log → email)
