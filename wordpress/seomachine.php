@@ -1002,6 +1002,18 @@ add_action('template_redirect', function() {
     }
 });
 
+add_action('template_redirect', function() {
+    $map = json_decode(get_option('seo_machine_redirects', '[]'), true);
+    if (!is_array($map) || empty($map)) return;
+    $uri = rtrim(strtok($_SERVER['REQUEST_URI'], '?'), '/');
+    foreach ($map as $rule) {
+        if (isset($rule['from'], $rule['to']) && rtrim($rule['from'], '/') === $uri) {
+            wp_redirect($rule['to'], 301);
+            exit;
+        }
+    }
+});
+
 add_filter('robots_txt', function(string $output): string {
     if (strpos($output, 'wp-sitemap.xml') === false) {
         $output .= "\nSitemap: " . home_url('/wp-sitemap.xml') . "\n";
