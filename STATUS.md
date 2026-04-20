@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-04-20 (session 61 — site crawler built, SDY Elementor CSS regenerated)
+Last updated: 2026-04-20 (session 62 — CLAUDE.md restructured, verification + continuous improvement system added)
 
 ---
 
@@ -564,6 +564,18 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] `docs/superpowers/specs/2026-04-20-site-crawler-design.md` — approved design spec with UI readiness section
 - [x] **Smoke tested against GTM live** — 50 pages crawled in 11.5s; real issues found (4xx, redirect chains, missing meta)
 - [x] **Known minor issue (fix deferred):** `/wp-sitemap.xml` gets crawled as an HTML page and triggers false "Missing H1" warning — fix by filtering non-HTML content types in `detect_issues()`
+
+### CLAUDE.md restructure + operational systems (session 62)
+- [x] `CLAUDE.md` — rewritten from 415 → 174 lines; role-based structure: operational rules + pointers only, no documentation
+- [x] Agent properties removed from CLAUDE.md — stay in `.claude/agents/` files
+- [x] Client-specific details removed from CLAUDE.md — stay in `clients/[abbr]/` directories
+- [x] WordPress Integration section trimmed to 6 critical conventions only; version history + session references removed
+- [x] `docs/conventions.md` — new file; rules derived from real problems solved; 8 seed entries pre-populated from STATUS.md history
+- [x] `docs/commands.md` — new file; full CLI command reference extracted from CLAUDE.md; organised by area (content, research, publishing, audit, citations, social, reporting, tests)
+- [x] `docs/verification.md` — new file; per-task-type verification checklist with example `✓ Verified:` output format
+- [x] **Verification Protocol** — new CLAUDE.md section: before handing back any task, surface a `✓ Verified:` block; if check fails: fix → re-verify → hand back; new class of problem → add rule to `docs/conventions.md`
+- [x] **Continuous Improvement** — new CLAUDE.md section: problems solved → standing rules in `docs/conventions.md`
+- [x] `.claude/commands/wrap.md` — new step 4: conventions check before committing; any session lesson not in `docs/conventions.md` gets added at wrap-up
 
 ### Batch summary email (session 22 planned, session 25 partial)
 - [x] Per-article emails removed from `publish_scheduled.py` — no more per-post notifications (session 25)

@@ -24,9 +24,17 @@ Update project documentation to reflect everything completed or changed in this 
    - Add anything newly deferred to "Deferred / Future"
    - Update the "Last updated" date at the top
 
-4. **Commit and push to GitHub** — stage all changes, create a commit with a short message summarising the session (e.g. `Session 6: hub shortcode + image pipeline`), and push to `origin main`
+4. **Check for conventions** — review what was done this session and ask: did any problem get solved that should become a standing rule? If yes, add it to `docs/conventions.md` using the format:
+   ```
+   ## [Short rule title]
+   **Why:** [what went wrong]
+   **How to apply:** [when this rule kicks in]
+   ```
+   Only add rules for new classes of problem not already covered in `docs/conventions.md`.
 
-5. **Confirm** — output a brief summary of what was updated and the commit hash so the user can verify before closing. If `wordpress/seomachine.php` was committed in this session (or any earlier commit this session), also read the `Version:` line from that file and include it in the confirmation — e.g. **Plugin version: 3.3.1** — so the user can cross-check against wp-admin → Must-Use Plugins
+5. **Commit and push to GitHub** — stage all changes, create a commit with a short message summarising the session (e.g. `Session 6: hub shortcode + image pipeline`), and push to `origin main`
+
+6. **Confirm** — output a brief summary of what was updated and the commit hash so the user can verify before closing. If `wordpress/seomachine.php` was committed in this session (or any earlier commit this session), also read the `Version:` line from that file and include it in the confirmation — e.g. **Plugin version: 3.3.1** — so the user can cross-check against wp-admin → Must-Use Plugins
 
 ## Multi-window / parallel agent policy
 
