@@ -118,3 +118,107 @@ def extract_links(
         resources["images"].append(urljoin(base_url, tag["src"]))
 
     return internal, external, resources
+
+
+async def fetch_page(
+    url: str,
+    session: aiohttp.ClientSession | None = None,
+    timeout: int = 10,
+) -> tuple[int, str, list[str], str]:
+    """Returns (http_code, final_url, redirect_chain, html)."""
+    own_session = session is None
+    if own_session:
+        session = aiohttp.ClientSession(
+            headers={"User-Agent": "SEOMachine/1.0"},
+            connector=aiohttp.TCPConnector(ssl=False),
+        )
+    try:
+        async with session.get(
+            url, allow_redirects=True, timeout=aiohttp.ClientTimeout(total=timeout)
+        ) as resp:
+            chain = [str(r.url) for r in resp.history]
+            final_url = str(resp.url)
+            http_code = resp.status
+            content_type = resp.content_type or ""
+            html = await resp.text(errors="replace") if "html" in content_type else ""
+            return http_code, final_url, chain, html
+    except asyncio.TimeoutError:
+        return 408, url, [], ""
+    except Exception:
+        return 0, url, [], ""
+    finally:
+        if own_session:
+            await session.close()
+
+
+async def head_check(
+    url: str,
+    session: aiohttp.ClientSession | None = None,
+    timeout: int = 10,
+) -> int:
+    own_session = session is None
+    if own_session:
+        session = aiohttp.ClientSession(
+            headers={"User-Agent": "SEOMachine/1.0"},
+            connector=aiohttp.TCPConnector(ssl=False),
+        )
+    try:
+        async with session.head(
+            url, allow_redirects=True, timeout=aiohttp.ClientTimeout(total=timeout)
+        ) as resp:
+            return resp.status
+    except Exception:
+        return 0
+    finally:
+        if own_session:
+            await session.close()
+
+
+async def fetch_sitemap(
+    site_url: str,
+    session: aiohttp.ClientSession | None = None,
+) -> set[str]:
+    own_session = session is None
+    if own_session:
+        session = aiohttp.ClientSession(
+            headers={"User-Agent": "SEOMachine/1.0"},
+            connector=aiohttp.TCPConnector(ssl=False),
+        )
+    urls: set[str] = set()
+    try:
+        for path in ("/wp-sitemap.xml", "/sitemap.xml", "/sitemap_index.xml"):
+            try:
+                async with session.get(
+                    site_url.rstrip("/") + path,
+                    timeout=aiohttp.ClientTimeout(total=10),
+                ) as resp:
+                    if resp.status != 200:
+                        continue
+                    text = await resp.text()
+                    found = re.findall(r"<loc>(https?://[^<]+)</loc>", text)
+                    urls.update(found)
+                    if "<sitemapindex" in text:
+                        sub_xml_urls = re.findall(
+                            r"<loc>(https?://[^<]+\.xml[^<]*)</loc>", text
+                        )
+                        for sub in sub_xml_urls:
+                            try:
+                                async with session.get(
+                                    sub, timeout=aiohttp.ClientTimeout(total=10)
+                                ) as sr:
+                                    if sr.status == 200:
+                                        urls.update(
+                                            re.findall(
+                                                r"<loc>(https?://[^<]+)</loc>",
+                                                await sr.text(),
+                                            )
+                                        )
+                            except Exception:
+                                pass
+                    break
+            except Exception:
+                continue
+    finally:
+        if own_session:
+            await session.close()
+    return urls
