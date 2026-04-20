@@ -2,7 +2,7 @@
 /**
  * Plugin Name: SEO Machine
  * Description: Registers SEO content post types and exposes SEO meta fields via REST API. No Yoast dependency.
- * Version: 3.4.2
+ * Version: 3.4.3
  * Author: SEO Machine
  *
  * Installation:
@@ -359,9 +359,12 @@ add_action('save_post', function(int $post_id): void {
 });
 
 // ── SEO head output ──────────────────────────────────────────────────────────
-// Outputs <meta name="description">, Open Graph, and Twitter Card tags from
-// SEO Machine meta fields on all singular pages (CPTs, pages, posts).
+// Outputs canonical, meta description, robots, Open Graph, and Twitter Card
+// tags from SEO Machine meta fields on all singular pages (CPTs, pages, posts).
 // Also overrides <title> when a custom SEO title is set.
+
+// Allow Google to display large images from our pages in search results.
+add_filter('wp_robots', 'wp_robots_max_image_preview_large');
 
 add_action('wp_head', function(): void {
     if (!is_singular()) {
@@ -376,6 +379,8 @@ add_action('wp_head', function(): void {
     $site_name  = get_bloginfo('name');
     $post_type  = get_post_type($post_id);
     $title_tag  = $meta_title ?: get_the_title($post_id);
+
+    echo '<link rel="canonical" href="' . esc_url($post_url) . '">' . "\n";
 
     if ($meta_desc) {
         add_filter('wpseo_metadesc', '__return_empty_string', 99);
