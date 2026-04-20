@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-04-19 (session 58 — hook framework, GTB WP-CLI fix, save_queue bug fix)
+Last updated: 2026-04-20 (session 59 — design system brainstorm, SiteBuilder spec)
 
 ---
 
@@ -743,6 +743,43 @@ Live at `serendipitymassage.co.uk`. All content migrated from staging2. All publ
 - [x] Existing posts (16637–16667) — excerpts set manually in wp-admin for cleaner hub display
 - [x] Hub section — line-height confirmed not needed; all titles display cleanly at default
 - [x] `clients/gtm/config.json` — `schema.logo_url` confirmed and updated to correct WP media URL
+
+---
+
+## Design System (session 59 — brainstorm complete)
+
+Design system ownership moved to SiteBuilder monorepo (`/Volumes/Ext Data/VSC Projects/CC Dev/SiteBuilder`). SEO Machine has no design system code — SiteBuilder generates WordPress CSS exports during the transition period.
+
+Full spec: `SiteBuilder/docs/brainstorming/2026-04-20-design-system-spec.md`
+
+### Architecture decisions
+- [x] Two-layer system: base tokens (spacing, type scale, radius, shadows) + brand tokens (colours + fonts)
+- [x] Descriptive CSS variable names throughout — `--color-dark-purple-bg` not `--color-primary`
+- [x] Three brand token files: GTM/GTB, SDY, TMG/TMB (blog subdomains inherit parent)
+- [x] Astro-first: new sites use tokens natively; existing WordPress sites get generated CSS export → Elementor Additional CSS
+- [x] Design system lives in SiteBuilder `packages/tokens/` — not in SEO Machine
+- [x] Fluid type scale standardised from SDY's `design-system-sync.css` (clamp values)
+- [x] Global link rule: inherit body text colour + bold; hover = `--color-link-hover` + underline
+
+### Brand tokens locked in
+- [x] GTM/GTB: `#870BA6` bg / `#ffff03` text / `#269b4c` btn / `#F6D533` link-hover | Cormorant Garamond + Dosis
+- [x] SDY: `#624A48`/`#705A89` bg / `#CFBCC6` text / `#61CE70`/`#2c6e49` btns / `#F6D533` link-hover | Playfair Display + Open Sans
+- [x] TMG/TMB: `#3a0942` bg / `#ffffff` text / `#269b4c` btn / `#ffd402` link-hover | Dosis now → Playfair Display + Open Sans when ready
+
+### Still to do (implement in SiteBuilder)
+- [ ] Create `packages/tokens/base.css` — structural tokens + global link rule
+- [ ] Create `packages/tokens/brands/gtm.css`, `sdy.css`, `tmg.css`
+- [ ] Create `packages/tokens/types.ts` — BrandToken TypeScript interface
+- [ ] Create `packages/tokens/index.ts` — `buildTokens()` + `generateWordPressCss()`
+- [ ] Refactor `packages/sitebuilder-ui/src/tokens.ts` — descriptive names, consume `packages/tokens/`
+- [ ] Update Tailwind theme references to match new token names
+- [ ] Add `tokens:export` script to root `package.json`
+- [ ] Generate + apply WordPress CSS exports to GTM, SDY, TMG
+- [ ] Apply GTM font updates (Cormorant Garamond h1–h6, Dosis body) via CSS export
+- [ ] Retire SDY's `design-system-sync.css` once CSS export is applied
+
+### GBP API (session 59)
+- [x] Google replied to case 7-2336000041300 requesting Project ID + admin emails — user replied with `caleb-489417` + `kmmsubs@gmail.com`; awaiting quota approval (300 QPM = approved)
 
 ---
 
