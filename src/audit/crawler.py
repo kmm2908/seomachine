@@ -66,3 +66,55 @@ class CrawlResult:
     pages: list[PageData]
     issues: CrawlIssues
     stats: CrawlStats
+
+
+def extract_metadata(html: str) -> dict:
+    soup = BeautifulSoup(html, "html.parser")
+
+    title_tag = soup.find("title")
+    title = title_tag.get_text(strip=True) if title_tag else ""
+
+    meta_desc_tag = soup.find("meta", attrs={"name": re.compile(r"^description$", re.I)})
+    meta_desc = meta_desc_tag.get("content", "").strip() if meta_desc_tag else ""
+
+    h1s = [h.get_text(strip=True) for h in soup.find_all("h1")]
+
+    canonical_tag = soup.find("link", attrs={"rel": "canonical"})
+    canonical = canonical_tag.get("href", "").strip() if canonical_tag else ""
+
+    return {"title": title, "meta_description": meta_desc, "h1s": h1s, "canonical": canonical}
+
+
+def extract_links(
+    html: str, base_url: str
+) -> tuple[set[str], set[str], dict[str, list[str]]]:
+    soup = BeautifulSoup(html, "html.parser")
+    base_domain = urlparse(base_url).netloc
+    internal: set[str] = set()
+    external: set[str] = set()
+    resources: dict[str, list[str]] = {"css": [], "js": [], "images": []}
+
+    for tag in soup.find_all("a", href=True):
+        href = tag["href"].strip()
+        if not href or href.startswith(("#", "mailto:", "tel:", "javascript:")):
+            continue
+        abs_url = urljoin(base_url, href).split("#")[0]
+        parsed = urlparse(abs_url)
+        if parsed.scheme not in ("http", "https"):
+            continue
+        if parsed.netloc == base_domain:
+            internal.add(abs_url)
+        else:
+            external.add(abs_url)
+
+    for tag in soup.find_all("link", href=True):
+        if "stylesheet" in tag.get("rel", []):
+            resources["css"].append(urljoin(base_url, tag["href"]))
+
+    for tag in soup.find_all("script", src=True):
+        resources["js"].append(urljoin(base_url, tag["src"]))
+
+    for tag in soup.find_all("img", src=True):
+        resources["images"].append(urljoin(base_url, tag["src"]))
+
+    return internal, external, resources
