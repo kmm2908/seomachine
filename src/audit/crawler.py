@@ -388,3 +388,134 @@ def save_crawl_summary(result: CrawlResult, output_dir: Path) -> Path:
 
     path.write_text("\n".join(lines))
     return path
+
+
+async def crawl(
+    site_url: str,
+    max_pages: int = 500,
+    concurrency: int = 10,
+    delay: float = 0.1,
+) -> CrawlResult:
+    start_time = time.time()
+    base_domain = urlparse(site_url).netloc
+    start_url = site_url.rstrip("/") + "/"
+
+    headers = {"User-Agent": "SEOMachine/1.0"}
+    connector = aiohttp.TCPConnector(ssl=False)
+
+    async with aiohttp.ClientSession(headers=headers, connector=connector) as session:
+        sitemap_urls = await fetch_sitemap(site_url, session=session)
+
+        queue: deque[str] = deque([start_url])
+        visited: set[str] = set()
+        pages: list[PageData] = []
+        inlinks_map: dict[str, list[str]] = {}
+        response_times: list[float] = []
+
+        while queue and len(pages) < max_pages:
+            batch: list[str] = []
+            while queue and len(batch) < concurrency and len(pages) + len(batch) < max_pages:
+                url = queue.popleft()
+                if url not in visited:
+                    visited.add(url)
+                    batch.append(url)
+
+            if not batch:
+                break
+
+            async def fetch_one(url: str):
+                t0 = time.time()
+                http_code, final_url, redirect_chain, html = await fetch_page(
+                    url, session=session
+                )
+                elapsed = (time.time() - t0) * 1000
+                meta = (
+                    extract_metadata(html)
+                    if html
+                    else {"title": "", "meta_description": "", "h1s": [], "canonical": ""}
+                )
+                internal, _, resources = (
+                    extract_links(html, url)
+                    if html
+                    else (set(), set(), {"css": [], "js": [], "images": []})
+                )
+                return url, http_code, final_url, redirect_chain, meta, resources, internal, elapsed
+
+            batch_results = await asyncio.gather(*[fetch_one(u) for u in batch])
+
+            for (url, http_code, final_url, redirect_chain,
+                 meta, resources, internal_links, elapsed) in batch_results:
+                response_times.append(elapsed)
+                for link in internal_links:
+                    inlinks_map.setdefault(link, []).append(url)
+                    if link not in visited:
+                        queue.append(link)
+                pages.append(PageData(
+                    url=url,
+                    http_code=http_code,
+                    final_url=final_url,
+                    redirect_chain=redirect_chain,
+                    title=meta["title"],
+                    meta_description=meta["meta_description"],
+                    h1s=meta["h1s"],
+                    canonical=meta["canonical"],
+                    resources=resources,
+                    inlinks=[],
+                    is_in_sitemap=url in sitemap_urls,
+                ))
+
+            await asyncio.sleep(delay)
+
+        # Populate inlinks from map
+        for page in pages:
+            page.inlinks = inlinks_map.get(page.url, [])
+
+        # Resource status checks (unique URLs only)
+        all_res_urls = list({
+            u for page in pages for res_list in page.resources.values() for u in res_list
+        })
+        resource_statuses: dict[str, int] = {}
+        sem = asyncio.Semaphore(concurrency)
+
+        async def check_one(res_url: str) -> None:
+            async with sem:
+                resource_statuses[res_url] = await head_check(res_url, session=session)
+
+        await asyncio.gather(*[check_one(u) for u in all_res_urls])
+
+        issues = detect_issues(pages, sitemap_urls)
+
+        for page in pages:
+            for res_type, res_urls in page.resources.items():
+                for res_url in res_urls:
+                    code = resource_statuses.get(res_url, 0)
+                    if code >= 400:
+                        issues.broken_resources.append({
+                            "page_url": page.url,
+                            "resource_url": res_url,
+                            "resource_type": res_type,
+                            "http_code": code,
+                        })
+
+        duration = time.time() - start_time
+        stats = CrawlStats(
+            total_pages=len(pages),
+            pages_200=sum(1 for p in pages if p.http_code == 200),
+            pages_3xx=sum(1 for p in pages if 300 <= p.http_code < 400),
+            pages_4xx=sum(1 for p in pages if 400 <= p.http_code < 500),
+            pages_5xx=sum(1 for p in pages if p.http_code >= 500),
+            total_resources_checked=len(all_res_urls),
+            broken_resources_count=len(issues.broken_resources),
+            crawl_duration_seconds=round(duration, 2),
+            avg_response_ms=round(
+                sum(response_times) / len(response_times), 1
+            ) if response_times else 0.0,
+        )
+
+        return CrawlResult(
+            site_url=site_url,
+            crawled_at=datetime.now(timezone.utc).isoformat(),
+            pages=pages,
+            issues=issues,
+            stats=stats,
+        )

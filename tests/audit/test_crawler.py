@@ -339,3 +339,45 @@ def test_save_crawl_summary_creates_markdown(tmp_path):
     assert "# Crawl Report" in content
     assert "4xx Pages" in content
     assert "https://example.com/gone/" in content
+
+
+from src.audit.crawler import crawl
+
+
+@pytest.mark.asyncio
+async def test_crawl_basic():
+    homepage_html = """
+    <html><head>
+      <title>Home</title>
+      <meta name="description" content="Welcome.">
+      <link rel="stylesheet" href="/style.css">
+    </head><body>
+      <h1>Welcome</h1>
+      <a href="/about/">About</a>
+    </body></html>
+    """
+    about_html = """
+    <html><head>
+      <title>About</title>
+      <meta name="description" content="About us.">
+    </head><body><h1>About</h1></body></html>
+    """
+    with mock_aiohttp() as m:
+        m.get("https://example.com/wp-sitemap.xml", status=404)
+        m.get("https://example.com/sitemap.xml", status=404)
+        m.get("https://example.com/sitemap_index.xml", status=404)
+        m.get("https://example.com/", status=200, body=homepage_html,
+              content_type="text/html")
+        m.get("https://example.com/about/", status=200, body=about_html,
+              content_type="text/html")
+        m.head("https://example.com/style.css", status=200)
+        result = await crawl("https://example.com", max_pages=10, concurrency=2, delay=0)
+
+    assert result.stats.total_pages == 2
+    assert result.stats.pages_200 == 2
+    urls = {p.url for p in result.pages}
+    assert "https://example.com/" in urls
+    assert "https://example.com/about/" in urls
+    # About page should have homepage as an inlink
+    about_page = next(p for p in result.pages if p.url == "https://example.com/about/")
+    assert "https://example.com/" in about_page.inlinks
