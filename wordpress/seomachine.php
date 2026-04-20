@@ -2,7 +2,7 @@
 /**
  * Plugin Name: SEO Machine
  * Description: Registers SEO content post types and exposes SEO meta fields via REST API. No Yoast dependency.
- * Version: 3.4.1
+ * Version: 3.4.2
  * Author: SEO Machine
  *
  * Installation:
@@ -378,6 +378,7 @@ add_action('wp_head', function(): void {
     $title_tag  = $meta_title ?: get_the_title($post_id);
 
     if ($meta_desc) {
+        add_filter('wpseo_metadesc', '__return_empty_string', 99);
         echo '<meta name="description" content="' . esc_attr($meta_desc) . '">' . "\n";
     }
 
