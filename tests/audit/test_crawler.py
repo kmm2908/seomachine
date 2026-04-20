@@ -314,3 +314,28 @@ def test_on_page_checks_skip_non_200():
     assert issues.missing_title == []
     assert issues.missing_h1 == []
     assert issues.missing_meta == []
+
+
+def test_save_crawl_report_creates_json(tmp_path):
+    from src.audit.crawler import save_crawl_report
+    result = make_result()
+    path = save_crawl_report(result, tmp_path)
+    assert path.exists()
+    data = json.loads(path.read_text())
+    assert data["site_url"] == "https://example.com"
+    assert len(data["pages"]) == 1
+
+
+def test_save_crawl_summary_creates_markdown(tmp_path):
+    from src.audit.crawler import save_crawl_summary
+    result = make_result()
+    # Add one critical issue so the summary has content
+    result.issues.pages_4xx.append(
+        {"url": "https://example.com/gone/", "http_code": 404, "inlinks": []}
+    )
+    path = save_crawl_summary(result, tmp_path)
+    assert path.exists()
+    content = path.read_text()
+    assert "# Crawl Report" in content
+    assert "4xx Pages" in content
+    assert "https://example.com/gone/" in content

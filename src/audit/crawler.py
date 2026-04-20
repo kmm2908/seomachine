@@ -291,3 +291,100 @@ def detect_issues(pages: list[PageData], sitemap_urls: set[str]) -> CrawlIssues:
     issues.duplicate_titles = {t: urls for t, urls in title_map.items() if len(urls) > 1}
     issues.duplicate_meta = {m: urls for m, urls in meta_map.items() if len(urls) > 1}
     return issues
+
+
+def save_crawl_report(result: CrawlResult, output_dir: Path) -> Path:
+    output_dir = Path(output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+    path = output_dir / "crawl-report.json"
+    path.write_text(json.dumps(asdict(result), indent=2))
+    return path
+
+
+def save_crawl_summary(result: CrawlResult, output_dir: Path) -> Path:
+    output_dir = Path(output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+    path = output_dir / "crawl-summary.md"
+    s = result.stats
+    iss = result.issues
+
+    lines: list[str] = [
+        f"# Crawl Report — {result.site_url}",
+        f"**Crawled:** {result.crawled_at}  ",
+        f"**Pages:** {s.total_pages} | 200: {s.pages_200} · 3xx: {s.pages_3xx} "
+        f"· 4xx: {s.pages_4xx} · 5xx: {s.pages_5xx}  ",
+        f"**Resources:** {s.total_resources_checked} checked | "
+        f"{s.broken_resources_count} broken  ",
+        f"**Duration:** {s.crawl_duration_seconds}s | Avg: {s.avg_response_ms}ms",
+        "",
+        "---",
+        "",
+    ]
+
+    def section(title: str, items: list, fmt) -> list[str]:
+        if not items:
+            return []
+        out = [f"## {title} ({len(items)})", ""]
+        out += [f"- {fmt(i)}" for i in items]
+        out.append("")
+        return out
+
+    lines += ["## Critical", ""]
+    lines += section(
+        "4xx Pages", iss.pages_4xx,
+        lambda i: f"`{i['url']}` → HTTP {i['http_code']} ({len(i['inlinks'])} inlinks)",
+    )
+    lines += section(
+        "Redirect Chains", iss.redirect_chains,
+        lambda i: f"`{i['url']}` → {i['hop_count']} hops: {' → '.join(i['chain'])}",
+    )
+    lines += section(
+        "Broken Resources", iss.broken_resources,
+        lambda i: (
+            f"`{i['resource_url']}` ({i['resource_type']}, "
+            f"HTTP {i['http_code']}) on `{i['page_url']}`"
+        ),
+    )
+
+    lines += ["## Warnings", ""]
+    lines += section(
+        "HTTPS / Mixed Content", iss.https_issues,
+        lambda i: f"`{i['url']}` — {i['issue_type']}",
+    )
+    lines += section("Orphan Pages", iss.orphan_pages, lambda u: f"`{u}`")
+    lines += section("Missing H1", iss.missing_h1, lambda u: f"`{u}`")
+
+    lines += ["## Info", ""]
+    lines += section("Missing Title", iss.missing_title, lambda u: f"`{u}`")
+    lines += section(
+        "Title Too Long (>60 chars)", iss.title_too_long,
+        lambda i: f"`{i['url']}` — {i['length']} chars",
+    )
+    dup_t = [{"title": t, "urls": us} for t, us in iss.duplicate_titles.items()]
+    lines += section(
+        "Duplicate Titles", dup_t,
+        lambda i: (
+            f"\"{i['title'][:50]}\" on {len(i['urls'])} pages: "
+            + ", ".join(f"`{u}`" for u in i["urls"][:3])
+        ),
+    )
+    lines += section("Missing Meta Description", iss.missing_meta, lambda u: f"`{u}`")
+    lines += section(
+        "Meta Too Long (>160 chars)", iss.meta_too_long,
+        lambda i: f"`{i['url']}` — {i['length']} chars",
+    )
+    dup_m = [{"meta": m, "urls": us} for m, us in iss.duplicate_meta.items()]
+    lines += section(
+        "Duplicate Meta Descriptions", dup_m,
+        lambda i: f"\"{i['meta'][:50]}\" on {len(i['urls'])} pages",
+    )
+    lines += section(
+        "Multiple H1s", iss.multiple_h1,
+        lambda i: (
+            f"`{i['url']}` — {len(i['h1s'])} H1s: "
+            + ", ".join(f'"{h}"' for h in i["h1s"][:2])
+        ),
+    )
+
+    path.write_text("\n".join(lines))
+    return path
