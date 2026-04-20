@@ -441,10 +441,10 @@ async def crawl(
                 )
                 return url, http_code, final_url, redirect_chain, meta, resources, internal, elapsed
 
-            batch_results = await asyncio.gather(*[fetch_one(u) for u in batch])
+            batch_results = await asyncio.gather(*[fetch_one(u) for u in batch], return_exceptions=True)
 
             for (url, http_code, final_url, redirect_chain,
-                 meta, resources, internal_links, elapsed) in batch_results:
+                 meta, resources, internal_links, elapsed) in [r for r in batch_results if not isinstance(r, BaseException)]:
                 response_times.append(elapsed)
                 for link in internal_links:
                     inlinks_map.setdefault(link, []).append(url)
@@ -481,7 +481,7 @@ async def crawl(
             async with sem:
                 resource_statuses[res_url] = await head_check(res_url, session=session)
 
-        await asyncio.gather(*[check_one(u) for u in all_res_urls])
+        await asyncio.gather(*[check_one(u) for u in all_res_urls], return_exceptions=True)
 
         issues = detect_issues(pages, sitemap_urls)
 
