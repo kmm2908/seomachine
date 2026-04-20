@@ -343,7 +343,7 @@ src/
   publishing/   ← fetch_elementor_template.py, update_post_classes.py, inject_elementor_template.py
   snippets/     ← generate_directions_snippet.py
   social/       ← repurpose_content.py, video_producer.py, social_post_generator.py
-  audit/        ← run_audit.py, collectors.py, scoring.py, report.py, pdf_gen.py, queue_gen.py
+  audit/        ← run_audit.py, run_crawl.py, crawler.py, collectors.py, scoring.py, report.py, pdf_gen.py, queue_gen.py
   citations/    ← run_citations.py (CLI entry point)
   competitors/  ← competitor alternative page generators (future)
 tests/          ← test scripts (delete before production)
@@ -381,7 +381,10 @@ python3 src/reporting/daily_digest.py --date 2026-04-07  # specific date
 python3 src/reporting/daily_digest.py --dry-run          # print without sending
 python3 src/audit/run_audit.py --abbr gtm                # full SEO audit (existing client)
 python3 src/audit/run_audit.py --abbr gtm --no-pdf       # audit, skip PDF generation
+python3 src/audit/run_audit.py --abbr gtm --crawl        # audit + site crawl (replaces Ahrefs Site Audit)
 python3 src/audit/run_audit.py --url https://... --name "Business" --no-email  # prospect audit
+python3 src/audit/run_crawl.py --abbr gtm                # crawl only (saves crawl-report.json + crawl-summary.md)
+python3 src/audit/run_crawl.py --abbr gtm --max-pages 500 --concurrency 10 --delay 0.2
 python3 src/citations/run_citations.py --abbr gtm                  # full: audit + create missing
 python3 src/citations/run_citations.py --abbr gtm --mode audit     # check only, no submissions
 python3 src/citations/run_citations.py --abbr gtm --mode create    # create missing only
@@ -398,7 +401,9 @@ python3 src/citations/run_citations.py --abbr gtm --force          # re-check al
 
 **Niche/industry directories** — `citation_sites.py` also contains `NICHE_CITATION_SITES: dict[str, list[CitationSite]]` keyed by `config.json["niche"]`. These are industry-specific associations and directories that supplement the generic 23-site list. Currently defined for `"massage-therapy"` (shared with `"thai-massage"`): SMTO, CNHC, FHT, CThA (associations requiring qualifications + PI insurance) + Therapy Directory, Heal Scotland, Natural Therapy Pages UK, Healthy Pages, Holistic Pages, Guru Directory (niche directories). The manual pack generator automatically renders a separate "Industry & Association Directories" section when `niche` is set in `config.json`. To add a new niche, add an entry to `NICHE_CITATION_SITES` in `citation_sites.py` — no other files need changing.
 
-**`run_audit.py`** — full SEO audit script. Runs 6 scored checks (schema 20pts, content 20pts, GBP 20pts, reviews 15pts, NAP 15pts, technical 10pts) + competitor benchmark. Outputs: `audits/[abbr]/[date]/audit-internal.md` (raw data), `audit-prospect.html/pdf` (OMG-branded PAS report), `pending-queue.json` (content gaps as pending queue items). PDF emailed to `kmmsubs@gmail.com` on completion. **Note:** SiteGround's bot protection blocks unauthenticated web scraping — schema/technical collectors use WP app password auth to bypass this. Requires `playwright` + `playwright install chromium` for PDF generation (gracefully skips to HTML if not installed).
+**`run_audit.py`** — full SEO audit script. Runs 6 scored checks (schema 20pts, content 20pts, GBP 20pts, reviews 15pts, NAP 15pts, technical 10pts) + competitor benchmark. Outputs: `audits/[abbr]/[date]/audit-internal.md` (raw data), `audit-prospect.html/pdf` (OMG-branded PAS report), `pending-queue.json` (content gaps as pending queue items). PDF emailed to `kmmsubs@gmail.com` on completion. `--crawl` flag runs the async site crawler first and passes findings to `collect_technical()`. **Note:** SiteGround's bot protection blocks unauthenticated web scraping — schema/technical collectors use WP app password auth to bypass this. Requires `playwright` + `playwright install chromium` for PDF generation (gracefully skips to HTML if not installed).
+
+**`crawler.py` + `run_crawl.py`** — async site crawler replacing Ahrefs Site Audit for crawl-based technical SEO issue detection. `crawler.py` is the core module: BFS spider using `aiohttp`, batch fetches with `asyncio.Semaphore(concurrency)`, 0.1s delay, 10s timeout. Detects 12 issue categories (4xx, redirect chains ≥2 hops, broken resources, HTTPS/mixed content, orphan pages, missing H1, duplicate titles/meta, etc.). Outputs `crawl-report.json` (machine-readable, feeds UI) and `crawl-summary.md` (human-readable Critical/Warning/Info). `run_crawl.py` is the standalone CLI. Tests: `tests/audit/test_crawler.py` (31 tests, `aioresponses` mocks, `pytest-asyncio`). `pytest.ini` at project root sets `asyncio_mode = auto`.
 
 **`research_competitors.py`** — standalone competitor intelligence script. Reads `clients/[abbr]/config.json`, geocodes the `area` field via Nominatim (strips "City Centre" etc. before geocoding), queries DataForSEO for top 10 map pack results (`location_name` approach) + top 10 organic (UK, location code 2826), filters directory domains, scrapes each competitor site, extracts structured profiles via Claude Haiku, writes `clients/[abbr]/competitor-analysis.md`. Integrated into `/new-client` workflow as Step 5.
 

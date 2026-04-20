@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-04-20 (session 60 — seomachine.php v3.4.5, Ahrefs duplicate meta fix)
+Last updated: 2026-04-20 (session 61 — site crawler built, SDY Elementor CSS regenerated)
 
 ---
 
@@ -548,6 +548,23 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] **Collector fix (session 33):** individual API fallback no longer overwrites service/location counts already populated by the audit endpoint
 - [x] **Blog subdomain support (session 55):** `collect_content()` accepts optional `config` dict; if `blog_subdomain` field is set, fetches post count from that domain's REST API and adds to `blog_count`; `run_audit.py` passes `config=config`; `clients/gtm/config.json` + `clients/tmg/config.json` updated with `"blog_subdomain"` field — fixes GTM/TMG scoring 0 blog posts despite active blog subdomains (GTB/TMB)
 
+### Site crawler (session 61 — replaces Ahrefs Site Audit)
+- [x] `src/audit/crawler.py` — async spider using `aiohttp`; batch BFS with `asyncio.Semaphore(10)`; 0.1s delay; 10s per-request timeout; User-Agent `SEOMachine/1.0`
+- [x] **Data models:** `PageData`, `CrawlIssues` (13 issue fields), `CrawlStats`, `CrawlResult` — all serialise cleanly to JSON
+- [x] **`crawl(site_url, max_pages=500, concurrency=10, delay=0.1)`** — entry point; seeds from homepage + `/wp-sitemap.xml`; HEAD-checks external resources; returns `CrawlResult`
+- [x] **`detect_issues(pages, sitemap_urls)`** — pure detector covering 12 issue categories: 4xx pages, redirect chains (≥2 hops), broken resources, HTTPS/mixed content, orphan pages, missing H1, multiple H1s, missing title, duplicate titles, title too long, missing meta, duplicate meta, meta too long
+- [x] **`save_crawl_report(result, output_dir)`** — writes `crawl-report.json` (machine-readable; feeds audit + future UI)
+- [x] **`save_crawl_summary(result, output_dir)`** — writes `crawl-summary.md` (Critical/Warning/Info sections)
+- [x] `src/audit/run_crawl.py` — CLI entry point: `--abbr` (required), `--max-pages`, `--concurrency`, `--delay`, `--output`
+- [x] `src/audit/run_audit.py` — `--crawl` flag added; runs crawler before audit, passes `crawl_report=asdict(result)` to `collect_technical()`
+- [x] `src/audit/collectors.py` — `collect_technical()` gains optional `crawl_report: dict | None` param; `_enrich_from_crawl()` appends crawl findings to `TechnicalResult` at both early-return and normal-return paths
+- [x] `tests/audit/test_crawler.py` — 31 tests, all passing; uses `aioresponses` for HTTP mocking; `pytest-asyncio` with `asyncio_mode = auto`
+- [x] `pytest.ini` — created with `asyncio_mode = auto`
+- [x] `data_sources/requirements.txt` — `aioresponses>=0.7`, `pytest-asyncio>=0.23` added
+- [x] `docs/superpowers/specs/2026-04-20-site-crawler-design.md` — approved design spec with UI readiness section
+- [x] **Smoke tested against GTM live** — 50 pages crawled in 11.5s; real issues found (4xx, redirect chains, missing meta)
+- [x] **Known minor issue (fix deferred):** `/wp-sitemap.xml` gets crawled as an HTML page and triggers false "Missing H1" warning — fix by filtering non-HTML content types in `detect_issues()`
+
 ### Batch summary email (session 22 planned, session 25 partial)
 - [x] Per-article emails removed from `publish_scheduled.py` — no more per-post notifications (session 25)
 - [x] Daily digest script — `src/reporting/daily_digest.py`; reads `logs/scheduled-publish-log.csv`; groups by client; shows published/review/failed with WP links and cost; cron at 22:00 daily → `logs/cron-digest.log`; `--date` and `--dry-run` flags (session 31)
@@ -647,6 +664,11 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] Yoast guard — `add_filter('wpseo_metadesc', '__return_empty_string', 99)` retained as harmless future-proofing in case Yoast is ever installed
 - [x] seomachine.php now fully owns all SEO head output — canonical, meta description, OG, Twitter Card, robots — no external SEO plugin required on any site
 - [x] Confirmed via WP-CLI: `rel_canonical` and `hello_elementor_add_description_meta_tag` both successfully removed before priority 10 fires
+
+### SDY Elementor CSS regeneration (session 61)
+- [x] Root cause: `wp elementor flush-css` deletes CSS files but does NOT regenerate them — they only regenerate on first page load after deletion
+- [x] Fix: ran `wp eval` loop over all 64 published Elementor posts calling `Elementor\Core\Files\CSS\Post::create($id)->update()` via SSH
+- [x] Verified: all 64 posts returning HTTP 200; Ahrefs "CSS broken: 56 pages" issue resolved
 
 ### Scheduled publishing pipeline (session 15)
 - [x] `src/content/publish_scheduled.py` — cron-driven publisher; reads `research/[abbr]/topic-queue.json`; one topic per run; full pipeline (generate → quality gate → WP publish → log → email)
