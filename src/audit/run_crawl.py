@@ -1,17 +1,4 @@
 #!/usr/bin/env python3
-"""
-SEO Machine Site Crawler
-
-Crawls a WordPress site for SEO issues: broken links, missing metadata,
-redirect chains, HTTPS mixed content, orphan pages, etc.
-
-Usage:
-    python3 src/audit/run_crawl.py --abbr gtm
-    python3 src/audit/run_crawl.py --abbr gtm --max-pages 1000
-    python3 src/audit/run_crawl.py --abbr gtm --concurrency 20 --delay 0.05
-    python3 src/audit/run_crawl.py --abbr gtm --output /path/to/output
-"""
-
 from __future__ import annotations
 
 import argparse
@@ -56,10 +43,7 @@ def main() -> None:
         sys.exit(1)
 
     config = json.loads(config_path.read_text())
-    site_url = config.get("website") or config.get("wordpress", {}).get("url", "")
-    if not site_url:
-        print(f"Error: no site URL found in {config_path}", file=sys.stderr)
-        sys.exit(1)
+    site_url = config["wordpress"]["url"]
 
     output_dir = (
         Path(args.output) if args.output
