@@ -4,5 +4,13 @@
     "additionalDirectories": [
       "/Users/fred/.claude"
     ]
-  }
+  },
+  "enabledPlugins": {
+    "playwright@claude-plugins-official": false
+  },
+  "deniedMcpServers": [
+    {"serverName": "browsermcp"},
+    {"serverName": "claudeus-wp-mcp"},
+    {"serverName": "github"}
+  ]
 }

@@ -50,3 +50,15 @@ Added to via `/wrap` at the end of each session — any new class of problem get
 ## [seo_hub] shortcode must use Elementor Shortcode widget, not HTML widget
 **Why:** The Elementor HTML widget does not process WordPress shortcodes — it outputs them as literal text.
 **How to apply:** Always insert `[seo_hub type="X"]` via the Elementor Shortcode widget. If a hub list shows as plain text on the frontend, this is the cause.
+
+---
+
+## MCP tools cost tokens even when deferred — audit per project
+**Why:** Even deferred MCP tool definitions appear in the system prompt at session start. 60+ tool definitions loading for MCPs that a project never uses (browsermcp, Gmail, Google Calendar, Google Drive, claudeus-wp-mcp) wastes context on every message.
+**How to apply:** Add `deniedMcpServers` (for user-scoped MCP servers) and `enabledPlugins: {plugin: false}` (for plugin MCPs) to the project's `.claude/settings.json`. Audit by running `claude mcp list` and cross-referencing against the project's source code. Exception: keep Playwright MCP enabled for UI projects that use it for interactive visual QA (not just Python playwright in scripts).
+
+---
+
+## Remote scheduled agents cannot access the local filesystem
+**Why:** Scheduled triggers run in Anthropic's cloud infrastructure with no access to `/Volumes/`, `~/.claude/`, or any local paths.
+**How to apply:** Remote agent prompts must use GitHub repos as sources (clone with `--depth=1`) and cloud MCP connectors (Gmail, Google Drive) for I/O. Never reference local file paths or local scripts in trigger prompts.

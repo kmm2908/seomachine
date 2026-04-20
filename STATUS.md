@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-04-20 (session 62 — CLAUDE.md restructured, verification + continuous improvement system added)
+Last updated: 2026-04-20 (session 63 — MCP audit, global optimize-claude-md command, monthly scheduled bloat check)
 
 ---
 
@@ -564,6 +564,16 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] `docs/superpowers/specs/2026-04-20-site-crawler-design.md` — approved design spec with UI readiness section
 - [x] **Smoke tested against GTM live** — 50 pages crawled in 11.5s; real issues found (4xx, redirect chains, missing meta)
 - [x] **Known minor issue (fix deferred):** `/wp-sitemap.xml` gets crawled as an HTML page and triggers false "Missing H1" warning — fix by filtering non-HTML content types in `detect_issues()`
+
+### MCP audit + tooling hygiene (session 63)
+- [x] `claude mcp list` audit — 9 servers active; identified 60+ tool definitions loading into every seomachine session from unused MCPs
+- [x] **Project-level MCP overrides** — `.claude/settings.json` updated: `playwright@claude-plugins-official: false`, `deniedMcpServers: [browsermcp, claudeus-wp-mcp, github]`
+- [x] **Same applied to other projects** — MacMaid, SiteBuilder, SiteScrape all get `deniedMcpServers` for browsermcp + claudeus-wp-mcp; SiteBuilder keeps playwright (used for visual QA) and github (deployment triggers)
+- [x] **`/optimize-claude-md` global command** — `~/.claude/commands/optimize-claude-md.md`; available in all projects; audits for bloat, rewrites to ≤150 lines, commits
+- [x] **Monthly CLAUDE.md bloat check** — remote trigger `trig_01TMZzoo8ndSBwVMfE38RxCm`; runs 1st of each month at 8am UTC; clones all 4 repos, counts lines, creates Gmail draft report; manage at https://claude.ai/code/scheduled/trig_01TMZzoo8ndSBwVMfE38RxCm
+- [x] **CLAUDE.md trimmed in sibling projects** — MacMaid 73→59 lines (removed config table + workflow line); SiteScrape 90→77 lines (removed completed downloads log + git URL)
+- [x] seomachine CLAUDE.md still 174 lines — run `/optimize-claude-md` to trim (deferred)
+- [x] `docs/conventions.md` — 2 new rules added: MCP token overhead per project, remote agent local filesystem limitation
 
 ### CLAUDE.md restructure + operational systems (session 62)
 - [x] `CLAUDE.md` — rewritten from 415 → 174 lines; role-based structure: operational rules + pointers only, no documentation
