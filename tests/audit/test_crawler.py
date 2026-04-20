@@ -381,3 +381,25 @@ async def test_crawl_basic():
     # About page should have homepage as an inlink
     about_page = next(p for p in result.pages if p.url == "https://example.com/about/")
     assert "https://example.com/" in about_page.inlinks
+
+
+def test_collect_technical_accepts_crawl_report_without_error():
+    sys.path.insert(0, str(ROOT / "data_sources" / "modules"))
+    sys.path.insert(0, str(ROOT / "src" / "audit"))
+    from src.audit.collectors import collect_technical  # noqa: PLC0415
+    crawl_report = {
+        "issues": {
+            "pages_4xx": [{"url": "https://example.com/gone/", "http_code": 404,
+                           "inlinks": ["https://example.com/"]}],
+            "redirect_chains": [],
+            "broken_resources": [],
+            "orphan_pages": [],
+        },
+        "stats": {"total_pages": 50, "crawl_duration_seconds": 12.3},
+    }
+    # Pass a fake site_url — we're testing the crawl_report integration only.
+    # collect_technical will fail the homepage fetch and return early,
+    # but it must not crash when crawl_report is passed.
+    result = collect_technical("https://example.invalid", crawl_report=crawl_report)
+    # crawl findings appended to findings list when available
+    assert any("404" in f or "crawl" in f.lower() for f in result.findings)

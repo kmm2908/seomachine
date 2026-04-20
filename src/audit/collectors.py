@@ -873,7 +873,46 @@ def collect_citations(config: dict, root: Path) -> 'CitationResult':
 
 # ── Technical Collector ───────────────────────────────────────────────────────
 
-def collect_technical(site_url: str, wp_config: Optional[Dict] = None) -> TechnicalResult:
+def _enrich_from_crawl(result: TechnicalResult, crawl_report: Optional[Dict]) -> None:
+    if not crawl_report:
+        return
+    iss = crawl_report.get("issues", {})
+    stats = crawl_report.get("stats", {})
+
+    pages_4xx = iss.get("pages_4xx", [])
+    chains = iss.get("redirect_chains", [])
+    broken = iss.get("broken_resources", [])
+    orphans = iss.get("orphan_pages", [])
+
+    if pages_4xx:
+        sample = ", ".join(f"`{i['url']}`" for i in pages_4xx[:3])
+        extra = f" (+{len(pages_4xx) - 3} more)" if len(pages_4xx) > 3 else ""
+        result.findings.append(
+            f"{len(pages_4xx)} page(s) returning 404: {sample}{extra}"
+        )
+    if chains:
+        result.findings.append(
+            f"{len(chains)} redirect chain(s) with 3+ hops — wastes crawl budget."
+        )
+    if broken:
+        result.findings.append(
+            f"{len(broken)} broken CSS/JS/image resource(s) across site."
+        )
+    if orphans:
+        result.findings.append(
+            f"{len(orphans)} orphan page(s) — no internal links and not in sitemap."
+        )
+
+    total = stats.get("total_pages", 0)
+    duration = stats.get("crawl_duration_seconds", 0)
+    result.findings.append(f"Crawl: {total} pages in {duration}s.")
+
+
+def collect_technical(
+    site_url: str,
+    wp_config: Optional[Dict] = None,
+    crawl_report: Optional[Dict] = None,
+) -> TechnicalResult:
     result = TechnicalResult()
 
     # SSL
@@ -884,6 +923,7 @@ def collect_technical(site_url: str, wp_config: Optional[Dict] = None) -> Techni
     home_html = _get_with_fallback(site_url, wp_config=wp_config)
     if not home_html:
         result.findings.append('Could not reach site.')
+        _enrich_from_crawl(result, crawl_report)
         return result
     result.response_time_ms = int((time.time() - start) * 1000)
 
@@ -930,6 +970,7 @@ def collect_technical(site_url: str, wp_config: Optional[Dict] = None) -> Techni
             'Google uses Core Web Vitals as a ranking factor.'
         )
 
+    _enrich_from_crawl(result, crawl_report)
     return result
 
 

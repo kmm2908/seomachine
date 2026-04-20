@@ -116,6 +116,7 @@ def run_audit(
     site_name: str | None = None,
     send_email: bool = True,
     generate_pdf_flag: bool = True,
+    run_crawl: bool = False,
 ) -> AuditResult:
 
     today = str(date.today())
@@ -180,8 +181,18 @@ def run_audit(
     else:
         nap = nap_schema
 
+    crawl_report = None
+    if run_crawl:
+        import asyncio as _asyncio
+        from dataclasses import asdict as _asdict
+        from src.audit.crawler import crawl as _run_crawl, save_crawl_report as _save_report
+        print("→ Running site crawler...")
+        _crawl_result = _asyncio.run(_run_crawl(site_url))
+        _save_report(_crawl_result, out_dir)
+        crawl_report = _asdict(_crawl_result)
+
     logger.info('Collecting technical data...')
-    technical = collect_technical(site_url, wp_config=wp_config)
+    technical = collect_technical(site_url, wp_config=wp_config, crawl_report=crawl_report)
 
     logger.info('Collecting competitor data...')
     competitor = collect_competitor(abbr) if abbr != 'prospect' else CompetitorResult()
@@ -301,6 +312,8 @@ def main() -> None:
     parser.add_argument('--name', help='Business name (for prospect audit)')
     parser.add_argument('--no-pdf', action='store_true', help='Skip PDF generation')
     parser.add_argument('--no-email', action='store_true', help='Skip email delivery')
+    parser.add_argument('--crawl', action='store_true',
+                        help='Run site crawler before audit and include findings in report')
     args = parser.parse_args()
 
     if not args.abbr and not args.url:
@@ -312,6 +325,7 @@ def main() -> None:
         site_name=args.name,
         send_email=not args.no_email,
         generate_pdf_flag=not args.no_pdf,
+        run_crawl=getattr(args, 'crawl', False),
     )
 
 
