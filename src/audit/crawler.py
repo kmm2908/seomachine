@@ -222,3 +222,72 @@ async def fetch_sitemap(
         if own_session:
             await session.close()
     return urls
+
+
+def detect_issues(pages: list[PageData], sitemap_urls: set[str]) -> CrawlIssues:
+    issues = CrawlIssues()
+    title_map: dict[str, list[str]] = {}
+    meta_map: dict[str, list[str]] = {}
+
+    for page in pages:
+        # 4xx
+        if page.http_code >= 400:
+            issues.pages_4xx.append(
+                {"url": page.url, "http_code": page.http_code, "inlinks": page.inlinks}
+            )
+
+        # Redirect chains: 3+ total hops means redirect_chain has 2+ intermediate URLs
+        if len(page.redirect_chain) >= 2:
+            full_chain = page.redirect_chain + [page.final_url]
+            issues.redirect_chains.append(
+                {"url": page.url, "chain": full_chain, "hop_count": len(full_chain)}
+            )
+
+        # HTTPS / mixed content
+        if page.final_url.startswith("https://"):
+            for res_list in page.resources.values():
+                for res_url in res_list:
+                    if res_url.startswith("http://"):
+                        issues.https_issues.append(
+                            {"url": page.url, "issue_type": "mixed_content",
+                             "resource": res_url}
+                        )
+                        break
+        elif page.final_url.startswith("http://"):
+            issues.https_issues.append({"url": page.url, "issue_type": "not_https"})
+
+        # Orphan: no internal inlinks and not in sitemap
+        if not page.inlinks and not page.is_in_sitemap:
+            issues.orphan_pages.append(page.url)
+
+        # On-page checks only for 200 pages
+        if page.http_code != 200:
+            continue
+
+        if not page.title:
+            issues.missing_title.append(page.url)
+        else:
+            title_map.setdefault(page.title, []).append(page.url)
+            if len(page.title) > 60:
+                issues.title_too_long.append(
+                    {"url": page.url, "title": page.title, "length": len(page.title)}
+                )
+
+        if not page.meta_description:
+            issues.missing_meta.append(page.url)
+        else:
+            meta_map.setdefault(page.meta_description, []).append(page.url)
+            if len(page.meta_description) > 160:
+                issues.meta_too_long.append(
+                    {"url": page.url, "meta": page.meta_description,
+                     "length": len(page.meta_description)}
+                )
+
+        if not page.h1s:
+            issues.missing_h1.append(page.url)
+        elif len(page.h1s) > 1:
+            issues.multiple_h1.append({"url": page.url, "h1s": page.h1s})
+
+    issues.duplicate_titles = {t: urls for t, urls in title_map.items() if len(urls) > 1}
+    issues.duplicate_meta = {m: urls for m, urls in meta_map.items() if len(urls) > 1}
+    return issues
