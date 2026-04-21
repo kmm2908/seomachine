@@ -32,9 +32,22 @@ Update project documentation to reflect everything completed or changed in this 
    ```
    Only add rules for new classes of problem not already covered in `docs/conventions.md`.
 
-5. **Commit and push to GitHub** — stage all changes, create a commit with a short message summarising the session (e.g. `Session 6: hub shortcode + image pipeline`), and push to `origin main`
+5. **Regenerate OpenAPI spec if API changed** — if any file under `src/api/` was created or modified this session, regenerate the spec and copy it to SiteBuilder:
+   ```bash
+   PORTAL_API_KEY=x uvicorn src.api.main:app --port 8000 &
+   sleep 2
+   python3 -c "
+   import urllib.request, pathlib
+   data = urllib.request.urlopen('http://localhost:8000/openapi.json').read()
+   pathlib.Path('/Volumes/Ext Data/VSC Projects/CC Dev/SiteBuilder/docs/seomachine-api/openapi.json').write_bytes(data)
+   "
+   kill %1
+   ```
+   Skip this step if no `src/api/` files changed.
 
-6. **Confirm** — output a brief summary of what was updated and the commit hash so the user can verify before closing. If `wordpress/seomachine.php` was committed in this session (or any earlier commit this session), also read the `Version:` line from that file and include it in the confirmation — e.g. **Plugin version: 3.3.1** — so the user can cross-check against wp-admin → Must-Use Plugins
+6. **Commit and push to GitHub** — stage all changes, create a commit with a short message summarising the session (e.g. `Session 6: hub shortcode + image pipeline`), and push to `origin main`
+
+7. **Confirm** — output a brief summary of what was updated and the commit hash so the user can verify before closing. If `wordpress/seomachine.php` was committed in this session (or any earlier commit this session), also read the `Version:` line from that file and include it in the confirmation — e.g. **Plugin version: 3.3.1** — so the user can cross-check against wp-admin → Must-Use Plugins
 
 ## Multi-window / parallel agent policy
 

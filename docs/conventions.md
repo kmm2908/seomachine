@@ -68,3 +68,9 @@ Added to via `/wrap` at the end of each session — any new class of problem get
 ## Remote scheduled agents cannot access the local filesystem
 **Why:** Scheduled triggers run in Anthropic's cloud infrastructure with no access to `/Volumes/`, `~/.claude/`, or any local paths.
 **How to apply:** Remote agent prompts must use GitHub repos as sources (clone with `--depth=1`) and cloud MCP connectors (Gmail, Google Drive) for I/O. Never reference local file paths or local scripts in trigger prompts.
+
+---
+
+## Backfill `competitor_gaps_run: true` in citation state files created before session 67
+**Why:** `CitationState._load()` returns `competitor_gaps_run: False` when the key is absent (older files pre-date the feature). This causes `run_audit.py` to fire the full citation gap analysis (115 DataForSEO SERP calls, ~25 min) on every single audit run rather than just the first.
+**How to apply:** When running an audit against a client whose `clients/{abbr}/citations/state.json` was created before session 67 (2026-04-21), first check whether the key exists: `python3 -c "import json,pathlib; d=json.loads(pathlib.Path('clients/{abbr}/citations/state.json').read_text()); print(d.get('competitor_gaps_run', 'MISSING'))"`. If missing or False and gap analysis has already run, set it to true before starting the audit.

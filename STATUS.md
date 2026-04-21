@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-04-21 (session 67 — client portal FastAPI layer + OpenAPI spec export)
+Last updated: 2026-04-21 (session 68 — audit cache seeding + citation state backfill)
 
 ---
 
@@ -827,12 +827,16 @@ Data approach: contract-first. UI builds against mock data matching these exact 
 - [x] `fastapi>=0.111.0`, `uvicorn[standard]>=0.29.0` added to `data_sources/requirements.txt`
 - [x] **Smoke tested** — all 8 endpoints live against real data; 200/401/404 status codes verified
 
-**Start API:** `PORTAL_API_KEY=<key> uvicorn src.api.main:app --port 8000`
+---
 
-**Audit cache needed** (run once per client to seed `/audit/latest`):
-```bash
-python3 src/audit/run_audit.py --abbr gtm  # → saves clients/gtm/audit-latest.json
-```
+## Client Portal — Audit Cache + Citation State Backfill (session 68)
+
+- [x] **`clients/gtm/audit-latest.json`** seeded — Score 53/100 Grade D | Schema 16/20, Content 20/20, GBP 0/20\*, Reviews 0/15\*, NAP+Cit 9/15, Technical 8/10
+- [x] **`clients/sdy/audit-latest.json`** seeded — Score 50/100 Grade D | Schema 18/20, Content 13/20, GBP 0/20\*, Reviews 0/15\*, NAP+Cit 9/15, Technical 10/10
+- \* GBP API still at 0 QPM (429 on every call) — awaiting Google quota approval; GBP/Reviews scores will improve once approved
+- [x] **`competitor_gaps_run: true`** backfilled into `clients/gtm/citations/state.json` and `clients/sdy/citations/state.json` — these files pre-dated the feature and lacked the key, causing full gap analysis (115 SERP calls, ~25 min) to re-trigger on every audit
+- [x] **`/wrap` command updated** — step 5 added: regenerate `SiteBuilder/docs/seomachine-api/openapi.json` if any `src/api/` files changed
+- [ ] **GTM citation gap analysis** — running in background since 17:44 (~20 min total); will write `clients/gtm/citations/gap-results.json` when complete. Run manually if incomplete: `python3 src/research/research_citation_gaps.py --abbr gtm`
 
 ---
 

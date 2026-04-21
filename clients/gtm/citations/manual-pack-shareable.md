@@ -1,8 +1,8 @@
-CITATION SUBMISSION PACK — SERENDIPITY MASSAGE THERAPY & WELLNESS
+CITATION SUBMISSION PACK — GLASGOW THAI MASSAGE
 Generated: 2026-04-21
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-PART 1 — GENERAL DIRECTORIES (5 sites)
+PART 1 — GENERAL DIRECTORIES (10 sites)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Please register the business on each directory below.
@@ -20,11 +20,26 @@ the listing goes live — check your inbox after submitting.
 3. Yelp (claim/create)
    https://biz.yelp.co.uk/claim
 
-4. Checkatrade
-   https://www.checkatrade.com/join/
+4. Facebook Business
+   https://www.facebook.com/pages/create
 
-5. Brownbook
-   https://www.brownbook.net/add-business/
+5. Treatwell
+   https://www.treatwell.co.uk/join/
+
+6. Fresha
+   https://www.fresha.com/for-business
+
+7. Bark.com
+   https://www.bark.com/en/gb/professionals/
+
+8. Cylex UK
+   https://www.cylex-uk.co.uk/my-company.html
+
+9. Nextdoor
+   https://business.nextdoor.com/en-gb
+
+10. Checkatrade
+   https://www.checkatrade.com/join/
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 PART 2 — PROFESSIONAL ASSOCIATIONS (4 organisations)
@@ -73,74 +88,16 @@ self-registration — open the link and create a practitioner profile.
    https://gurudirectory.co.uk
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-PART 4 — COMPETITOR GAPS (17 sites)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-Your top 5 GBP competitors appear on these sites but we don't.
-These are priority targets — submit here first.
-
-1. Facebook Business (5/5 competitors listed)
-   https://www.facebook.com/pages/create
-
-2. Fresha (5/5 competitors listed)
-   https://www.fresha.com/for-business
-
-3. TripAdvisor (4/5 competitors listed)
-   https://www.tripadvisor.co.uk/GetListedNew
-
-4. Yell.com (4/5 competitors listed)
-   https://www.yell.com/ucs/UcsSearchAction.do
-
-5. Yelp (3/5 competitors listed)
-   https://biz.yelp.co.uk/signup
-
-6. Cylex UK (3/5 competitors listed)
-   https://www.cylex-uk.co.uk/my-company.html
-
-7. Treatwell (3/5 competitors listed)
-   https://www.treatwell.co.uk/join/
-
-8. Trustpilot (2/5 competitors listed)
-   https://businessapp.b2b.trustpilot.com/signup
-
-9. Thomson Local (2/5 competitors listed)
-   https://www.thomsonlocal.com/advertise
-
-10. Scoot (2/5 competitors listed)
-   https://www.scoot.co.uk/add-business
-
-11. 192.com (2/5 competitors listed)
-   https://www.192.com/atoz/business/add/
-
-12. Hotfrog (2/5 competitors listed)
-   https://www.hotfrog.co.uk/AddBusiness.aspx
-
-13. Nextdoor (2/5 competitors listed)
-   https://business.nextdoor.com/en-gb
-
-14. Foursquare (1/5 competitors listed)
-   https://business.foursquare.com/venue/claim
-
-15. FreeIndex (1/5 competitors listed)
-   https://www.freeindex.co.uk/register.htm
-
-16. Misterwhat (1/5 competitors listed)
-   https://misterwhat.co.uk/businesses/add
-
-17. Bark.com (1/5 competitors listed)
-   https://www.bark.com/en/gb/professionals/
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 BUSINESS DETAILS (copy-paste into every form)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Name:     Serendipity Massage Therapy & Wellness
-Address:  93 Hope Street, Central Chambers, Floor 1, Suite 48-50, Glasgow, G2 6LD
-Phone:    0141 673 6630
-Website:  https://serendipitymassage.co.uk
+Name:     Glasgow Thai Massage
+Address:  Floor 3 Suite 4, Victoria Chambers, 142 West Nile Street, Glasgow G1 2RQ
+Phone:    0737 932 2305
+Website:  https://glasgowthaimassage.co.uk
 Category: Massage Therapist / Health & Beauty
 
 Short description (50 words):
-Serendipity Massage Therapy & Wellness — professional massage therapy in Glasgow.
+Glasgow Thai Massage — professional massage therapy in Glasgow.
 Expert Thai massage, deep tissue, aromatherapy and wellness treatments.
 Fully qualified therapists. Book online or call us to arrange your appointment.
