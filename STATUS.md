@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-04-21 (session 65 — UI architecture decision)
+Last updated: 2026-04-21 (session 66 — client portal sidebar design spec)
 
 ---
 
@@ -799,6 +799,17 @@ Live at `serendipitymassage.co.uk`. All content migrated from staging2. All publ
 
 ---
 
+## Client Portal — Sidebar Design Spec (session 66)
+
+- [x] Architecture decision confirmed: **separate client portal and operator/admin dashboard** — client portal first, admin deferred
+- [x] Client portal builds in SiteBuilder monorepo (`apps/seomachine-portal/`), consuming `packages/tokens/` brand styling
+- [x] **7 top-level sidebar groups** defined (collapsible, outcome-focused labels): Home, My Content, SEO Performance, Citations, Research, Social & Video, Account
+- [x] **Client capabilities** documented: audit scores, content queue, request content, review/approve, download citation packs, competitor research, social status, billing
+- [x] **9 design principles** from UX/SaaS research: 5–7 top-level max, 80/20 rule, F-pattern, icon+label pairs, 220–260px width, outcome labels, badge counts, sticky sidebar, dark sidebar
+- [x] Spec written and committed to both repos: `docs/superpowers/specs/2026-04-21-client-portal-sidebar-design.md` (seomachine + SiteBuilder)
+
+---
+
 ## Design System (session 59 — brainstorm complete)
 
 Design system ownership moved to SiteBuilder monorepo (`/Volumes/Ext Data/VSC Projects/CC Dev/SiteBuilder`). SEO Machine has no design system code — SiteBuilder generates WordPress CSS exports during the transition period.
@@ -1043,7 +1054,8 @@ All 12 posts reviewed and approved by client (2026-04-16). Stars and notice para
 
 ## Deferred / Future
 
-- **Central UI** — defer build until citations + audit pipeline stable (~2–3 sessions); architect for it now: expose clean `run()` functions with structured JSON outputs on every new feature; internal staff tool first, then public product; trigger: when we find ourselves building a third workaround for the same problem (see memory `project_ui_roadmap.md`). **Architecture decided (session 65):** UI lives in SiteBuilder monorepo (Astro + Cloudflare Pages); SEO Machine gets a thin FastAPI wrapper; both call back to the planned VPS.
+- **Client portal** — sidebar spec written (session 66); build starts in SiteBuilder monorepo at `apps/seomachine-portal/`; build order: sidebar shell → Home/Overview → My Content → route guard. **Operator/admin dashboard deferred** (separate spec, separate session).
+- **FastAPI wrapper** — SEO Machine gets a thin FastAPI layer exposing `/audit`, `/publish`, `/queue-status` etc.; deferred until portal build is underway in SiteBuilder.
 - Resize large treatment reference images — `foot-massage.png` (1.7MB), `oil-massage.jpg` — resize to ~800px for leaner Gemini API payloads
 - Add `image_settings` block to GTM, GTB, TMG configs — room reference photos pending (user to provide room photos within ~24 hours)
 - Post 2013 banner regeneration (Hair Oiling Treatment) — new image pipeline in place; regenerate post 2013 banner once room reference photos are updated in SDY config
