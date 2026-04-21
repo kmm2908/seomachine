@@ -836,7 +836,7 @@ Data approach: contract-first. UI builds against mock data matching these exact 
 - \* GBP API still at 0 QPM (429 on every call) — awaiting Google quota approval; GBP/Reviews scores will improve once approved
 - [x] **`competitor_gaps_run: true`** backfilled into `clients/gtm/citations/state.json` and `clients/sdy/citations/state.json` — these files pre-dated the feature and lacked the key, causing full gap analysis (115 SERP calls, ~25 min) to re-trigger on every audit
 - [x] **`/wrap` command updated** — step 5 added: regenerate `SiteBuilder/docs/seomachine-api/openapi.json` if any `src/api/` files changed
-- [ ] **GTM citation gap analysis** — running in background since 17:44 (~20 min total); will write `clients/gtm/citations/gap-results.json` when complete. Run manually if incomplete: `python3 src/research/research_citation_gaps.py --abbr gtm`
+- [x] **GTM citation gap analysis** — complete; 17 gaps found; `clients/gtm/citations/gap-results.json` written; report at `research/gtm/citation-gaps-2026-04-21.md`
 
 ---
 
