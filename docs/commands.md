@@ -106,6 +106,27 @@ python3 src/social/repurpose_content.py --abbr gtm --topic "Thai Massage Benefit
 
 ---
 
+## Client Portal API
+
+```bash
+# Start the FastAPI server
+PORTAL_API_KEY=<key> uvicorn src.api.main:app --port 8000
+
+# Regenerate OpenAPI spec → SiteBuilder
+PORTAL_API_KEY=x uvicorn src.api.main:app --port 8000 &
+python3 -c "
+import urllib.request, pathlib
+data = urllib.request.urlopen('http://localhost:8000/openapi.json').read()
+pathlib.Path('/Volumes/Ext Data/VSC Projects/CC Dev/SiteBuilder/docs/seomachine-api/openapi.json').write_bytes(data)
+"
+```
+
+Endpoints: `/api/v1/clients`, `/clients/{abbr}`, `/clients/{abbr}/content/queue`, `/clients/{abbr}/content/published`, `/clients/{abbr}/audit/latest`, `/clients/{abbr}/citations`, `/clients/{abbr}/citations/gaps`, `/clients/{abbr}/social`
+
+Note: `/audit/latest` requires a cache file at `clients/{abbr}/audit-latest.json` — auto-written by `run_audit.py` after each run.
+
+---
+
 ## Reporting
 
 ```bash

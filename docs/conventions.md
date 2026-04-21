@@ -59,6 +59,12 @@ Added to via `/wrap` at the end of each session — any new class of problem get
 
 ---
 
+## Use Python to write files when paths contain spaces
+**Why:** `curl -o /path/with spaces/file.json` silently writes 0 bytes on macOS — the shell splits the path and curl discards it without erroring.
+**How to apply:** Whenever saving a file to a path that may contain spaces (common in `/Volumes/Ext Data/...`), use Python: `pathlib.Path('the path').write_bytes(data)` or `write_text(...)`. This applies to curl saves, file copies, and any Bash redirection to such paths.
+
+---
+
 ## Remote scheduled agents cannot access the local filesystem
 **Why:** Scheduled triggers run in Anthropic's cloud infrastructure with no access to `/Volumes/`, `~/.claude/`, or any local paths.
 **How to apply:** Remote agent prompts must use GitHub repos as sources (clone with `--depth=1`) and cloud MCP connectors (Gmail, Google Drive) for I/O. Never reference local file paths or local scripts in trigger prompts.

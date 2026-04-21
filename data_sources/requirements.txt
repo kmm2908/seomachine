@@ -1,6 +1,10 @@
 # Anthropic Claude API
 anthropic>=0.40.0
 
+# Client portal API
+fastapi>=0.111.0
+uvicorn[standard]>=0.29.0
+
 # Google Analytics and Search Console
 google-analytics-data>=0.18.0
 google-auth>=2.23.0

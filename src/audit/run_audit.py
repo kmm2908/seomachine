@@ -251,6 +251,16 @@ def run_audit(
     )
     logger.info(f'Pending queue ({len(queue)} items) → {queue_path}')
 
+    # ── API cache ────────────────────────────────────────────────────────────
+    if abbr != 'prospect':
+        from dataclasses import asdict as _dc_asdict
+        cache_path = ROOT / 'clients' / abbr / 'audit-latest.json'
+        cache_path.write_text(
+            json.dumps(_dc_asdict(result), indent=2, ensure_ascii=False),
+            encoding='utf-8',
+        )
+        logger.info(f'API cache → {cache_path}')
+
     # ── Email ────────────────────────────────────────────────────────────────
     if send_email:
         _send_report_email(result, pdf_path, md_path)

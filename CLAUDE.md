@@ -136,10 +136,11 @@ src/
   social/       ← repurpose_content.py, video_producer.py, social_post_generator.py
   audit/        ← run_audit.py, run_crawl.py, crawler.py, collectors.py, scoring.py, report.py
   citations/    ← run_citations.py
+  api/          ← FastAPI client portal API (main.py, dependencies.py, routers/)
 tests/          ← test scripts
 data_sources/   ← importable modules (wordpress_publisher, image_generator, quality_gate, etc.)
 config/         ← service account keys (gitignored)
-clients/        ← per-client context and config
+clients/        ← per-client context and config (audit-latest.json written here after each audit run)
 docs/           ← commands.md, conventions.md, verification.md, design specs
 ```
 

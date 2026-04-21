@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-04-21 (session 66 — client portal sidebar design spec)
+Last updated: 2026-04-21 (session 67 — client portal FastAPI layer + OpenAPI spec export)
 
 ---
 
@@ -807,6 +807,32 @@ Live at `serendipitymassage.co.uk`. All content migrated from staging2. All publ
 - [x] **Client capabilities** documented: audit scores, content queue, request content, review/approve, download citation packs, competitor research, social status, billing
 - [x] **9 design principles** from UX/SaaS research: 5–7 top-level max, 80/20 rule, F-pattern, icon+label pairs, 220–260px width, outcome labels, badge counts, sticky sidebar, dark sidebar
 - [x] Spec written and committed to both repos: `docs/superpowers/specs/2026-04-21-client-portal-sidebar-design.md` (seomachine + SiteBuilder)
+
+## Client Portal — FastAPI Layer (session 67)
+
+Data approach: contract-first. UI builds against mock data matching these exact shapes; FastAPI reads existing flat files; no UI rework when connected.
+
+- [x] **API contract defined** — `docs/superpowers/specs/` — 8 endpoints, response shapes grounded in real data structures
+- [x] **`src/api/` FastAPI layer built** — `main.py` (app + CORS), `dependencies.py` (auth, abbr validation, helpers), 5 routers
+- [x] **`GET /api/v1/clients`** — lists all clients from `clients/*/config.json`
+- [x] **`GET /api/v1/clients/{abbr}`** — single client profile
+- [x] **`GET /api/v1/clients/{abbr}/content/queue`** — merges all `research/{abbr}/*-queue.json` files; `?status=` filter; summary counts
+- [x] **`GET /api/v1/clients/{abbr}/content/published`** — reads `logs/scheduled-publish-log.csv`; `?limit/offset/content_type` params
+- [x] **`GET /api/v1/clients/{abbr}/audit/latest`** — reads `clients/{abbr}/audit-latest.json` cache; 404 with run instruction if missing
+- [x] **`GET /api/v1/clients/{abbr}/citations`** — reads `clients/{abbr}/citations/state.json`; summary counts
+- [x] **`GET /api/v1/clients/{abbr}/citations/gaps`** — reads `clients/{abbr}/citations/gap-results.json`
+- [x] **`GET /api/v1/clients/{abbr}/social`** — idle stub (GHL accounts not yet connected)
+- [x] Auth: `X-API-Key` header; `PORTAL_API_KEY` env var; 401 on missing/wrong key
+- [x] All responses: `{ data, meta: { generated_at } }` envelope
+- [x] `fastapi>=0.111.0`, `uvicorn[standard]>=0.29.0` added to `data_sources/requirements.txt`
+- [x] **Smoke tested** — all 8 endpoints live against real data; 200/401/404 status codes verified
+
+**Start API:** `PORTAL_API_KEY=<key> uvicorn src.api.main:app --port 8000`
+
+**Audit cache needed** (run once per client to seed `/audit/latest`):
+```bash
+python3 src/audit/run_audit.py --abbr gtm  # → saves clients/gtm/audit-latest.json
+```
 
 ---
 
