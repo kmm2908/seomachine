@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-04-21 (session 64 — GTB queue refill, 8 cross-project skills, monthly audit trigger)
+Last updated: 2026-04-21 (session 65 — UI architecture decision)
 
 ---
 
@@ -1043,7 +1043,7 @@ All 12 posts reviewed and approved by client (2026-04-16). Stars and notice para
 
 ## Deferred / Future
 
-- **Central UI** — defer build until citations + audit pipeline stable (~2–3 sessions); architect for it now: expose clean `run()` functions with structured JSON outputs on every new feature; internal staff tool first, then public product; trigger: when we find ourselves building a third workaround for the same problem (see memory `project_ui_roadmap.md`)
+- **Central UI** — defer build until citations + audit pipeline stable (~2–3 sessions); architect for it now: expose clean `run()` functions with structured JSON outputs on every new feature; internal staff tool first, then public product; trigger: when we find ourselves building a third workaround for the same problem (see memory `project_ui_roadmap.md`). **Architecture decided (session 65):** UI lives in SiteBuilder monorepo (Astro + Cloudflare Pages); SEO Machine gets a thin FastAPI wrapper; both call back to the planned VPS.
 - Resize large treatment reference images — `foot-massage.png` (1.7MB), `oil-massage.jpg` — resize to ~800px for leaner Gemini API payloads
 - Add `image_settings` block to GTM, GTB, TMG configs — room reference photos pending (user to provide room photos within ~24 hours)
 - Post 2013 banner regeneration (Hair Oiling Treatment) — new image pipeline in place; regenerate post 2013 banner once room reference photos are updated in SDY config
