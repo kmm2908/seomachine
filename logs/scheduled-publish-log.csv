@@ -184,3 +184,6 @@ date,abbr,topic,content_type,status,post_id,cost,notes
 2026-04-15,gtb,How Often Deep Tissue Massage,blog,published,23117,$0.6567,https://blog.glasgowthaimassage.co.uk/wp-admin/post.php?post=23117&action=edit
 2026-04-16,gtb,Side Effects of Thai Massage,blog,published,23125,$0.3985,https://blog.glasgowthaimassage.co.uk/wp-admin/post.php?post=23125&action=edit
 2026-04-17,gtb,Thai Yoga Massage Stretching Techniques,blog,failed,,,400 Client Error: Bad Request for url: https://blog.glasgowthaimassage.co.uk/wp-json/wp/v2/categories
+2026-04-20,gtb,,,queue_empty,,,No pending topics
+2026-04-21,gtb,,,queue_empty,,,No pending topics
+2026-04-21,gtb,Thai Yoga Massage Stretching Techniques,blog,published,23129,$0.6759,https://blog.glasgowthaimassage.co.uk/wp-admin/post.php?post=23129&action=edit

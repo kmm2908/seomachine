@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-04-20 (session 63 — MCP audit, global optimize-claude-md command, monthly scheduled bloat check)
+Last updated: 2026-04-21 (session 64 — GTB queue refill, 8 cross-project skills, monthly audit trigger)
 
 ---
 
@@ -929,7 +929,23 @@ New client added 2026-03-26. Existing WordPress site at `thaimassagegreenock.co.
 
 Global skills installed at `~/.claude/skills/`. Available across all projects.
 
-### Installed this session
+### Session 64 — Project-specific skills (2026-04-21)
+- [x] `seomachine-workflow` — Client structure, GTB cron cadence, WP-CLI routing gate, queue JSON format, batch debugging
+- [x] `entity-seo-research` — 5-step entity research sequence (primary entity → co-occurrence → schema type → brief)
+- [x] `wp-plugin-deploy` — Version bump + CSS rename + GitHub Actions + SG Optimizer purge sequence
+- [x] `astro-cloudflare` — SiteBuilder monorepo structure, brand tokens, Cloudflare Pages/D1/Workers conventions
+- [x] `sitebuilder-directory` — New D1-backed directory build sequence (template → D1 → wrangler → platformProxy → seed → deploy)
+- [x] `macmaid-module` — Module contract: `scan() → make_result(risk, action, items)`, MODULES dict, test pattern
+- [x] `mac-launchagent` — Plist template, Python path resolution, launchctl commands, WorkingDirectory key
+- [x] `sitescrape-extend` — Auth strategy, data extraction (Next.js `__NEXT_DATA__`), manifest format, video handlers
+- [x] Monthly skills audit trigger created (trig_011dzFBTksFU4dBDbHLKLj7o) — 1st of month 8am BST, clones all 4 repos, emails report to kmmsubs@gmail.com
+- [x] `/wrap` command updated — step 2 now captures session lessons (errors → conventions.md, discoveries → memory)
+
+### GTB publishing (session 64, 2026-04-21)
+- [x] Thai Yoga Massage Stretching Techniques published (post ID 23129, $0.68) — yoga-stretching-queue updated
+- [x] All 4 GTB queues refilled (were empty): 8 Thai Massage + 4 Stay Healthy + 4 Glasgow News + 4 Yoga & Stretching topics
+
+### Installed this session (session 20)
 - [x] `skill-creator` (18 files) — Anthropic official; create, test, iterate on skills
 - [x] `frontend-design` — Anthropic official; production-grade frontend UI with scroll-driven website guidelines
 - [x] `video-to-website` — Turn video into scroll-driven animated website (GSAP, canvas frames)
