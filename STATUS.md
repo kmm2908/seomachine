@@ -288,6 +288,7 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] `clients/sdy/config.json` — keeps `gbp_location_id` as fallback pending Place ID confirmation
 - [x] `src/audit/collectors.py` — reads `gbp_place_id` first, falls back to `gbp_location_id`; photo_count bug fixed (was always 0 via wrong API field); photo finding now suppressed when count unknown
 - [x] `src/audit/scoring.py` — `GBPResult.photo_count` changed to `Optional[int]` (None = unknown); score computation skips photo points when None
+- [x] GBP API allowlist email — Google rejected original submission (service account email ineligible); user replied with `kmmSubs@gmail.com` (individual Google Account, Owner on project `caleb-489417`); awaiting Google confirmation
 - [ ] **NEEDS USER ACTION** — Enable "My Business Account Management API" in Cloud Console: https://console.developers.google.com/apis/api/mybusinessaccountmanagement.googleapis.com/overview?project=589041037268
 - [ ] **NEEDS USER ACTION** — Accept service account manager invitation in GBP Manager (business.google.com) for GTM, SDY, TMG — `seo-machine@caleb-489417.iam.gserviceaccount.com`; also find SDY Place ID (check Maps URL for GBP listing `?cid=...` or business.google.com listing URL)
 - [ ] End-to-end test — run after both actions above: `python3 -c "import sys; sys.path.insert(0,'data_sources/modules'); from dotenv import load_dotenv; load_dotenv(); from google_business_profile import GoogleBusinessProfile; gbp=GoogleBusinessProfile(); print(gbp._discover_managed_locations())"`
