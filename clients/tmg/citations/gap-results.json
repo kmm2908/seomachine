@@ -1,0 +1,199 @@
+{
+  "generated": "2026-04-23",
+  "competitors": [
+    {
+      "name": "Greenleaf Health Massage",
+      "domain": "greenleafhealthmassage.co.uk"
+    },
+    {
+      "name": "The Four Seasons salon",
+      "domain": "fourseasonssalon.co.uk"
+    },
+    {
+      "name": "Baan Pim Thai Massage & Spa",
+      "domain": "baanpimthaimassage.co.uk"
+    },
+    {
+      "name": "The massage room",
+      "domain": "themassageroomgourock.co.uk"
+    },
+    {
+      "name": "Erawan Massage: \u0e40\u0e2d\u0e23\u0e32\u0e27\u0e31\u0e13 \u0e19\u0e27\u0e14\u0e40\u0e1e\u0e37\u0e48\u0e2d\u0e2a\u0e38\u0e02\u0e20\u0e32\u0e1e",
+      "domain": "facebook.com"
+    }
+  ],
+  "gaps": [
+    {
+      "site_id": "facebook",
+      "site_name": "Facebook Business",
+      "site_url": "https://www.facebook.com",
+      "submission_url": "https://www.facebook.com/pages/create",
+      "competitor_count": 5,
+      "total_competitors": 5,
+      "our_status": "not_found"
+    },
+    {
+      "site_id": "fresha",
+      "site_name": "Fresha",
+      "site_url": "https://www.fresha.com",
+      "submission_url": "https://www.fresha.com/for-business",
+      "competitor_count": 5,
+      "total_competitors": 5,
+      "our_status": "not_found"
+    },
+    {
+      "site_id": "tripadvisor",
+      "site_name": "TripAdvisor",
+      "site_url": "https://www.tripadvisor.co.uk",
+      "submission_url": "https://www.tripadvisor.co.uk/GetListedNew",
+      "competitor_count": 4,
+      "total_competitors": 5,
+      "our_status": "not_found"
+    },
+    {
+      "site_id": "yell",
+      "site_name": "Yell.com",
+      "site_url": "https://www.yell.com",
+      "submission_url": "https://www.yell.com/ucs/UcsSearchAction.do",
+      "competitor_count": 4,
+      "total_competitors": 5,
+      "our_status": "not_found"
+    },
+    {
+      "site_id": "cylex",
+      "site_name": "Cylex UK",
+      "site_url": "https://www.cylex-uk.co.uk",
+      "submission_url": "https://www.cylex-uk.co.uk/my-company.html",
+      "competitor_count": 4,
+      "total_competitors": 5,
+      "our_status": "not_found"
+    },
+    {
+      "site_id": "nextdoor",
+      "site_name": "Nextdoor",
+      "site_url": "https://nextdoor.co.uk",
+      "submission_url": "https://business.nextdoor.com/en-gb",
+      "competitor_count": 4,
+      "total_competitors": 5,
+      "our_status": "not_found"
+    },
+    {
+      "site_id": "yelp",
+      "site_name": "Yelp",
+      "site_url": "https://www.yelp.co.uk",
+      "submission_url": "https://biz.yelp.co.uk/signup",
+      "competitor_count": 3,
+      "total_competitors": 5,
+      "our_status": "not_found"
+    },
+    {
+      "site_id": "trustpilot",
+      "site_name": "Trustpilot",
+      "site_url": "https://uk.trustpilot.com",
+      "submission_url": "https://businessapp.b2b.trustpilot.com/signup",
+      "competitor_count": 3,
+      "total_competitors": 5,
+      "our_status": "not_found"
+    },
+    {
+      "site_id": "192com",
+      "site_name": "192.com",
+      "site_url": "https://www.192.com",
+      "submission_url": "https://www.192.com/atoz/business/add/",
+      "competitor_count": 3,
+      "total_competitors": 5,
+      "our_status": "not_found"
+    },
+    {
+      "site_id": "treatwell",
+      "site_name": "Treatwell",
+      "site_url": "https://www.treatwell.co.uk",
+      "submission_url": "https://www.treatwell.co.uk/join/",
+      "competitor_count": 3,
+      "total_competitors": 5,
+      "our_status": "not_found"
+    },
+    {
+      "site_id": "bark",
+      "site_name": "Bark.com",
+      "site_url": "https://www.bark.com",
+      "submission_url": "https://www.bark.com/en/gb/professionals/",
+      "competitor_count": 3,
+      "total_competitors": 5,
+      "our_status": "not_found"
+    },
+    {
+      "site_id": "foursquare",
+      "site_name": "Foursquare",
+      "site_url": "https://foursquare.com",
+      "submission_url": "https://business.foursquare.com/venue/claim",
+      "competitor_count": 2,
+      "total_competitors": 5,
+      "our_status": "not_found"
+    },
+    {
+      "site_id": "thomson_local",
+      "site_name": "Thomson Local",
+      "site_url": "https://www.thomsonlocal.com",
+      "submission_url": "https://www.thomsonlocal.com/advertise",
+      "competitor_count": 2,
+      "total_competitors": 5,
+      "our_status": "not_found"
+    },
+    {
+      "site_id": "scoot",
+      "site_name": "Scoot",
+      "site_url": "https://www.scoot.co.uk",
+      "submission_url": "https://www.scoot.co.uk/add-business",
+      "competitor_count": 2,
+      "total_competitors": 5,
+      "our_status": "not_found"
+    },
+    {
+      "site_id": "brownbook",
+      "site_name": "Brownbook",
+      "site_url": "https://www.brownbook.net",
+      "submission_url": "https://www.brownbook.net/add-business/",
+      "competitor_count": 2,
+      "total_competitors": 5,
+      "our_status": "not_found"
+    },
+    {
+      "site_id": "misterwhat",
+      "site_name": "Misterwhat",
+      "site_url": "https://misterwhat.co.uk",
+      "submission_url": "https://misterwhat.co.uk/businesses/add",
+      "competitor_count": 2,
+      "total_competitors": 5,
+      "our_status": "not_found"
+    },
+    {
+      "site_id": "freeindex",
+      "site_name": "FreeIndex",
+      "site_url": "https://www.freeindex.co.uk",
+      "submission_url": "https://www.freeindex.co.uk/register.htm",
+      "competitor_count": 1,
+      "total_competitors": 5,
+      "our_status": "not_found"
+    },
+    {
+      "site_id": "hotfrog",
+      "site_name": "Hotfrog",
+      "site_url": "https://www.hotfrog.co.uk",
+      "submission_url": "https://www.hotfrog.co.uk/AddBusiness.aspx",
+      "competitor_count": 1,
+      "total_competitors": 5,
+      "our_status": "not_found"
+    },
+    {
+      "site_id": "checkatrade",
+      "site_name": "Checkatrade",
+      "site_url": "https://www.checkatrade.com",
+      "submission_url": "https://www.checkatrade.com/join/",
+      "competitor_count": 1,
+      "total_competitors": 5,
+      "our_status": "not_found"
+    }
+  ],
+  "discovered": []
+}
