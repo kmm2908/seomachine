@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-04-21 (session 68 — audit cache seeding + citation state backfill)
+Last updated: 2026-04-23 (session 69 — TMG service batch + competitor research)
 
 ---
 
@@ -941,11 +941,16 @@ New client added 2026-03-26. Existing WordPress site at `thaimassagegreenock.co.
 - [x] Deploy `wordpress/seomachine.php` to TMG main site — auto-deploy via GitHub Actions (session 21)
 - [x] Deploy `wordpress/seomachine.php` to TMB blog site — auto-deploy via GitHub Actions (session 21)
 - [x] SSH public key added to TMG SiteGround account (`u3520-kztrwuly6pid@uk1001.siteground.eu`)
-- [ ] Fetch Elementor template (if using Elementor) and set `elementor_template_id` in both configs
+- [x] Fetch Elementor template — fetched 2026-04-22; `elementor_template_id: 13202` set in config; `clients/tmg/elementor-template.json` + meta sidecar saved
 - [ ] Run `research_competitors.py --abbr tmg` to generate `clients/tmg/competitor-analysis.md`
 - [ ] Run `research_blog_topics.py --abbr tmb --queue` to generate topic queue
 - [ ] Test batch publish run on TMB
 - [ ] Add TMG/TMB to Google Sheet Column D dropdown
+
+### TMG Service Batch (2026-04-22)
+- [x] 13 service pages published — 12 clean, 1 published_review
+- [x] Post IDs: 13267 (Traditional Thai Massage), 13271 (Thai Oil Massage), 13275 (Thai Aromatherapy Massage), 13279 (Thai Sports Massage), 13283 (Thai Facial Massage), 13287 (Thai Foot Massage), 13291 (Hot Stone Massage), 13295 (Thai Head Massage), 13299 (Head and Hair Oiling), 13303 (Thai Reflexology), 13307 (Thai Deep Tissue Oil Massage), 13308★ (Aromatherapy Deep Tissue Oil Massage — readability failure), 13312 (Tailored Facial Treatment)
+- [ ] Post 13308 — review in wp-admin: fix readability, remove ★★★★★ from title, publish
 
 ---
 
