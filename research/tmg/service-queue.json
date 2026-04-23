@@ -1,0 +1,111 @@
+{
+  "abbr": "TMG",
+  "cadence_days": 1,
+  "created_at": "2026-04-22",
+  "topics": [
+    {
+      "topic": "Traditional Thai Massage",
+      "content_type": "service",
+      "status": "published",
+      "published_at": "2026-04-22",
+      "post_id": 13267,
+      "cost": "$0.6762"
+    },
+    {
+      "topic": "Thai Oil Massage",
+      "content_type": "service",
+      "status": "published",
+      "published_at": "2026-04-22",
+      "post_id": 13271,
+      "cost": "$0.6690"
+    },
+    {
+      "topic": "Thai Aromatherapy Massage",
+      "content_type": "service",
+      "status": "published",
+      "published_at": "2026-04-22",
+      "post_id": 13275,
+      "cost": "$0.5865"
+    },
+    {
+      "topic": "Thai Sports Massage",
+      "content_type": "service",
+      "status": "published",
+      "published_at": "2026-04-22",
+      "post_id": 13279,
+      "cost": "$0.5206"
+    },
+    {
+      "topic": "Thai Facial Massage",
+      "content_type": "service",
+      "status": "published",
+      "published_at": "2026-04-22",
+      "post_id": 13283,
+      "cost": "$0.4159"
+    },
+    {
+      "topic": "Thai Foot Massage",
+      "content_type": "service",
+      "status": "published",
+      "published_at": "2026-04-22",
+      "post_id": 13287,
+      "cost": "$0.6987"
+    },
+    {
+      "topic": "Hot Stone Massage",
+      "content_type": "service",
+      "status": "published",
+      "published_at": "2026-04-22",
+      "post_id": 13291,
+      "cost": "$0.6407"
+    },
+    {
+      "topic": "Thai Head Massage",
+      "content_type": "service",
+      "status": "published",
+      "published_at": "2026-04-22",
+      "post_id": 13295,
+      "cost": "$0.6401"
+    },
+    {
+      "topic": "Head and Hair Oiling",
+      "content_type": "service",
+      "status": "published",
+      "published_at": "2026-04-22",
+      "post_id": 13299,
+      "cost": "$0.6466"
+    },
+    {
+      "topic": "Thai Reflexology",
+      "content_type": "service",
+      "status": "published",
+      "published_at": "2026-04-22",
+      "post_id": 13303,
+      "cost": "$0.7403"
+    },
+    {
+      "topic": "Thai Deep Tissue Oil Massage",
+      "content_type": "service",
+      "status": "published",
+      "published_at": "2026-04-22",
+      "post_id": 13307,
+      "cost": "$0.4124"
+    },
+    {
+      "topic": "Aromatherapy Deep Tissue Oil Massage",
+      "content_type": "service",
+      "status": "published",
+      "published_at": "2026-04-22",
+      "post_id": 13308,
+      "cost": "$0.5832"
+    },
+    {
+      "topic": "Tailored Facial Treatment",
+      "content_type": "service",
+      "status": "published",
+      "published_at": "2026-04-22",
+      "post_id": 13312,
+      "cost": "$0.6391"
+    }
+  ]
+}
