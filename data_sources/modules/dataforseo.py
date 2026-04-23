@@ -513,6 +513,42 @@ class DataForSEO:
         items = (task.get('result') or [{}])[0].get('items') or []
         return [item['domain'] for item in items if item.get('domain')]
 
+    def get_reviews(self, place_id: str, keyword: str, location_code: int = 2826) -> dict:
+        """Get review count and average rating for a business via Maps SERP.
+
+        Searches by keyword and matches the result by place_id.
+        Returns {total_count, average_rating}. Response rate is not available
+        via this endpoint — use Google Places API for that.
+        Returns {} if the business is not found.
+        """
+        data = [{
+            'keyword': keyword,
+            'language_code': 'en',
+            'location_code': location_code,
+            'device': 'desktop',
+            'depth': 20,
+        }]
+        try:
+            response = self._post('/v3/serp/google/maps/live/advanced', data)
+        except Exception:
+            return {}
+        if response.get('status_code') != 20000:
+            return {}
+        task = response.get('tasks', [{}])[0]
+        if task.get('status_code') != 20000:
+            return {}
+        items = (task.get('result') or [{}])[0].get('items') or []
+        for item in items:
+            if item.get('type') != 'maps_search':
+                continue
+            if item.get('place_id') == place_id:
+                rating = item.get('rating') or {}
+                return {
+                    'total_count': rating.get('votes_count') or 0,
+                    'average_rating': float(rating.get('value') or 0.0),
+                }
+        return {}
+
 
 # Example usage
 if __name__ == "__main__":

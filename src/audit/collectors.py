@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import json
 import logging
+import os
 import re
 import sys
 import time
@@ -699,8 +700,54 @@ def collect_reviews(config: Dict) -> ReviewResult:
     result = ReviewResult()
 
     place_id = config.get('gbp_place_id') or config.get('gbp_location_id')
-    if not place_id:
-        # Try to extract review data from schema on site
+    count: Optional[int] = None
+    avg_rating: Optional[float] = None
+    has_rate_data = False
+
+    if place_id:
+        keyword = config.get('name', '')
+        # Append city to keyword if not already present (improves Maps SERP matching)
+        address = config.get('address', '')
+        if address:
+            parts = [p.strip() for p in address.split(',')]
+            for part in reversed(parts):
+                city = re.sub(r'[A-Z]{1,2}[0-9][A-Z0-9]?\s*[0-9][A-Z]{2}', '', part, flags=re.IGNORECASE).strip()
+                if city and city.lower() not in keyword.lower():
+                    keyword = f'{keyword} {city}'
+                    break
+
+        # Step A: Google Places API (New) → count + rating + response rate from reviews sample
+        places_key = os.getenv('GOOGLE_PLACES_API_KEY')
+        if places_key:
+            try:
+                from google_places import get_place_details
+                pd = get_place_details(place_id, places_key)
+                count = pd.get('userRatingCount')
+                avg_rating = pd.get('rating')
+                reviews = pd.get('reviews') or []
+                if reviews:
+                    replied = sum(
+                        1 for r_ in reviews
+                        if r_.get('ownerAttribution') or r_.get('authorAttribution', {}).get('displayName', '').lower() == 'owner'
+                    )
+                    result.response_rate = replied / len(reviews)
+                    has_rate_data = True
+            except Exception:
+                pass
+
+        # Step B: DataForSEO Maps SERP → count + rating fallback (when Places API not configured)
+        if count is None and keyword and os.getenv('DATAFORSEO_LOGIN'):
+            try:
+                from dataforseo import DataForSEO
+                rev = DataForSEO().get_reviews(place_id, keyword)
+                if rev:
+                    count = rev.get('total_count')
+                    avg_rating = rev.get('average_rating')
+            except Exception:
+                pass
+
+    # Fallback: schema.org aggregateRating scrape
+    if count is None:
         site_url = config.get('website', '') or config.get('wordpress', {}).get('url', '')
         if site_url:
             r = _get(site_url)
@@ -719,40 +766,21 @@ def collect_reviews(config: Dict) -> ReviewResult:
             )
         return result
 
-    try:
-        from google_business_profile import GoogleBusinessProfile, from_client_config as _gbp_from_config
-        gbp = _gbp_from_config(config)
-        reviews = gbp.get_reviews(place_id, limit=50)
-        if not reviews:
-            result.findings.append(
-                'GBP Reviews API not accessible — Google restricts this API to approved partners. '
-                'Add aggregateRating to site schema as an alternative.'
-            )
-            return result
-        result.available = True
-
-        if reviews:
-            result.count = len(reviews)
-            ratings = [r_['rating'] for r_ in reviews if r_.get('rating')]
-            result.average_rating = sum(ratings) / len(ratings) if ratings else 0.0
-            responded = sum(1 for r_ in reviews if r_.get('owner_reply'))
-            result.response_rate = responded / len(reviews) if reviews else 0.0
-
-    except Exception as e:
-        result.findings.append(f'Review API error: {e}')
-        return result
+    result.available = True
+    result.count = count or 0
+    result.average_rating = float(avg_rating or 0.0)
 
     # Build findings
     if result.count < 10:
         result.findings.append(
             f'Only {result.count} reviews — businesses with 50+ reviews dominate local search.'
         )
-    if result.average_rating < 4.5:
+    if result.average_rating > 0 and result.average_rating < 4.5:
         result.findings.append(
             f'Average rating {result.average_rating:.1f} — '
             'aim for 4.8+ to compete in the local pack.'
         )
-    if result.response_rate < 0.5:
+    if has_rate_data and result.response_rate < 0.5:
         pct = int(result.response_rate * 100)
         result.findings.append(
             f'Only {pct}% of reviews have a response — '
