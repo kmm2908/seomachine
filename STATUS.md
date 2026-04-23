@@ -943,9 +943,9 @@ New client added 2026-03-26. Existing WordPress site at `thaimassagegreenock.co.
 - [x] SSH public key added to TMG SiteGround account (`u3520-kztrwuly6pid@uk1001.siteground.eu`)
 - [x] Fetch Elementor template — fetched 2026-04-22; `elementor_template_id: 13202` set in config; `clients/tmg/elementor-template.json` + meta sidecar saved
 - [x] Run `research_competitors.py --abbr tmg` — 10 map pack + 5 organic competitors; 9 sites profiled; `clients/tmg/competitor-analysis.md` written (2026-04-23)
-- [ ] Run `research_blog_topics.py --abbr tmb --queue` to generate topic queue
-- [ ] Test batch publish run on TMB
-- [ ] Add TMG/TMB to Google Sheet Column D dropdown
+- [ ] Run `research_blog_topics.py --abbr tmb --queue` to generate topic queue — **DEFERRED: TMB paused until site migrates to Astro/SiteBuilder**
+- [ ] Test batch publish run on TMB — **DEFERRED: same**
+- [ ] Add TMG/TMB to Google Sheet Column D dropdown — moot (Sheets removed)
 
 ### TMG Location Batch (2026-04-23)
 - [x] 14 location pages published — 14/14 clean, 0 review
