@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-04-23 (session 69 — TMG service batch + competitor research)
+Last updated: 2026-04-23 (session 69 — TMG batches, FAQ strip, Google Sheets removal)
 
 ---
 
@@ -958,6 +958,16 @@ New client added 2026-03-26. Existing WordPress site at `thaimassagegreenock.co.
 - [x] FAQ widget removed from all 14 location posts (13321–13392) — no schema was present in location posts
 - [x] Elementor CSS regenerated on all 27 posts
 - [x] Future publishes: template now has S1 only — no FAQ will be injected on new pages
+
+### Google Sheets Removal (2026-04-23)
+- [x] `src/content/geo_batch_runner.py` — deleted; shared pipeline functions extracted to `src/content/pipeline.py`
+- [x] `data_sources/modules/google_sheets.py` — deleted; `send_email()` extracted to `data_sources/modules/email_utils.py`
+- [x] `.claude/commands/geo-batch.md` — deleted
+- [x] `publish_scheduled.py` — imports updated to use `pipeline` + `email_utils`
+- [x] `repurpose_content.py` — `from google_sheets import send_email` → `from email_utils import send_email`
+- [x] `research_blog_topics.py` — `push_to_sheet()` function and `--sheet` flag removed
+- [x] `docs/commands.md`, `CLAUDE.md`, `docs/project-overview.md` — geo_batch_runner references replaced with pipeline.py
+- [x] `.env` — `GEO_LOCATIONS_SHEET_ID` line removed
 
 ### TMG Problem Batch Gap (2026-04-23)
 - [x] Backache — post 13360, published clean ($0.83) — was the only SDY topic missing from TMG

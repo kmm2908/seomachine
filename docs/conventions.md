@@ -71,6 +71,13 @@ Added to via `/wrap` at the end of each session — any new class of problem get
 
 ---
 
+## Use wp eval-file for namespaced PHP classes, never wp eval inline
+
+**Why:** Passing `wp eval 'Namespace\Sub\Class::method()'` via SSH fails with "Parse error: unexpected token '\'" — the backslash in the namespace is interpreted by the shell before it reaches WP-CLI. Even with escaping, inline PHP strings over SSH are fragile.
+**How to apply:** Write the PHP to a local temp file (`/tmp/foo.php`) and run it with `wp eval-file /tmp/foo.php --allow-root` over SSH. This applies any time WP-CLI PHP calls use `\Elementor\`, `\WP_Query`, or any other namespaced class.
+
+---
+
 ## Backfill `competitor_gaps_run: true` in citation state files created before session 67
 **Why:** `CitationState._load()` returns `competitor_gaps_run: False` when the key is absent (older files pre-date the feature). This causes `run_audit.py` to fire the full citation gap analysis (115 DataForSEO SERP calls, ~25 min) on every single audit run rather than just the first.
 **How to apply:** When running an audit against a client whose `clients/{abbr}/citations/state.json` was created before session 67 (2026-04-21), first check whether the key exists: `python3 -c "import json,pathlib; d=json.loads(pathlib.Path('clients/{abbr}/citations/state.json').read_text()); print(d.get('competitor_gaps_run', 'MISSING'))"`. If missing or False and gap analysis has already run, set it to true before starting the audit.
