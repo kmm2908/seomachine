@@ -698,8 +698,8 @@ def collect_gbp(config: Dict) -> GBPResult:
 def collect_reviews(config: Dict) -> ReviewResult:
     result = ReviewResult()
 
-    location_id = config.get('gbp_location_id')
-    if not location_id:
+    place_id = config.get('gbp_place_id') or config.get('gbp_location_id')
+    if not place_id:
         # Try to extract review data from schema on site
         site_url = config.get('website', '') or config.get('wordpress', {}).get('url', '')
         if site_url:
@@ -715,15 +715,20 @@ def collect_reviews(config: Dict) -> ReviewResult:
                         break
         if not result.available:
             result.findings.append(
-                'Review data not available — add `gbp_location_id` to config.json '
-                'or add aggregateRating to site schema.'
+                'Review data not available — add aggregateRating to site schema.'
             )
         return result
 
     try:
         from google_business_profile import GoogleBusinessProfile, from_client_config as _gbp_from_config
         gbp = _gbp_from_config(config)
-        reviews = gbp.get_reviews(location_id, limit=50)
+        reviews = gbp.get_reviews(place_id, limit=50)
+        if not reviews:
+            result.findings.append(
+                'GBP Reviews API not accessible — Google restricts this API to approved partners. '
+                'Add aggregateRating to site schema as an alternative.'
+            )
+            return result
         result.available = True
 
         if reviews:

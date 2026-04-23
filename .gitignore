@@ -116,6 +116,10 @@ google-analytics-credentials.json
 # GCP service account keys in config/
 config/*-*[0-9]*.json
 
+# OAuth2 user credentials
+config/gbp-oauth-client.json
+config/gbp-oauth-token.json
+
 
 
 # Firecrawl cache (web scraping artifacts)

@@ -35,6 +35,7 @@ Profile API (formerly Google My Business).
 GBP API calls are free (no per-call billing). Rate limits apply.
 """
 
+import json
 import logging
 import os
 from datetime import datetime
@@ -42,8 +43,9 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 import diskcache
-from google.auth.transport.requests import AuthorizedSession
+from google.auth.transport.requests import AuthorizedSession, Request
 from google.oauth2 import service_account
+from google.oauth2.credentials import Credentials
 
 logger = logging.getLogger(__name__)
 
@@ -55,7 +57,7 @@ _TTL_REVIEWS = 60 * 60 * 24
 _CACHE_DIR = Path(__file__).parent.parent / "cache" / "gbp"
 
 _GBP_INFO_BASE = "https://mybusinessbusinessinformation.googleapis.com/v1"
-_GBP_REVIEWS_BASE = "https://mybusiness.googleapis.com/v4"
+_GBP_REVIEWS_BASE = "https://mybusinessreviews.googleapis.com/v1"
 _GBP_ACCOUNT_MGMT_BASE = "https://mybusinessaccountmanagement.googleapis.com/v1"
 
 _SCOPES = ["https://www.googleapis.com/auth/business.manage"]
@@ -72,23 +74,44 @@ class GoogleBusinessProfile:
         """
         Initialise the GBP client.
 
-        Args:
-            credentials_path: Path to service account JSON key.
-                              Falls back to GBP_CREDENTIALS_PATH env var.
-            cache_dir: Override the default diskcache directory.
+        Supports two auth methods (checked in order):
+        1. OAuth2 user credentials — config/gbp-oauth-token.json (GBP_OAUTH_TOKEN_PATH)
+        2. Service account — GBP_CREDENTIALS_PATH env var (legacy fallback)
         """
-        credentials_path = credentials_path or os.getenv("GBP_CREDENTIALS_PATH")
+        oauth_token_path = os.getenv("GBP_OAUTH_TOKEN_PATH", "config/gbp-oauth-token.json")
+        oauth_client_path = os.getenv("GBP_OAUTH_CLIENT_PATH", "config/gbp-oauth-client.json")
 
-        if not credentials_path or not Path(credentials_path).exists():
-            raise ValueError(
-                f"GBP credentials file not found: {credentials_path!r}. "
-                "Set GBP_CREDENTIALS_PATH in .env or pass credentials_path."
+        if Path(oauth_token_path).exists() and Path(oauth_client_path).exists():
+            with open(oauth_token_path) as f:
+                token_data = json.load(f)
+            with open(oauth_client_path) as f:
+                client_data = json.load(f)
+            client_config = client_data.get("installed") or client_data.get("web", {})
+            credentials = Credentials(
+                token=token_data.get("token"),
+                refresh_token=token_data.get("refresh_token"),
+                token_uri=token_data.get("token_uri", "https://oauth2.googleapis.com/token"),
+                client_id=client_config.get("client_id"),
+                client_secret=client_config.get("client_secret"),
+                scopes=token_data.get("scopes"),
+            )
+            if credentials.expired and credentials.refresh_token:
+                credentials.refresh(Request())
+                token_data["token"] = credentials.token
+                with open(oauth_token_path, "w") as f:
+                    json.dump(token_data, f, indent=2)
+        else:
+            credentials_path = credentials_path or os.getenv("GBP_CREDENTIALS_PATH")
+            if not credentials_path or not Path(credentials_path).exists():
+                raise ValueError(
+                    f"No GBP credentials found. Either provide {oauth_token_path} "
+                    "(OAuth2) or set GBP_CREDENTIALS_PATH (service account)."
+                )
+            credentials = service_account.Credentials.from_service_account_file(
+                credentials_path,
+                scopes=_SCOPES,
             )
 
-        credentials = service_account.Credentials.from_service_account_file(
-            credentials_path,
-            scopes=_SCOPES,
-        )
         self._session = AuthorizedSession(credentials)
         self._cache = diskcache.Cache(str(cache_dir or _CACHE_DIR))
 
@@ -132,8 +155,11 @@ class GoogleBusinessProfile:
                 continue
             for loc in locations_data.get("locations", []):
                 place_id = loc.get("metadata", {}).get("placeId")
-                resource_name = loc.get("name")  # "accounts/123/locations/456"
+                resource_name = loc.get("name")  # "locations/456" or "accounts/123/locations/456"
                 if place_id and resource_name:
+                    # Ensure full accounts/.../locations/... path for v4 reviews API
+                    if account_name and not resource_name.startswith("accounts/"):
+                        resource_name = f"{account_name}/{resource_name}"
                     result[place_id] = resource_name
 
         if result:

@@ -1,7 +1,7 @@
 {
-  "abbr": "gtm",
-  "site_name": "Glasgow Thai Massage",
-  "site_url": "https://glasgowthaimassage.co.uk",
+  "abbr": "tmg",
+  "site_name": "Thai Massage Greenock",
+  "site_url": "https://thaimassagegreenock.co.uk",
   "date": "2026-04-23",
   "schema": {
     "has_local_business": true,
@@ -9,24 +9,23 @@
     "has_article": false,
     "name_present": true,
     "address_present": true,
-    "phone_present": false,
+    "phone_present": true,
     "url_present": true,
     "opening_hours_present": false,
     "pages_checked": 2,
-    "score": 16,
+    "score": 18,
     "findings": [
-      "LocalBusiness schema is missing telephone number.",
       "Opening hours not in schema — missed rich result opportunity.",
       "No Article/BlogPosting schema on sampled pages."
     ]
   },
   "content": {
-    "service_count": 7,
-    "blog_count": 70,
-    "location_count": 4,
-    "page_count": 58,
+    "service_count": 13,
+    "blog_count": 16,
+    "location_count": 14,
+    "page_count": 47,
     "has_sitemap": true,
-    "sitemap_url_count": 2,
+    "sitemap_url_count": 9,
     "duplicate_pairs": [],
     "score": 20,
     "findings": []
@@ -34,7 +33,7 @@
   "gbp": {
     "available": true,
     "has_description": true,
-    "category_count": 9,
+    "category_count": 8,
     "has_hours": true,
     "photo_count": null,
     "services_count": 0,
@@ -48,14 +47,14 @@
     "available": false,
     "score": 0,
     "findings": [
-      "Review data not available — add `gbp_location_id` to config.json or add aggregateRating to site schema."
+      "GBP Reviews API not accessible — Google restricts this API to approved partners. Add aggregateRating to site schema as an alternative."
     ]
   },
   "nap": {
     "schema_name_match": "unknown",
     "schema_address_match": "unknown",
     "schema_phone_match": "unknown",
-    "total_sites": 10,
+    "total_sites": 1,
     "found_count": 0,
     "nap_issue_count": 0,
     "duplicate_count": 0,
@@ -112,7 +111,7 @@
             "postcode": "input[name=\"postcode\"]"
           }
         },
-        "status": "not_found",
+        "status": "unknown",
         "nap_match": null,
         "listing_url": null,
         "found_name": "",
@@ -168,7 +167,7 @@
           "form_url_template": null,
           "form_selectors": {}
         },
-        "status": "not_found",
+        "status": "unknown",
         "nap_match": null,
         "listing_url": null,
         "found_name": "",
@@ -200,7 +199,7 @@
             "postcode": "#postcode"
           }
         },
-        "status": "not_found",
+        "status": "unknown",
         "nap_match": null,
         "listing_url": null,
         "found_name": "",
@@ -316,7 +315,7 @@
             "postcode": "input[name=\"postcode\"]"
           }
         },
-        "status": "not_found",
+        "status": "unknown",
         "nap_match": null,
         "listing_url": null,
         "found_name": "",
@@ -456,7 +455,7 @@
           "form_url_template": "https://www.192.com/atoz/business/add/",
           "form_selectors": {}
         },
-        "status": "not_found",
+        "status": "unknown",
         "nap_match": null,
         "listing_url": null,
         "found_name": "",
@@ -568,7 +567,7 @@
           "form_url_template": "https://www.freeindex.co.uk/register.htm",
           "form_selectors": {}
         },
-        "status": "not_found",
+        "status": "unknown",
         "nap_match": null,
         "listing_url": null,
         "found_name": "",
@@ -596,7 +595,7 @@
           "form_url_template": "https://www.hotfrog.co.uk/AddBusiness.aspx",
           "form_selectors": {}
         },
-        "status": "not_found",
+        "status": "unknown",
         "nap_match": null,
         "listing_url": null,
         "found_name": "",
@@ -680,7 +679,7 @@
           "form_url_template": "https://www.brownbook.net/add-business/",
           "form_selectors": {}
         },
-        "status": "not_found",
+        "status": "unknown",
         "nap_match": null,
         "listing_url": null,
         "found_name": "",
@@ -708,7 +707,7 @@
           "form_url_template": "https://misterwhat.co.uk/businesses/add",
           "form_selectors": {}
         },
-        "status": "not_found",
+        "status": "unknown",
         "nap_match": null,
         "listing_url": null,
         "found_name": "",
@@ -723,7 +722,7 @@
     "findings": [
       "Business name not found in site schema — add to LocalBusiness.",
       "Phone number not in schema — critical for local search.",
-      "Low citation coverage: 0/10 sites"
+      "Low citation coverage: 0/1 sites"
     ]
   },
   "technical": {
@@ -733,7 +732,7 @@
     "has_h1": true,
     "has_robots": true,
     "has_sitemap": true,
-    "response_time_ms": 819,
+    "response_time_ms": 221,
     "score": 8,
     "findings": [
       "Homepage has no meta description — affects click-through rate."
@@ -741,16 +740,16 @@
   },
   "competitor": {
     "top_competitors": [
-      "Thai House Massage & Spa",
-      "Nutcha Thai Massage Glasgow",
-      "Daras Massage and Spa",
-      "Tiger Lily Thai Spa",
-      "Serenity Thai Massage"
+      "Greenleaf Health Massage",
+      "The Four Seasons salon",
+      "Baan Pim Thai Massage & Spa",
+      "Erawan Massage: เอราวัณ นวดเพื่อสุขภาพ",
+      "The massage room"
     ],
     "client_map_position": "unknown",
     "notes": [],
     "available": true
   },
-  "total_score": 68,
-  "grade_letter": "C"
+  "total_score": 70,
+  "grade_letter": "B"
 }

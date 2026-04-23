@@ -288,11 +288,15 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] `clients/sdy/config.json` — keeps `gbp_location_id` as fallback pending Place ID confirmation
 - [x] `src/audit/collectors.py` — reads `gbp_place_id` first, falls back to `gbp_location_id`; photo_count bug fixed (was always 0 via wrong API field); photo finding now suppressed when count unknown
 - [x] `src/audit/scoring.py` — `GBPResult.photo_count` changed to `Optional[int]` (None = unknown); score computation skips photo points when None
-- [x] GBP API allowlist email — Google rejected original submission (service account email ineligible); user replied with `kmmSubs@gmail.com` (individual Google Account, Owner on project `caleb-489417`); awaiting Google confirmation
-- [ ] **NEEDS USER ACTION** — Enable "My Business Account Management API" in Cloud Console: https://console.developers.google.com/apis/api/mybusinessaccountmanagement.googleapis.com/overview?project=589041037268
-- [ ] **NEEDS USER ACTION** — Accept service account manager invitation in GBP Manager (business.google.com) for GTM, SDY, TMG — `seo-machine@caleb-489417.iam.gserviceaccount.com`; also find SDY Place ID (check Maps URL for GBP listing `?cid=...` or business.google.com listing URL)
-- [ ] End-to-end test — run after both actions above: `python3 -c "import sys; sys.path.insert(0,'data_sources/modules'); from dotenv import load_dotenv; load_dotenv(); from google_business_profile import GoogleBusinessProfile; gbp=GoogleBusinessProfile(); print(gbp._discover_managed_locations())"`
-- [ ] Run audits after API confirmed working: `python3 src/audit/run_audit.py --abbr gtm && python3 src/audit/run_audit.py --abbr sdy && python3 src/audit/run_audit.py --abbr tmg`
+- [x] **GBP auth migrated to OAuth2** (session 71) — service account invitation flow failed (UNVERIFIED state blocks acceptance); switched to OAuth2 Desktop app credentials (`config/gbp-oauth-client.json` + `config/gbp-oauth-token.json`); `kmmsubs@gmail.com` is Primary Owner of all 3 locations; no manager invitations needed
+- [x] `google_business_profile.py` — OAuth2 path added to `__init__()`: loads `config/gbp-oauth-client.json` + `config/gbp-oauth-token.json`; auto-refreshes expired tokens; service account remains as fallback
+- [x] `_discover_managed_locations()` — resource names now prefixed with account name (`accounts/110724881487221568669/locations/...`) for compatibility with reviews API
+- [x] `clients/sdy/config.json` — `gbp_location_id` replaced with `gbp_place_id: "ChIJ30L0W4pHiEgRLmDHhVxEuNU"` (discovered via OAuth)
+- [x] GBP info API confirmed working: all 3 sites now score 15/20 on GBP (was 0/20)
+- [x] Reviews API (`mybusiness.googleapis.com/v4` + `mybusinessreviews.googleapis.com`) — both APIs fully retired/restricted by Google; cannot be enabled; `collect_reviews()` updated to return clear message instead of 0/15
+- [x] Audits run (session 71): GTM 68/100 C | SDY 65/100 C | TMG 70/100 B
+- [x] **TMG posts were all drafts** — bulk-published 37 posts (13 service, 14 location, 12 problem) via WP-CLI; 1 flagged (Diabetic Neuropathy 13192) left as draft; rewrite rules flushed to fix 404s
+- [x] `audit-latest.json` updated for all 3 clients with new scores
 
 ### Competitor research script (new session 8)
 - [x] `src/research_competitors.py` — standalone script: geocodes client area via Nominatim, pulls top 10 map pack + top 10 organic from DataForSEO, scrapes competitor sites, extracts structured profiles via Claude Haiku, writes `clients/[abbr]/competitor-analysis.md`
