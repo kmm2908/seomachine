@@ -57,7 +57,7 @@
       "last_checked": "2026-04-23"
     },
     "yell": {
-      "status": "unknown",
+      "status": "not_found",
       "listing_url": null,
       "nap_match": null,
       "found_name": "",
@@ -68,7 +68,7 @@
       "last_checked": "2026-04-23"
     },
     "thomson_local": {
-      "status": "unknown",
+      "status": "not_found",
       "listing_url": null,
       "nap_match": null,
       "found_name": "",
@@ -79,7 +79,7 @@
       "last_checked": "2026-04-23"
     },
     "scoot": {
-      "status": "unknown",
+      "status": "not_found",
       "listing_url": null,
       "nap_match": null,
       "found_name": "",
@@ -90,7 +90,7 @@
       "last_checked": "2026-04-23"
     },
     "192com": {
-      "status": "unknown",
+      "status": "not_found",
       "listing_url": null,
       "nap_match": null,
       "found_name": "",
@@ -112,7 +112,7 @@
       "last_checked": "2026-04-23"
     },
     "freeindex": {
-      "status": "unknown",
+      "status": "not_found",
       "listing_url": null,
       "nap_match": null,
       "found_name": "",
@@ -123,7 +123,7 @@
       "last_checked": "2026-04-23"
     },
     "brownbook": {
-      "status": "unknown",
+      "status": "not_found",
       "listing_url": null,
       "nap_match": null,
       "found_name": "",
@@ -134,7 +134,7 @@
       "last_checked": "2026-04-23"
     },
     "misterwhat": {
-      "status": "unknown",
+      "status": "not_found",
       "listing_url": null,
       "nap_match": null,
       "found_name": "",
