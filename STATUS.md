@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-04-23 (session 69 — TMG batches, FAQ strip, Google Sheets removal)
+Last updated: 2026-04-23 (session 69 — all TMG service/location/problem pages clean and published)
 
 ---
 
@@ -974,8 +974,8 @@ New client added 2026-03-26. Existing WordPress site at `thaimassagegreenock.co.
 
 ### TMG Service Batch (2026-04-22)
 - [x] 13 service pages published — 12 clean, 1 published_review
-- [x] Post IDs: 13267 (Traditional Thai Massage), 13271 (Thai Oil Massage), 13275 (Thai Aromatherapy Massage), 13279 (Thai Sports Massage), 13283 (Thai Facial Massage), 13287 (Thai Foot Massage), 13291 (Hot Stone Massage), 13295 (Thai Head Massage), 13299 (Head and Hair Oiling), 13303 (Thai Reflexology), 13307 (Thai Deep Tissue Oil Massage), 13308★ (Aromatherapy Deep Tissue Oil Massage — readability failure), 13312 (Tailored Facial Treatment)
-- [ ] Post 13308 — review in wp-admin: fix readability, remove ★★★★★ from title, publish
+- [x] Post IDs: 13267 (Traditional Thai Massage), 13271 (Thai Oil Massage), 13275 (Thai Aromatherapy Massage), 13279 (Thai Sports Massage), 13283 (Thai Facial Massage), 13287 (Thai Foot Massage), 13291 (Hot Stone Massage), 13295 (Thai Head Massage), 13299 (Head and Hair Oiling), 13303 (Thai Reflexology), 13307 (Thai Deep Tissue Oil Massage), 13308 (Aromatherapy Deep Tissue Oil Massage), 13312 (Tailored Facial Treatment)
+- [x] Post 13308 — already clean on live site (no stars in title, no review notice); queue status corrected to published
 
 ---
 
