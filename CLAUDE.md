@@ -38,7 +38,7 @@ Each client lives in `clients/[abbr]/`. To add a new client, run `/new-client`. 
 ```
 clients/
   [abbr]/
-    config.json          ← WP creds, schema tokens, image settings, GBP location ID, ai_visibility
+    config.json          ← WP creds, schema tokens, image settings, GBP Place ID (`gbp_place_id`), ai_visibility
     brand-voice.md       ← tone and messaging rules
     seo-guidelines.md    ← keyword and entity strategy
     internal-links-map.md

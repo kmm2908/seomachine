@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-04-23 (session 69 — all TMG service/location/problem pages clean and published)
+Last updated: 2026-04-23 (session 70 — GBP API quota approved; module rewritten for Account Management API discovery; Place IDs updated; blocked on user enabling Account Management API + accepting manager invitations)
 
 ---
 
@@ -281,11 +281,17 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] `clients/README.md` — `gbp_location_id` field documented; setup instructions (which APIs to enable, how to add service account as location manager, how to find location ID)
 - [x] Import verified clean: `python3 -c "from data_sources.modules.google_business_profile import GoogleBusinessProfile; print('OK')"`
 - [x] `GBP_CREDENTIALS_PATH=config/caleb-489417-c8e809f47022.json` added to `.env`
-- [x] `gbp_location_id: "431635553293070625"` added to GTM config; `"5667481148525577024"` added to TMG config
-- [x] Service account `seo-machine@caleb-489417.iam.gserviceaccount.com` added as Manager on GTM GBP listing (pending acceptance)
-- [x] GBP API access request submitted — case ID 7-2336000041300, review time 7–10 business days (quota currently 0 QPM)
-- [x] `get_reviews()` — to be implemented via DataForSEO `business_data/google/reviews` endpoint (GBP Reviews API deprecated); stub in place
-- [ ] End-to-end test — blocked pending Google API access approval (check quota: 0 QPM = pending, 300 QPM = approved)
+- [x] GBP API quota approved (case 7-2336000041300, 2026-04-23) — email confirmed
+- [x] `google_business_profile.py` rewritten — now uses Account Management API for location discovery; accepts Place IDs as identifiers; `_discover_managed_locations()` builds `{place_id: resource_name}` map; all public methods updated accordingly
+- [x] `clients/gtm/config.json` — `gbp_place_id: "ChIJnQImbT5FiEgRon5L9CbTr28"` (Place ID confirmed via API search; old `gbp_location_id` + `place_id` fields removed)
+- [x] `clients/tmg/config.json` — `gbp_place_id: "ChIJc7U5HBKviUgRQ_yIDJUUXGU"` (Place ID confirmed via API search)
+- [x] `clients/sdy/config.json` — keeps `gbp_location_id` as fallback pending Place ID confirmation
+- [x] `src/audit/collectors.py` — reads `gbp_place_id` first, falls back to `gbp_location_id`; photo_count bug fixed (was always 0 via wrong API field); photo finding now suppressed when count unknown
+- [x] `src/audit/scoring.py` — `GBPResult.photo_count` changed to `Optional[int]` (None = unknown); score computation skips photo points when None
+- [ ] **NEEDS USER ACTION** — Enable "My Business Account Management API" in Cloud Console: https://console.developers.google.com/apis/api/mybusinessaccountmanagement.googleapis.com/overview?project=589041037268
+- [ ] **NEEDS USER ACTION** — Accept service account manager invitation in GBP Manager (business.google.com) for GTM, SDY, TMG — `seo-machine@caleb-489417.iam.gserviceaccount.com`; also find SDY Place ID (check Maps URL for GBP listing `?cid=...` or business.google.com listing URL)
+- [ ] End-to-end test — run after both actions above: `python3 -c "import sys; sys.path.insert(0,'data_sources/modules'); from dotenv import load_dotenv; load_dotenv(); from google_business_profile import GoogleBusinessProfile; gbp=GoogleBusinessProfile(); print(gbp._discover_managed_locations())"`
+- [ ] Run audits after API confirmed working: `python3 src/audit/run_audit.py --abbr gtm && python3 src/audit/run_audit.py --abbr sdy && python3 src/audit/run_audit.py --abbr tmg`
 
 ### Competitor research script (new session 8)
 - [x] `src/research_competitors.py` — standalone script: geocodes client area via Nominatim, pulls top 10 map pack + top 10 organic from DataForSEO, scrapes competitor sites, extracts structured profiles via Claude Haiku, writes `clients/[abbr]/competitor-analysis.md`

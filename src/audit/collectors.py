@@ -648,11 +648,11 @@ def collect_content(site_url: str, wp_config: Optional[Dict] = None, config: Opt
 def collect_gbp(config: Dict) -> GBPResult:
     result = GBPResult()
 
-    location_id = config.get('gbp_location_id')
+    location_id = config.get('gbp_place_id') or config.get('gbp_location_id')
     if not location_id:
         result.findings.append(
-            'GBP location ID not configured — '
-            'add `gbp_location_id` to config.json to enable this check.'
+            'GBP place ID not configured — '
+            'add `gbp_place_id` (Google Maps Place ID) to config.json to enable this check.'
         )
         return result
 
@@ -669,8 +669,8 @@ def collect_gbp(config: Dict) -> GBPResult:
         hours = gbp.get_hours(location_id)
         result.has_hours = bool(hours)
 
-        attrs = gbp.get_attributes(location_id)
-        result.photo_count = attrs.get('photo_count', 0) if attrs else 0
+        gbp.get_attributes(location_id)  # cache for future use
+        # photo_count left as None — requires v4 media API call (TODO)
 
     except Exception as e:
         result.available = False
@@ -684,7 +684,7 @@ def collect_gbp(config: Dict) -> GBPResult:
         result.findings.append('Only one GBP category — add relevant secondary categories.')
     if not result.has_hours:
         result.findings.append('Business hours not set on GBP profile.')
-    if result.photo_count < 5:
+    if result.photo_count is not None and result.photo_count < 5:
         result.findings.append(
             f'Only {result.photo_count} photo(s) on GBP — '
             'profiles with 10+ photos get significantly more clicks.'

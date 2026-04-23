@@ -7,7 +7,7 @@ Each category returns a dataclass with a `score` field (int) and
 
 from __future__ import annotations
 from dataclasses import dataclass, field
-from typing import List
+from typing import List, Optional
 
 
 # ── Category weights ──────────────────────────────────────────────────────────
@@ -108,7 +108,7 @@ class GBPResult:
     has_description: bool = False
     category_count: int = 0
     has_hours: bool = False
-    photo_count: int = 0
+    photo_count: Optional[int] = None  # None = unknown (v4 media API not yet called)
     services_count: int = 0
     score: int = 0
     findings: List[str] = field(default_factory=list)
@@ -122,9 +122,10 @@ class GBPResult:
         if self.category_count >= 2: pts += 5
         elif self.category_count == 1: pts += 3
         if self.has_hours:         pts += 5
-        if self.photo_count >= 10: pts += 5
-        elif self.photo_count >= 3: pts += 3
-        elif self.photo_count >= 1: pts += 1
+        if self.photo_count is not None:
+            if self.photo_count >= 10: pts += 5
+            elif self.photo_count >= 3: pts += 3
+            elif self.photo_count >= 1: pts += 1
         self.score = min(pts, 20)
         return self.score
 

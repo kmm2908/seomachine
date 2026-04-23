@@ -56,6 +56,7 @@ _CACHE_DIR = Path(__file__).parent.parent / "cache" / "gbp"
 
 _GBP_INFO_BASE = "https://mybusinessbusinessinformation.googleapis.com/v1"
 _GBP_REVIEWS_BASE = "https://mybusiness.googleapis.com/v4"
+_GBP_ACCOUNT_MGMT_BASE = "https://mybusinessaccountmanagement.googleapis.com/v1"
 
 _SCOPES = ["https://www.googleapis.com/auth/business.manage"]
 
@@ -92,12 +93,71 @@ class GoogleBusinessProfile:
         self._cache = diskcache.Cache(str(cache_dir or _CACHE_DIR))
 
     # ------------------------------------------------------------------
+    # Location discovery — Account Management API
+    # ------------------------------------------------------------------
+
+    def _discover_managed_locations(self) -> Dict[str, str]:
+        """
+        Use the Account Management API to build a Place ID → resource name map
+        for all locations this service account manages.
+
+        Returns: {"ChIJ...": "accounts/123/locations/456", ...}
+        Requires My Business Account Management API to be enabled in Cloud Console.
+        Returns {} if the API is disabled or the service account has no managed locations.
+        """
+        cache_key = "managed_locations"
+        cached = self._cache.get(cache_key)
+        if cached is not None:
+            return cached
+
+        result: Dict[str, str] = {}
+
+        accounts_data = self._get(f"{_GBP_ACCOUNT_MGMT_BASE}/accounts")
+        if not accounts_data:
+            logger.warning(
+                "GBP: Could not list accounts. "
+                "Enable My Business Account Management API at "
+                "https://console.developers.google.com/apis/api/"
+                "mybusinessaccountmanagement.googleapis.com/overview"
+            )
+            return result
+
+        for account in accounts_data.get("accounts", []):
+            account_name = account.get("name", "")
+            locations_data = self._get(
+                f"{_GBP_ACCOUNT_MGMT_BASE}/{account_name}/locations",
+                params={"readMask": "name,metadata"},
+            )
+            if not locations_data:
+                continue
+            for loc in locations_data.get("locations", []):
+                place_id = loc.get("metadata", {}).get("placeId")
+                resource_name = loc.get("name")  # "accounts/123/locations/456"
+                if place_id and resource_name:
+                    result[place_id] = resource_name
+
+        if result:
+            self._cache.set(cache_key, result, expire=_TTL_SLOW)
+        return result
+
+    def _resolve_resource_name(self, place_id: str) -> Optional[str]:
+        """
+        Resolve a Google Maps Place ID to a GBP API resource name.
+        Returns None if the service account does not manage this location.
+        """
+        return self._discover_managed_locations().get(place_id)
+
+    # ------------------------------------------------------------------
     # Public API
     # ------------------------------------------------------------------
 
-    def get_business_info(self, location_id: str) -> Dict[str, Any]:
+    def get_business_info(self, place_id: str) -> Dict[str, Any]:
         """
         Fetch core business details for a GBP location.
+
+        Args:
+            place_id: Google Maps Place ID (e.g. "ChIJnQImbT5FiEgRon5L9CbTr28").
+                      Use the `gbp_place_id` field from client config.
 
         Returns a dict shaped for direct merge into a LocalBusiness JSON-LD node:
         {
@@ -114,15 +174,23 @@ class GoogleBusinessProfile:
             },
             "description": "...",
             "categories": ["Primary Category", "Secondary Category", ...],
-            "_raw_location_name": "locations/123..."   # GBP resource name
+            "_raw_location_name": "accounts/123/locations/456"
         }
         """
-        cache_key = f"business_info:{location_id}"
+        cache_key = f"business_info:{place_id}"
         cached = self._cache.get(cache_key)
         if cached is not None:
             return cached
 
-        resource = f"locations/{location_id}"
+        resource = self._resolve_resource_name(place_id)
+        if not resource:
+            logger.warning(
+                "GBP: No managed location found for Place ID %s. "
+                "Accept the service account manager invitation in GBP Manager.",
+                place_id,
+            )
+            return {}
+
         read_mask = (
             "name,title,phoneNumbers,websiteUri,"
             "categories,profile,storefrontAddress"
@@ -137,9 +205,12 @@ class GoogleBusinessProfile:
         self._cache.set(cache_key, result, expire=_TTL_SLOW)
         return result
 
-    def get_hours(self, location_id: str) -> Dict[str, Any]:
+    def get_hours(self, place_id: str) -> Dict[str, Any]:
         """
         Fetch regular and special opening hours for a location.
+
+        Args:
+            place_id: Google Maps Place ID.
 
         Returns:
         {
@@ -148,21 +219,19 @@ class GoogleBusinessProfile:
                  "opens": "09:00", "closes": "18:00"},
                 ...
             ],
-            "specialOpeningHoursSpecification": [
-                {"@type": "OpeningHoursSpecification", "validFrom": "2026-12-25",
-                 "validThrough": "2026-12-25", "opens": "00:00", "closes": "00:00"},
-                ...
-            ]
+            "specialOpeningHoursSpecification": [...]
         }
         """
-        cache_key = f"hours:{location_id}"
+        cache_key = f"hours:{place_id}"
         cached = self._cache.get(cache_key)
         if cached is not None:
             return cached
 
-        resource = f"locations/{location_id}"
-        url = f"{_GBP_INFO_BASE}/{resource}"
+        resource = self._resolve_resource_name(place_id)
+        if not resource:
+            return {}
 
+        url = f"{_GBP_INFO_BASE}/{resource}"
         data = self._get(url, params={"readMask": "regularHours,specialHours,moreHours"})
         if not data:
             return {}
@@ -171,9 +240,12 @@ class GoogleBusinessProfile:
         self._cache.set(cache_key, result, expire=_TTL_SLOW)
         return result
 
-    def get_reviews(self, location_id: str, limit: int = 20) -> List[Dict[str, Any]]:
+    def get_reviews(self, place_id: str, limit: int = 20) -> List[Dict[str, Any]]:
         """
         Fetch recent reviews for a location.
+
+        Args:
+            place_id: Google Maps Place ID.
 
         Returns a list of:
         {
@@ -185,51 +257,50 @@ class GoogleBusinessProfile:
         }
         Sorted newest-first.
         """
-        cache_key = f"reviews:{location_id}:{limit}"
+        cache_key = f"reviews:{place_id}:{limit}"
         cached = self._cache.get(cache_key)
         if cached is not None:
             return cached
 
-        # Reviews endpoint uses the v4 API with accounts path
-        # location_id here is the numeric ID; the v4 endpoint needs
-        # the full resource name accounts/{id}/locations/{id}/reviews
-        # We derive it from the location's resource name returned by info.
-        info = self.get_business_info(location_id)
-        raw_name = info.get("_raw_location_name", f"locations/{location_id}")
-        # Expect raw_name like "accounts/123/locations/456" from info fetch
-        # If we only have "locations/456" fall back gracefully
-        reviews_resource = raw_name if raw_name.startswith("accounts/") else raw_name
+        resource = self._resolve_resource_name(place_id)
+        if not resource:
+            return []
 
-        url = f"{_GBP_REVIEWS_BASE}/{reviews_resource}/reviews"
+        url = f"{_GBP_REVIEWS_BASE}/{resource}/reviews"
         data = self._get(url, params={"pageSize": min(limit, 50)})
         if not data:
             return []
 
-        reviews = [
-            self._map_review(r) for r in data.get("reviews", [])
-        ]
+        reviews = [self._map_review(r) for r in data.get("reviews", [])]
         reviews = reviews[:limit]
         self._cache.set(cache_key, reviews, expire=_TTL_REVIEWS)
         return reviews
 
-    def get_attributes(self, location_id: str) -> Dict[str, Any]:
+    def get_attributes(self, place_id: str) -> Dict[str, Any]:
         """
         Fetch location attributes (amenities, accessibility, service options, etc.).
+
+        Args:
+            place_id: Google Maps Place ID.
 
         Returns:
         {
             "amenitiesOffered": ["Wi-Fi", "Parking"],
             "accessibilityFeature": ["Wheelchair accessible entrance"],
             "serviceOptions": ["By appointment only"],
-            "_raw_attributes": [...]   # full GBP attribute list for reference
+            "_raw_attributes": [...]
         }
         """
-        cache_key = f"attributes:{location_id}"
+        cache_key = f"attributes:{place_id}"
         cached = self._cache.get(cache_key)
         if cached is not None:
             return cached
 
-        url = f"{_GBP_INFO_BASE}/locations/{location_id}/attributes"
+        resource = self._resolve_resource_name(place_id)
+        if not resource:
+            return {}
+
+        url = f"{_GBP_INFO_BASE}/{resource}/attributes"
         data = self._get(url)
         if not data:
             return {}

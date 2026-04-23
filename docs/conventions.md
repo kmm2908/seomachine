@@ -78,6 +78,18 @@ Added to via `/wrap` at the end of each session — any new class of problem get
 
 ---
 
+## GBP API: quota approval ≠ APIs enabled; CIDs ≠ resource names
+**Why:** The GBP quota approval email (from Google Support) only grants QPM quota. The individual service APIs (`mybusinessaccountmanagement.googleapis.com`, `mybusinessbusinessinformation.googleapis.com`, etc.) must be enabled separately in Cloud Console. Additionally, Google Maps CIDs (from `?cid=` URLs or GBP Manager listing URLs) are a completely different ID space from the GBP API resource names (`accounts/{id}/locations/{id}`). Using CIDs directly in API calls returns 404. The correct flow: enable Account Management API → it returns resource names → use those for Business Information API calls.
+**How to apply:** The module now uses `_discover_managed_locations()` to build a `{place_id: resource_name}` map via Account Management API. Store the Google Maps Place ID (`ChIJ...`) in client config as `gbp_place_id`. Never use numeric CIDs as GBP API identifiers. If Account Management API is disabled, the module logs the exact console URL to enable it and returns empty dict gracefully.
+
+---
+
+## GBP service account requires explicit manager invitation acceptance
+**Why:** Adding a service account as Manager in GBP Manager sends an invitation that must be accepted — it is not auto-granted. Until accepted, all API calls return 404/empty as if the location doesn't exist. There is no error indicating "invitation pending" vs "no access".
+**How to apply:** After adding a service account in GBP Manager, go back to Settings → Managers on the same business and confirm the service account appears as an active manager (not pending). If it still shows as pending invitation, re-send or try a different access level.
+
+---
+
 ## Backfill `competitor_gaps_run: true` in citation state files created before session 67
 **Why:** `CitationState._load()` returns `competitor_gaps_run: False` when the key is absent (older files pre-date the feature). This causes `run_audit.py` to fire the full citation gap analysis (115 DataForSEO SERP calls, ~25 min) on every single audit run rather than just the first.
 **How to apply:** When running an audit against a client whose `clients/{abbr}/citations/state.json` was created before session 67 (2026-04-21), first check whether the key exists: `python3 -c "import json,pathlib; d=json.loads(pathlib.Path('clients/{abbr}/citations/state.json').read_text()); print(d.get('competitor_gaps_run', 'MISSING'))"`. If missing or False and gap analysis has already run, set it to true before starting the audit.
