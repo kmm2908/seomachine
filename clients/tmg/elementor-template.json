@@ -2,7 +2,9 @@
   {
     "id": "2982748",
     "elType": "container",
-    "settings": [],
+    "settings": {
+      "_title": "Section 1 Content"
+    },
     "elements": [
       {
         "id": "b867334",
@@ -17,7 +19,8 @@
         "id": "d9bd9c8",
         "elType": "container",
         "settings": {
-          "content_width": "full"
+          "content_width": "full",
+          "_title": "Section 2 Content"
         },
         "elements": [
           {
@@ -48,7 +51,8 @@
     "id": "4dc0f2d",
     "elType": "container",
     "settings": {
-      "flex_direction": "column"
+      "flex_direction": "column",
+      "_title": "Book Now"
     },
     "elements": [
       {
@@ -67,7 +71,8 @@
     "id": "cf330a7",
     "elType": "container",
     "settings": {
-      "flex_direction": "column"
+      "flex_direction": "column",
+      "_title": "Reviews"
     },
     "elements": [
       {
@@ -86,7 +91,8 @@
     "id": "9af571a",
     "elType": "container",
     "settings": {
-      "flex_direction": "column"
+      "flex_direction": "column",
+      "_title": "Book Now"
     },
     "elements": [
       {
@@ -105,7 +111,8 @@
     "id": "a06e7fd",
     "elType": "container",
     "settings": {
-      "flex_direction": "column"
+      "flex_direction": "column",
+      "_title": "Problems"
     },
     "elements": [
       {
@@ -121,29 +128,11 @@
     "isInner": false
   },
   {
-    "id": "5f5c6f2",
-    "elType": "container",
-    "settings": {
-      "flex_direction": "column"
-    },
-    "elements": [
-      {
-        "id": "81b0d92",
-        "elType": "widget",
-        "settings": {
-          "template_id": "13255"
-        },
-        "elements": [],
-        "widgetType": "template"
-      }
-    ],
-    "isInner": false
-  },
-  {
     "id": "e412ea0",
     "elType": "container",
     "settings": {
-      "flex_direction": "column"
+      "flex_direction": "column",
+      "_title": "Book Now"
     },
     "elements": [
       {
@@ -162,7 +151,8 @@
     "id": "4acf165",
     "elType": "container",
     "settings": {
-      "flex_direction": "column"
+      "flex_direction": "column",
+      "_title": "Maps"
     },
     "elements": [
       {
@@ -181,7 +171,8 @@
     "id": "e1eb8dc",
     "elType": "container",
     "settings": {
-      "flex_direction": "column"
+      "flex_direction": "column",
+      "_title": "Video"
     },
     "elements": [
       {
@@ -200,7 +191,8 @@
     "id": "49ab1ca",
     "elType": "container",
     "settings": {
-      "flex_direction": "column"
+      "flex_direction": "column",
+      "_title": "Book Now"
     },
     "elements": [
       {
