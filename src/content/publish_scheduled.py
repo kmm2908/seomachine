@@ -39,8 +39,7 @@ load_dotenv(ROOT / '.env')
 
 import anthropic
 
-# Import pipeline functions from geo_batch_runner
-from geo_batch_runner import (
+from pipeline import (
     load_business_config,
     build_system_prompt,
     build_user_prompt,
@@ -53,7 +52,7 @@ from geo_batch_runner import (
     CONTENT_DIR,
     CONTENT_TYPE_AGENTS,
 )
-from google_sheets import send_email
+from email_utils import send_email
 from quality_gate import QualityGate
 
 LOG_PATH = ROOT / 'logs' / 'scheduled-publish-log.csv'

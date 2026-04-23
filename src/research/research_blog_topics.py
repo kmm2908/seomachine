@@ -363,38 +363,6 @@ def write_queue(topics: list, abbr: str, cadence_days: int) -> Path:
     return out_path
 
 
-def push_to_sheet(topics: list, abbr: str, niche: str) -> None:
-    """Push topics to Google Sheet with status 'pause' for review."""
-    try:
-        import google_sheets as gs
-        service = gs.get_service()
-        sheet_id = gs.get_sheet_id()
-
-        # Find next empty row in column A
-        result = service.spreadsheets().values().get(
-            spreadsheetId=sheet_id, range='A:A'
-        ).execute()
-        next_row = len(result.get('values', [])) + 1
-
-        rows = []
-        for t in topics:
-            ctype = infer_content_type(t['keyword'])
-            # Columns: A=topic, B=status, C=cost, D=abbr, E=type, F=file, G=notes, H=review#, I=niche
-            rows.append([t['keyword'], 'pause', '', abbr.upper(), ctype, '', '', '', niche])
-
-        if rows:
-            service.spreadsheets().values().update(
-                spreadsheetId=sheet_id,
-                range=f'A{next_row}',
-                valueInputOption='RAW',
-                body={'values': rows},
-            ).execute()
-            print(f"→ Pushed {len(rows)} topics to Sheet (rows {next_row}–{next_row + len(rows) - 1}), status: pause")
-
-    except Exception as e:
-        print(f"⚠ Sheet push failed: {e}")
-
-
 # ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
@@ -403,7 +371,6 @@ def main():
     parser = argparse.ArgumentParser(description='Research blog topics for a client niche')
     parser.add_argument('--abbr', required=True, help='Client abbreviation e.g. gtb')
     parser.add_argument('--limit', type=int, default=25, help='Topics to output (default 25)')
-    parser.add_argument('--sheet', action='store_true', help='Push topics to Google Sheet (status: pause)')
     parser.add_argument('--refresh', action='store_true', help='Force cache refresh even if < 30 days old')
     parser.add_argument('--queue', action='store_true', help='Write topic-queue.json for scheduled publishing')
     parser.add_argument('--cadence', type=int, default=7, help='Publishing cadence in days for --queue (default 7)')
@@ -469,10 +436,6 @@ def main():
     # --- Report ---
     out_path = write_report(abbr, top_topics, competitor_domains, niche)
     print(f"\n✓ Report: {out_path.relative_to(ROOT)}")
-
-    # --- Sheet push ---
-    if args.sheet:
-        push_to_sheet(top_topics, abbr, niche)
 
     # --- Queue file ---
     if args.queue:

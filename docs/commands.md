@@ -7,11 +7,6 @@ Full reference for all Python scripts. Run from the project root.
 ## Content Generation
 
 ```bash
-# Batch runner — Google Sheet queue
-python3 src/content/geo_batch_runner.py                    # all "Write Now" rows
-python3 src/content/geo_batch_runner.py A2:E5              # specific range
-python3 src/content/geo_batch_runner.py --publish          # generate + publish to WP as draft
-
 # Scheduled publisher — JSON queue file
 python3 src/content/publish_scheduled.py --abbr gtb                          # publish next pending topic
 python3 src/content/publish_scheduled.py --abbr gtb --status                 # queue status table

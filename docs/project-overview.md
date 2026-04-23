@@ -19,7 +19,6 @@ The core product. Generates on-brand, quality-gated content for client websites.
 
 | Component | Location | Purpose |
 |-----------|----------|---------|
-| Batch runner | `src/content/geo_batch_runner.py` | Reads Google Sheet queue → generates via Claude API → publishes |
 | Scheduled publisher | `src/content/publish_scheduled.py` | Cron-driven; one topic per run from JSON queue file |
 | Quality gate | `data_sources/modules/quality_gate.py` | Flesch + engagement checks; rewrites up to 2× before flagging |
 | 7 content writers | `.claude/agents/` | blog, service, location, pillar, topical, comp-alt, problem |
@@ -165,7 +164,7 @@ Modules used across multiple product areas:
 | `google_analytics.py` | Research, Audit, Reporting |
 | `google_search_console.py` | Research, Audit, Reporting |
 | `google_business_profile.py` | Audit, Content |
-| `google_sheets.py` | Content pipeline |
+| `email_utils.py` | Content, Social (batch summary emails) |
 | `wordpress_publisher.py` | Content, Publishing |
 | `image_generator.py` | Content, Social |
 | `quality_gate.py` | Content |

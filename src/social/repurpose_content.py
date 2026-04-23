@@ -28,7 +28,7 @@ load_dotenv(ROOT / '.env')
 from social_post_generator import SocialPostGenerator, extract_content_from_html
 from video_producer import VideoProducer
 from ghl_publisher import GHLPublisher, get_x_format_for_date
-from google_sheets import send_email
+from email_utils import send_email
 
 CLIENTS_DIR = ROOT / 'clients'
 CONTENT_DIR = ROOT / 'content'

@@ -54,7 +54,6 @@ Global context (not client-specific): `context/style-guide.md`, `context/cro-bes
 ## Content Pipeline
 
 ```
-Google Sheet queue → src/content/geo_batch_runner.py → content/[abbr]/[type]/
 Topic queue file  → src/content/publish_scheduled.py → content/[abbr]/[type]/  (cron-driven)
 ```
 
@@ -75,18 +74,13 @@ For all CLI commands and flags, see `docs/commands.md`.
 | `comp-alt` | `competitor-alt-writer.md` | 500–700 | Competitor alternative / comparison pages |
 | `problem` | `problem-page-writer.md` | 600–800 | Condition/symptom pages with authority outbound links |
 
-Default: `blog` if Column E is empty.
-
 ## Batch Runner
 
 ```bash
-python3 src/content/geo_batch_runner.py             # all "Write Now" rows
-python3 src/content/geo_batch_runner.py --publish   # generate + publish to WordPress as draft
 python3 src/content/publish_scheduled.py --abbr gtb --status   # queue status
 python3 src/content/publish_scheduled.py --abbr gtb            # publish next pending topic
 ```
 
-Google Sheet columns: A=Topic, B=Status, C=Cost, D=Abbr, E=Type, F=File path, G=Notes, H=Review count, I=Niche.
 Quality gate runs after every article — see `data_sources/modules/quality_gate.py` for thresholds.
 Failed quality gate: article published as draft with `★★★★★` in title — fix in wp-admin, remove stars, publish.
 
@@ -98,7 +92,7 @@ Failed quality gate: article published as draft with `★★★★★` in title 
 
 All commands in `.claude/commands/`. Key groups:
 - **Research:** `/research`, `/research-serp`, `/research-gaps`, `/research-topics`, `/research-trending`, `/research-performance`, `/research-blog-topics`
-- **Writing:** `/write`, `/article`, `/rewrite`, `/geo-batch`
+- **Writing:** `/write`, `/article`, `/rewrite`
 - **Publishing:** `/publish-draft`, `/optimize`, `/analyze-existing`, `/audit`, `/cluster`
 - **Landing pages:** `/landing-write`, `/landing-audit`, `/landing-research`, `/landing-publish`, `/landing-competitor`
 
@@ -129,7 +123,7 @@ Publishing uses the WordPress REST API or WP-CLI over SSH (see conventions below
 
 ```
 src/
-  content/      ← geo_batch_runner.py, publish_scheduled.py, republish_existing.py, regen_images.py
+  content/      ← pipeline.py, publish_scheduled.py, republish_existing.py, regen_images.py
   research/     ← research_competitors.py, research_blog_topics.py, research_serp_analysis.py, etc.
   publishing/   ← fetch_elementor_template.py, update_post_classes.py, inject_elementor_template.py
   snippets/     ← generate_directions_snippet.py
