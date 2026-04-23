@@ -942,7 +942,7 @@ New client added 2026-03-26. Existing WordPress site at `thaimassagegreenock.co.
 - [x] Deploy `wordpress/seomachine.php` to TMB blog site — auto-deploy via GitHub Actions (session 21)
 - [x] SSH public key added to TMG SiteGround account (`u3520-kztrwuly6pid@uk1001.siteground.eu`)
 - [x] Fetch Elementor template — fetched 2026-04-22; `elementor_template_id: 13202` set in config; `clients/tmg/elementor-template.json` + meta sidecar saved
-- [ ] Run `research_competitors.py --abbr tmg` to generate `clients/tmg/competitor-analysis.md`
+- [x] Run `research_competitors.py --abbr tmg` — 10 map pack + 5 organic competitors; 9 sites profiled; `clients/tmg/competitor-analysis.md` written (2026-04-23)
 - [ ] Run `research_blog_topics.py --abbr tmb --queue` to generate topic queue
 - [ ] Test batch publish run on TMB
 - [ ] Add TMG/TMB to Google Sheet Column D dropdown
