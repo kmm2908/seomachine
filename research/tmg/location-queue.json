@@ -1,0 +1,119 @@
+{
+  "abbr": "TMG",
+  "cadence_days": 1,
+  "created_at": "2026-04-23",
+  "topics": [
+    {
+      "topic": "Greenock Esplanade",
+      "content_type": "location",
+      "status": "published",
+      "published_at": "2026-04-23",
+      "post_id": 13321,
+      "cost": "$0.5934"
+    },
+    {
+      "topic": "Lyle Hill Greenock",
+      "content_type": "location",
+      "status": "published",
+      "published_at": "2026-04-23",
+      "post_id": 13326,
+      "cost": "$0.5963"
+    },
+    {
+      "topic": "McLean Museum and Art Gallery Greenock",
+      "content_type": "location",
+      "status": "published",
+      "published_at": "2026-04-23",
+      "post_id": 13334,
+      "cost": "$0.8340"
+    },
+    {
+      "topic": "Battery Park Greenock",
+      "content_type": "location",
+      "status": "published",
+      "published_at": "2026-04-23",
+      "post_id": 13342,
+      "cost": "$0.5311"
+    },
+    {
+      "topic": "Greenock Custom House",
+      "content_type": "location",
+      "status": "published",
+      "published_at": "2026-04-23",
+      "post_id": 13352,
+      "cost": "$0.5955"
+    },
+    {
+      "topic": "Greenock Ocean Terminal",
+      "content_type": "location",
+      "status": "published",
+      "published_at": "2026-04-23",
+      "post_id": 13356,
+      "cost": "$0.5854"
+    },
+    {
+      "topic": "Wellpark Greenock",
+      "content_type": "location",
+      "status": "published",
+      "published_at": "2026-04-23",
+      "post_id": 13361,
+      "cost": "$0.7653"
+    },
+    {
+      "topic": "Gourock Outdoor Pool",
+      "content_type": "location",
+      "status": "published",
+      "published_at": "2026-04-23",
+      "post_id": 13368,
+      "cost": "$0.5448"
+    },
+    {
+      "topic": "Cloch Lighthouse Gourock",
+      "content_type": "location",
+      "status": "published",
+      "published_at": "2026-04-23",
+      "post_id": 13372,
+      "cost": "$0.6591"
+    },
+    {
+      "topic": "Gourock Ferry Terminal",
+      "content_type": "location",
+      "status": "published",
+      "published_at": "2026-04-23",
+      "post_id": 13376,
+      "cost": "$0.5942"
+    },
+    {
+      "topic": "Newark Castle Port Glasgow",
+      "content_type": "location",
+      "status": "published",
+      "published_at": "2026-04-23",
+      "post_id": 13380,
+      "cost": "$0.5303"
+    },
+    {
+      "topic": "Coronation Park Port Glasgow",
+      "content_type": "location",
+      "status": "published",
+      "published_at": "2026-04-23",
+      "post_id": 13384,
+      "cost": "$0.5927"
+    },
+    {
+      "topic": "Shipbuilders of Port Glasgow",
+      "content_type": "location",
+      "status": "published",
+      "published_at": "2026-04-23",
+      "post_id": 13388,
+      "cost": "$0.5947"
+    },
+    {
+      "topic": "Inverkip",
+      "content_type": "location",
+      "status": "published",
+      "published_at": "2026-04-23",
+      "post_id": 13392,
+      "cost": "$0.8259"
+    }
+  ]
+}

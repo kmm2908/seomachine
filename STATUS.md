@@ -947,6 +947,21 @@ New client added 2026-03-26. Existing WordPress site at `thaimassagegreenock.co.
 - [ ] Test batch publish run on TMB
 - [ ] Add TMG/TMB to Google Sheet Column D dropdown
 
+### TMG Location Batch (2026-04-23)
+- [x] 14 location pages published — 14/14 clean, 0 review
+- [x] Post IDs: 13321 (Greenock Esplanade), 13326 (Lyle Hill), 13334 (McLean Museum), 13342 (Battery Park), 13352 (Custom House), 13356 (Ocean Terminal), 13361 (Wellpark), 13368 (Gourock Outdoor Pool), 13372 (Cloch Lighthouse), 13376 (Gourock Ferry Terminal), 13380 (Newark Castle), 13384 (Coronation Park), 13388 (Shipbuilders of Port Glasgow), 13392 (Inverkip)
+- [x] Total cost: $8.83
+
+### TMG FAQ Strip (2026-04-23)
+- [x] Elementor template re-fetched — FAQ/S2 section confirmed removed by client
+- [x] FAQ section stripped from all 13 service posts (13267–13312) — JSON-LD schema retained on each
+- [x] FAQ widget removed from all 14 location posts (13321–13392) — no schema was present in location posts
+- [x] Elementor CSS regenerated on all 27 posts
+- [x] Future publishes: template now has S1 only — no FAQ will be injected on new pages
+
+### TMG Problem Batch Gap (2026-04-23)
+- [x] Backache — post 13360, published clean ($0.83) — was the only SDY topic missing from TMG
+
 ### TMG Service Batch (2026-04-22)
 - [x] 13 service pages published — 12 clean, 1 published_review
 - [x] Post IDs: 13267 (Traditional Thai Massage), 13271 (Thai Oil Massage), 13275 (Thai Aromatherapy Massage), 13279 (Thai Sports Massage), 13283 (Thai Facial Massage), 13287 (Thai Foot Massage), 13291 (Hot Stone Massage), 13295 (Thai Head Massage), 13299 (Head and Hair Oiling), 13303 (Thai Reflexology), 13307 (Thai Deep Tissue Oil Massage), 13308★ (Aromatherapy Deep Tissue Oil Massage — readability failure), 13312 (Tailored Facial Treatment)
