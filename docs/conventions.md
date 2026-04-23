@@ -90,6 +90,34 @@ Added to via `/wrap` at the end of each session — any new class of problem get
 
 ---
 
+## GBP auth: use OAuth2 owner credentials, not service account
+
+**Why:** Service accounts in Google's UNVERIFIED/NOT_VETTED state cannot accept GBP Manager invitations — they fail with `FAILED_PRECONDITION` (400) silently. There is no error distinguishing "invitation pending" from "no access". Since `kmmsubs@gmail.com` is Primary Owner of all 3 GBP locations, OAuth2 user credentials bypass invitations entirely and work without any GBP Manager setup.
+**How to apply:** GBP module auto-uses OAuth2 when `config/gbp-oauth-client.json` + `config/gbp-oauth-token.json` exist. Service account remains as fallback. To re-generate a token, run `src/tools/gbp_auth.py` (or equivalent `InstalledAppFlow.run_local_server()`). If OAuth fails, verify the client file has `"installed"` as top-level key (Desktop app) not `"web"`.
+
+---
+
+## GBP OAuth2 client must be Desktop app type, not Web app
+
+**Why:** `InstalledAppFlow.run_local_server()` generates a random-port redirect URI (`http://localhost:PORT/`). Web app OAuth clients require each redirect URI to be explicitly registered — you'd need every possible port. Desktop app clients (type: `installed`) allow any `localhost` URI automatically and require no redirect URI configuration.
+**How to apply:** When creating an OAuth2 client in Cloud Console for CLI/script use, always choose "Desktop app". The downloaded JSON has `"installed"` as the top-level key. If you see `redirect_uri_mismatch` in a local flow, check the client type first.
+
+---
+
+## GBP Reviews API is fully retired — do not attempt to enable it
+
+**Why:** Both `mybusiness.googleapis.com/v4` and `mybusinessreviews.googleapis.com/v1` are permanently retired for self-service developers. They cannot be enabled in Cloud Console and will not return data regardless of OAuth scope or quota approval.
+**How to apply:** `collect_reviews()` returns an informational message (not 0/15) so audits don't appear misconfigured. Do not add these URLs to any API-enable attempt. If reviews data is needed, consider DataForSEO or embedding `aggregateRating` in `LocalBusiness` schema from a manually maintained count.
+
+---
+
+## wp rewrite flush required after bulk WP-CLI post status changes
+
+**Why:** `wp post update --post_status=publish` (bulk) does not trigger WordPress rewrite rule flushing. CPT pages with custom permalink structures return 404 (with `error404` CSS class in the body) until rewrites are regenerated.
+**How to apply:** After any bulk WP-CLI status change on CPT posts, always run `wp rewrite flush --hard` over SSH before testing or serving the pages.
+
+---
+
 ## Backfill `competitor_gaps_run: true` in citation state files created before session 67
 **Why:** `CitationState._load()` returns `competitor_gaps_run: False` when the key is absent (older files pre-date the feature). This causes `run_audit.py` to fire the full citation gap analysis (115 DataForSEO SERP calls, ~25 min) on every single audit run rather than just the first.
 **How to apply:** When running an audit against a client whose `clients/{abbr}/citations/state.json` was created before session 67 (2026-04-21), first check whether the key exists: `python3 -c "import json,pathlib; d=json.loads(pathlib.Path('clients/{abbr}/citations/state.json').read_text()); print(d.get('competitor_gaps_run', 'MISSING'))"`. If missing or False and gap analysis has already run, set it to true before starting the audit.

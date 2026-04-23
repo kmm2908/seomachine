@@ -21,7 +21,7 @@ run_in_background: true
 
 ## Project Overview
 
-SEO Machine is a Claude Code workspace for creating SEO-optimised content at scale. It combines custom commands, specialised agents, a Python batch runner, and Google Sheets integration to research, write, optimise, and publish articles for multiple business clients.
+SEO Machine is a Claude Code workspace for creating SEO-optimised content at scale. It combines custom commands, specialised agents, and a Python batch runner to research, write, optimise, and publish articles for multiple business clients.
 
 ## Setup
 
@@ -167,3 +167,7 @@ Rule format:
 ```
 
 The `/wrap` command includes a conventions check — any session lesson not already in `docs/conventions.md` gets added as part of wrap-up.
+
+## Autonomy
+Never return a task to the user if there is any way to complete it — exhaust every avenue (alternative APIs, different auth methods, workarounds, indirect approaches) before handing back. Only interrupt when human input is genuinely unavoidable.
+

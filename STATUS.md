@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-04-23 (session 70 — GBP API quota approved; module rewritten for Account Management API discovery; Place IDs updated; blocked on user enabling Account Management API + accepting manager invitations)
+Last updated: 2026-04-23 (session 71 — GBP OAuth2 migration complete; TMG posts bulk-published; all 3 clients scoring 15/20 GBP; GTM 68/100 C, SDY 65/100 C, TMG 70/100 B)
 
 ---
 
