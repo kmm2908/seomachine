@@ -128,28 +128,28 @@ TOPIC_CONTEXT_MAP = {
 
 FAQ_SCENE_POOL = [
     (
+        "A spa therapist neatly arranging folded white towels on a wooden treatment tray beside a row of small "
+        "glass bottles of massage oil, no client in the frame, clean spa bench visible behind."
+    ),
+    (
         "A relaxed female client in a white spa robe seated with both feet resting in a warm floral foot bath, "
         "rose petals floating on the water, a lit candle glowing beside her, eyes closed in contentment."
     ),
     (
+        "Close-up of a therapist's hands pouring warm herbal massage oil from a small ceramic vessel into an "
+        "open palm, the oil catching the light as it streams, clean neutral spa background."
+    ),
+    (
+        "A male client in a dark dressing gown reclining in a cushioned spa chair, head resting back, eyes "
+        "closed, smiling softly in a calm and relaxed manner, warm ambient lighting."
+    ),
+    (
+        "A female therapist pressing a folded hot herbal compress firmly to a male client's upper shoulder, "
+        "both in a professional spa setting, mid-treatment, client eyes closed."
+    ),
+    (
         "A relaxed female client in a white spa robe seated in a spa chair, cradling a glass cup of herbal tea "
         "with both hands, soft natural light from a window beside her, serene expression."
-    ),
-    (
-        "A relaxed female client lying on a treatment table covered in white sheets, eyes closed, arms resting "
-        "at her sides, a single white orchid on the side table, warm candlelight."
-    ),
-    (
-        "A relaxed female client in a white spa robe reclining in a cushioned chair, fresh white towel wrapped "
-        "around her hair, a lit candle and small vase of flowers on the shelf behind her."
-    ),
-    (
-        "A relaxed female client in a white spa robe seated beside a low table with floating candles in a bowl "
-        "of water and a green plant, looking peacefully toward a window."
-    ),
-    (
-        "A relaxed female client in a white spa robe with eyes closed, hands resting open in her lap, warm "
-        "amber lighting, a small salt lamp and orchid on a shelf in the background."
     ),
 ]
 

@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-04-23 (session 71 — GBP OAuth2 migration complete; TMG posts bulk-published; all 3 clients scoring 15/20 GBP; GTM 68/100 C, SDY 65/100 C, TMG 70/100 B)
+Last updated: 2026-04-25 (session 72 — FAQ_SCENE_POOL diversified; third article image now cycles through 6 distinct scene types)
 
 ---
 
@@ -221,6 +221,7 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] **`SECTION_PHOTO_SUFFIX`** — universal anatomical grounding rule added: all visible body parts must be clearly attached to a person in the scene
 - [x] **Foot massage section prompt** — updated from close-up-hands-only to wide shot showing both client on table and therapist in frame; fixes floating feet issue
 - [x] **FAQ image variety** — `FAQ_SCENE_POOL` of 6 distinct client-at-rest scenes replaces single fixed prompt; scene chosen deterministically by page slug (same page always regenerates to same scene)
+- [x] **FAQ_SCENE_POOL diversified (session 72)** — all 6 original entries were "relaxed female client in white spa robe" variations; replaced with 6 genuinely different scene types: [0] therapist arranging towels/oils (prep), [1] female client foot bath (kept), [2] oil-pouring close-up (product), [3] male client in dressing gown smiling, [4] therapist pressing herbal compress (action), [5] female client with herbal tea (kept); rotation mechanism unchanged
 - [x] 6 specialist service pages visually audited — all 18 images confirmed anatomically correct
 - [x] 6 specialist service pages republished to staging2 (final IDs: Head and Hair Oiling 2213, Thai Facial Massage 2217, Thai Head Massage 2221, Thai Reflexology 2229, Thai Foot Massage 2248)
 - [x] **Duplicate content audit** — staging2 seo_service reviewed; 3 overlapping pairs identified and resolved:
