@@ -2,7 +2,7 @@
   "abbr": "tmg",
   "site_name": "Thai Massage Greenock",
   "site_url": "https://thaimassagegreenock.co.uk",
-  "date": "2026-04-23",
+  "date": "2026-04-25",
   "schema": {
     "has_local_business": true,
     "has_faq": true,
@@ -41,20 +41,18 @@
     "findings": []
   },
   "reviews": {
-    "count": 0,
-    "average_rating": 0.0,
-    "response_rate": 0.0,
-    "available": false,
-    "score": 0,
-    "findings": [
-      "GBP Reviews API not accessible — Google restricts this API to approved partners. Add aggregateRating to site schema as an alternative."
-    ]
+    "count": 47,
+    "average_rating": 5.0,
+    "response_rate": 1.0,
+    "available": true,
+    "score": 14,
+    "findings": []
   },
   "nap": {
     "schema_name_match": "unknown",
     "schema_address_match": "unknown",
     "schema_phone_match": "unknown",
-    "total_sites": 1,
+    "total_sites": 8,
     "found_count": 0,
     "nap_issue_count": 0,
     "duplicate_count": 0,
@@ -111,7 +109,7 @@
             "postcode": "input[name=\"postcode\"]"
           }
         },
-        "status": "unknown",
+        "status": "not_found",
         "nap_match": null,
         "listing_url": null,
         "found_name": "",
@@ -199,7 +197,7 @@
             "postcode": "#postcode"
           }
         },
-        "status": "unknown",
+        "status": "not_found",
         "nap_match": null,
         "listing_url": null,
         "found_name": "",
@@ -315,7 +313,7 @@
             "postcode": "input[name=\"postcode\"]"
           }
         },
-        "status": "unknown",
+        "status": "not_found",
         "nap_match": null,
         "listing_url": null,
         "found_name": "",
@@ -455,7 +453,7 @@
           "form_url_template": "https://www.192.com/atoz/business/add/",
           "form_selectors": {}
         },
-        "status": "unknown",
+        "status": "not_found",
         "nap_match": null,
         "listing_url": null,
         "found_name": "",
@@ -567,7 +565,7 @@
           "form_url_template": "https://www.freeindex.co.uk/register.htm",
           "form_selectors": {}
         },
-        "status": "unknown",
+        "status": "not_found",
         "nap_match": null,
         "listing_url": null,
         "found_name": "",
@@ -679,7 +677,7 @@
           "form_url_template": "https://www.brownbook.net/add-business/",
           "form_selectors": {}
         },
-        "status": "unknown",
+        "status": "not_found",
         "nap_match": null,
         "listing_url": null,
         "found_name": "",
@@ -707,7 +705,7 @@
           "form_url_template": "https://misterwhat.co.uk/businesses/add",
           "form_selectors": {}
         },
-        "status": "unknown",
+        "status": "not_found",
         "nap_match": null,
         "listing_url": null,
         "found_name": "",
@@ -722,7 +720,7 @@
     "findings": [
       "Business name not found in site schema — add to LocalBusiness.",
       "Phone number not in schema — critical for local search.",
-      "Low citation coverage: 0/1 sites"
+      "Low citation coverage: 0/8 sites"
     ]
   },
   "technical": {
@@ -732,7 +730,7 @@
     "has_h1": true,
     "has_robots": true,
     "has_sitemap": true,
-    "response_time_ms": 221,
+    "response_time_ms": 134,
     "score": 8,
     "findings": [
       "Homepage has no meta description — affects click-through rate."
@@ -750,6 +748,6 @@
     "notes": [],
     "available": true
   },
-  "total_score": 70,
+  "total_score": 84,
   "grade_letter": "B"
 }

@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-04-25 (session 72 — FAQ_SCENE_POOL diversified; third article image now cycles through 6 distinct scene types)
+Last updated: 2026-04-25 (session 73 — Reviews audit response rate now live via Apify; GTM/TMG score 14/15 up from 9/15)
 
 ---
 
@@ -296,6 +296,8 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] GBP info API confirmed working: all 3 sites now score 15/20 on GBP (was 0/20)
 - [x] Reviews API (`mybusiness.googleapis.com/v4` + `mybusinessreviews.googleapis.com`) — both APIs fully retired/restricted by Google; cannot be enabled; `collect_reviews()` updated to return clear message instead of 0/15
 - [x] Audits run (session 71): GTM 68/100 C | SDY 65/100 C | TMG 70/100 B
+- [x] **Reviews scoring fixed (sessions 72–73)** — retired GBP Reviews API replaced with 3-step collection: (A) Google Places API (New) for count + rating; (B) DataForSEO Maps SERP fallback; (C) Apify `compass~google-maps-reviews-scraper` for response rate. All 3 clients have `gbp_place_id` (`ChIJ...` format) in config. Google Maps headless scraping was attempted but blocked by Google's "limited view" restriction — Apify is the only viable free route for response rate data. `APIFY_API_KEY` in `.env`; email alert on key expiry.
+- [x] Audits run (session 73): GTM 82/100 B | SDY 65/100 C | TMG 84/100 B — GTM/TMG reviews now 14/15 (up from 9/15); SDY 0/15 accurate (0 Google reviews)
 - [x] **TMG posts were all drafts** — bulk-published 37 posts (13 service, 14 location, 12 problem) via WP-CLI; 1 flagged (Diabetic Neuropathy 13192) left as draft; rewrite rules flushed to fix 404s
 - [x] `audit-latest.json` updated for all 3 clients with new scores
 

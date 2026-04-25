@@ -2,7 +2,7 @@
   "abbr": "sdy",
   "site_name": "Serendipity Massage Therapy & Wellness",
   "site_url": "https://serendipitymassage.co.uk",
-  "date": "2026-04-23",
+  "date": "2026-04-25",
   "schema": {
     "has_local_business": true,
     "has_faq": true,
@@ -45,10 +45,10 @@
     "count": 0,
     "average_rating": 0.0,
     "response_rate": 0.0,
-    "available": false,
+    "available": true,
     "score": 0,
     "findings": [
-      "Review data not available — add `gbp_location_id` to config.json or add aggregateRating to site schema."
+      "Only 0 reviews — businesses with 50+ reviews dominate local search."
     ]
   },
   "nap": {
@@ -731,7 +731,7 @@
     "has_h1": true,
     "has_robots": true,
     "has_sitemap": true,
-    "response_time_ms": 708,
+    "response_time_ms": 693,
     "score": 10,
     "findings": []
   },

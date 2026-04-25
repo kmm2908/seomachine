@@ -2,7 +2,7 @@
   "abbr": "gtm",
   "site_name": "Glasgow Thai Massage",
   "site_url": "https://glasgowthaimassage.co.uk",
-  "date": "2026-04-23",
+  "date": "2026-04-25",
   "schema": {
     "has_local_business": true,
     "has_faq": true,
@@ -22,7 +22,7 @@
   },
   "content": {
     "service_count": 7,
-    "blog_count": 70,
+    "blog_count": 71,
     "location_count": 4,
     "page_count": 58,
     "has_sitemap": true,
@@ -42,14 +42,12 @@
     "findings": []
   },
   "reviews": {
-    "count": 0,
-    "average_rating": 0.0,
-    "response_rate": 0.0,
-    "available": false,
-    "score": 0,
-    "findings": [
-      "Review data not available — add `gbp_location_id` to config.json or add aggregateRating to site schema."
-    ]
+    "count": 58,
+    "average_rating": 4.7,
+    "response_rate": 1.0,
+    "available": true,
+    "score": 14,
+    "findings": []
   },
   "nap": {
     "schema_name_match": "unknown",
@@ -733,7 +731,7 @@
     "has_h1": true,
     "has_robots": true,
     "has_sitemap": true,
-    "response_time_ms": 819,
+    "response_time_ms": 134,
     "score": 8,
     "findings": [
       "Homepage has no meta description — affects click-through rate."
@@ -751,6 +749,6 @@
     "notes": [],
     "available": true
   },
-  "total_score": 68,
-  "grade_letter": "C"
+  "total_score": 82,
+  "grade_letter": "B"
 }

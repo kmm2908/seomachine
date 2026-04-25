@@ -118,6 +118,24 @@ Added to via `/wrap` at the end of each session — any new class of problem get
 
 ---
 
+## Apify `run-sync-get-dataset-items` returns 201, not 200
+**Why:** The Apify synchronous run endpoint creates a run object (HTTP 201 Created), not a simple data fetch (HTTP 200 OK). Treating 201 as a failure means the call always silently returns None even when the data is valid.
+**How to apply:** When checking Apify response codes, use `status_code in (200, 201)`. This applies to any call to `https://api.apify.com/v2/acts/{id}/run-sync-get-dataset-items`.
+
+---
+
+## Google Maps reviews panel is blocked for all headless browsers
+**Why:** Google Maps shows a "limited view" to any automated browser — headless Chromium, headless Chrome, or any browser with the automation fingerprint exposed. The reviews panel is restricted to authenticated users, making DOM scraping and screenshot approaches equally unviable.
+**How to apply:** Never attempt to scrape Google Maps reviews via Playwright or similar. Use Apify (`compass~google-maps-reviews-scraper`) or another authenticated scraping service. The `responseFromOwnerText` field on each result is null/string and gives response rate directly.
+
+---
+
+## `except Exception: pass` in collectors silently swallows TypeError from wrong kwargs
+**Why:** The Step A/B/C pattern in `collect_reviews()` uses broad exception suppression so a single source failure doesn't break the audit. But this also hides bugs like passing `known_review_count=` to a function that only accepts `max_reviews=`, causing all downstream data to be silently missing.
+**How to apply:** When a Step A/B/C collector block produces None/zero for a metric that should have data, test the step in isolation first: `python3 -c "from collectors import collect_reviews; ..."` before running the full audit. Also run the module function directly to confirm it returns data.
+
+---
+
 ## Backfill `competitor_gaps_run: true` in citation state files created before session 67
 **Why:** `CitationState._load()` returns `competitor_gaps_run: False` when the key is absent (older files pre-date the feature). This causes `run_audit.py` to fire the full citation gap analysis (115 DataForSEO SERP calls, ~25 min) on every single audit run rather than just the first.
 **How to apply:** When running an audit against a client whose `clients/{abbr}/citations/state.json` was created before session 67 (2026-04-21), first check whether the key exists: `python3 -c "import json,pathlib; d=json.loads(pathlib.Path('clients/{abbr}/citations/state.json').read_text()); print(d.get('competitor_gaps_run', 'MISSING'))"`. If missing or False and gap analysis has already run, set it to true before starting the audit.
