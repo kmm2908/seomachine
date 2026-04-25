@@ -716,7 +716,7 @@ def collect_reviews(config: Dict) -> ReviewResult:
                     keyword = f'{keyword} {city}'
                     break
 
-        # Step A: Google Places API (New) → count + rating + response rate from reviews sample
+        # Step A: Google Places API (New) → count + rating (free, authoritative)
         places_key = os.getenv('GOOGLE_PLACES_API_KEY')
         if places_key:
             try:
@@ -724,14 +724,6 @@ def collect_reviews(config: Dict) -> ReviewResult:
                 pd = get_place_details(place_id, places_key)
                 count = pd.get('userRatingCount')
                 avg_rating = pd.get('rating')
-                reviews = pd.get('reviews') or []
-                if reviews:
-                    replied = sum(
-                        1 for r_ in reviews
-                        if r_.get('ownerAttribution') or r_.get('authorAttribution', {}).get('displayName', '').lower() == 'owner'
-                    )
-                    result.response_rate = replied / len(reviews)
-                    has_rate_data = True
             except Exception:
                 pass
 

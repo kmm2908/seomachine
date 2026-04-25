@@ -6,7 +6,7 @@ def get_place_details(place_id: str, api_key: str) -> dict:
     url = f"https://places.googleapis.com/v1/places/{place_id}"
     headers = {
         "X-Goog-Api-Key": api_key,
-        "X-Goog-FieldMask": "rating,userRatingCount,reviews",
+        "X-Goog-FieldMask": "rating,userRatingCount",
     }
     try:
         r = requests.get(url, headers=headers, timeout=10)
