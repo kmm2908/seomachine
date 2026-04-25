@@ -762,6 +762,17 @@ def collect_reviews(config: Dict) -> ReviewResult:
     result.count = count or 0
     result.average_rating = float(avg_rating or 0.0)
 
+    # Step C: Scrape Google Maps for owner response rate
+    if place_id and result.count > 0:
+        try:
+            from google_maps_scraper import get_response_rate
+            rate = get_response_rate(place_id)
+            if rate is not None:
+                result.response_rate = rate
+                has_rate_data = True
+        except Exception:
+            pass
+
     # Build findings
     if result.count < 10:
         result.findings.append(
