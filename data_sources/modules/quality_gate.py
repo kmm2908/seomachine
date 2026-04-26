@@ -80,6 +80,8 @@ class QualityGate:
     def __init__(self, anthropic_client, client_config: dict):
         self._client = anthropic_client
         self._config = client_config
+        wp_url = client_config.get('wordpress', {}).get('url', '')
+        self._site_domain = re.sub(r'^https?://(www\.)?', '', wp_url).rstrip('/')
 
     def check_and_improve(self, content: str, topic: str, content_type: str) -> QualityResult:
         """
@@ -111,7 +113,14 @@ class QualityGate:
 
         failures = self._evaluate(eng, read, cfg)
         passing = self._get_passing(eng, read, cfg)
-        self._print_quality_line(eng, read, failures, attempt=1, rewriting=bool(failures), flesch_threshold=cfg['flesch_threshold'])
+        kw_ok = self._keyword_in_first_100_words(current_content, topic)
+        link_count = self._count_internal_links(current_content)
+        if not kw_ok:
+            failures.append('keyword_placement')
+        else:
+            passing.append('keyword_placement')
+        self._print_quality_line(eng, read, failures, attempt=1, rewriting=bool(failures),
+                                 flesch_threshold=cfg['flesch_threshold'], link_count=link_count)
 
         if not failures:
             return QualityResult(content=content, passed=True, attempts=1, cost_usd=0.0)
@@ -158,13 +167,20 @@ class QualityGate:
                 )
 
             failures = self._evaluate(eng, read, cfg)
-            passing = self._get_passing(eng, read, cfg)  # update for next iteration
+            passing = self._get_passing(eng, read, cfg)
+            kw_ok = self._keyword_in_first_100_words(current_content, topic)
+            link_count = self._count_internal_links(current_content)
+            if not kw_ok:
+                failures.append('keyword_placement')
+            else:
+                passing.append('keyword_placement')
             is_last = rewrite_num == MAX_REWRITES
             self._print_quality_line(
                 eng, read, failures,
                 attempt=1 + rewrite_num,
                 rewriting=bool(failures) and not is_last,
-                flesch_threshold=cfg['flesch_threshold']
+                flesch_threshold=cfg['flesch_threshold'],
+                link_count=link_count,
             )
 
             if not failures:
@@ -253,14 +269,20 @@ class QualityGate:
             instructions.append(
                 "Break any paragraph with more than 3 sentences into two shorter ones. Aim for 2-3 sentences per paragraph."
             )
+        if 'keyword_placement' in failures:
+            instructions.append(
+                "Introduce the primary topic keyword within the first 100 words of the article body. "
+                "The opening paragraph is the natural place — weave it in without forcing it."
+            )
         # Preserve instructions — tell Claude not to break what already works
         preserve_instructions = {
-            'readability': "Readability is already good — keep sentences short and clear. Do not make sentences longer or more complex.",
-            'hook':        "The opening paragraph is already effective — do not change it.",
-            'ctas':        "CTAs are already well distributed — keep them as they are.",
-            'stories':     "The client scenario is already present — keep it.",
-            'rhythm':      "Sentence rhythm is already varied — maintain this variety.",
-            'paragraphs':  "Paragraph lengths are already good — do not merge paragraphs together.",
+            'readability':       "Readability is already good — keep sentences short and clear. Do not make sentences longer or more complex.",
+            'hook':              "The opening paragraph is already effective — do not change it.",
+            'ctas':              "CTAs are already well distributed — keep them as they are.",
+            'stories':           "The client scenario is already present — keep it.",
+            'rhythm':            "Sentence rhythm is already varied — maintain this variety.",
+            'paragraphs':        "Paragraph lengths are already good — do not merge paragraphs together.",
+            'keyword_placement': "The primary keyword is already in the first 100 words — do not move or rewrite the opening.",
         }
         if passing:
             preserve_lines = [preserve_instructions[k] for k in passing if k in preserve_instructions]
@@ -347,8 +369,37 @@ Content to rewrite:
         text = re.sub(r' +', ' ', text).strip()
         return text
 
+    _STOPWORDS = {
+        'a','an','the','and','or','but','in','on','at','to','for','of','with','by','from',
+        'up','into','as','is','it','its','how','what','why','when','where','who','which',
+        'that','this','are','was','were','be','been','do','does','did','can','could',
+        'would','should','may','might','your','you','all','my','i','get',
+    }
+
+    def _keyword_in_first_100_words(self, html: str, topic: str) -> bool:
+        """Return True if ≥2 meaningful topic words appear in the first 100 body words."""
+        body_plain = self._to_body_plain(html)
+        first_100 = ' '.join(body_plain.split()[:100]).lower()
+        key_words = [w.lower() for w in re.split(r'\W+', topic)
+                     if w and w.lower() not in self._STOPWORDS]
+        if len(key_words) < 2:
+            return True  # can't meaningfully check a single-word topic
+        matches = sum(1 for w in key_words if w in first_100)
+        return matches >= 2
+
+    def _count_internal_links(self, html: str) -> int:
+        """Count <a href> links in the body (Section 1) that point to the site's own domain."""
+        body = html.split('<!-- SECTION 2', 1)[0]
+        hrefs = re.findall(r'<a\b[^>]*\bhref=["\']([^"\']+)["\']', body, re.IGNORECASE)
+        count = 0
+        for href in hrefs:
+            if href.startswith('/') or (self._site_domain and self._site_domain in href):
+                count += 1
+        return count
+
     def _print_quality_line(self, eng: dict, read: dict, failures: List[str],
-                             attempt: int, rewriting: bool, flesch_threshold: int = 55) -> None:
+                             attempt: int, rewriting: bool, flesch_threshold: int = 55,
+                             link_count: int = -1) -> None:
         """Print quality summary line to stdout."""
         scores = eng.get('scores', {})
         flesch = read.get('readability_metrics', {}).get('flesch_reading_ease', 0)
@@ -357,11 +408,15 @@ Content to rewrite:
             return '✓' if scores.get(key) else '✗'
 
         flesch_tick = '✓' if flesch >= flesch_threshold else '✗'
+        kw_tick = '✗' if 'keyword_placement' in failures else '✓'
+        link_str = (f" | links {link_count}{'✓' if link_count >= 2 else '✗'}"
+                    if link_count >= 0 else "")
 
         line = (
             f"    → Quality: Flesch {flesch:.0f} {flesch_tick} | "
             f"hook {tick('hook')} | ctas {tick('ctas')} | "
-            f"stories {tick('stories')} | rhythm {tick('rhythm')} | paras {tick('paragraphs')}"
+            f"stories {tick('stories')} | rhythm {tick('rhythm')} | paras {tick('paragraphs')} | "
+            f"kw {kw_tick}{link_str}"
         )
 
         if failures and rewriting:

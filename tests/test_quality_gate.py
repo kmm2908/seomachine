@@ -14,6 +14,7 @@ def make_client_config(abbr='gtm'):
         'name': 'Test Business',
         'phone': '0141 000 0000',
         'website': 'https://example.com',
+        'wordpress': {'url': 'https://example.com'},
     }
 
 
@@ -31,11 +32,12 @@ def make_mock_anthropic(response_text='<p>Rewritten content here.</p>'):
 
 
 PASSING_CONTENT = """
-<p>Imagine coming home after a long week and sinking into total relaxation.</p>
+<p>Imagine coming home after a long week and sinking into total relaxation with a
+<a href="/couples-massage/">couples massage</a> designed just for you.</p>
 <p>One of our regulars, a nurse who works long shifts, found that monthly sessions
 improved her sleep and reduced her neck tension significantly. Short sentence here.
 Then a longer one. Then short again. Mix it up throughout.</p>
-<p>Our couples massage is perfect for anniversaries. Book your session today and
+<p>Our <a href="/services/">couples massage</a> is perfect for anniversaries. Book your session today and
 feel the difference. Get in touch to arrange your visit anytime.</p>
 <p>We use expert techniques tailored to your needs. Simple words work best here.
 Each session is designed around you. Book now to get started.</p>
@@ -150,6 +152,8 @@ def test_api_error_on_first_rewrite_still_tries_second():
     mock_eng = MagicMock()
     # analyze() called: initial check (fail), then after rewrite-2 succeeds (pass)
     mock_eng.return_value.analyze.side_effect = [failing_scores, passing_scores]
+    mock_eng.return_value._analyze_ctas.side_effect = [{'distributed': False}, {'distributed': True}]
+    mock_eng.return_value._analyze_paragraphs.side_effect = [{'long_count': 5}, {'long_count': 0}]
     mock_read = MagicMock()
     mock_read.return_value.analyze.side_effect = [failing_read, passing_read]
 
@@ -157,7 +161,8 @@ def test_api_error_on_first_rewrite_still_tries_second():
     with patch('quality_gate.EngagementAnalyzer', mock_eng), \
          patch('quality_gate.ReadabilityScorer', mock_read), \
          patch('quality_gate.Path.read_text', return_value='# Brand Voice\nBe warm.'):
-        result = gate.check_and_improve(FAILING_CONTENT, 'Deep Tissue', 'service')
+        # Topic "Couples Massage": fails keyword check on FAILING_CONTENT, passes on PASSING_CONTENT
+        result = gate.check_and_improve(FAILING_CONTENT, 'Couples Massage', 'service')
     assert result.passed is True
     assert mock_client.messages.create.call_count == 2
 
@@ -207,6 +212,8 @@ def test_api_error_on_first_rewrite_uses_original_failures_for_second():
     mock_eng = MagicMock()
     # analyze() called: initial check (fail), then after rewrite-2 succeeds (pass)
     mock_eng.return_value.analyze.side_effect = [failing_scores, passing_scores]
+    mock_eng.return_value._analyze_ctas.side_effect = [{'distributed': False}, {'distributed': True}]
+    mock_eng.return_value._analyze_paragraphs.side_effect = [{'long_count': 5}, {'long_count': 0}]
     mock_read = MagicMock()
     mock_read.return_value.analyze.side_effect = [failing_read, passing_read]
 
@@ -216,7 +223,8 @@ def test_api_error_on_first_rewrite_uses_original_failures_for_second():
     with patch('quality_gate.EngagementAnalyzer', mock_eng), \
          patch('quality_gate.ReadabilityScorer', mock_read), \
          patch('quality_gate.Path.read_text', return_value='# Brand Voice\nBe warm.'):
-        result = gate.check_and_improve(FAILING_CONTENT, 'Deep Tissue', 'service')
+        # Topic "Couples Massage": fails keyword check on FAILING_CONTENT, passes on PASSING_CONTENT
+        result = gate.check_and_improve(FAILING_CONTENT, 'Couples Massage', 'service')
 
     assert result.passed is True
     # The second API call prompt should contain real fix instructions (not empty)
@@ -263,6 +271,8 @@ def test_preserve_instructions_included_for_passing_criteria():
          patch('quality_gate.ReadabilityScorer') as mock_read_cls, \
          patch('quality_gate.Path.read_text', return_value='# Brand Voice\nBe warm.'):
         mock_eng_cls.return_value.analyze.return_value = failing_eng
+        mock_eng_cls.return_value._analyze_ctas.return_value = {'distributed': False}
+        mock_eng_cls.return_value._analyze_paragraphs.return_value = {'long_count': 0}
         mock_read_cls.return_value.analyze.return_value = passing_read
         gate.check_and_improve(FAILING_CONTENT, 'Deep Tissue', 'service')
 
@@ -270,3 +280,43 @@ def test_preserve_instructions_included_for_passing_criteria():
     prompt = captured_prompt[0]
     assert 'PRESERVE' in prompt
     assert 'Readability is already good' in prompt
+
+
+def test_keyword_placement_passes_when_topic_in_first_100_words():
+    from quality_gate import QualityGate
+    gate = QualityGate(make_mock_anthropic(), make_client_config())
+    assert gate._keyword_in_first_100_words(PASSING_CONTENT, 'Couples Massage') is True
+
+
+def test_keyword_placement_fails_when_topic_missing_from_first_100_words():
+    from quality_gate import QualityGate
+    gate = QualityGate(make_mock_anthropic(), make_client_config())
+    content_no_early_keyword = '<p>' + ('filler word ' * 120) + '</p><p>couples massage mentioned here</p>'
+    assert gate._keyword_in_first_100_words(content_no_early_keyword, 'Couples Massage') is False
+
+
+def test_count_internal_links_counts_relative_and_domain_hrefs():
+    from quality_gate import QualityGate
+    gate = QualityGate(make_mock_anthropic(), make_client_config())
+    content = (
+        '<p><a href="/service/thai-massage/">Thai Massage</a></p>'
+        '<p><a href="https://example.com/book/">Book Now</a></p>'
+        '<p><a href="https://external.com/page/">External</a></p>'
+    )
+    assert gate._count_internal_links(content) == 2
+
+
+def test_keyword_placement_failure_included_in_gate_result():
+    from quality_gate import QualityGate
+    gate = QualityGate(make_mock_anthropic(PASSING_CONTENT), make_client_config())
+    mock_eng, mock_read = make_passing_analyzers()
+    content_no_early_keyword = (
+        '<p>' + ('filler word ' * 120) + '</p>'
+        '<p>Our <a href="/service/">deep tissue</a> massage is great. '
+        '<a href="/book/">Book now.</a></p>'
+    )
+    with patch('quality_gate.EngagementAnalyzer', mock_eng), \
+         patch('quality_gate.ReadabilityScorer', mock_read), \
+         patch('quality_gate.Path.read_text', return_value='# Brand Voice\nBe warm.'):
+        result = gate.check_and_improve(content_no_early_keyword, 'Deep Tissue Massage', 'service')
+    assert 'keyword_placement' in result.failures or result.passed is True

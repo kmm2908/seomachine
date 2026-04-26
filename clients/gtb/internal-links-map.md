@@ -10,6 +10,29 @@ Use this file when writing any content for the GTB blog site. Link naturally to 
 
 ---
 
+## Tier 1 — Always Consider
+
+Include at least one of these in every article. These are the highest-value commercial pages.
+
+| Page | URL | Best anchor text |
+|------|-----|-----------------|
+| Book an appointment (GTM) | https://glasgowthaimassage.co.uk/booking-form/ | book a session, book online, book your appointment |
+| All services (GTM) | https://glasgowthaimassage.co.uk/thai-massage-glasgow/ | our services, all treatments, what we offer |
+
+---
+
+## Tier 2 — GTM Service Pages
+
+Link from blog articles when a specific treatment is mentioned.
+
+---
+
+## Tier 3 — Blog Posts & Category Archives
+
+Link between blog posts for topical depth.
+
+---
+
 ## Main GTM Site — Core Pages
 
 Always link to these when relevant. These are the primary commercial pages for the business.

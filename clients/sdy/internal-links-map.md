@@ -4,6 +4,21 @@ This document catalogs key pages on serendipitymassage.co.uk for strategic inter
 
 ---
 
+## Tier 1 — Always Consider
+
+Include at least one of these in every article. These are the highest-value commercial pages.
+
+- Book Now: https://serendipitymassage.co.uk/book-now/ — anchor: book a session, book online, book your appointment
+- Homepage (services hub): https://serendipitymassage.co.uk/ — anchor: Serendipity Massage, massage therapy Glasgow, our services
+
+---
+
+## Tier 2 — Service Pages
+
+Link from any article that mentions a specific treatment.
+
+---
+
 ## Key Pages
 
 - Homepage: https://serendipitymassage.co.uk/

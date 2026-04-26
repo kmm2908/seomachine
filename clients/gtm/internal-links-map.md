@@ -8,6 +8,23 @@ Use this file when writing any content. Link naturally to relevant pages using t
 
 ---
 
+## Tier 1 — Always Consider
+
+Include at least one of these in every article. These are the highest-value commercial pages.
+
+| Page | URL | Best anchor text |
+|------|-----|-----------------|
+| Book an appointment | https://glasgowthaimassage.co.uk/book/ | book a session, book online, book your appointment |
+| All services | https://glasgowthaimassage.co.uk/thai-massage-glasgow/ | our services, all treatments, what we offer |
+
+---
+
+## Tier 2 — Service & Condition Pages
+
+Link from any article that mentions a specific treatment or health condition.
+
+---
+
 ## Core Pages
 
 | Page | URL | Best anchor text |
@@ -48,6 +65,10 @@ Link to these when discussing the relevant condition in blog or topical content.
 | Lower back pain | https://glasgowthaimassage.co.uk/lower-back-pain-causes-treatment/ | lower back pain, back pain treatment, massage for back pain |
 
 ---
+
+## Tier 3 — Blog & Category Pages
+
+Link to these for topical depth and cross-linking between related content.
 
 ## Blog Categories
 

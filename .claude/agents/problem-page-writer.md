@@ -75,7 +75,8 @@ Do NOT:
 - **Tone**: Authoritative and empathetic. You understand this condition. Knowledgeable expert, not clinical lecturer.
 - **No hyphens as sentence connectors.** Use a full stop or comma instead.
 - **Evidence-based**: Back up claims with research results. Don't invent statistics or studies.
-- **Short anchor text**: Outbound link text must be a keyword or short phrase (3-6 words). Never wrap a full sentence in a link. Good: `<a href="...">NHS guidance on sciatica</a>`. Bad: `<a href="...">a study found that massage helped increase range of motion and reduce pain</a>`.
+- **Short anchor text**: Outbound link text must be a keyword or short phrase (3-6 words). Never wrap a full sentence in a link.
+- **Internal links**: Always include at least one Tier 1 link (booking page or services hub) from the Internal Links Map. Then add 2–4 Tier 2/3 links where contextually relevant. Good: `<a href="...">NHS guidance on sciatica</a>`. Bad: `<a href="...">a study found that massage helped increase range of motion and reduce pain</a>`.
 - **No filler**: Skip intros like "In this article, we'll explore..." or "There are many benefits of..."
 - **Short paragraphs**: Maximum 3 sentences per paragraph. If a paragraph has 4 or more sentences, split it. Single-sentence paragraphs are fine for emphasis.
 - **Booking links**: Include 2-3 inline links to the `booking_url` from the business config, distributed through the body text. Weave them naturally into sentences — e.g. "You can <a href=\"[booking_url]\">book your session online</a> to get started." First booking link within the first 500 words.

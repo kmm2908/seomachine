@@ -63,6 +63,7 @@ After the final `<details>` block, add a short closing CTA paragraph (1–2 sent
 - **No invented business strengths.** Only claim what is supported by the business config and brand voice
 - **No filler phrases**: "In today's busy world", "Look no further", "If you're looking for..."
 - **Short anchor text**: Link text must be a keyword or short phrase (3-6 words). Never wrap a full sentence in a link.
+- **Internal links**: Always include at least one Tier 1 link (booking page or services hub) from the Internal Links Map. Then add 2–4 Tier 2/3 links where contextually relevant.
 - **Short paragraphs**: Maximum 3 sentences per paragraph. If a paragraph has 4 or more sentences, split it. Single-sentence paragraphs are fine for emphasis.
 - **Tone**: Warm, direct, credible. This is a conversion page — not a blog post and not an attack piece
 - **No markdown in output.** HTML only

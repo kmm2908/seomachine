@@ -4,6 +4,29 @@ Use these confirmed URLs when adding internal links to TMG content.
 
 ---
 
+## Tier 1 — Always Consider
+
+Include at least one of these in every article. These are the highest-value commercial pages.
+
+| Page | URL | Best anchor text |
+|------|-----|-----------------|
+| Booking Form | https://thaimassagegreenock.co.uk/booking-form/ | book a session, book online, book your appointment |
+| Homepage (services hub) | https://thaimassagegreenock.co.uk/ | Thai Massage Greenock, our massage services, all treatments |
+
+---
+
+## Tier 2 — Service Pages
+
+Link from any article that mentions a specific treatment.
+
+---
+
+## Tier 3 — Location & Other Pages
+
+Link when discussing specific areas or general topics.
+
+---
+
 ## Service Pages
 
 | Service | URL |
