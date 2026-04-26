@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-04-25 (session 73 — Reviews audit response rate now live via Apify; GTM/TMG score 14/15 up from 9/15)
+Last updated: 2026-04-26 (session 74 — Quality gate: keyword_placement check + internal link count display; tier structure in all internal-links maps; all 7 agents updated)
 
 ---
 
@@ -410,6 +410,10 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] **Problem Flesch threshold** (session 22) — `problem` content type: Flesch lowered from 55 to 48 (medical/health content is naturally denser)
 - [x] **Rate limit retry sleep** (session 22) — 65-second sleep between rewrite retry attempts when API returns rate limit error (was failing immediately before)
 - [x] **`published_review` status** (session 23) — quality gate failures now publish to WordPress as drafts with ★★★★★ in title + failure notice paragraph; status `published_review` in queue; `✎` icon in `--status` display; user reviews directly in wp-admin instead of editing local HTML files
+- [x] **`keyword_placement` gate check** (session 74) — mandatory criterion: ≥2 meaningful topic words (stopwords stripped) must appear in first 100 words of body text; rewrite prompt includes fix + preserve instructions; `_keyword_in_first_100_words()` private method
+- [x] **Internal link count display** (session 74) — `_count_internal_links()` counts `<a href>` in Section 1 body where href starts with `/` or contains client domain; shown in quality line as `links N✓/✗`; informational only (does not gate/fail)
+- [x] **Tier structure in internal-links maps** (session 74) — Tier 1 (always include ≥1: booking + services hub), Tier 2 (service/condition pages), Tier 3 (blog/location/category); added to all 4 client maps (GTM, GTB, TMG, SDY); all 7 agent files updated with tier-based linking instruction
+- [x] **14 unit tests passing** (session 74) — includes Python 3.13 `MagicMock` fix: `TypeError: '<=' not supported` when mock subscript is compared to int; fixed by using `side_effect` returning explicit dicts rather than relying on MagicMock auto-subscription
 
 ### Elementor template auto-refresh (session 12)
 - [x] `fetch_elementor_template.py` — saves `elementor-template-meta.json` sidecar with WP `modified` date on every fetch
