@@ -29,7 +29,8 @@
             "topical": "seo_topical",
             "blog": "post",
             "news": "post",
-            "comp-alt": "seo_comp_alt"
+            "comp-alt": "seo_comp_alt",
+            "yoga-video": "post"
         },
         "default_post_type": "seo_blog",
         "default_status": "draft",

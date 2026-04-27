@@ -5,6 +5,18 @@ Added to via `/wrap` at the end of each session — any new class of problem get
 
 ---
 
+## `research/*` is gitignored — remote agents cannot push queue updates
+**Why:** `.gitignore` line 54 (`research/*`) keeps queue files and research artifacts local only. Remote routines (CCR / cloud agents) cannot reach the local Mac via `git push` for any file under `research/`. Friday cron uses the LOCAL queue, not GitHub.
+**How to apply:** Remote routines that need to enqueue future work must either (a) commit a script that the user runs locally, or (b) write enqueue logic that mutates a tracked file. Never instruct a remote routine to commit changes inside `research/` — git silently skips them and the user thinks the work landed when it didn't. For one-off backfills before a cron run, edit the queue locally in the active session.
+
+---
+
+## Queue entries with `youtube_url` auto-route to `yoga-video`
+**Why:** The yoga/stretching workflow needs an iframe, source credit, and `VideoObject` schema — none of which the standard blog agent produces. Routing on the queue field avoids per-queue config.
+**How to apply:** When adding a YouTube-led post to any queue, set `youtube_url` (and optionally `youtube_title`). `publish_scheduled.py` overrides `content_type` to `yoga-video`, routes to `yoga-video-writer.md`, and post-injects the iframe + "This video originally appeared here:" credit at the `<!-- YOUTUBE_EMBED -->` marker. Every client whose queues may carry yoga-video entries must include `"yoga-video": "post"` (or appropriate CPT) in `wordpress.content_type_map` — without this, the type falls through to `default_post_type` (which on secondary blog sites like GTB is `seo_blog`, a CPT that doesn't exist on those sites, leaving posts invisible).
+
+---
+
 ## Use WP-CLI over SSH, never direct REST, on SiteGround
 **Why:** SiteGround's CDN returns 202 bot-challenge pages for unauthenticated REST requests from non-browser IPs. SSH port forwarding is also blocked (`AllowTcpForwarding no`), so tunnelling is not an option.
 **How to apply:** When `ssh.wp_path` is set in a client's `config.json`, `WordPressPublisher` automatically routes all publishing through WP-CLI over SSH. Never attempt direct REST publish to SiteGround without this path set.

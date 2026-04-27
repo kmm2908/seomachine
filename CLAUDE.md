@@ -73,6 +73,7 @@ For all CLI commands and flags, see `docs/commands.md`.
 | `news` | `blog-post-writer.md` | 600–1200 | News-angle posts; hook is optional in quality gate |
 | `comp-alt` | `competitor-alt-writer.md` | 500–700 | Competitor alternative / comparison pages |
 | `problem` | `problem-page-writer.md` | 600–800 | Condition/symptom pages with authority outbound links |
+| `yoga-video` | `yoga-video-writer.md` | 380–500 | Embed-led posts wrapping a YouTube video; auto-routed when queue entry has `youtube_url`; iframe + source-credit + `VideoObject` schema injected at publish |
 
 ## Batch Runner
 
@@ -100,7 +101,7 @@ All commands in `.claude/commands/`. Key groups:
 
 Located in `.claude/agents/`. For agent properties and output format, read the agent file directly.
 
-- **Content writers (7):** `service-page-writer.md`, `location-page-writer.md`, `pillar-page-writer.md`, `topical-writer.md`, `blog-post-writer.md`, `competitor-alt-writer.md`, `problem-page-writer.md`
+- **Content writers (8):** `service-page-writer.md`, `location-page-writer.md`, `pillar-page-writer.md`, `topical-writer.md`, `blog-post-writer.md`, `competitor-alt-writer.md`, `problem-page-writer.md`, `yoga-video-writer.md`
 - **SEO/optimisation:** `seo-optimizer.md`, `meta-creator.md`, `internal-linker.md`, `keyword-mapper.md`, `content-analyzer.md`, `editor.md`, `headline-generator.md`, `cro-analyst.md`, `performance.md`, `cluster-strategist.md`
 
 ## SEO Approach

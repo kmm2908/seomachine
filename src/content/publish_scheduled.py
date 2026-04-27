@@ -48,6 +48,7 @@ from pipeline import (
     slugify,
     _ensure_directions_snippet,
     _ensure_template_fresh,
+    extract_youtube_id,
     CLIENTS_DIR,
     CONTENT_DIR,
     CONTENT_TYPE_AGENTS,
@@ -154,6 +155,19 @@ def publish_topic(topic_dict: dict, abbr: str, dry_run: bool = False) -> dict:
     content_type = topic_dict.get('content_type', 'blog')
     wp_category = topic_dict.get('wp_category', '')
     brief = topic_dict.get('brief', '')
+    youtube_url = (topic_dict.get('youtube_url') or '').strip()
+    youtube_title = (topic_dict.get('youtube_title') or '').strip()
+
+    # Auto-route entries with a youtube_url to the embed-led agent
+    if youtube_url:
+        yt_id = extract_youtube_id(youtube_url)
+        if not yt_id:
+            raise ValueError(f"Could not extract YouTube ID from {youtube_url}")
+        if content_type != 'yoga-video':
+            print(f"    → Routing to yoga-video (youtube_url present, was {content_type})")
+        content_type = 'yoga-video'
+    else:
+        yt_id = None
 
     api_key = os.getenv('ANTHROPIC_API_KEY')
     if not api_key:
@@ -174,7 +188,10 @@ def publish_topic(topic_dict: dict, abbr: str, dry_run: bool = False) -> dict:
         )
 
     # Generate content
-    content, cost_usd = generate_content(topic, abbr, content_type, client, business_config, brief=brief)
+    content, cost_usd = generate_content(
+        topic, abbr, content_type, client, business_config,
+        brief=brief, youtube_url=youtube_url, youtube_title=youtube_title,
+    )
 
     if not content or len(content) < 100:
         raise ValueError("Generated content is too short or empty")
@@ -189,6 +206,26 @@ def publish_topic(topic_dict: dict, abbr: str, dry_run: bool = False) -> dict:
     content = content.replace('[BUSINESS_POSTCODE]', business_config.get('postcode', ''))
     content = content.replace('[BUSINESS_PRICE_RANGE]', schema_cfg.get('price_range', ''))
     content = content.replace('[BUSINESS_LOGO]', schema_cfg.get('logo_url', ''))
+
+    # Inject YouTube iframe + source-credit line at the marker, replace schema tokens
+    if youtube_url and yt_id:
+        iframe_block = (
+            '<div class="yoga-video-embed">'
+            '<iframe width="560" height="315" '
+            f'src="https://www.youtube.com/embed/{yt_id}" '
+            'title="YouTube video" frameborder="0" '
+            'allow="accelerometer; autoplay; clipboard-write; encrypted-media; '
+            'gyroscope; picture-in-picture; web-share" '
+            'referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>'
+            '</iframe>'
+            '<p class="video-credit">This video originally appeared here: '
+            f'<a href="{youtube_url}" target="_blank" rel="noopener">{youtube_url}</a></p>'
+            '</div>'
+        )
+        content = content.replace('<!-- YOUTUBE_EMBED -->', iframe_block)
+        content = content.replace('[YOUTUBE_ID]', yt_id)
+        content = content.replace('[YOUTUBE_URL]', youtube_url)
+        content = content.replace('[YOUTUBE_TITLE]', youtube_title or topic)
 
     # Save to disk
     filepath = write_content_file(topic, content, abbr, content_type)

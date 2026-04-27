@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-04-26 (session 74 — Quality gate: keyword_placement check + internal link count display; tier structure in all internal-links maps; all 7 agents updated)
+Last updated: 2026-04-27 (session 75 — Yoga & Stretching YouTube embed workflow shipped; new `yoga-video` content type + agent; auto-routes on `youtube_url` presence)
 
 ---
 
@@ -415,6 +415,22 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] **Tier structure in internal-links maps** (session 74) — Tier 1 (always include ≥1: booking + services hub), Tier 2 (service/condition pages), Tier 3 (blog/location/category); added to all 4 client maps (GTM, GTB, TMG, SDY); all 7 agent files updated with tier-based linking instruction
 - [x] **14 unit tests passing** (session 74) — includes Python 3.13 `MagicMock` fix: `TypeError: '<=' not supported` when mock subscript is compared to int; fixed by using `side_effect` returning explicit dicts rather than relying on MagicMock auto-subscription
 
+### Yoga & Stretching YouTube embed workflow (session 75)
+- [x] **`yoga-video` content type added** — new entry in `CONTENT_TYPE_AGENTS` and `PROMPT_BUILDERS` in `src/content/pipeline.py`; new prompt builder `build_yoga_video_prompt()`; `extract_youtube_id()` helper handles `youtube.com/watch?v=`, `youtu.be/`, `youtube.com/embed/`, `youtube.com/shorts/` URL shapes
+- [x] **`yoga-video-writer.md` agent** — embed-led format: ~80–120 word intro (hook), `<!-- YOUTUBE_EMBED -->` marker, 1–2 H3 sections (~120–180 words), 70–100 word CTA outro with single booking link, 4-question FAQ; total 380–500 words
+- [x] **Auto-routing in `publish_scheduled.py`** — when queue entry has `youtube_url`, content_type is overridden to `yoga-video` regardless of original; iframe + "This video originally appeared here:" credit injected at marker; schema tokens `[YOUTUBE_ID]`, `[YOUTUBE_URL]`, `[YOUTUBE_TITLE]` replaced with real values
+- [x] **`VideoObject` schema** — agent outputs JSON-LD `@graph` with four nodes: BlogPosting, VideoObject (with `embedUrl`, `thumbnailUrl`, `contentUrl`), FAQPage, LocalBusiness; uploadDate uses `[DATE]` token
+- [x] **`yoga-video` → `post` mapping in GTB config** — added to `wordpress.content_type_map` so secondary blog sites (where `seo_blog` CPT is suppressed) route correctly to standard WP `post` CPT
+- [x] **First test post 23157** — "Yoga Poses for Back Pain Relief" wraps Yoga With Adriene "Yoga For Lower Back Pain" (XeXz8fIZDCE); content verified via WP-CLI: 1 iframe, 1 credit line, 1 VideoObject, no leftover markers/tokens; left as draft per GTB's `default_status: draft` workflow
+- [x] **Convention rule added** — `docs/conventions.md`: "Queue entries with `youtube_url` auto-route to `yoga-video`" — covers content_type_map requirement
+- [ ] **Cosmetic: image-in-embed-div** — image generator inserts a section image inside the `.yoga-video-embed` wrapper div (renders fine but structurally messy); deferred — fix would teach `image_generator` to skip injection inside that wrapper
+- [ ] **Phase 2: yt-dlp/oembed auto-research** — scheduled remote routine `trig_01QUJbFoV4wzq5rJ22xGxZj8` fires Thu 2026-04-30 09:00 UTC; will build `src/research/research_yoga_videos.py` + `clients/gtb/yoga-channels.json` and backfill the 2 remaining pending queue entries before Friday's cron
+
+### Cron wrapper hardening (session 75)
+- [x] **`~/.seomachine-cron.sh` self-pulls** — wrapper now runs `find .git -name 'Icon?' -size 0 -delete` (Finder pollution sweep) then `git pull --ff-only origin main` before each publish run; output to `logs/cron-${ABBR}.log`; `--ff-only` refuses if local diverges (cron then runs against existing local state, failure captured in log)
+- [x] **Stray `Icon\r` files cleaned** — 14 zero-byte Finder metadata files removed from `.git/refs/`, `.git/objects/`, `.git/logs/`, `.git/hooks/` etc.; root cause: project lives on `/Volumes/Ext Data` external drive that Finder pollutes with custom-icon metadata files (literal `\r` at end of filename) which git then tries to parse as refs and fails
+- [x] **Lets remote routines push to main and have local cron pick it up** — Phase 2 routine pushes to GitHub Thursday morning; Friday cron auto-pulls before running, no manual `git pull` needed
+
 ### Elementor template auto-refresh (session 12)
 - [x] `fetch_elementor_template.py` — saves `elementor-template-meta.json` sidecar with WP `modified` date on every fetch
 - [x] `refresh_if_stale(abbr, wp_config)` — lightweight REST check; auto-re-fetches template if WP modified date is newer
@@ -524,7 +540,7 @@ Read STATUS.md and pick up where we left off. Start with the first unchecked ite
 - [x] Initial batch of 8 posts published as standard WP posts with categories — GTB post IDs: 22603/22608/22613/22618 (Thai Massage), 22623/22628 (Stay Healthy), 22633/22638 (Glasgow News — 2 need review)
 - [x] Total batch cost: ~$5.29
 - [x] Set up cron jobs for all 4 GTB category queues — done via ~/.seomachine-cron.sh (session 26)
-- [ ] Yoga & Stretching: YouTube embed format (not batch-runner content) — separate workflow TBD
+- [x] Yoga & Stretching: YouTube embed format — `yoga-video` content type added (session 75); auto-routes when queue entry has `youtube_url`; iframe + credit injected after opening paragraph; VideoObject schema in `@graph`
 - [x] Glasgow News hook failures — fixed (session 31): `news` content type added with hook optional; 6 new GOOD_HOOK_PATTERNS for journalistic leads; 4 new pending topics in glasgow-news-queue.json with `content_type: "news"`
 
 ### SEO Machine admin panel (session 25)
@@ -756,7 +772,7 @@ Four WordPress post categories with separate queue files per category.
 - [x] Yoga & Stretching YouTube URLs populated — Yoga At Your Desk (`tAUf7aajBWE`), Todd McLaughlin Thai massage (`4pSFX5XvxWk`)
 - [x] Initial batch of 8 published as standard WP posts with categories (session 25)
 - [x] Set up cron jobs for all 4 category queues — done via `~/.seomachine-cron.sh` wrapper (session 26)
-- [ ] Yoga & Stretching posts: YouTube embed format, not batch-runner content — workflow TBD
+- [x] Yoga & Stretching posts: YouTube embed format implemented (session 75) — `yoga-video` content type; agent: `.claude/agents/yoga-video-writer.md`; queue entries with `youtube_url` auto-route; iframe + "This video originally appeared here:" credit + VideoObject JSON-LD; first test post 23157 (Yoga With Adriene back-pain video) created as draft for review
 
 **Cron schedule (to set up):**
 ```

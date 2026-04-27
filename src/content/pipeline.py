@@ -34,15 +34,24 @@ CLIENTS_DIR = ROOT / 'clients'
 
 # ── Content type → agent file mapping ────────────────────────────────────────
 CONTENT_TYPE_AGENTS = {
-    'service':   'service-page-writer.md',
-    'location':  'location-page-writer.md',
-    'topical':   'topical-writer.md',
-    'blog':      'blog-post-writer.md',
-    'news':      'blog-post-writer.md',  # news-angle posts; hook threshold relaxed in quality gate
-    'pillar':    'pillar-page-writer.md',
-    'comp-alt':  'competitor-alt-writer.md',
-    'problem':   'problem-page-writer.md',
+    'service':    'service-page-writer.md',
+    'location':   'location-page-writer.md',
+    'topical':    'topical-writer.md',
+    'blog':       'blog-post-writer.md',
+    'news':       'blog-post-writer.md',  # news-angle posts; hook threshold relaxed in quality gate
+    'pillar':     'pillar-page-writer.md',
+    'comp-alt':   'competitor-alt-writer.md',
+    'problem':    'problem-page-writer.md',
+    'yoga-video': 'yoga-video-writer.md',  # embed-led posts; iframe + credit injected post-generation
 }
+
+
+def extract_youtube_id(url: str) -> Optional[str]:
+    """Extract the 11-char video ID from a youtube.com/watch?v= or youtu.be/ URL."""
+    if not url:
+        return None
+    m = re.search(r'(?:v=|youtu\.be/|/embed/|/shorts/)([A-Za-z0-9_-]{11})', url)
+    return m.group(1) if m else None
 
 # ── Claude model and pricing ─────────────────────────────────────────────────
 MODEL = 'claude-sonnet-4-6'
@@ -376,26 +385,58 @@ Steps you must follow:
 3. Output three HTML sections starting with <!-- SECTION 1 -->. No frontmatter, no markdown."""
 
 
+def build_yoga_video_prompt(topic: str, business_config: Optional[dict] = None,
+                            youtube_url: str = '', youtube_title: str = '') -> str:
+    """User prompt for yoga/stretching video-led blog posts."""
+    today = date.today().isoformat()
+    title_line = youtube_title or topic
+    return f"""Write an embed-led yoga/stretching blog post built around the following YouTube video:
+
+Topic: {topic}
+Source video title: {title_line}
+Source video URL: {youtube_url}
+Today's date: {today}
+
+The video itself is the centrepiece. Your written copy is the wrapper.
+
+Steps you must follow:
+
+1. Output `<!-- SECTION 1 -->` and an `<h2>` containing the primary keyword.
+2. Write an 80–120 word intro paragraph framing why someone should watch this specific video. Use a Pain Callout, Story, or Myth Bust hook.
+3. Output the literal marker `<!-- YOUTUBE_EMBED -->` on its own line. The publisher replaces this with the iframe and source-credit line — do not output an iframe yourself.
+4. Write 1–2 short `<h3>` sections (120–180 words combined) tying the video to a real Glasgow desk-worker / runner / sleeper problem.
+5. Close with a 70–100 word CTA paragraph containing exactly one inline link to the booking_url from business config.
+6. Output `<!-- SECTION 2 FAQ -->` with 4 `<details>`/`<summary>` questions and 2–3 sentence answers.
+7. Output `<!-- SCHEMA -->` with a JSON-LD `@graph` containing BlogPosting, VideoObject, FAQPage, and LocalBusiness — use the literal tokens [YOUTUBE_ID], [YOUTUBE_URL], [YOUTUBE_TITLE], [DATE], [BUSINESS_PHONE], [BUSINESS_URL], [BUSINESS_STREET], [BUSINESS_POSTCODE], [BUSINESS_PRICE_RANGE], [BUSINESS_LOGO], [BANNER_IMAGE_URL] where applicable.
+
+Total written word count: 380–500 words across Sections 1 and 2 combined. No frontmatter. No markdown. No code blocks."""
+
+
 PROMPT_BUILDERS = {
-    'service':   build_service_prompt,
-    'location':  build_location_prompt,
-    'topical':   build_topical_prompt,
-    'blog':      build_blog_prompt,
-    'comp-alt':  build_comp_alt_prompt,
-    'problem':   build_problem_prompt,
+    'service':    build_service_prompt,
+    'location':   build_location_prompt,
+    'topical':    build_topical_prompt,
+    'blog':       build_blog_prompt,
+    'comp-alt':   build_comp_alt_prompt,
+    'problem':    build_problem_prompt,
+    'yoga-video': build_yoga_video_prompt,
 }
 
 
 def build_user_prompt(topic: str, content_type: str,
                       business_config: Optional[dict] = None,
                       wiki_data: Optional[dict] = None,
-                      brief: str = '') -> str:
+                      brief: str = '',
+                      youtube_url: str = '',
+                      youtube_title: str = '') -> str:
     """Build the user prompt for the given content type."""
     builder = PROMPT_BUILDERS.get(content_type, build_blog_prompt)
     if content_type in ('location', 'topical'):
         return builder(topic, business_config, wiki_data)
     if content_type == 'service' and brief:
         return builder(topic, business_config, brief=brief)
+    if content_type == 'yoga-video':
+        return builder(topic, business_config, youtube_url=youtube_url, youtube_title=youtube_title)
     return builder(topic, business_config)
 
 
@@ -431,7 +472,9 @@ def calculate_cost(usage) -> float:
 def generate_content(topic: str, abbreviation: str, content_type: str,
                      client: anthropic.Anthropic,
                      business_config: Optional[dict] = None,
-                     brief: str = ''):
+                     brief: str = '',
+                     youtube_url: str = '',
+                     youtube_title: str = ''):
     """Call Claude API to research and write content.
     Returns (content: str, cost_usd: float).
     """
@@ -445,7 +488,9 @@ def generate_content(topic: str, abbreviation: str, content_type: str,
         else:
             print(f"    Wikipedia: no page found for '{topic}'")
 
-    user_prompt = build_user_prompt(topic, content_type, business_config, wiki_data=wiki_data, brief=brief)
+    user_prompt = build_user_prompt(topic, content_type, business_config,
+                                    wiki_data=wiki_data, brief=brief,
+                                    youtube_url=youtube_url, youtube_title=youtube_title)
 
     for attempt in range(2):
         try:
